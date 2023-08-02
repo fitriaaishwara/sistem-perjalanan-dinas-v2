@@ -1053,6 +1053,23 @@
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
+		$(function () {
+			$('select.select2').select2(
+                {
+                    theme: 'bootstrap',
+                    width: '100%',
+                }
+            );
+
+
+			$.ajaxSetup({
+    		    headers: {
+    		        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+    		    },
+    		    timeout: 86400,
+    		});
+		});
+
 		Circles.create({
 			id:'circles-1',
 			radius:45,

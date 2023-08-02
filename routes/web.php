@@ -105,13 +105,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     //Pengajuan
     Route::get('/pengajuan', [App\Http\Controllers\Web\PengajuanController::class, 'index'])->name('pengajuan');
-    Route::post('/pengajuan/getData', [App\Http\Controllers\Web\PengajuanController::class, 'getData'])->name('pengajuan/getData');
     Route::get('/pengajuan/create', [App\Http\Controllers\Web\PengajuanController::class, 'create'])->name('pengajuan/create');
-    Route::post('/pengajuan/store', [App\Http\Controllers\Web\PengajuanController::class, 'store'])->name('pengajuan/store');
-    Route::post('/pengajuan/stores', [App\Http\Controllers\Web\PengajuanController::class, 'stores'])->name('pengajuan/stores');
-    Route::get('/pengajuan/edit/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'edit'])->name('pengajuan/edit');
-    Route::post('/pengajuan/update/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'update'])->name('pengajuan/update');
-    Route::post('/pengajuan/delete/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'destroy'])->name('pengajuan/delete');
+    Route::get('/pengajuan/stores', [App\Http\Controllers\Web\PengajuanController::class, 'store'])->name('pengajuan/stores');
+    Route::get('/pengajuan/staff', [App\Http\Controllers\Web\PerjalananController::class, 'staff'])->name('pengajuan/staff');
+    Route::get('/pengajuan/staff/{id}/by_id', [App\Http\Controllers\Web\PerjalananController::class, 'staff_by_id'])->name('pengajuan/staff/by_id');
 
     //Instansi
     Route::post('/instansi/getData', [App\Http\Controllers\Web\InstansiController::class, 'getData'])->name('instansi/getData');

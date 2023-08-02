@@ -27,9 +27,9 @@
                         <div class="col-sm-9 validate">
                             <select class="form-control" id="status" name="status">
                                 <option value="">-- Pilih Status --</option>
-                                @foreach ($statusPerjalanan as $status)
+                                {{-- @foreach ($statusPerjalanan as $status)
                                     <option value="{{ $status->id }}">{{ $status->name }}</option>
-                                @endforeach
+                                @endforeach --}}
                             </select>
                         </div>
                     </div>

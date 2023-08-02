@@ -36,14 +36,24 @@
                                     <div id="myModal" class="card-body">
                                         <div class="col-lg-12">
                                             <div class="form-group">
+                                                <label for="staff_type" class="form-label">Tipe Staff<span
+                                                        style="color:red;">*</span></label>
+                                                <select id="staff_type" type="text" class="form-control col-md-12 col-xs-12 staff_type select2"
+                                                    name="staff_type">
+                                                    <option value="internal" selected>Internal</option>
+                                                    <option value="eksternal">Eksternal</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
                                                 <label for="nip">NIP / NIPPPK / NIK</label>
                                                 <input type="text" class="form-control" id="nip" name="nip" minlength="16" maxlength="16" placeholder="NIP / NIPPPK / NIK">
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Nama</label>
-                                                <input type="text" class="form-control" id="name" name="name" placeholder="Nama Pegawai">
+                                                <select id="staff_name" name="staff_name" type="text" class="form-control col-md-12 col-xs-12 staff_name">
+                                                </select>
                                             </div>
-                                                <div class="form-group">
+                                            <div class="form-group">
                                                 <label for="jabatan_id" class="form-label">Jabatan<span
                                                         style="color:red;">*</span></label>
                                                 <select id="jabatan_id" type="text" class="form-control col-md-12 col-xs-12 jabatan_id"
@@ -136,7 +146,104 @@
 	// mencari rezeki
 	// demi si fitri
 
-    $("#golongan_id").select2({
+    let staff;
+    let staff_type;
+
+    $(function () {
+        $('#tanggal_berangkat').flatpickr({
+            dateFormat: "Y-m-d",
+            //disable past date
+            minDate: "today",
+        });
+
+        $('#tanggal_kembali').flatpickr({
+            dateFormat: "Y-m-d",
+            minDate: "today",
+        });
+
+        staff_type = $('#staff_type').val()
+        console.log(staff_type);
+
+        if (staff_type != 'internal') {
+            // destroy select2 to manual input
+            $('#staff_name').select2('destroy')
+            $('#jabatan_id').hide();
+            $('#golongan_id').hide();
+
+            $('#jabatan_id').prop('disabled', false);
+            $('#golongan_id').prop('disabled', false);
+        } else {
+            $('#nip').prop('disabled', true);
+            $('#instansi').prop('disabled', true);
+
+            // $('#jabatan_id').select2('enable', false);
+            // $('#golongan_id').select2('enable', false);
+        }
+    });
+
+    $('select#staff_type').change(function (e) {
+        e.preventDefault();
+        staff_type = $(this).val()
+    });
+
+    $('#staff_name').change(function (e) {
+        e.preventDefault();
+        get_staff_by_id($(this).val()).then((data) => {
+            $('#nip').val(data.nip);
+            $('#jabatan_id').val(data.id_jabatan).trigger('change')
+            $('#golongan_id').val(data.id_golongan).trigger('change')
+
+            console.log(data);
+        })
+    });
+
+    //make tangga_berangkat and tanggal_kembali to be total days without save data hasilnya berupa misal 2 hari
+    $('#tanggal_berangkat , #tanggal_kembali').change(function(){
+            var tanggal_berangkat = $('#tanggal_berangkat').val();
+            var tanggal_kembali = $('#tanggal_kembali').val();
+			if(tanggal_berangkat != '' && tanggal_kembali != '') {
+				var date1 = new Date(tanggal_berangkat);
+				var date2 = new Date(tanggal_kembali);
+				var Difference_In_Time = date2.getTime() - date1.getTime();
+				var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24) + " Hari";
+				$('#lama_perjalanan').val(Difference_In_Days);
+			} else {
+				$('#lama_perjalanan').val('0 hari');
+			}
+        });
+
+    $("#staff_name").select2({
+            theme: 'bootstrap',
+            width: '100%',
+            placeholder: "Nama Pegawai",
+            minimumInputLength: 3,
+            ajax: {
+                url: "{{ route('pengajuan/staff') }}",
+                dataType: 'json',
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                processResults: function(data) {
+                    if (staff_type == 'internal' && data && data.staff) {
+                        data = data.staff?.map(item => {
+                            console.log(item);
+                            return ({
+                                id: item.id,
+                                text: item.text + " (" + (item.nip) + ")"
+                            })
+                        })
+                        return {
+                            results: data
+                        };
+                    }
+                },
+                cache: true
+            },
+        });
+
+        $("#golongan_id").select2({
             theme: 'bootstrap',
             width: '100%',
             dropdownParent: $('#myModal'),
@@ -221,38 +328,17 @@
                 cache: false
             },
         });
-
-    $(function () {
-        $('#tanggal_berangkat').flatpickr({
-            dateFormat: "Y-m-d",
-            //disable past date
-            minDate: "today",
-        });
-
-        $('#tanggal_kembali').flatpickr({
-            dateFormat: "Y-m-d",
-            minDate: "today",
-        });
-
-        //make tangga_berangkat and tanggal_kembali to be total days without save data hasilnya berupa misal 2 hari
-        $('#tanggal_berangkat , #tanggal_kembali').change(function(){
-            var tanggal_berangkat = $('#tanggal_berangkat').val();
-            var tanggal_kembali = $('#tanggal_kembali').val();
-			if(tanggal_berangkat != '' && tanggal_kembali != '') {
-				var date1 = new Date(tanggal_berangkat);
-				var date2 = new Date(tanggal_kembali);
-				var Difference_In_Time = date2.getTime() - date1.getTime();
-				var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24) + " Hari";
-				$('#lama_perjalanan').val(Difference_In_Days);
-			} else {
-				$('#lama_perjalanan').val('0 hari');
-			}
-        });
-
-    });
-
 </script>
 
+<script>
+    function get_staff_by_id(id) {
+      return fetch('/pengajuan/staff/'+ id +'/by_id')
+        .then(response => response.json())
+        .then(data => {
+          return data.staff
+        })
+    };
+</script>
 @endpush
 
 

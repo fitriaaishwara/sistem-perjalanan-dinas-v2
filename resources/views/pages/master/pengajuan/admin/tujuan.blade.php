@@ -98,52 +98,6 @@
 				</li>
 			</ul>
 		</div>
-        <div class="row" id="myForm">
-            <div class="col-md-12">
-                <form action="{{ route('pengajuan/store') }}" method="POST" id="pengajuanForm" name="pengajuanForm">
-                @csrf
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">Informasi Perjalanan</div>
-                        </div>
-                        <div class="card-body">
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label for="id_mak" class="form-label">Kode Akun / Mata Anggaran Kegiatan<span
-                                            style="color:red;">*</span>
-                                    </label>
-                                    <select id="id_mak" type="text" class="form-control col-12 id_mak"
-                                    name="id_mak">
-                                        <option value="{{ $perjalanan->id_mak }}">{{ $perjalanan->mak->kode_mak }}</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="perihal_perjalanan" class="form-label">Perihal Perjalanan</span
-                                        style="color:red;">*</span>
-                                </label>
-                                    <input type="text" class="form-control" id="perihal_perjalanan" name="perihal_perjalanan" placeholder="Input Perihal Perjalanan" validate value="{{ $perjalanan->perihal_perjalanan }}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="estimasi_biaya" class="form-label">Estimasi Biaya</span
-                                        style="color:red;">*</span>
-                                </label>
-                                    <input type="text" class="form-control" id="estimasi_biaya" name="estimasi_biaya" placeholder="Input Estimasi Biaya" validate value="{{ $perjalanan->estimasi_biaya }}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="description" class="form-label">Description</span
-                                        style="color:red;">*</span>
-                                    </label>
-                                    <textarea class="form-control" id="description" name="description" placeholder="Input Description" validate>{{ $perjalanan->perihal_perjalanan }}</textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary btn-sm" id="saveBtn" name="saveBtn" form="pengajuanForm">Save</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -247,7 +201,7 @@
                 [10, 15, 25, 50, "All"]
             ],
             "ajax": {
-                "url": "{{ route('tujuanById/getData' , ['id_perjalanan' => $perjalanan->id]) }}",
+                "url": "{{ route('tujuan/getData') }}",
                 "type": "POST",
                 "headers": {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
@@ -367,7 +321,7 @@
                         $('#saveBtnTujuan').text('Save');
                         $('#saveBtnTujuan').attr('disabled', false);
                         reloadTable();
-                        $('#myModal').modal('hide');
+                        $('#myModalTujuan').modal('hide');
                     },
                     error: function(data) {
                         Swal.fire(

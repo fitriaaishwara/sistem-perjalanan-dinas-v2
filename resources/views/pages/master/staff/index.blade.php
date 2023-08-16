@@ -42,6 +42,7 @@
                                         <option value="0">PNS</option>
                                         <option value="1">Non PNS (PPPK)</option>
                                         <option value="2">Honorer</option>
+                                        <option value="3">Lainnya</option>
                                     </select>
                                 </div>
                                 <div class="mb-3 validate show_in_jenis_pns_only">

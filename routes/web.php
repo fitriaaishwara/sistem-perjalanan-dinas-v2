@@ -105,10 +105,16 @@ Route::group(['middleware' => ['auth']], function () {
 
     //Pengajuan
     Route::get('/pengajuan', [App\Http\Controllers\Web\PengajuanController::class, 'index'])->name('pengajuan');
+    Route::post('/pengajuan/getData', [App\Http\Controllers\Web\PengajuanController::class, 'getData'])->name('pengajuan/getData');
     Route::get('/pengajuan/create', [App\Http\Controllers\Web\PengajuanController::class, 'create'])->name('pengajuan/create');
-    Route::get('/pengajuan/stores', [App\Http\Controllers\Web\PengajuanController::class, 'store'])->name('pengajuan/stores');
+    Route::get('/pengajuan/create/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'createId'])->name('pengajuan/createId');
+    Route::get('/pengajuan/stores', [App\Http\Controllers\Web\PengajuanController::class, 'stores'])->name('pengajuan/stores');
+    Route::post('/pengajuan/store', [App\Http\Controllers\Web\PengajuanController::class, 'store'])->name('pengajuan/store');
     Route::get('/pengajuan/staff', [App\Http\Controllers\Web\PerjalananController::class, 'staff'])->name('pengajuan/staff');
     Route::get('/pengajuan/staff/{id}/by_id', [App\Http\Controllers\Web\PerjalananController::class, 'staff_by_id'])->name('pengajuan/staff/by_id');
+
+    Route::get('/pengajuan/edit/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'edit'])->name('pengajuan/edit');
+    Route::post('/pengajuan/edit/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'update'])->name('pengajuan/edit');
 
     //Instansi
     Route::post('/instansi/getData', [App\Http\Controllers\Web\InstansiController::class, 'getData'])->name('instansi/getData');
@@ -116,9 +122,25 @@ Route::group(['middleware' => ['auth']], function () {
     //Golongan
     Route::post('/golongan/getData', [App\Http\Controllers\Web\GolonganController::class, 'getData'])->name('golongan/getData');
 
-    //Golongan
+    //statusPerjalanan
     Route::get('/statusPerjalanan/{id}', [App\Http\Controllers\Web\PerjalananController::class, 'show_status'])->name('statusPerjalanan/show');
     Route::post('/statusPerjalanan/update', [App\Http\Controllers\Web\PerjalananController::class, 'update_status'])->name('statusPerjalanan/update');
+
+    // Route::get('/tujuan', [App\Http\Controllers\Web\TujuanController::class, 'index'])->name('tujuan');
+    Route::post('/tujuan/getData', [App\Http\Controllers\Web\TujuanController::class, 'getData'])->name('tujuan/getData');
+    Route::post('/tujuanById/getData/{id_perjalanan} ', [App\Http\Controllers\Web\TujuanController::class, 'getTujuanByIdPerjalanan'])->name('tujuanById/getData');
+    Route::post('/tujuan/store', [App\Http\Controllers\Web\TujuanController::class, 'store'])->name('tujuan/store');
+    Route::post('/tujuan/update', [App\Http\Controllers\Web\TujuanController::class, 'update'])->name('tujuan/update');
+    Route::get('/tujuan/{id}', [App\Http\Controllers\Web\TujuanController::class, 'show'])->name('tujuan/show');
+    Route::post('/tujuan/delete/{id}', [App\Http\Controllers\Web\TujuanController::class, 'destroy'])->name('tujuan/delete');
+
+    // Route::get('/tujuan', [App\Http\Controllers\Web\TujuanController::class, 'index'])->name('tujuan');
+    Route::post('/DataStaffPerjalananDinas/getData', [App\Http\Controllers\Web\DataStaffPerjalananDinasController::class, 'getData'])->name('staffData/getData');
+    Route::post('/DataStaffPerjalananDinas/store', [App\Http\Controllers\Web\DataStaffPerjalananDinasController::class, 'store'])->name('staffData/store');
+    Route::post('/DataStaffPerjalananDinas/update', [App\Http\Controllers\Web\DataStaffPerjalananDinasController::class, 'update'])->name('staffData/update');
+    Route::get('/DataStaffPerjalananDinas/{id}', [App\Http\Controllers\Web\DataStaffPerjalananDinasController::class, 'show'])->name('staffData/show');
+    Route::post('/DataStaffPerjalananDinas/delete/{id}', [App\Http\Controllers\Web\DataStaffPerjalananDinasController::class, 'destroy'])->name('staffData/delete');
+
 
     //Jabatan
     Route::get('/mak', [App\Http\Controllers\Web\MakController::class, 'index'])->name('mak');

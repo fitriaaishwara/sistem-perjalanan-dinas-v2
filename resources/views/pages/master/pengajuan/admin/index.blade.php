@@ -83,13 +83,12 @@
                             <table id="myTable" class="display table table-striped table-hover" >
                                 <thead>
                                     <tr>
-                                        <th>NIP/NIPPPK/NIK</th>
-                                        <th>Nama</th>
+                                        <th>MAK</th>
+                                        <th>Perihal</th>
                                         <th>Tujuan</th>
                                         <th>Tanggal Berangkat</th>
                                         <th>Tanggal Kembali</th>
-                                        <th>MAK</th>
-                                        <th>Perihal</th>
+                                        <th>Estimasi Biaya</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -107,177 +106,191 @@
 @endsection
 @push('js')
     <script type="text/javascript">
+        $(function() {
+            let request = {
+                start: 0,
+                length: 10
+            };
+            var isUpdate = false;
 
-    $(function() {
-        let request = {
-            start: 0,
-            length: 10
-        };
-        var isUpdate = false;
-
-        var myTable = $('#myTable').DataTable({
-            "language": {
-                "paginate": {
-                    "next": '<i class="fas fa-arrow-right"></i>',
-                    "previous": '<i class="fas fa-arrow-left"></i>'
-                }
-            },
-            "aaSorting": [],
-            "ordering": false,
-            "responsive": true,
-            "serverSide": true,
-            "lengthMenu": [
-                [10, 15, 25, 50, 100, 250, 500],
-                [10, 15, 25, 50, 100, 250, 500]
-            ],
-            "ajax": {
-                "url": "{{ route('pengajuan/getData') }}",
-                "type": "POST",
-                "headers": {
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
-                },
-                "beforeSend": function(xhr) {
-                    xhr.setRequestHeader("Authorization", "Bearer " + $('#secret').val());
-                },
-                "Content-Type": "application/json",
-                "data": function(data) {
-                    request.draw = data.draw;
-                    request.start = data.start;
-                    request.length = data.length;
-                    request.searchkey = data.search.value || "";
-
-                    return (request);
-                },
-            },
-            "columns": [
-                {
-                    "data": "pegawais",
-                    "width": '10%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        if (data && data.nip) {
-                            return "<div class='text-wrap'>" + data.nip + "</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
-                        }
+            var jabatanTable = $('#myTable').DataTable({
+                "language": {
+                    "paginate": {
+                        "next": '<i class="fas fa-arrow-right"></i>',
+                        "previous": '<i class="fas fa-arrow-left"></i>'
                     }
                 },
-                {
-                    "data": "pegawais",
-                    "width": '10%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        if (data && data.name) {
-                            return "<div class='text-wrap'>" + data.name + "</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
-                        }
-                    }
-                },
-                {
-                    "data": "tujuan",
-                    "width": '10%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data + "</div>";
+                "aaSorting": [],
+                "autoWidth": false,
+                "ordering": false,
+                "serverSide": true,
+                "responsive": true,
+                "lengthMenu": [
+                    [10, 15, 25, 50, -1],
+                    [10, 15, 25, 50, "All"]
+                ],
+                "ajax": {
+                    "url": "{{ route('pengajuan/getData') }}",
+                    "type": "POST",
+                    "headers": {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
+                    },
+                    "beforeSend": function(xhr) {
+                        xhr.setRequestHeader("Authorization", "Bearer " + $('#secret').val());
+                    },
+                    "Content-Type": "application/json",
+                    "data": function(data) {
+                        request.draw = data.draw;
+                        request.start = data.start;
+                        request.length = data.length;
+                        request.searchkey = data.search.value || "";
+
+                        return (request);
                     },
                 },
-                {
-                    "data": "tanggal_berangkat",
-                    "width": '15%',
-                    "defaultContent": "-",
-                    //render date format
-                    render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap'>" + moment(data).format('DD MMM YYYY') + "</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
+                "columns": [
+                    {
+                        "data": "mak",
+                        "width": '10%',
+                        "defaultContent": "-",
+                        render: function(data, type, row) {
+                            if (data && data.kode_mak) {
+                                return "<div class='text-wrap'>" + data.kode_mak + "</div>";
+                            } else {
+                                return "<div class='text-wrap'>-</div>";
+                            }
                         }
-                    }
-
-                },
-                {
-                    "data": "tanggal_kembali",
-                    "width": '15%',
-                    "defaultContent": "-",
-                     //render date format
-                    render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap'>" + moment(data).format('DD MMM YYYY') + "</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
-                        }
-                    }
-                },
-                {
-                    "data": "maks",
-                    "width": '10%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        if (data && data.kode_mak) {
-                            return "<div class='text-wrap'>" + data.kode_mak + "</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
-                        }
-                    }
-                },
-                {
-                    "data": "keterangan",
-                    "width": '20%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data + "</div>";
                     },
-                },
-                {
-                    "data": "status_perjalanans",
-                    "width": '15%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        if (data && data.name) {
-                            return "<div class='text-wrap'>" + data.name + "</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
+                    {
+                        "data": "perihal_perjalanan",
+                        "width": '10%',
+                        "defaultContent": "-",
+                        render: function(data, type, row) {
+                            return "<div class='text-wrap'>" + data + "</div>";
+                        },
+                    },
+                    {
+                        "data": "tujuan",
+                        "width": '10%',
+                        "defaultContent": "-",
+                        render: function(data, type, row) {
+                            if (data && data.tempat_tujuan) {
+                                return "<div class='text-wrap'>" + data.tempat_tujuan + "</div>";
+                            } else {
+                                return "<div class='text-wrap'>-</div>";
+                            }
                         }
-                    }
-                },
-                {
-                    "data": "id",
-                    "width": '15%',
-                    render: function(data, type, row) {
-                        var btnEdit = "";
-                        var btnStatus = "";
-                        var btnDelete = "";
-                        btnEdit += '<a href="/pengajuan/edit/' + data +
+                    },
+                    {
+                        "data": "tujuan",
+                        "width": '10%',
+                        "defaultContent": "-",
+                        render: function(data, type, row) {
+                            if (data && data.tanggal_berangkat) {
+                                return "<div class='text-wrap'>" + data.tanggal_berangkat + "</div>";
+                            } else {
+                                return "<div class='text-wrap'>-</div>";
+                            }
+                        }
+                    },
+                    {
+                        "data": "tujuan",
+                        "width": '10%',
+                        "defaultContent": "-",
+                        render: function(data, type, row) {
+                            if (data && data.tanggal_pulang) {
+                                return "<div class='text-wrap'>" + data.tanggal_pulang + "</div>";
+                            } else {
+                                return "<div class='text-wrap'>-</div>";
+                            }
+                        }
+                    },
+                    {
+                        "data": "estimasi_biaya",
+                        "width": '10%',
+                        "defaultContent": "-",
+                        render: function(data, type, row) {
+                            return "<div class='text-wrap'>" + data + "</div>";
+                        },
+                    },
+                    {
+                        "data": "id",
+                        "width": '10%',
+                        render: function(data, type, row) {
+                            var btnEdit = "";
+                            var btnDelete = "";
+                            btnEdit += '<a href="/pengajuan/edit/' + data +
                                         '" name="btnEdit" data-id="' + data +
                                         '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
-                        btnStatus += '<button name="btnStatus" data-id="' + data +
-                            '" type="button" class="btn btn-primary btn-sm btnStatus m-1" data-toggle="tooltip" data-placement="top" title="Change Status"><i class="fa fa-bookmark"></i></button>';
-                        btnDelete += '<button name="btnDelete" data-id="' + data +
-                            '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
+                            btnDelete += '<button name="btnDelete" data-id="' + data +
+                                '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
 
-                        return btnEdit + btnStatus + btnDelete;
+                            return btnEdit + btnDelete;
+                        },
                     },
-                },
-            ]
-        });
+                ]
+            });
 
-        function reloadTable() {
-            myTable.ajax.reload(null, false); //reload datatable ajax
-        }
+            function reloadTable() {
+                jabatanTable.ajax.reload(null, false); //reload datatable ajax
+            }
 
-        $('#myTable').on("click", ".btnStatus", function() {
+            $('#saveBtn').click(function(e) {
+                e.preventDefault();
+                var isValid = $("#jabatanForm").valid();
+                if (isValid) {
+                    $('#saveBtn').text('Save...');
+                    $('#saveBtn').attr('disabled', true);
+                    if (!isUpdate) {
+                        var url = "{{ route('jabatan/store') }}";
+                    } else {
+                        var url = "{{ route('jabatan/update') }}";
+                    }
+                    var formData = new FormData($('#jabatanForm')[0]);
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        dataType: "JSON",
+                        success: function(data) {
+                            Swal.fire(
+                                (data.status) ? 'Success' : 'Error',
+                                data.message,
+                                (data.status) ? 'success' : 'error'
+                            )
+                            $('#saveBtn').text('Save');
+                            $('#saveBtn').attr('disabled', false);
+                            reloadTable();
+                            $('#myModal').modal('hide');
+                        },
+                        error: function(data) {
+                            Swal.fire(
+                                'Error',
+                                'A system error has occurred. please try again later.',
+                                'error'
+                            )
+                            $('#saveBtn').text('Save');
+                            $('#saveBtn').attr('disabled', false);
+                        }
+                    });
+                }
+            });
+
+            $('#jabatanTable').on("click", ".btnEdit", function() {
+                $('#myModal').modal('show');
                 isUpdate = true;
                 var id = $(this).attr('data-id');
-                var url = "{{ route('statusPerjalanan/show', ['id' => ':id']) }}";
+                var url = "{{ route('jabatan/show', ['id' => ':id']) }}";
                 url = url.replace(':id', id);
                 $.ajax({
                     type: 'GET',
                     url: url,
                     success: function(response) {
+                        $('#name').val(response.data.name);
+                        $('#description').val(response.data.description);
                         $('#id').val(response.data.id);
-                        $('#status').val(response.data.id_status_perjalanan);
-                        $('#myModal').modal('show');
                     },
                     error: function() {
                         Swal.fire(
@@ -287,52 +300,75 @@
                         )
                     },
                 });
-        });
+            });
 
-        $('#myTable').on("click", ".btnDelete", function() {
-            var id = $(this).attr('data-id');
-            Swal.fire({
-                title: 'Confirmation',
-                text: "You will delete this pengajuan. Are you sure you want to continue?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: "Yes, I'm sure",
-                cancelButtonText: 'No'
-            }).then(function(result) {
-                if (result.value) {
-                    var url = "{{ route('dataPerjalanan/delete', ['id' => ':id']) }}";
-                    url = url.replace(':id', id);
-                    $.ajax({
-                        headers: {
-                            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                                'content'),
-                        },
-                        url: url,
-                        type: "POST",
-                        success: function(data) {
-                            Swal.fire(
-                                (data.status) ? 'Success' : 'Error',
-                                data.message,
-                                (data.status) ? 'success' : 'error'
-                            )
-                            reloadTable();
-                        },
-                        error: function(response) {
-                            Swal.fire(
-                                'Error',
-                                'A system error has occurred. please try again later.',
-                                'error'
-                            )
-                        }
-                    });
+            $('#jabatanTable').on("click", ".btnDelete", function() {
+                var id = $(this).attr('data-id');
+                Swal.fire({
+                    title: 'Confirmation',
+                    text: "Kamu akan menghapus jabatan. Apakah kamu ingin melanjutkan?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: "Yes, I'm sure",
+                    cancelButtonText: 'No'
+                }).then(function(result) {
+                    if (result.value) {
+                        var url = "{{ route('jabatan/delete', ['id' => ':id']) }}";
+                        url = url.replace(':id', id);
+                        $.ajax({
+                            headers: {
+                                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                                    'content'),
+                            },
+                            url: url,
+                            type: "POST",
+                            success: function(data) {
+                                Swal.fire(
+                                    (data.status) ? 'Success' : 'Error',
+                                    data.message,
+                                    (data.status) ? 'success' : 'error'
+                                )
+                                reloadTable();
+                            },
+                            error: function(response) {
+                                Swal.fire(
+                                    'Error',
+                                    'A system error has occurred. please try again later.',
+                                    'error'
+                                )
+                            }
+                        });
+                    }
+                })
+            });
+
+            $('#jabatanForm').validate({
+                rules: {
+                    name: {
+                        required: true,
+                    },
+                },
+                errorElement: 'em',
+                errorPlacement: function(error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.validate').append(error);
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
                 }
-            })
-        });
-    });
-</script>
+            });
 
+            $('#addNew').on('click', function() {
+                $('#name').val("");
+                isUpdate = false;
+            });
+        });
+    </script>
 @endpush
 
 

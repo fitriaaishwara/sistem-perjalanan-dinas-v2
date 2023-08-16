@@ -37,13 +37,6 @@
                                     </div>
                                 </div>
                                 <div class="row mb-4">
-                                    <label for="saldo_pagu" class="col-sm-3 col-form-label">Saldo Pagu<span
-                                            style="color:red;">*</span></label>
-                                    <div class="col-sm-9 validate">
-                                        <input id="saldo_pagu" type="text" class="form-control" name="saldo_pagu">
-                                    </div>
-                                </div>
-                                <div class="row mb-4">
                                     <label for="description" class="col-sm-3 col-form-label">Keterangan</label>
                                     <div class="col-sm-9 validate">
                                         <textarea class="form-control" rows="3" id="description" name="description"></textarea>
@@ -195,7 +188,11 @@
                         "width": '10%',
                         "defaultContent": "-",
                         render: function(data, type, row) {
-                            return "<div class='text-wrap'>" + data + "</div>";
+                            if (data == null) {
+                                return "<div class='text-wrap'>-</div>";
+                            } else {
+                                return "<div class='text-wrap'>" + data + "</div>";
+                            }
                         },
                     },
                     {
@@ -286,7 +283,6 @@
                     success: function(response) {
                         $('#kode_mak').val(response.data.kode_mak);
                         $('#saldo_awal_pagu').val(response.data.saldo_awal_pagu);
-                        $('#saldo_pagu').val(response.data.saldo_pagu);
                         $('#description').val(response.data.description);
                     },
                     error: function() {

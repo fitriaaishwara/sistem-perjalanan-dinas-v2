@@ -83,13 +83,12 @@
                             <table id="myTable" class="display table table-striped table-hover" >
                                 <thead>
                                     <tr>
-                                        <th>NIP/NIPPPK/NIK</th>
-                                        <th>Nama</th>
+                                        <th>MAK</th>
+                                        <th>Perihal</th>
                                         <th>Tujuan</th>
                                         <th>Tanggal Berangkat</th>
                                         <th>Tanggal Kembali</th>
-                                        <th>MAK</th>
-                                        <th>Perihal</th>
+                                        <th>Estimasi Biaya</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -150,6 +149,22 @@
                 },
             },
             "columns": [
+                {
+                    "data": "mak",
+                    "width": '10%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        return "<div class='text-wrap'>" + data + "</div>";
+                    },
+                },
+                {
+                    "data": "perihal_perjalanan",
+                    "width": '10%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        return "<div class='text-wrap'>" + data + "</div>";
+                    },
+                },
                 {
                     "data": "pegawais",
                     "width": '10%',

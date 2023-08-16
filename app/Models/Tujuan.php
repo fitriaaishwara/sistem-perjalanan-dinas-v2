@@ -7,17 +7,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Mak extends Model
+class Tujuan extends Model
 {
     use HasFactory, Uuid, SoftDeletes;
-    protected $table = 'mak';
+    protected $table = 'data_tujuan_perjalanan';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'kode_mak', 'saldo_awal_pagu', 'saldo_pagu', 'description',
+        'id_perjalanan', 'tempat_berangkat', 'tempat_tujuan', 'tanggal_berangkat', 'tanggal_pulang', 'tanggal_tiba', 'lama_perjalanan', 'status'
     ];
 
     public function perjalanan()
     {
-        return $this->hasMany(PerjalananDinas::class, 'id_mak', 'id');
+        return $this->belongsTo(Perjalanan::class, 'id_perjalanan', 'id');
     }
 }

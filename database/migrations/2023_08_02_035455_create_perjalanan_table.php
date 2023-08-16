@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMakTable extends Migration
+class CreatePerjalananTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,21 @@ class CreateMakTable extends Migration
      */
     public function up()
     {
-        Schema::create('mak', function (Blueprint $table) {
+        Schema::create('perjalanan', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('kode_mak')->unique();
-            $table->string('saldo_awal_pagu');
-            $table->string('saldo_pagu');
+            $table->foreignUuid('id_mak');
+            $table->string('perihal_perjalanan');
+            $table->string('estimasi_biaya');
             $table->string('description')->nullable();
-            $table->boolean('status')->default(1);
+            $table->boolean('status')->default (1);
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->string('deleted_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('id_mak')->references('id')->on('mak');
+
+
         });
     }
 
@@ -35,6 +38,6 @@ class CreateMakTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mak');
+        Schema::dropIfExists('perjalanan');
     }
 }

@@ -128,7 +128,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Route::get('/tujuan', [App\Http\Controllers\Web\TujuanController::class, 'index'])->name('tujuan');
     Route::post('/tujuan/getData', [App\Http\Controllers\Web\TujuanController::class, 'getData'])->name('tujuan/getData');
-    Route::post('/tujuanById/getData/{id_perjalanan} ', [App\Http\Controllers\Web\TujuanController::class, 'getTujuanByIdPerjalanan'])->name('tujuanById/getData');
+    Route::any('/tujuanById/getData/{id_perjalanan} ', [App\Http\Controllers\Web\TujuanController::class, 'getTujuanByIdPerjalanan'])->name('tujuanById/getData');
     Route::post('/tujuan/store', [App\Http\Controllers\Web\TujuanController::class, 'store'])->name('tujuan/store');
     Route::post('/tujuan/update', [App\Http\Controllers\Web\TujuanController::class, 'update'])->name('tujuan/update');
     Route::get('/tujuan/{id}', [App\Http\Controllers\Web\TujuanController::class, 'show'])->name('tujuan/show');

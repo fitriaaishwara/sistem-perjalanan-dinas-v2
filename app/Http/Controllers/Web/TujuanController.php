@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Perjalanan;
 use App\Models\Tujuan;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class TujuanController extends Controller
 {
@@ -14,8 +15,8 @@ class TujuanController extends Controller
         $keyword = $request['searchkey'];
         $data = Tujuan::select()
             ->with('perjalanan')
-            ->offset($request['start'])
-            ->limit(($request['length'] == -1) ? Tujuan::where('status', true)->count() : $request['length'])
+            // ->offset($request['start'])
+            // ->limit(($request['length'] == -1) ? Tujuan::where('status', true)->count() : $request['length'])
             ->when($keyword, function ($query, $keyword) {
                 return $query->where('name', 'like', '%' . $keyword . '%');
             })
@@ -28,46 +29,22 @@ class TujuanController extends Controller
             })
             ->where('status', true)
             ->count();
-        $response = [
-            'status'          => true,
-            'draw'            => $request['draw'],
-            'recordsTotal'    => Tujuan::where('status', true)->count(),
-            'recordsFiltered' => $dataCounter,
-            'data'            => $data,
-        ];
-        return $response;
+        
+        return DataTables::of($data)
+                    ->make(true);
     }
 
     public function getTujuanByIdPerjalanan(Request $request, $id)
     {
         $perjalanan = Perjalanan::findOrFail($id);
-        // dd($perjalanan);
-        $keyword = $request['searchkey'];
 
             $data = ['status' => false, 'message' => 'Tujuan failed to be found'];
-            $data = Tujuan::select()
-                ->where('id_perjalanan', $perjalanan)
-                ->offset($request['start'])
-                ->limit(($request['length'] == -1) ? Tujuan::where('status', true)->count() : $request['length'])
-                ->when($keyword, function ($query, $keyword) {
-                    return $query->where('name', 'like', '%' . $keyword . '%');
-                })
+            $data = Tujuan::where('id_perjalanan', $id)
                 ->where('status', true)
                 ->get();
-            $dataCounter = Tujuan::select()
-                ->when($keyword, function ($query, $keyword) {
-                    return $query->where('name', 'like', '%' . $keyword . '%');
-                })
-                ->where('status', true)
-                ->count();
-            $response = [
-                'status'          => true,
-                'draw'            => $request['draw'],
-                'recordsTotal'    => Tujuan::where('status', true)->count(),
-                'recordsFiltered' => $dataCounter,
-                'data'            => $data,
-            ];
-            return $response;
+
+            return DataTables::of($data)
+                ->make(true);
     }
 
     public function show($id)
@@ -126,8 +103,8 @@ class TujuanController extends Controller
 
     public function update(Request $request)
     {
-        // try {
-            // $data = ['status' => false, 'code' => 'EC001', 'message' => 'Tujuan failed to be updated'];
+        try {
+            $data = ['status' => false, 'code' => 'EC001', 'message' => 'Tujuan failed to be updated'];
             $update = Tujuan::where('id', $request['id'])->update([
                 'tempat_berangkat' => $request['tempat_berangkat'], // $request['name'
                 'tempat_tujuan' => $request['tempat_tujuan'], // $request['description
@@ -136,15 +113,13 @@ class TujuanController extends Controller
                 'tanggal_tiba' => $request['tanggal_tiba'], // $request['status'
                 'lama_perjalanan' => $request['lama_perjalanan'] // $request['status'
             ]);
-        //     if ($update) {
-        //         $data = ['status' => true, 'code' => 'SC001', 'message' => 'Tujuan successfully updated'];
-        //     }
-        // } catch (\Exception $ex) {
-        //     $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
-        // }
+            if ($update) {
+                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Tujuan successfully updated'];
+            }
+        } catch (\Exception $ex) {
+            $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
+        }
 
-        dd($update);
-
-        // return $data;
+        return $data;
     }
 }

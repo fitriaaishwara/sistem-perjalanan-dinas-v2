@@ -20,6 +20,7 @@
             <div class="modal-body">
                 <form method="POST" action="{{ route('tujuan/store') }}" id="tujuanForm" name="tujuanForm">
                     @csrf
+                    <input type="hidden" name="id" id="id">
                     <input id="id_perjalanan" type="hidden" class="form-control" name="id_perjalanan" value="{{ $perjalanan->id }}">
                     <div class="row mb-4">
                         <label for="tempat_tujuan" class="col-sm-3 col-form-label">Tujuan<span

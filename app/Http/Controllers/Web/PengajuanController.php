@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Perjalanan;
 use App\Models\PerjalananDinas;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class PengajuanController extends Controller
@@ -92,8 +93,6 @@ class PengajuanController extends Controller
 
         $data = Perjalanan::select()
             ->with('mak', 'tujuan')
-            ->offset($request['start'])
-            ->limit(($request['length'] == -1) ? Perjalanan::where('status', true)->count() : $request['length'])
             ->when($keyword, function ($query, $keyword) {
                 return $query->where('name', 'like', '%' . $keyword . '%');
             })
@@ -107,14 +106,8 @@ class PengajuanController extends Controller
             ->where('status', true)
             ->count();
 
-        $response = [
-            'status'          => true,
-            'draw'            => $request['draw'],
-            'recordsTotal'    => Perjalanan::where('status', true)->count(),
-            'recordsFiltered' => $dataCounter,
-            'data'            => $data,
-        ];
-        return $response;
+        return DataTables::of($data)
+                    ->make(true);
     }
 
 }

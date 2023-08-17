@@ -1053,6 +1053,20 @@
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
+        function formatIndonesianDate(date) {
+            const months = [
+                "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+            ];
+
+            var date = new Date(date);
+            const day = date.getDate();
+            const month = months[date.getMonth()];
+            const year = date.getFullYear();
+
+            return `${day} ${month} ${year}`;
+        }
+
 		$(function () {
 			$('select.select2').select2(
                 {

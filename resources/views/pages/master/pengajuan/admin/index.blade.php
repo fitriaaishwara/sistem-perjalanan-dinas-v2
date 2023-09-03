@@ -140,102 +140,24 @@
                         xhr.setRequestHeader("Authorization", "Bearer " + $('#secret').val());
                     },
                     "Content-Type": "application/json",
-                    "data": function(data) {
-                        request.draw = data.draw;
-                        request.start = data.start;
-                        request.length = data.length;
-                        request.searchkey = data.search.value || "";
+                    // "data": function(data) {
+                    //     request.draw = data.draw;
+                    //     request.start = data.start;
+                    //     request.length = data.length;
+                    //     request.searchkey = data.search.value || "";
 
-                        return (request);
-                    },
+                    //     return (request);
+                    // },
                 },
                 "columns": [
-                    {
-                        "data": "mak",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            if (data && data.kode_mak) {
-                                return "<div class='text-wrap' style='font-size: 12px;'>" + data.kode_mak + "</div>";
-                            } else {
-                                return "<div class='text-wrap'>-</div>";
-                            }
-                        }
-                    },
-                    {
-                        "data": "perihal_perjalanan",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
-                        },
-                    },
-                    {
-                        "data": "tujuan",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            console.log(data);
-                            var tujuan = "";
-                            var angka = 1;
-                            for (var i = 0; i < data.length; i++) {
-                                tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + data[i].tempat_tujuan + "</div>";
-                                angka++;
-                            }
-                            return tujuan;
-                            // if (data) {
-                            //     return "<div class='text-wrap'>" + data.tempat_tujuan + "</div>";
-                            // } else {
-                            //     return "<div class='text-wrap'>-</div>";
-                            // }
-                        }
-                    },
-                    {
-                        "data": "tujuan",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            var tujuan = "";
-                            var angka = 1;
-                            for (var i = 0; i < data.length; i++) {
-                                tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + formatIndonesianDate(data[i].tanggal_berangkat) + "</div>";
-                                angka++;
-                            }
-                            return tujuan;
-                            // if (data && data.tanggal_berangkat) {
-                            //     return "<div class='text-wrap'>" + data.tanggal_berangkat + "</div>";
-                            // } else {
-                            //     return "<div class='text-wrap'>-</div>";
-                            // }
-                        }
-                    },
-                    {
-                        "data": "tujuan",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            var tujuan = "";
-                            var angka = 1;
-                            for (var i = 0; i < data.length; i++) {
-                                tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + formatIndonesianDate(data[i].tanggal_pulang) + "</div>";
-                                angka++;
-                            }
-                            return tujuan;
-                            // if (data && data.tanggal_pulang) {
-                            //     return "<div class='text-wrap'>" + data.tanggal_pulang + "</div>";
-                            // } else {
-                            //     return "<div class='text-wrap'>-</div>";
-                            // }
-                        }
-                    },
-                    {
-                        "data": "estimasi_biaya",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
-                        },
-                    },
+                    
+                    {data:'mak', name: 'mak'},
+                    {data:'perihal_perjalanan', name: 'perihal_perjalanan'},
+                    {data:'tujuan', name: 'tujuan'},
+                    {data:'tanggal_berakhir', name: 'tanggal_berakhir'},
+                    {data:'tanggal_kembali', name: 'tanggal_kembali'},
+                    {data:'estimasi_biaya', name: 'estimasi_biaya'},
+                    {data:'status', name: 'status'},
                     {
                         "data": "id",
                         "width": '10%',

@@ -118,22 +118,36 @@ class PengajuanController extends Controller
     {
         $keyword = $request['searchkey'];
 
-        $data = Perjalanan::select()
-            ->with('mak')
+        $data = Perjalanan::with('mak')
             ->when($keyword, function ($query, $keyword) {
                 return $query->where('name', 'like', '%' . $keyword . '%');
             })
-            ->where('status', true)
-            ->get();
-
-        $dataCounter = Perjalanan::select()
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('name', 'like', '%' . $keyword . '%');
-            })
-            ->where('status', true)
-            ->count();
+            ->where('status', true);
 
         return DataTables::of($data)
+                    ->editColumn('mak', function($db) {
+                        return $db->mak->kode_mak;
+                    })
+                    ->addColumn('tujuan', function($db) {
+                        
+                    })
+                    ->addColumn('tanggal_berakhir', function($db) {
+
+                    })
+                    ->addColumn('tanggal_kembali', function($db) {
+
+                    })
+                    ->editColumn('estimasi_biaya', function($db) {
+                        return $this->rupiah_format($db->estimasi_biaya);
+                    })
+                    ->editColumn('status', function($db) {
+                        if ($db->status == 1) {
+                            return "<span class='badge badge-success'><small>Active</small></span>";
+                        } else {
+                            return "<span class='badge badge-danger'><small>Inactive</small></span>";
+                        }
+                    })
+                    ->rawColumns(['status'])
                     ->make(true);
     }
 

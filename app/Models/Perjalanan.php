@@ -23,8 +23,8 @@ class Perjalanan extends Model
 
     public function tujuan()
     {
-        // return $this->hasMany(Tujuan::class, 'id', 'id_perjalanan');
-        return Tujuan::where('id_perjalanan', $this->id) -> where('status', true) ;
+        return $this->hasMany(Tujuan::class, 'id_perjalanan', 'id');
+        // return Tujuan::where('id_perjalanan', $this->id) -> where('status', true);
     }
 
 

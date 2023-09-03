@@ -112,7 +112,7 @@
                         <div class="col-sm-9 validate">
                             <select name="id_tujuan_perjalanan" class="form-control select2" required id="id_tujuan_perjalanan">
                                 <option value="">Pilih Tujuan</option>
-                                @foreach ($perjalanan->tujuan()->get() as $item)
+                                @foreach ($perjalanan->tujuan as $item)
                                     <option value="{{ $item->id }}">{{ $item->tempat_tujuan . ' - ' . $item->tempat_berangkat }}</option>
                                 @endforeach
                             </select>

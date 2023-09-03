@@ -115,6 +115,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/pengajuan/edit/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'edit'])->name('pengajuan/edit');
     Route::post('/pengajuan/edit/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'update'])->name('pengajuan/edit');
+    Route::post('/pengajuan/edit/{id}/save-staff', [App\Http\Controllers\Web\PengajuanController::class, 'save_staff'])->name('pengajuan/edit/save_staff');
 
     //Instansi
     Route::post('/instansi/getData', [App\Http\Controllers\Web\InstansiController::class, 'getData'])->name('instansi/getData');

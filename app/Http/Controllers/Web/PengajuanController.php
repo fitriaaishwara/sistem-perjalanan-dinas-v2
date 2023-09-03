@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\DataStaffPerjalanan;
 use App\Models\Perjalanan;
 use App\Models\PerjalananDinas;
+use App\Models\Staff;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -56,6 +59,8 @@ class PengajuanController extends Controller
 
         $perjalanan = Perjalanan::findOrFail($id);
 
+        $staff = Staff::where('status', 1)->get();
+
         try {
             $data = ['status' => false, 'message' => 'Jabatan failed to be found'];
             $data = Perjalanan::findOrFail($id);
@@ -66,7 +71,29 @@ class PengajuanController extends Controller
             $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }
 
-        return view('pages.master.pengajuan.admin.edit', compact('data','perjalanan'));
+        return view('pages.master.pengajuan.admin.edit', compact('data','perjalanan', 'staff'));
+    }
+
+    function save_staff(Request $request, $id_perjalanan) {
+        $id_staff = $request->id_staff;
+        $id_tujuan_perjalanan = $request->id_tujuan_perjalanan;
+
+        $staff = new DataStaffPerjalanan;
+        $staff->status = 1;
+        $staff->created_by = Auth::id();
+        $staff->updated_by = Auth::id();
+        $staff->id_perjalanan = $id_perjalanan;
+
+        // if id_edit contains value, then update data
+        if ($request->has('id_edit') and !empty($request->id_edit)) {
+            $staff = DataStaffPerjalanan::findOrFail($request->id_edit);
+        }
+
+        $staff->id_staff = $id_staff;
+        $staff->id_tujuan_perjalanan = $id_tujuan_perjalanan;
+        $staff->save();
+
+        return redirect()->back() -> with('success', 'Data berhasil disimpan');
     }
 
     public function createId($id)

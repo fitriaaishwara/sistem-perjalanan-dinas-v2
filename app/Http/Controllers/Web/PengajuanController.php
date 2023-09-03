@@ -57,7 +57,7 @@ class PengajuanController extends Controller
     public function edit($id)
     {
 
-        $perjalanan = Perjalanan::findOrFail($id);
+        $perjalanan = Perjalanan::with(['tujuan'])->findOrFail($id);
 
         $staff = Staff::where('status', 1)->get();
 

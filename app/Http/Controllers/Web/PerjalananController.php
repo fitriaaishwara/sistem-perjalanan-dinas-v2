@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Perjalanan;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class PerjalananController extends Controller
 {
@@ -30,6 +32,29 @@ class PerjalananController extends Controller
         $staff = \App\Models\Staff::where('id', $id)->first();
 
         return response() -> json(['staff' => $staff]);
+    }
+
+    public function getData(Request $request)
+    {
+        $keyword = $request['searchkey'];
+
+        $data = Perjalanan::select()
+            ->with('mak', 'tujuan')
+            ->when($keyword, function ($query, $keyword) {
+                return $query->where('name', 'like', '%' . $keyword . '%');
+            })
+            ->where('status', true)
+            ->get();
+
+        $dataCounter = Perjalanan::select()
+            ->when($keyword, function ($query, $keyword) {
+                return $query->where('name', 'like', '%' . $keyword . '%');
+            })
+            ->where('status', true)
+            ->count();
+
+        return DataTables::of($data)
+                    ->make(true);
     }
 
 

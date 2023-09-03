@@ -149,113 +149,92 @@
                 },
             },
             "columns": [
-                {
-                    "data": "mak",
-                    "width": '10%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data + "</div>";
+                    {
+                        "data": "mak",
+                        "width": '10%',
+                        "defaultContent": "-",
+                        render: function(data, type, row) {
+                            if (data && data.kode_mak) {
+                                return "<div class='text-wrap' style='font-size: 12px;'>" + data.kode_mak + "</div>";
+                            } else {
+                                return "<div class='text-wrap'>-</div>";
+                            }
+                        }
                     },
-                },
-                {
-                    "data": "perihal_perjalanan",
-                    "width": '10%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data + "</div>";
+                    {
+                        "data": "perihal_perjalanan",
+                        "width": '10%',
+                        "defaultContent": "-",
+                        render: function(data, type, row) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                        },
                     },
-                },
-                {
-                    "data": "pegawais",
-                    "width": '10%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        if (data && data.nip) {
-                            return "<div class='text-wrap'>" + data.nip + "</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
+                    {
+                        "data": "tujuan",
+                        "width": '10%',
+                        "defaultContent": "-",
+                        render: function(data, type, row) {
+                            console.log(data);
+                            var tujuan = "";
+                            var angka = 1;
+                            for (var i = 0; i < data.length; i++) {
+                                tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + data[i].tempat_tujuan + "</div>";
+                                angka++;
+                            }
+                            return tujuan;
+                            // if (data) {
+                            //     return "<div class='text-wrap'>" + data.tempat_tujuan + "</div>";
+                            // } else {
+                            //     return "<div class='text-wrap'>-</div>";
+                            // }
                         }
-                    }
-                },
-                {
-                    "data": "pegawais",
-                    "width": '10%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        if (data && data.name) {
-                            return "<div class='text-wrap'>" + data.name + "</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
-                        }
-                    }
-                },
-                {
-                    "data": "tujuan",
-                    "width": '10%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data + "</div>";
                     },
-                },
-                {
-                    "data": "tanggal_berangkat",
-                    "width": '15%',
-                    "defaultContent": "-",
-                    //render date format
-                    render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap'>" + moment(data).format('DD MMM YYYY') + "</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
+                    {
+                        "data": "tujuan",
+                        "width": '10%',
+                        "defaultContent": "-",
+                        render: function(data, type, row) {
+                            var tujuan = "";
+                            var angka = 1;
+                            for (var i = 0; i < data.length; i++) {
+                                tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + formatIndonesianDate(data[i].tanggal_berangkat) + "</div>";
+                                angka++;
+                            }
+                            return tujuan;
+                            // if (data && data.tanggal_berangkat) {
+                            //     return "<div class='text-wrap'>" + data.tanggal_berangkat + "</div>";
+                            // } else {
+                            //     return "<div class='text-wrap'>-</div>";
+                            // }
                         }
-                    }
-
-                },
-                {
-                    "data": "tanggal_kembali",
-                    "width": '15%',
-                    "defaultContent": "-",
-                     //render date format
-                    render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap'>" + moment(data).format('DD MMM YYYY') + "</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
-                        }
-                    }
-                },
-                {
-                    "data": "maks",
-                    "width": '10%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        if (data && data.kode_mak) {
-                            return "<div class='text-wrap'>" + data.kode_mak + "</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
-                        }
-                    }
-                },
-                {
-                    "data": "keterangan",
-                    "width": '20%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data + "</div>";
                     },
-                },
-                {
-                    "data": "status_perjalanans",
-                    "width": '15%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        if (data && data.name) {
-                            return "<div class='text-wrap'>" + data.name + "</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
+                    {
+                        "data": "tujuan",
+                        "width": '10%',
+                        "defaultContent": "-",
+                        render: function(data, type, row) {
+                            var tujuan = "";
+                            var angka = 1;
+                            for (var i = 0; i < data.length; i++) {
+                                tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + formatIndonesianDate(data[i].tanggal_pulang) + "</div>";
+                                angka++;
+                            }
+                            return tujuan;
+                            // if (data && data.tanggal_pulang) {
+                            //     return "<div class='text-wrap'>" + data.tanggal_pulang + "</div>";
+                            // } else {
+                            //     return "<div class='text-wrap'>-</div>";
+                            // }
                         }
-                    }
-                },
+                    },
+                    {
+                        "data": "estimasi_biaya",
+                        "width": '10%',
+                        "defaultContent": "-",
+                        render: function(data, type, row) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                        },
+                    },
                 {
                     "data": "id",
                     "width": '15%',

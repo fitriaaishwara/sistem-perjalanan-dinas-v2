@@ -36,31 +36,39 @@
                                     <div id="myModal" class="card-body">
                                         <div class="col-lg-12">
                                             <input type="hidden" name="id_perjalanan" id="id_perjalanan" value="{{ $perjalanan->id }}">
-                                            <input type="hidden" name="id_pegawai" id="id_pegawai" value="{{ $perjalanan->id_pegawai }}">
-                                            <input type="hidden" name="id_mak" id="id_mak" value="{{ $perjalanan->id_mak }}">
+                                            {{-- <input type="hidden" name="id_mak" id="id_mak" value="{{ $perjalanan->id_mak }}"> --}}
                                             <div class="form-group">
                                                 <label for="nomor_nota_dinas">Nomor Nota Dinas</label>
                                                 <input type="text" class="form-control" id="nomor_nota_dinas" name="nomor_nota_dinas" placeholder="Nomor Nota Dinas">
                                             </div>
                                             <div class="form-group">
-                                                <label for="tujuan_nota_dinas">Tujuan / Yth</label>
-                                                <input type="text" class="form-control" id="tujuan_nota_dinas" name="tujuan_nota_dinas" placeholder="Tujuan Nota Dinas / Yth">
+                                                <label for="yth">Tujuan / Yth</label>
+                                                <input type="text" class="form-control" id="yth" name="yth" placeholder="Tujuan Nota Dinas / Yth">
                                             </div>
                                             <div class="form-group">
-                                                <label for="dari_nota_dinas">Dari</label>
-                                                <input type="text" class="form-control" id="dari_nota_dinas" name="dari_nota_dinas" placeholder="Nota Dinas Dari">
+                                                <label for="dari">Dari</label>
+                                                <input type="text" class="form-control" id="dari" name="dari" placeholder="Nota Dinas Dari">
                                             </div>
                                             <div class="form-group">
-                                                <label for="perihal_nota_dinas">Perihal</label>
-                                                <input type="text" class="form-control" id="perihal_nota_dinas" name="perihal_nota_dinas" placeholder="Perihal Nota Dinas" value="{{ $perjalanan->keterangan }}" readonly>
+                                                <label for="perihal">Perihal</label>
+                                                <input type="text" class="form-control" id="perihal" name="perihal" placeholder="Perihal Nota Dinas" value="{{ $perjalanan->perihal_perjalanan }}" readonly>
                                             </div>
                                             <div id="showTanggal_nota_dinas" class="form-group">
                                                 <label for="tanggal_nota_dinas">Tanggal Nota Dinas</label>
                                                 <input type="text" name="tanggal_nota_dinas" id="tanggal_nota_dinas" class="form-control date"  placeholder="Pilih Tanggal Nota Dinas" validate>
                                             </div>
                                             <div class="form-group">
-                                                <label for="dalam_rangka_nota_dinas">Dalam Rangka Nota Dinas</label>
-                                                <textarea class="form-control" id="dalam_rangka_nota_dinas" name="dalam_rangka_nota_dinas" rows="3" placeholder="Dalam Rangka Nota Dinas"></textarea>
+                                                <label for="isi_nota_dinas">Dalam Rangka Nota Dinas</label>
+                                                <textarea class="form-control" id="isi_nota_dinas" name="isi_nota_dinas" rows="3" placeholder="Isi Nota Dinas"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="id_staff_penandatangan">Ditandatangani Oleh: </label>
+                                                <select class="form-control select2" id="id_staff_penandatangan" name="id_staff_penandatangan">
+                                                    <option value="">Pilih Penandatangan</option>
+                                                    @foreach ($staff as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -101,7 +109,7 @@
 
     $(function () {
         $('#tanggal_nota_dinas').flatpickr({
-            dateFormat: "d-m-Y",
+            // dateFormat: "d-m-Y",
         });
 
     });

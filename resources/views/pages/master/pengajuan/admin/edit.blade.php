@@ -75,6 +75,60 @@
         </div>
     </div>
 </div>
+    <div id="myModalStaff" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalTujuanLabel" aria-hidden="true">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">
+                    <span class="fw-mediumbold">
+                        Staff Yang Ditugaskan
+                    </span>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{route('pengajuan/edit/save_staff', $perjalanan->id)}}" id="formStaffPilih">
+                    @csrf
+                    <input type="hidden" name="id_edit" id="id_edit">
+                    
+                    <div class="row mb-4">
+                        <label for="id_staff" class="col-sm-3 col-form-label">Staff<span
+                                style="color:red;">*</span></label>
+                        <div class="col-sm-9 validate">
+                            <select name="id_staff" class="form-control select2" required id="id_staff">
+                                <option value="">Pilih Staff</option>
+                                @foreach ($staff as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <label for="id_tujuan_perjalanan" class="col-sm-3 col-form-label">Informasi Tujuan<span
+                                style="color:red;">*</span></label>
+                        <div class="col-sm-9 validate">
+                            <select name="id_tujuan_perjalanan" class="form-control select2" required id="id_tujuan_perjalanan">
+                                <option value="">Pilih Tujuan</option>
+                                @foreach ($perjalanan->tujuan()->get() as $item)
+                                    <option value="{{ $item->id }}">{{ $item->tempat_tujuan . ' - ' . $item->tempat_berangkat }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="$('form#formStaffPilih').submit()" class="btn btn-dark waves-effect waves-light btn-sm">Save changes</button>
+                <button type="button" class="btn btn-secondary waves-effect btn-sm"
+                    data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="container">
 	<div class="page-inner">
 		<div class="page-header">
@@ -584,68 +638,18 @@
                     return (request);
                 },
             },
-            "columns": [{
-                    "data": null,
-                    "width": '5%',
-                    render: function(data, type, row, meta) {
-                        return meta.row + meta.settings._iDisplayStart + 1;
-                    }
-                },
+            "columns": [
                 {
-                    "data": "staff",
-                    "width": '15%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        if (data && data.name) {
-                            return "<div class='text-wrap'>" + data.name + "</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
-                        }
-                    },
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    // orderable: false,
+                    // searchable: false,
                 },
-                {
-                    "data": "staff",
-                    "width": '15%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        if(data && data.jenis == 0){
-                            return "<div class='text-wrap'>PNS</div>";
-                        } else if(data && data.jenis == 1){
-                            return "<div class='text-wrap'>Non - PNS (PPPK)</div>";
-                        } else if(data && data.jenis == 2){
-                            return "<div class='text-wrap'>Honorer</div>";
-                        } else if(data && data.jenis == 3){
-                            return "<div class='text-wrap'>(Lainnya)</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
-                        }
-                    }
-                },
-                {
-                    "data": "staff",
-                    "width": '15%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data + "</div>";
-
-                    },
-                },
-                {
-                    "data": "staff",
-                    "width": '15%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data + "</div>";
-                    },
-                },
-                {
-                    "data": "staff",
-                    "width": '15%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data + "</div>";
-                    },
-                },
+                {"data": "nama","name": "nama"},
+                {"data": "jenis","name": "jenis"},
+                {"data": "jabatan","name": "jabatan"},
+                {"data": "golongan","name": "golongan"},
+                {"data": "instansi","name": "instansi"},
                 {
                     "data": "id",
                     "width": '10%',

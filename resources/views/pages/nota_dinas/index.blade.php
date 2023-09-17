@@ -222,7 +222,7 @@
                             '" name="btnDownload" data-id="' + data +
                             '" type="button" class="btn btn-primary btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
 
-                            console.log(row);
+                            // console.log(row);
                         return btnTambah + btnEdit + btnDownload;
                     },
                 },

@@ -27,7 +27,9 @@ class Perjalanan extends Model
         // return Tujuan::where('id_perjalanan', $this->id) -> where('status', true);
     }
 
-
+    function nota_dinas() {
+        return $this->hasOne(NotaDinas::class, 'id_perjalanan', 'id');
+    }
 
 
 }

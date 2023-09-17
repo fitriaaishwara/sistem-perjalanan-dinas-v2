@@ -153,10 +153,12 @@ Route::group(['middleware' => ['auth']], function () {
 
     //Nota Dinas
     Route::get('/nota-dinas', [App\Http\Controllers\Web\NotaDinasController::class, 'index'])->name('nota-dinas');
-    Route::post('/nota-dinas/getData', [App\Http\Controllers\Web\NotaDinasController::class, 'getData'])->name('nota-dinas/getData');
+    Route::any('/nota-dinas/getData', [App\Http\Controllers\Web\NotaDinasController::class, 'getData'])->name('nota-dinas/getData');
     Route::get('/nota-dinas/create/{id}', [App\Http\Controllers\Web\NotaDinasController::class, 'create'])->name('nota-dinas/create');
+    Route::get('/nota-dinas/edit/{id}', [App\Http\Controllers\Web\NotaDinasController::class, 'edit'])->name('nota-dinas/edit');
     Route::any('/nota-dinas/store/', [App\Http\Controllers\Web\NotaDinasController::class, 'store'])->name('nota-dinas/store');
-    Route::get('/nota-dinas/pdf/{id}', [App\Http\Controllers\Web\NotaDinasController::class, 'notaDinasPDF'])->name('nota-dinas/pdf');
+    Route::any('/nota-dinas/update/{id}', [App\Http\Controllers\Web\NotaDinasController::class, 'update'])->name('nota-dinas/update');
+    Route::get('/nota-dinas/pdf/{id}', [App\Http\Controllers\Web\NotaDinasController::class, 'pdf'])->name('nota-dinas/pdf');
 
     //SPT
     Route::get('/surat-perintah-tugas', [App\Http\Controllers\Web\SptController::class, 'index'])->name('spt');

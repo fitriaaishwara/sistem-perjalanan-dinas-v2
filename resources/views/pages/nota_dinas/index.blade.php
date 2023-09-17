@@ -211,12 +211,15 @@
                         var btnEdit = "";
 
                         //if tujuam modal id is empty
-                            btnTambah += '<a href="/nota-dinas/create/' + data +
-                                '" name="btnTambah" data-id="' + data +
-                                '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
-                            btnEdit += '<a href="/nota-dinas/edit/' + data +
-                                '" name="btnEdit" data-id="' + data +
-                                '" type="button" class="btn btn-primary btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
+                            if (row.nota_dinas == null) {
+                                btnTambah += '<a href="/nota-dinas/create/' + data +
+                                    '" name="btnTambah" data-id="' + data +
+                                    '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';   
+                            } else if (row.nota_dinas != null) {
+                                btnEdit += '<a href="/nota-dinas/edit/' + data +
+                                    '" name="btnEdit" data-id="' + data +
+                                    '" type="button" class="btn btn-primary btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';   
+                            }
 
                         btnDownload += '<a href="/nota-dinas/pdf/' + data +
                             '" name="btnDownload" data-id="' + data +

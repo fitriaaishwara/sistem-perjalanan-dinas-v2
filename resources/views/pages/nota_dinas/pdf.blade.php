@@ -56,7 +56,7 @@
                     :
                 </td>
                 <td>
-                    {{ $data->tujuan_nota_dinas }}
+                    {{ $data->yth }}
                 </td>
             </tr>
             <tr>
@@ -67,7 +67,7 @@
                     :
                 </td>
                 <td>
-                    {{ $data->dari_nota_dinas }}
+                    {{ $data->dari }}
                 </td>
             </tr>
             <tr>
@@ -78,7 +78,7 @@
                     :
                 </td>
                 <td>
-                    {{ $data->perihal_nota_dinas }}
+                    {{ $data->perihal }}
                 </td>
             </tr>
             <tr>
@@ -89,7 +89,7 @@
                     :
                 </td>
                 <td>
-                    {{ tanggal_indonesia($data->tanggal_nota_dinas) }}
+                    {{ tgl_indo($data->tanggal_nota_dinas) }}
                 </td>
             </tr>
         </table>

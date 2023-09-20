@@ -35,19 +35,18 @@
                                     </div>
                                     <div id="myModal" class="card-body">
                                         <div class="col-lg-12">
-                                            <input type="hidden" name="id_perjalanan" id="id_perjalanan" value="{{ $perjalanan->id }}">
-                                            <input type="hidden" name="id_pegawai" id="id_pegawai" value="{{ $perjalanan->id_pegawai }}">
+
                                             <div class="form-group">
-                                                <label for="nomor_spt">Nomor</label>
-                                                <input type="text" class="form-control" id="nomor_spt" name="nomor_spt" placeholder="Nomor Surat Perintah Tugas">
+                                                <label for="nomor_spt">Nomor SPT</label>
+                                                <select name="nomor_spt" id="nomor_spt" class="form-control select2" validate>
+                                                    <option value="">Pilih Nomor SPT</option>
+                                                    <option value="1">Nomor :&emsp;&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;&emsp;SesDep.4  /SPT/         IX            2023</option>
+                                                    <option value="2">Nomor :&emsp;&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;&emsp;Dep.4  /SPT/         IX            2023</option>
+                                                </select>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="dikeluarkan_di">Dikeluarkan-di</label>
-                                                <input type="text" class="form-control" id="dikeluarkan_di" name="dikeluarkan_di" placeholder="Dikeluarkan-di">
-                                            </div>
-                                            <div id="showPada_Tanggal" class="form-group">
-                                                <label for="pada_tanggal">Pada Tanggal</label>
-                                                <input type="text" name="pada_tanggal" id="pada_tanggal" class="form-control date"  placeholder="Pilih Tanggal SPT terbit" validate>
+                                            <div id="showDikeluarkan_tanggal" class="form-group">
+                                                <label for="dikeluarkan_tanggal">Dikeluarkan Tanggal</label>
+                                                <input type="text" name="dikeluarkan_tanggal" id="dikeluarkan_tanggal" class="form-control date"  placeholder="Pilih Tanggal SPT terbit" validate>
                                             </div>
                                         </div>
                                     </div>
@@ -87,7 +86,7 @@
 	// demi si fitri
 
     $(function () {
-        $('#pada_tanggal').flatpickr({
+        $('#dikeluarkan_tanggal').flatpickr({
             dateFormat: "Y-m-d",
         });
 

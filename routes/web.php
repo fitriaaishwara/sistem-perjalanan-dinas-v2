@@ -162,7 +162,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     //SPT
     Route::get('/surat-perintah-tugas', [App\Http\Controllers\Web\SptController::class, 'index'])->name('spt');
-    Route::post('/surat-perintah-tugas/getData', [App\Http\Controllers\Web\SptController::class, 'getData'])->name('spt/getData');
+    Route::any('/surat-perintah-tugas/getData', [App\Http\Controllers\Web\SptController::class, 'getData'])->name('spt/getData');
     Route::get('/surat-perintah-tugas/create/{id}', [App\Http\Controllers\Web\SptController::class, 'create'])->name('spt/create');
     Route::any('/surat-perintah-tugas/store/', [App\Http\Controllers\Web\SptController::class, 'store'])->name('spt/store');
     Route::get('/surat-perintah-tugas/pdf/{id}', [App\Http\Controllers\Web\SptController::class, 'sptPDF'])->name('spt/pdf');

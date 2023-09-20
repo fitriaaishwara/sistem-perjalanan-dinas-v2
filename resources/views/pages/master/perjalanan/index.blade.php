@@ -235,6 +235,10 @@
                             return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
                         },
                     },
+                    {
+                        //empty column for action
+
+                    },
                 {
                     "data": "id",
                     "width": '15%',

@@ -31,9 +31,4 @@ class Staff extends Model
         return $this->belongsTo(Instansi::class, 'id_instansi', 'id');
     }
 
-    public function dataStaffPerjalanans()
-    {
-        return $this->hasMany(DataStaffPerjalanan::class, 'id_staff', 'id');
-    }
-
 }

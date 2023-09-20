@@ -163,7 +163,7 @@
                         "width": '10%',
                         "defaultContent": "-",
                         render: function(data, type, row) {
-                            return "<div class='text-wrap'>" + data + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
                         },
                     },
                     {
@@ -172,7 +172,7 @@
                         "defaultContent": "-",
                         render: function(data, type, row) {
                             let description = (data) ? data : '-';
-                            return "<div class='text-wrap'>" + description + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + description + "</div>";
                         },
                     },
                     {

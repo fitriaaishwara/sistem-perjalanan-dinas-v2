@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNotaDinasTable extends Migration
+class CreateSptTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,13 @@ class CreateNotaDinasTable extends Migration
      */
     public function up()
     {
-        Schema::create('nota_dinas', function (Blueprint $table) {
+        Schema::create('spt', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('id_perjalanan');
-            $table->foreignUuid('id_staff_penandatangan');
-            $table->string('nomor_nota_dinas');
-            $table->string('yth');
-            $table->string('dari');
-            $table->string('perihal');
-            $table->date('tanggal_nota_dinas');
-            $table->text('isi_nota_dinas');
-            $table->string('status_nota_dinas')->nullable();
+            $table->foreignUuid('id_tujuan')->nullable();
+            $table->foreignUuid('id_staff')->nullable();
+            $table->foreignUuid('id_staff_penandatangan')->nullable();
+            $table->string('nomor_spt');
+            $table->date('dikeluarkan_tanggal');
             $table->boolean('status')->default (1);
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
@@ -31,9 +27,9 @@ class CreateNotaDinasTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('id_perjalanan')->references('id')->on('perjalanan');
+            $table->foreign('id_tujuan')->references('id')->on('data_tujuan_perjalanan');
+            $table->foreign('id_staff')->references('id')->on('data_staff_perjalanan');
             $table->foreign('id_staff_penandatangan')->references('id')->on('staff');
-
         });
     }
 
@@ -44,6 +40,6 @@ class CreateNotaDinasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('nota_dinas');
+        Schema::dropIfExists('spt');
     }
 }

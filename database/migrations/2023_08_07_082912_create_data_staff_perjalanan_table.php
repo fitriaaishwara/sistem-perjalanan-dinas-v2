@@ -14,10 +14,10 @@ class CreateDataStaffPerjalananTable extends Migration
     public function up()
     {
         Schema::create('data_staff_perjalanan', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->foreignUuid('id_staff');
             $table->foreignUuid('id_perjalanan');
-            $table->foreignUuid(('id_tujuan_perjalanan'));
+            $table->foreignUuid('id_tujuan_perjalanan');
             $table->boolean('status')->default (1);
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

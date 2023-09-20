@@ -1,11 +1,11 @@
 @extends('pages.layouts.master')
 @section('content')
-@section('title', 'Surat Perintah Tugas')
+@section('title', 'Surat Perjalanan Dinas')
 
 <div class="container">
     <div class="page-inner">
         <div class="page-header">
-            <h4 class="page-title">Surat Perintah Tugas</h4>
+            <h4 class="page-title">Surat Perjalanan Dinas</h4>
             <ul class="breadcrumbs">
                 <li class="nav-home">
                     <a href="#">
@@ -22,7 +22,7 @@
                     <i class="flaticon-right-arrow"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="#">Surat Perintah Tugas</a>
+                    <a href="#">Surat Perintah Dinas</a>
                 </li>
             </ul>
         </div>
@@ -40,12 +40,14 @@
                             <table id="myTable" class="display table table-striped table-hover" >
                                 <thead>
                                     <tr>
-                                        <th>Nomor</th>
-                                        <th>MAK</th>
-                                        <th>Tujuan</th>
-                                        <th>Tanggal Berangkat</th>
-                                        <th>Tanggal Kembali</th>
-                                        <th>Perihal</th>
+                                        <th>Nomor SPD</th>
+                                        <th>Pejabat Pembuat Komitmen</th>
+                                        <th>Nama/NIP Pegawai</th>
+                                        <th>Maksud Perjalanan Dinas</th>
+                                        <th>Tempat Tujuan</th>
+                                        <th>Lama Perjalanan Dinas</th>
+                                        <th>Instansi</th>
+                                        <th>Akun</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -160,6 +162,32 @@
                     render: function(data, type, row) {
                         if (data) {
                             return "<div class='text-wrap'>" + moment(data).format('DD MMM YYYY') + "</div>";
+                        } else {
+                            return "<div class='text-wrap'>-</div>";
+                        }
+                    }
+                },
+                {
+                    "data": "keterangan",
+                    "width": '15%',
+                    "defaultContent": "-",
+                     //render date format
+                    render: function(data, type, row) {
+                        if (data) {
+                            return "<div class='text-wrap'>" + data + "</div>";
+                        } else {
+                            return "<div class='text-wrap'>-</div>";
+                        }
+                    }
+                },
+                {
+                    "data": "keterangan",
+                    "width": '15%',
+                    "defaultContent": "-",
+                     //render date format
+                    render: function(data, type, row) {
+                        if (data) {
+                            return "<div class='text-wrap'>" + data + "</div>";
                         } else {
                             return "<div class='text-wrap'>-</div>";
                         }

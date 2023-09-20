@@ -41,11 +41,11 @@
                                 <thead>
                                     <tr>
                                         <th>Nomor SPT</th>
-                                        <th>MAK</th>
+                                        <th>Diperintahkan Kepada</th>
+                                        <th>Maksud Perjalanan</th>
                                         <th>Tujuan</th>
-                                        <th>Tanggal Berangkat</th>
-                                        <th>Tanggal Kembali</th>
-                                        <th>Perihal</th>
+                                        <th>Jangka Waktu</th>
+                                        <th>Dikeluarkan</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -106,73 +106,81 @@
             },
             "columns": [
                 {
-                    "data": "spt",
+                    "data": "nomor_spt",
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        if (data && data.nomor_spt) {
-                            return "<div class='text-wrap'>" + data.nomor_spt + "</div>";
-                        }
-                    }
-                },
-                {
-                    "data": "maks",
-                    "width": '10%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        if (data && data.kode_mak) {
-                            return "<div class='text-wrap'>" + data.kode_mak + "</div>";
+                        if (data) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
                         } else {
-                            return "<div class='text-wrap'>-</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
                         }
-                    }
-                },
-                {
-
-                    "data": "tujuan",
-                    "width": '10%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data + "</div>";
                     },
                 },
                 {
-                    "data": "tanggal_berangkat",
+                    "data": "staff",
+                    "width": '10%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        var result = "<div class='text-wrap' style='font-size: 12px;'>";
+                        $.each (data, function (key, val) {
+                            // console.log(val);
+                            result += (key + 1) + ". " + val.staff.name + "<br>";
+                        });
+
+                        result += "</div>";
+                        return result;
+                    }
+                },
+                {
+                    "data": "perjalanan",
+                    "width": '10%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        if (data.perihal_perjalanan) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.perihal_perjalanan + "</div>";
+                        } else {
+                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
+                        }
+                    }
+                },
+                {
+                    "data": "tempat_tujuan",
                     "width": '15%',
                     "defaultContent": "-",
                     //render date format
                     render: function(data, type, row) {
                         if (data) {
-                            return "<div class='text-wrap'>" + moment(data).format('DD MMM YYYY') + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
                         } else {
-                            return "<div class='text-wrap'>-</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
                         }
                     }
 
                 },
                 {
-                    "data": "tanggal_kembali",
+                    "data": "tanggal_berangkat",
                     "width": '15%',
                     "defaultContent": "-",
-                     //render date format
                     render: function(data, type, row) {
                         if (data) {
-                            return "<div class='text-wrap'>" + moment(data).format('DD MMM YYYY') + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + moment(data).format('DD MMM YYYY') + " s/d " + moment(row.tanggal_kembali).format('DD MMM YYYY') + "</div>";
                         } else {
-                            return "<div class='text-wrap'>-</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
                         }
                     }
+
                 },
                 {
-                    "data": "keterangan",
+                    "data": "dikeluarkan_tanggal",
                     "width": '15%',
                     "defaultContent": "-",
                      //render date format
                     render: function(data, type, row) {
                         if (data) {
-                            return "<div class='text-wrap'>" + data + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + moment(data).format('DD MMM YYYY') + "</div>";
                         } else {
-                            return "<div class='text-wrap'>-</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>Belum Diterbitkan</div>";
                         }
                     }
                 },

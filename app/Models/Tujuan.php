@@ -18,6 +18,16 @@ class Tujuan extends Model
 
     public function perjalanan()
     {
-        return $this->belongsTo(Perjalanan::class, 'id_perjalanan', 'id');
+        return $this->hasOne(Perjalanan::class, 'id', 'id_perjalanan');
+    }
+
+    public function spt()
+    {
+        return $this->hasMany(Spt::class, 'id_tujuan', 'id');
+    }
+
+    public function staff()
+    {
+        return $this->hasMany(DataStaffPerjalanan::class, 'id_tujuan_perjalanan', 'id');
     }
 }

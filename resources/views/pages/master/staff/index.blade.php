@@ -198,7 +198,7 @@
                     "width": '10%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data + "</div>";
+                        return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
                     },
                 },
                 {
@@ -206,7 +206,7 @@
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data + "</div>";
+                        return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
                     },
                 },
                 {
@@ -215,11 +215,11 @@
                     "defaultContent": "-",
                     render: function(data, type, row) {
                         if(data == 0) {
-                            return "<div class='text-wrap'>PNS</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>PNS</div>";
                         } else if(data == 1) {
-                            return "<div class='text-wrap'>Non PNS (PPPK)</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>Non PNS (PPPK)</div>";
                         } else {
-                            return "<div class='text-wrap'>Honorer</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>Honorer</div>";
                         }
                     },
                 },

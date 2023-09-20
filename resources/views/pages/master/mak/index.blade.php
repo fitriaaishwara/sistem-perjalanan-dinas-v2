@@ -172,7 +172,7 @@
                         "width": '10%',
                         "defaultContent": "-",
                         render: function(data, type, row) {
-                            return "<div class='text-wrap'>" + data + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
                         },
                     },
                     {
@@ -180,7 +180,7 @@
                         "width": '10%',
                         "defaultContent": "-",
                         render: function(data, type, row) {
-                            return "<div class='text-wrap'>" + data + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
                         },
                     },
                     {
@@ -189,9 +189,9 @@
                         "defaultContent": "-",
                         render: function(data, type, row) {
                             if (data == null) {
-                                return "<div class='text-wrap'>-</div>";
+                                return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
                             } else {
-                                return "<div class='text-wrap'>" + data + "</div>";
+                                return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
                             }
                         },
                     },
@@ -201,9 +201,9 @@
                         "defaultContent": "-",
                         render: function(data, type, row) {
                             if (data == null) {
-                                return "<div class='text-wrap'>-</div>";
+                                return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
                             } else {
-                                return "<div class='text-wrap'>" + data + "</div>";
+                                return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
                             }
                         },
                     },

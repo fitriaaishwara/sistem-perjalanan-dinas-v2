@@ -35,7 +35,7 @@ class DataPerjalananDinas extends Model
 
     function data_staff_perjalanan()
     {
-        return $this->hasMany(DataStaffPerjalanan::class, 'id_perjalanan', 'id');
+        return $this->hasMany(DataStaffPerjalanan::class, 'id', 'id_perjalanan');
     }
 
     function penginapan()

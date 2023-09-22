@@ -31,5 +31,10 @@ class Perjalanan extends Model
         return $this->hasOne(NotaDinas::class, 'id_perjalanan', 'id');
     }
 
+    function data_staff_perjalanan()
+    {
+        return $this->hasMany(DataStaffPerjalanan::class, 'id_perjalanan', 'id');
+    }
+
 
 }

@@ -25,7 +25,7 @@ class DataStaffPerjalanan extends Model
 
     public function perjalanan()
     {
-        return $this->hasOne(DataPerjalananDinas::class, 'id', 'id_perjalanan');
+        return $this->hasMany(Perjalanan::class, 'id', 'id_perjalanan');
     }
 
     public function staff()
@@ -33,9 +33,9 @@ class DataStaffPerjalanan extends Model
         return $this->belongsTo(Staff::class, 'id_staff', 'id');
     }
 
-    public function spt()
+    public function spd()
     {
-        return $this->hasMany(Spt::class, 'id_spt', 'id');
+        return $this->hasOne(Spd::class, 'id_staff_perjalanan', 'id');
     }
 
     public function penandatangan()

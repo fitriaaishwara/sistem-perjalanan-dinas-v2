@@ -14,8 +14,14 @@ class CreateSpdTable extends Migration
     public function up()
     {
         Schema::create('spd', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->uuid('id')->primary();
+            $table->foreignUuid('id_staff_perjalanan')->nullable();
+            $table->foreignUuid('nomor_spd')->nullable();
+            $table->string('pejabat_pembuat_komitmen');
+            $table->string('tingkat_biaya_perjalanan_dinas')->nullable();
+            $table->string('alat_angkutan')->nullable();
+            $table->string('keterangan')->nullable();
+            $table->date('pada_tanggal')->nullable();
         });
     }
 

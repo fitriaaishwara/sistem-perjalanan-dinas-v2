@@ -48,6 +48,15 @@
                                                 <label for="dikeluarkan_tanggal">Dikeluarkan Tanggal</label>
                                                 <input type="text" name="dikeluarkan_tanggal" id="dikeluarkan_tanggal" class="form-control date"  placeholder="Pilih Tanggal SPT terbit" validate>
                                             </div>
+                                            <div class="form-group">
+                                                <label for="nomor_spt">Penandatangan SPT</label>
+                                                <select name="nomor_spt" id="nomor_spt" class="form-control select2" validate>
+                                                    <option value="">Pilih Penandatangan</option>
+                                                    @foreach ($staff as $item)
+                                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

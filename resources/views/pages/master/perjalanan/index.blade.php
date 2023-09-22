@@ -232,11 +232,16 @@
                         "width": '10%',
                         "defaultContent": "-",
                         render: function(data, type, row) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + "Rp." + data + "</div>";
                         },
                     },
                     {
-                        //empty column for action
+                        "data": "status_perjalanan",
+                        "width": '10%',
+                        "defaultContent": "-",
+                        render: function(data, type, row) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>Active</div>";
+                        },
 
                     },
                 {

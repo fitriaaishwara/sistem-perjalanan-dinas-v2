@@ -59,7 +59,9 @@ class NotaDinasController extends Controller
         $perjalanan = Perjalanan::with(['nota_dinas']) -> find($id);
         $data = NotaDinas::where('id_perjalanan', $id)->first();
         $staff = Staff::where('status', true)->get();
-        return view('pages.nota_dinas.pdf', compact('perjalanan', 'staff', 'data'));
+        //pdf
+        $pdf = \PDF::loadView('pages.nota_dinas.pdf', compact('perjalanan', 'staff', 'data'));
+        return $pdf->stream();
     }
 
     public function store(Request $request)

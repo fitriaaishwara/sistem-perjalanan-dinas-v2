@@ -133,38 +133,63 @@
                 },
                 {
 
-                    "data": "tujuan",
+                    "data": "staff",
                     "width": '10%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data + "</div>";
-                    },
-                },
-                {
-                    "data": "tanggal_berangkat",
-                    "width": '15%',
-                    "defaultContent": "-",
-                    //render date format
-                    render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap'>" + moment(data).format('DD MMM YYYY') + "</div>";
+                        if (data && data.name) {
+                            return "<div class='text-wrap'>" + data.name + "</div>";
                         } else {
                             return "<div class='text-wrap'>-</div>";
                         }
                     }
+                },
+                {
 
+                    "data": "perjalanan",
+                    "width": '10%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        var result = "<div class='text-wrap' style='font-size: 12px;'>";
+                        $.each (data, function (key, val) {
+                            // console.log(val);
+                            result += val.perihal_perjalanan + "<br>";
+                        });
+
+                        result += "</div>";
+                        return result;
+                    }
                 },
                 {
-                    "data": "tanggal_kembali",
+
+                    "data": "tujuan_perjalanan",
+                    "width": '10%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        var result = "<div class='text-wrap' style='font-size: 12px;'>";
+                        $.each (data, function (key, val) {
+                            // console.log(val);
+                            result += val.tempat_tujuan + "<br>";
+                        });
+
+                        result += "</div>";
+                        return result;
+                    }
+                },
+                {
+                    "data": "tujuan_perjalanan",
                     "width": '15%',
                     "defaultContent": "-",
                      //render date format
                     render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap'>" + moment(data).format('DD MMM YYYY') + "</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
-                        }
+                        var result = "<div class='text-wrap' style='font-size: 12px;'>";
+                        $.each (data, function (key, val) {
+                            // console.log(val);
+                            result += val.lama_perjalanan + "<br>";
+                        });
+
+                        result += "</div>";
+                        return result;
                     }
                 },
                 {
@@ -181,29 +206,19 @@
                     }
                 },
                 {
-                    "data": "keterangan",
+                    "data": "perjalanan",
                     "width": '15%',
                     "defaultContent": "-",
                      //render date format
                     render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap'>" + data + "</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
-                        }
-                    }
-                },
-                {
-                    "data": "keterangan",
-                    "width": '15%',
-                    "defaultContent": "-",
-                     //render date format
-                    render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap'>" + data + "</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
-                        }
+                        var result = "<div class='text-wrap' style='font-size: 12px;'>";
+                        $.each (data, function (key, val) {
+                            // console.log(val);
+                            result += val.mak.kode_mak + "<br>";
+                        });
+
+                        result += "</div>";
+                        return result;
                     }
                 },
                 {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Spt;
+use App\Models\Staff;
 use App\Models\Tujuan;
 use Illuminate\Http\Request;
 
@@ -46,6 +47,7 @@ class SptController extends Controller
 
     public function create()
     {
-        return view('pages.spt.create');
+        $staff = Staff::where('status', true)->get();
+        return view('pages.spt.create', compact('staff'));
     }
 }

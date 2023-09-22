@@ -98,7 +98,7 @@
     <br>
 
     <div class="body font-12">
-        {{ $data->dalam_rangka_nota_dinas }}
+        {{ $data->isi_nota_dinas }}
     </div>
 
     {!!( Str::repeat('<br>', 2) )!!}

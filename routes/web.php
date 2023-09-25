@@ -172,7 +172,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/surat-perjalanan-dinas/getData', [App\Http\Controllers\Web\SpdController::class, 'getData'])->name('spd/getData');
     Route::get('/surat-perjalanan-dinas/create/{id}', [App\Http\Controllers\Web\SpdController::class, 'create'])->name('spd/create');
     Route::any('/surat-perjalanan-dinas/store/', [App\Http\Controllers\Web\SpdController::class, 'store'])->name('spd/store');
-    Route::get('/surat-perjalanan-dinas/pdf/{id}', [App\Http\Controllers\Web\SpdController::class, 'sptPDF'])->name('spd/pdf');
+    Route::get('/surat-perjalanan-dinas/pdf/{id}', [App\Http\Controllers\Web\SpdController::class, 'spdPDF'])->name('spd/pdf');
 
     //SPD
     Route::get('/bukti-perjalanan', [App\Http\Controllers\Web\SpdController::class, 'index'])->name('bukti');

@@ -22,6 +22,16 @@ class CreateSpdTable extends Migration
             $table->string('alat_angkutan')->nullable();
             $table->string('keterangan')->nullable();
             $table->date('pada_tanggal')->nullable();
+
+            $table->boolean('status')->default(1);
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
+            $table->string('deleted_by')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+
+
+            $table->foreign('id_staff_perjalanan')->references('id')->on('data_staff_perjalanan')->onDelete('cascade');
         });
     }
 

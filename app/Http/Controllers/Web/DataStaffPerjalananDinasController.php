@@ -14,7 +14,7 @@ class DataStaffPerjalananDinasController extends Controller
         $keyword = $request ['searchkey'];
 
         $data = DataStaffPerjalanan::select()
-            ->with('perjalanan', 'staff')
+            ->with(['staff.golongans', 'staff.jabatans', 'staff.instansis'])
             ->when($keyword, function ($query, $keyword) {
                 return $query->where('name', 'like', '%' . $keyword . '%');
             })
@@ -50,29 +50,35 @@ class DataStaffPerjalananDinasController extends Controller
             })
             ->addColumn('golongan', function($db) {
                 $staff = Staff::where('id', $db->id_staff)->first();
+                $text = '';
+
+                if ($staff and !empty($staff->id_golongan)) {
+                    $text .= "<span><small>" . $staff->golongans->name . "</small></span><br>";
+                }
+
+                return $text;
             })
             ->addColumn('jenis', function($db) {
                 $staff = Staff::where('id', $db->id_staff)->first();
-                $text = '';
+                $text = "";
 
-                if ($staff and !empty($staff->jenis)) {
+                if ($staff) {
                     switch ($staff->jenis) {
+                        case 0:
+                            $text .= "<span class='badge badge-primary'><small>PNS</small></span><br>";
+                            break;
                         case 1:
-                            $text .= "<span class='badge badge-success'><small>PNS</small></span><br>";
+                            $text .= "<span class='badge badge-primary'><small>Non PNS</small></span><br>";
                             break;
-
                         case 2:
-                            $text .= "<span class='badge badge-success'><small>Non PNS</small></span><br>";
+                            $text .= "<span class='badge badge-primary'><small>Magang</small></span><br>";
                             break;
-
-                        case 3:
-                            $text .= "<span class='badge badge-primary'><small>Lainnya</small></span><br>";
-                            break;
-                        
                         default:
-                            $text .= "<span class='badge badge-danger'><small>Unknown</small></span><br>";
+                            $text .= "<span><small>-</small></span><br>";
                             break;
                     }
+                } else {
+                    $text .= "<span><small>-</small></span><br>";
                 }
 
                 return $text;
@@ -82,7 +88,7 @@ class DataStaffPerjalananDinasController extends Controller
                 $text = '';
 
                 if ($staff and !empty($staff->id_jabatan)) {
-                    # code...
+                    $text .= "<span><small>" . $staff->jabatans->name . "</small></span><br>";
                 }
 
                 return $text;
@@ -92,7 +98,7 @@ class DataStaffPerjalananDinasController extends Controller
                 $text = '';
 
                 if ($staff and !empty($staff->id_instansi)) {
-                    # code...
+                    $text .= "<span><small>" . $staff->instansis->name . "</small></span><br>";
                 }
 
                 return $text;

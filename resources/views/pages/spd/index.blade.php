@@ -108,24 +108,27 @@
             },
             "columns": [
                 {
-                    "data": "sppd",
+                    "data": "spd",
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        if (data && data.name) {
-                            return "<div class='text-wrap'>" + data.name + "</div>";
+                        if (data && data.nomor_spd) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.nomor_spd + "</div>";
                         } else {
                             return "<div class='text-wrap'>-</div>";
                         }
                     }
                 },
                 {
-                    "data": "maks",
+                    "data": "spd",
                     "width": '10%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        if (data && data.kode_mak) {
-                            return "<div class='text-wrap'>" + data.kode_mak + "</div>";
+                        if (data && data.pejabat_pembuat_komitmen) {
+                            if (data.pejabat_pembuat_komitmen == 1)
+                                return "<div class='text-wrap' style='font-size: 12px;'>Deputi Bidang Kewirausahaan</div>";
+                            else
+                                return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
                         } else {
                             return "<div class='text-wrap'>-</div>";
                         }
@@ -138,7 +141,7 @@
                     "defaultContent": "-",
                     render: function(data, type, row) {
                         if (data && data.name) {
-                            return "<div class='text-wrap'>" + data.name + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.name + "</div>";
                         } else {
                             return "<div class='text-wrap'>-</div>";
                         }
@@ -193,13 +196,12 @@
                     }
                 },
                 {
-                    "data": "keterangan",
-                    "width": '15%',
+                    "data": "staff",
+                    "width": '10%',
                     "defaultContent": "-",
-                     //render date format
                     render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap'>" + data + "</div>";
+                        if (data && data.instansis && data.instansis.name) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.instansis.name + "</div>";
                         } else {
                             return "<div class='text-wrap'>-</div>";
                         }
@@ -230,16 +232,16 @@
                         var btnEdit = "";
 
                         if (row.id_spt == "" || row.id_spt == null) {
-                            btnTambah += '<a href="/surat-perintah-tugas/create/' + data +
+                            btnTambah += '<a href="/surat-perjalanan-dinas/create/' + data +
                                 '" name="btnTambah" data-id="' + data +
                                 '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
                         } else {
-                            btnEdit += '<a href="/surat-perintah-tugas/edit/' + row.id_spt +
+                            btnEdit += '<a href="/surat-perjalanan-dinas/edit/' + row.id_spt +
                                 '" name="btnEdit" data-id="' + row.id_spt +
                                 '" type="button" class="btn btn-primary btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
                         }
 
-                        btnDownload += '<a href="/surat-perintah-tugas/pdf/' + row.id_spt +
+                        btnDownload += '<a href="/surat-perjalanan-dinas/pdf/' + row.id_spt +
                             '" name="btnDownload" data-id="' + row.id_spt +
                             '" type="button" class="btn btn-primary btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
 

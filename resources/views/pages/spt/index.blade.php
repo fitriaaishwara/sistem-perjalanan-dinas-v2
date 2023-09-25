@@ -106,16 +106,19 @@
             },
             "columns": [
                 {
-                    "data": "nomor_spt",
-                    "width": '15%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
-                        } else {
-                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
+                    "data": "spt",
+                        "width": '20%',
+                        "defaultContent": "-",
+                        render: function(data, type, row) {
+                            if (data) {
+                                if (data[0].nomor_spt == 1) {
+                                    return "<div class='text-wrap' style='font-size: 12px;'>Nomor :&emsp;&emsp;SesDep.4  /SPT/         IX            2023</div>";
+                                } else {
+                                    return "<div class='text-wrap' style='font-size: 12px;'>Nomor :&emsp;&emsp;Dep.4  /SPT/         IX            2023</div>";
+
+                                }
+                            }
                         }
-                    },
                 },
                 {
                     "data": "staff",
@@ -192,18 +195,18 @@
                         var btnDownload = "";
                         var btnEdit = "";
 
-                        if (row.id_spt == "" || row.id_spt == null) {
-                            btnTambah += '<a href="/surat-perintah-tugas/create/' + data +
-                                '" name="btnTambah" data-id="' + data +
-                                '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
-                        } else {
-                            btnEdit += '<a href="/surat-perintah-tugas/edit/' + row.id_spt +
-                                '" name="btnEdit" data-id="' + row.id_spt +
-                                '" type="button" class="btn btn-primary btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
-                        }
+                        if (row.spt == null) {
+                                btnTambah += '<a href="/surat-perintah-tugas/create/' + data +
+                                    '" name="btnTambah" data-id="' + data +
+                                    '" type="button" class="btn btn-success btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
+                            } else if (row.spt != null) {
+                                btnEdit += '<a href="/surat-perintah-tugas/edit/' + data +
+                                    '" name="btnEdit" data-id="' + data +
+                                    '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
+                            }
 
-                        btnDownload += '<a href="/surat-perintah-tugas/pdf/' + row.id_spt +
-                            '" name="btnDownload" data-id="' + row.id_spt +
+                        btnDownload += '<a href="/surat-perintah-tugas/pdf/' + data +
+                            '" name="btnDownload" data-id="' + data +
                             '" type="button" class="btn btn-primary btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
 
                             console.log(row);

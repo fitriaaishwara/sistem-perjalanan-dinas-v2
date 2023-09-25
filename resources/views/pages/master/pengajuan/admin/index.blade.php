@@ -107,6 +107,13 @@
 @push('js')
     <script type="text/javascript">
 
+        function rupiah($angka){
+            var reverse = $angka.toString().split('').reverse().join(''),
+            ribuan = reverse.match(/\d{1,3}/g);
+            ribuan = ribuan.join('.').split('').reverse().join('');
+            return ribuan;
+        }
+
         $(function() {
             let request = {
                 start: 0,
@@ -234,7 +241,7 @@
                         "defaultContent": "-",
                         render: function(data, type, row) {
                            //format_rupiah
-                            return "<div class='text-wrap' style='font-size: 12px;'>" +  data + "</div>";
+                           return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data) + "</div>";
                         },
                     },
                     {

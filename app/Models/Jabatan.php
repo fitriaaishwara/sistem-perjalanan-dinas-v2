@@ -15,4 +15,9 @@ class Jabatan extends Model
     protected $fillable = [
         'name', 'description', 'status'
     ];
+
+    public function staffs()
+    {
+        return $this->hasOne(Staff::class, 'id_jabatan', 'id');
+    }
 }

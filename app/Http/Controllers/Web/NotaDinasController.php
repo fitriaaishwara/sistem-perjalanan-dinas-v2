@@ -7,6 +7,7 @@ use App\Models\NotaDinas;
 use App\Models\Perjalanan;
 use App\Models\Staff;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\DataTables;
 
 class NotaDinasController extends Controller
@@ -60,8 +61,15 @@ class NotaDinasController extends Controller
         $data = NotaDinas::where('id_perjalanan', $id)->first();
         $staff = Staff::where('status', true)->get();
         //pdf
-        $pdf = \PDF::loadView('pages.nota_dinas.pdf', compact('perjalanan', 'staff', 'data'));
-        return $pdf->stream();
+        if ($data) {
+            $pdf = \PDF::loadView('pages.nota_dinas.pdf', compact('perjalanan', 'staff', 'data'));
+            return $pdf->stream();
+        } else {
+            //return redirect with Alert
+            //css for alert
+            Alert::error('Nota Dinas Tidak Ditemukan', 'Buat Naskah Terlebih Dahulu');
+            return redirect()->back();
+        }
     }
 
     public function store(Request $request)
@@ -85,9 +93,8 @@ class NotaDinasController extends Controller
         } catch (\Exception $ex) {
             $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }
-
         // return $data;
-        return redirect() -> back() -> with('success', $data['message']);
+        return redirect()->back()->with('success', $data['message']);
     }
 
     public function update(Request $request, $id)

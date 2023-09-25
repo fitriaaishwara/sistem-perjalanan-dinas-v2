@@ -92,7 +92,7 @@
                 <form method="POST" action="{{route('pengajuan/edit/save_staff', $perjalanan->id)}}" id="formStaffPilih">
                     @csrf
                     <input type="hidden" name="id_edit" id="id_edit">
-                    
+
                     <div class="row mb-4">
                         <label for="id_staff" class="col-sm-3 col-form-label">Staff<span
                                 style="color:red;">*</span></label>
@@ -113,7 +113,7 @@
                             <select name="id_tujuan_perjalanan" class="form-control select2" required id="id_tujuan_perjalanan">
                                 <option value="">Pilih Tujuan</option>
                                 @foreach ($perjalanan->tujuan as $item)
-                                    <option value="{{ $item->id }}">{{ $item->tempat_tujuan . ' - ' . $item->tempat_berangkat }}</option>
+                                    <option value="{{ $item->id }}">{{ $item->tempat_berangkat . ' - ' . $item->tempat_tujuan }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -218,8 +218,8 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Tempat Tujuan</th>
                                         <th>Tempat Berangkat</th>
+                                        <th>Tempat Tujuan</th>
                                         <th>Tanggal Berangkat</th>
                                         <th>Tanggal Kembali</th>
                                         <th>Tanggal Tiba</th>
@@ -327,7 +327,7 @@
                     }
                 },
                 {
-                    "data": "tempat_tujuan",
+                    "data": "tempat_berangkat",
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
@@ -335,7 +335,7 @@
                     },
                 },
                 {
-                    "data": "tempat_berangkat",
+                    "data": "tempat_tujuan",
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {

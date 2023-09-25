@@ -28,7 +28,7 @@ class Spd extends Model
 
     ];
 
-    public function staff_perjalanan()
+    public function data_staff_perjalanan()
     {
         return $this->belongsTo(DataStaffPerjalanan::class, 'id_staff_perjalanan', 'id');
     }

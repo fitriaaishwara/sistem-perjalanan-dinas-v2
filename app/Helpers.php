@@ -23,8 +23,17 @@ function tgl_indo($tanggal){
 	// variabel pecahkan 1 = bulan
 	// variabel pecahkan 2 = tahun
 
-	return $pecahkan[2] . ' ' . $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
+	return $pecahkan[0] . ' ' . $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[2];
 }
+//make function to format to rupiah indonesia
+
+    function rupiah($angka){
+
+        $hasil_rupiah = "Rp " . number_format($angka,2,',','.');
+        return $hasil_rupiah;
+
+    }
+
 
 function br_bookmarks_tagify_json_to_array( $value ) {
 

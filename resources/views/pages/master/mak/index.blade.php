@@ -118,6 +118,12 @@
 @endsection
 @push('js')
     <script type="text/javascript">
+        function rupiah($angka){
+            var reverse = $angka.toString().split('').reverse().join(''),
+            ribuan = reverse.match(/\d{1,3}/g);
+            ribuan = ribuan.join('.').split('').reverse().join('');
+            return ribuan;
+        }
         $(function() {
             let request = {
                 start: 0,
@@ -180,7 +186,7 @@
                         "width": '10%',
                         "defaultContent": "-",
                         render: function(data, type, row) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data) + "</div>";
                         },
                     },
                     {
@@ -191,7 +197,7 @@
                             if (data == null) {
                                 return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
                             } else {
-                                return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                                return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data) + "</div>";
                             }
                         },
                     },

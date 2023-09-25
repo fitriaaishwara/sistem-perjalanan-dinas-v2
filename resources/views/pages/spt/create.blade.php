@@ -30,12 +30,53 @@
                             <form action="{{ route('spt/store') }}" method="POST" id="pengajuanForm">
                                 @csrf
                                 <div class="card">
+                                    {{-- <div class="card-header">
+                                        <div class="card-title">Surat Perintah Tugas</div>
+                                    </div> --}}
+                                    <div id="myModal" class="card-body">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label for="nomor_spt">Staff Yang Ditugaskan</label>
+                                                <br>
+                                                <div class="table-responsive">
+                                                    <table id="myTable" class="display table table-striped table-hover" >
+                                                        <thead>
+                                                            <tr>
+                                                                <th style="width: 10px">No</th>
+                                                                <th>Nama</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($dataStaff as $item)
+                                                            <tr>
+                                                                <td>{{ $loop->iteration }}</td>
+                                                                <td>{{ $item->staff->name }}</td>
+                                                            </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                            </div>
+                                            <div id="showDikeluarkan_tanggal" class="form-group">
+                                                <label for="dikeluarkan_tanggal">Tujuan</label>
+                                                <input type="text" class="form-control date" value="{{ $tujuan->tempat_tujuan }}" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="nomor_spt">Tanggal Berangkat - Tanggal Kembali</label>
+                                                <input type="text" class="form-control date" value="{{ tgl_indo($tujuan->tanggal_berangkat) }} - {{ tgl_indo($tujuan->tanggal_kembali) }}" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
                                     <div class="card-header">
                                         <div class="card-title">Surat Perintah Tugas</div>
                                     </div>
                                     <div id="myModal" class="card-body">
                                         <div class="col-lg-12">
-
+                                            <input type="hidden" name="id_tujuan" id="id_tujuan" value="{{ $tujuan->id }}">
+                                            <input type="hidden" name="id_staff" id="id_staff" value="{{ $tujuan->id_staff }}">
                                             <div class="form-group">
                                                 <label for="nomor_spt">Nomor SPT</label>
                                                 <select name="nomor_spt" id="nomor_spt" class="form-control select2" validate>
@@ -49,8 +90,8 @@
                                                 <input type="text" name="dikeluarkan_tanggal" id="dikeluarkan_tanggal" class="form-control date"  placeholder="Pilih Tanggal SPT terbit" validate>
                                             </div>
                                             <div class="form-group">
-                                                <label for="nomor_spt">Penandatangan SPT</label>
-                                                <select name="nomor_spt" id="nomor_spt" class="form-control select2" validate>
+                                                <label for="id_staff_penandatangan">Penandatangan SPT</label>
+                                                <select name="id_staff_penandatangan" id="id_staff_penandatangan" class="form-control select2" validate>
                                                     <option value="">Pilih Penandatangan</option>
                                                     @foreach ($staff as $item)
                                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -97,6 +138,13 @@
     $(function () {
         $('#dikeluarkan_tanggal').flatpickr({
             dateFormat: "Y-m-d",
+        });
+
+        //select2
+        $('.select2').select2({
+            placeholder: 'Pilih Data',
+            theme: 'bootstrap',
+            allowClear: true
         });
 
     });

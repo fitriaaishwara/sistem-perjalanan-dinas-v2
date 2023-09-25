@@ -20,7 +20,7 @@ class StaffController extends Controller
         $keyword = $request['searchkey'];
 
         $data = Staff::select()
-            ->with(['golongans', 'jabatans'])
+            ->with(['golongans', 'jabatans', 'instansis'])
             ->offset($request['start'])
             ->limit(($request['length'] == -1) ? Staff::where('status', true)->count() : $request['length'])
             ->when($keyword, function ($query, $keyword) {

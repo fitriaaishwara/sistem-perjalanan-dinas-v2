@@ -74,6 +74,60 @@
         </div>
     </div>
 </div>
+<div id="myModalStaff" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalTujuanLabel" aria-hidden="true">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">
+                    <span class="fw-mediumbold">
+                        Staff Yang Ditugaskan
+                    </span>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{route('pengajuan/edit/save_staff', $perjalanan->id)}}" id="formStaffPilih">
+                    @csrf
+                    <input type="hidden" name="id_edit" id="id_edit">
+
+                    <div class="row mb-4">
+                        <label for="id_staff" class="col-sm-3 col-form-label">Staff<span
+                                style="color:red;">*</span></label>
+                        <div class="col-sm-9 validate">
+                            <select name="id_staff" class="form-control select2" required id="id_staff">
+                                <option value="">Pilih Staff</option>
+                                @foreach ($staff as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <label for="id_tujuan_perjalanan" class="col-sm-3 col-form-label">Informasi Tujuan<span
+                                style="color:red;">*</span></label>
+                        <div class="col-sm-9 validate">
+                            <select name="id_tujuan_perjalanan" class="form-control select2" required id="id_tujuan_perjalanan">
+                                <option value="">Pilih Tujuan</option>
+                                @foreach ($perjalanan->tujuan as $item)
+                                    <option value="{{ $item->id }}">{{ $item->tempat_berangkat . ' - ' . $item->tempat_tujuan }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="$('form#formStaffPilih').submit()" class="btn btn-dark waves-effect waves-light btn-sm">Save changes</button>
+                <button type="button" class="btn btn-secondary waves-effect btn-sm"
+                    data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="container">
 	<div class="page-inner">
 		<div class="page-header">
@@ -201,7 +255,7 @@
                 [10, 15, 25, 50, "All"]
             ],
             "ajax": {
-                "url": "{{ route('tujuan/getData') }}",
+                "url": "{{ route('tujuanById/getData' , ['id_perjalanan' => $perjalanan->id]) }}",
                 "type": "POST",
                 "headers": {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
@@ -520,7 +574,7 @@
                 [10, 15, 25, 50, "All"]
             ],
             "ajax": {
-                "url": "{{ route('staffData/getData') }}",
+                "url": "{{ route('staffById/getData' , ['id_perjalanan' => $perjalanan->id]) }}",
                 "type": "POST",
                 "headers": {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\DataStaffPerjalanan;
 use App\Models\Perjalanan;
+use App\Models\Staff;
 use App\Models\Tujuan;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -29,7 +31,7 @@ class TujuanController extends Controller
             })
             ->where('status', true)
             ->count();
-        
+
         return DataTables::of($data)
                     ->make(true);
     }
@@ -40,6 +42,19 @@ class TujuanController extends Controller
 
             $data = ['status' => false, 'message' => 'Tujuan failed to be found'];
             $data = Tujuan::where('id_perjalanan', $id)
+                ->where('status', true)
+                ->get();
+
+            return DataTables::of($data)
+                ->make(true);
+    }
+
+    public function getStaffByIdPerjalanan(Request $request, $id)
+    {
+        $perjalanan = Perjalanan::findOrFail($id);
+
+            $data = ['status' => false, 'message' => 'Staff failed to be found'];
+            $data = DataStaffPerjalanan::where('id_perjalanan', $id)
                 ->where('status', true)
                 ->get();
 

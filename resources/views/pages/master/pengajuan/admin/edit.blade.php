@@ -1,8 +1,8 @@
 @extends('pages.layouts.master')
 @section('content')
 @section('title', 'Data Pengajuan')
-    <!-- Modal -->
-    <div id="myModalTujuan" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalTujuanLabel" aria-hidden="true">
+<!-- Modal -->
+<div id="myModalTujuan" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalTujuanLabel" aria-hidden="true">
     <div class="modal-dialog" >
         <div class="modal-content">
             <div class="modal-header border-0" id="myModalTujuanLabel">
@@ -75,7 +75,7 @@
         </div>
     </div>
 </div>
-    <div id="myModalStaff" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalTujuanLabel" aria-hidden="true">
+<div id="myModalStaff" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalTujuanLabel" aria-hidden="true">
     <div class="modal-dialog" >
         <div class="modal-content">
             <div class="modal-header border-0">

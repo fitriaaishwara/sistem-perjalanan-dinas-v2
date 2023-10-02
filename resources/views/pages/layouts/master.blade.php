@@ -326,13 +326,6 @@
 							</a>
 						</li>
 
-                        <li class="nav-item {{ request()->is('pengajuan') || request()->is('pengajuan/*') ? 'active' : '' }}">
-                            <a href="{{ route('pengajuan') }}">
-								<i class="fas fa-plane-departure"></i>
-								<p>Pengajuan</p>
-							</a>
-						</li>
-
                         <li class="nav-section">
 							<span class="sidebar-mini-icon">
 								<i class="fa fa-ellipsis-h"></i>
@@ -352,38 +345,31 @@
 								<p>Jabatan</p>
 							</a>
 						</li>
-                        <li class="nav-item {{ request()->is('data-perjalanan') || request()->is('data-perjalanan/*') ? 'active' : '' }}">
-                            <a href="{{ route('dataPerjalanan') }}">
-								<i class="fas fa-plane-departure"></i>
-								<p>Data Perjalanan</p>
-							</a>
-						</li>
                         <li class="nav-item {{ request()->is('mak') || request()->is('mak/*') ? 'active' : '' }}">
                             <a href="{{ route('mak') }}">
 								<i class="fas fa-plane-departure"></i>
 								<p>Mata Anggaran Akun</p>
 							</a>
 						</li>
-
                         <li class="nav-section">
 							<span class="sidebar-mini-icon">
 								<i class="fa fa-ellipsis-h"></i>
 							</span>
-                            <h4 class="text-section">Management User</h4>
+                            <h4 class="text-section">Perjalanan</h4>
 						</li>
-                        <li class="nav-item {{ request()->is('role') || request()->is('role/*') ? 'active' : '' }}">
-                            <a href="{{ route('role') }}">
+                        <li class="nav-item {{ request()->is('pengajuan') || request()->is('pengajuan/*') ? 'active' : '' }}">
+                            <a href="{{ route('pengajuan') }}">
 								<i class="fas fa-plane-departure"></i>
-								<p>Role</p>
-							</a>
-						</li>
-                        <li class="nav-item {{ request()->is('user') || request()->is('user/*') ? 'active' : '' }}">
-                            <a href="{{ route('user') }}">
-								<i class="fas fa-plane-departure"></i>
-								<p>User</p>
+								<p>Pengajuan</p>
 							</a>
 						</li>
 
+                        <li class="nav-item {{ request()->is('data-perjalanan') || request()->is('data-perjalanan/*') ? 'active' : '' }}">
+                            <a href="{{ route('dataPerjalanan') }}">
+								<i class="fas fa-plane-departure"></i>
+								<p>Data Perjalanan</p>
+							</a>
+						</li>
                         <li class="nav-section">
 							<span class="sidebar-mini-icon">
 								<i class="fa fa-ellipsis-h"></i>
@@ -408,18 +394,12 @@
 								<p>SPD</p>
                             </a>
 						</li>
-                        <li class="nav-section">
-							<span class="sidebar-mini-icon">
-								<i class="fa fa-ellipsis-h"></i>
-							</span>
-							<h4 class="text-section">Dokumen</h4>
-						</li>
-						<li class="nav-item {{ request()->is('bukti-perjalanan') || request()->is('bukti-perjalanan/*') ? 'active' : '' }}">
-							<a href="{{ route('bukti') }}">
-								<i class="fas fa-file-invoice-dollar"></i>
-								<p>Upload Bukti</p>
-							</a>
-						</li>
+                        <li class="nav-item {{ request()->is('bukti-perjalanan') || request()->is('bukti-perjalanan/*') ? 'active' : '' }}">
+                            <a href="{{ route('bukti')}}">
+                                <i class="fas fa-file-invoice"></i>
+                                <p>Upload Dokumen</p>
+                            </a>
+                        </li>
 						<li class="nav-section">
 							<span class="sidebar-mini-icon">
 								<i class="fa fa-ellipsis-h"></i>
@@ -468,6 +448,24 @@
 									</li>
 								</ul>
 							</div>
+						</li>
+                        <li class="nav-section">
+							<span class="sidebar-mini-icon">
+								<i class="fa fa-ellipsis-h"></i>
+							</span>
+                            <h4 class="text-section">Management User</h4>
+						</li>
+                        <li class="nav-item {{ request()->is('role') || request()->is('role/*') ? 'active' : '' }}">
+                            <a href="{{ route('role') }}">
+								<i class="fas fa-plane-departure"></i>
+								<p>Role</p>
+							</a>
+						</li>
+                        <li class="nav-item {{ request()->is('user') || request()->is('user/*') ? 'active' : '' }}">
+                            <a href="{{ route('user') }}">
+								<i class="fas fa-plane-departure"></i>
+								<p>User</p>
+							</a>
 						</li>
 					</ul>
 				</div>

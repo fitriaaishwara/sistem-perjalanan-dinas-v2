@@ -31,4 +31,8 @@ class Staff extends Model
         return $this->belongsTo(Instansi::class, 'id_instansi', 'id');
     }
 
+
+
+
+
 }

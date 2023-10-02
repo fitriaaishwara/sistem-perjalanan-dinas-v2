@@ -26,8 +26,8 @@
 <body class="login">
 	<div class="wrapper wrapper-login wrapper-login-full p-0">
 		<div class="login-aside w-50 d-flex flex-column align-items-center justify-content-center text-center bg-secondary-gradient">
-			<h1 class="title fw-bold text-white mb-3">Join Our Comunity</h1>
-			<p class="subtitle text-white op-7">Ayo bergabung dengan komunitas kami untuk masa depan yang lebih baik</p>
+			<h1 class="title fw-bold text-white mb-3">Aplikasi Perjalanan Dinas</h1>
+			<p class="subtitle text-white op-7">Kementerian Koperasi dan UKM</p>
 		</div>
 		<div class="login-aside w-50 d-flex align-items-center justify-content-center bg-white">
 			<div class="container container-login container-transparent animated fadeIn">
@@ -41,7 +41,7 @@
                         </div>
                         <div class="form-group">
                             <label for="password" class="placeholder"><b>Password</b></label>
-                            <a href="#" class="link float-right">Forget Password ?</a>
+                            <a href="#" class="link float-right">Lupa Kata Sandi ?</a>
                             <div class="position-relative">
                                 <input id="password" name="password" type="password" class="form-control" :value="__('Password')"  required>
                                 <div class="show-password">
@@ -52,7 +52,7 @@
                         <div class="form-group form-action-d-flex mb-3">
                             <div class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" id="rememberme">
-                                <label class="custom-control-label m-0" for="rememberme">Remember Me</label>
+                                <label class="custom-control-label m-0" for="rememberme">Ingat Saya</label>
                             </div>
                             <button type="submit" class="btn btn-secondary col-md-5 float-right mt-3 mt-sm-0 fw-bold">Sign In</button>
                         </div>
@@ -100,7 +100,7 @@
 							<a href="#" id="show-signin" class="btn btn-danger btn-link w-100 fw-bold">Cancel</a>
 						</div>
 						<div class="col-md-6">
-							<a href="#" class="btn btn-secondary w-100 fw-bold">Sign Up</a>
+							<a href="#" class="btn btn-success w-100 fw-bold">Masuk</a>
 						</div>
 					</div>
 				</div>

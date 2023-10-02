@@ -100,7 +100,7 @@
                                                     <th>Kode Mata Anggaran</th>
                                                     <th>Saldo Awal Pagu</th>
                                                     <th>Saldo Pagu</th>
-                                                    <th>Keterangan</th>
+                                                    <th>Terealisasi</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>

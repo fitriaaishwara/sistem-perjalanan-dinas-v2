@@ -101,6 +101,8 @@ class PengajuanController extends Controller
 
         $perjalanan = Perjalanan::findOrFail($id);
 
+        $staff = Staff::where('status', 1)->get();
+
         try {
             $data = ['status' => false, 'message' => 'Jabatan failed to be found'];
             $data = Perjalanan::findOrFail($id);
@@ -111,7 +113,7 @@ class PengajuanController extends Controller
             $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }
 
-        return view('pages.master.pengajuan.admin.tujuan', compact('data','perjalanan'));
+        return view('pages.master.pengajuan.admin.tujuan', compact('data','perjalanan', 'staff'));
     }
 
     public function getData(Request $request)

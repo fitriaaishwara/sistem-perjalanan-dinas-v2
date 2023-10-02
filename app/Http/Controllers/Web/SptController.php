@@ -74,7 +74,7 @@ class SptController extends Controller
         }
         if ($data['status']) {
             Alert::success('SPT Berhasil Dibuat', 'Berhasil');
-            return redirect()->route('pages.spt.index');
+            return redirect()->route('spt');
         } else {
             Alert::error('SPT Gagal Dibuat', 'Gagal');
             return redirect()->back();

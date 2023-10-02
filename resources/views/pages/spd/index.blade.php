@@ -231,18 +231,18 @@
                         var btnDownload = "";
                         var btnEdit = "";
 
-                        if (row.id_spt == "" || row.id_spt == null) {
+                        if (row.spd == "" || row.spd == null) {
                             btnTambah += '<a href="/surat-perjalanan-dinas/create/' + data +
                                 '" name="btnTambah" data-id="' + data +
                                 '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
                         } else {
-                            btnEdit += '<a href="/surat-perjalanan-dinas/edit/' + row.id_spt +
-                                '" name="btnEdit" data-id="' + row.id_spt +
+                            btnEdit += '<a href="/surat-perjalanan-dinas/edit/' + data +
+                                '" name="btnEdit" data-id="' + data +
                                 '" type="button" class="btn btn-primary btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
                         }
 
-                        btnDownload += '<a href="/surat-perjalanan-dinas/pdf/' + row.id_spt +
-                            '" name="btnDownload" data-id="' + row.id_spt +
+                        btnDownload += '<a href="/surat-perjalanan-dinas/pdf/' + data +
+                            '" name="btnDownload" data-id="' + data +
                             '" type="button" class="btn btn-primary btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
 
                             console.log(row);

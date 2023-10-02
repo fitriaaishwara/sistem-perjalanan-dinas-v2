@@ -75,7 +75,7 @@ class SpdController extends Controller
         }
         if ($data['status']) {
             Alert::success('SPD Berhasil Dibuat', 'Berhasil');
-            return redirect()->route('pages.spd.index');
+            return redirect()->route('spd');
         } else {
             Alert::error('SPD Gagal Dibuat', 'Gagal');
             return redirect()->back();

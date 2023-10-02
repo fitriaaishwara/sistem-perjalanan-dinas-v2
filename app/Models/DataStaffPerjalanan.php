@@ -48,4 +48,9 @@ class DataStaffPerjalanan extends Model
         return $this->hasMany(Tujuan::class, 'id', 'id_tujuan_perjalanan');
     }
 
+    public function transportasi_berangkat()
+    {
+        return $this->hasMany(TransportasiBerangkat::class, 'id_staff_perjalanan', 'id');
+    }
+
 }

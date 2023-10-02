@@ -62,12 +62,14 @@
 </head>
 <body>
     <div class="text-center font-11">
-        <u><h1>SURAT PERINTAH TUGAS</h1></u>
+        <h1>SURAT PERINTAH TUGAS</h1>
+
         @if ($spt->nomor_spt == 1)
-            <p style="font-size: 12px">Nomor :&emsp;&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;&emsp;SesDep.4  /SPT/         IX            2023</p>
+            <p>Nomor :&emsp;&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;&emsp;SesDep.4  /SPT/         IX            2023</p>
         @else
-            <p style="font-size: 12px">Nomor :&emsp;&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;&emsp;Dep.4  /SPT/         IX            2023</p>
+            <p>Nomor :&emsp;&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;&emsp;Dep.4  /SPT/         IX            2023</p>
         @endif
+
     </div>
 
     <br>
@@ -75,95 +77,65 @@
     <div class="font-11">
         <table class="w-100">
             <tr>
-                <td style="width: 30px" class="text-center">
-                    I.
-                </td>
                 <td style="width: 250px; font-weight: bold">
-                    DIPERINTAHKAN KEPADA
+                    I.  DIPERINTAHKAN KEPADA
                 </td>
                 <td style="width: 30px" class="text-center">
                     :
-                </td>
-                <td>
                 </td>
             </tr>
             @foreach($dataStaff as $item)
             <tr>
-                <td style="width: 30px" class="text-center">
-                </td>
-                <td class="text" style="width: 100px">
+                <td class="text" style="width: 250px">
                     1. Nama
                 </td>
-                <td style="width: 30px" class="text-center">
-                    :
+                <td style="width: 100px" class="text-center">
+                    : {{ $item->staff->name }}
                 </td>
                 <td>
-                    {{ $item->staff->name }}
+                    {{-- {{ $data->pegawai->name }} --}}
                 </td>
             </tr>
             <tr>
-                <td style="width: 30px" class="text-center">
-                </td>
                 <td class="text" style="width: 100px">
                     2. Jabatan
                 </td>
-                <td style="width: 30px" class="text-center">
-                    :
+                <td style="width: 70px" class="text-center">
+                    : {{ $item->staff->jabatans->name }}
                 </td>
                 <td>
-                    {{ $item->staff->jabatans->name }}
+                    {{-- {{ $data->dari_nota_dinas }} --}}
                 </td>
             </tr>
             @endforeach
             <tr>
-                <td style="width: 30px" class="text-center">
-                    II.
-                </td>
-                <td style="width: 100px; font-weight: bold">
-                    MAKSUD PERJALANAN
+                <td style="width: 250px; font-weight: bold">
+                    II.  MAKSUD PERJALANAN
                 </td>
                 <td style="width: 30px" class="text-center">
-                    :
-                </td>
-                <td>
-                    {{ $tujuan->perjalanan->perihal_perjalanan }}
+                    : {{ $tujuan->perjalanan->perihal_perjalanan }}
                 </td>
             </tr>
             <tr>
-                <td style="width: 30px" class="text-center">
-                    III.
-                </td>
-                <td style="width: 100px; font-weight: bold">
-                    TUJUAN
+                <td style="width: 250px; font-weight: bold">
+                    III.  TUJUAN
                 </td>
                 <td style="width: 30px" class="text-center">
-                    :
-                </td>
-                <td>
-                    {{ $tujuan->tempat_tujuan }}
+                    :   {{ $tujuan->tempat_tujuan }}
                 </td>
             </tr>
             <tr>
-                <td style="width: 30px" class="text-center">
-                    IV
+                <td style="width: 250px; font-weight: bold">
+                    IV.  JANGKA WAKTU
                 </td>
-                <td style="width: 100px; font-weight: bold">
-                    JANGKA WAKTU
-                </td>
-                <td style="width: 30px" class="text-center">
-                    :
-                </td>
-                <td>
-                    Tgl. Berangkat : {{ tgl_indo($tujuan->tanggal_berangkat) }}
+                <td style="width: 100px" class="text-center">
+                    : Tgl. Berangkat : {{ tgl_indo($tujuan->tanggal_berangkat) }}
                     <br> Tgl. Kembali : {{ tgl_indo($tujuan->tanggal_kembali) }}
                 </td>
             </tr>
             <tr>
-                <td style="width: 30px" class="text-center">
-                    V.
-                </td>
-                <td style="width: 170px; font-weight: bold">
-                    KETERANGAN
+                <td style="width: 250px; font-weight: bold">
+                    V.  KETERANGAN
                 </td>
                 <td style="width: 30px" class="text-center">
                     :
@@ -188,21 +160,20 @@
         <table class="w-100 tabel_spd">
             <tr>
                 <td></td>
-                <td style="width: 30px"></td>
+                <td></td>
                 <td>
                     <div style="width: 250px; font-weight: bold">DIKELUARKAN DI : JAKARTA</div>
-                    <u><div style="width: 250px; font-weight: bold">PADA TANGGAL : {{ tgl_indo($spt->dikeluarkan_tanggal) }}</div></u>
+                    <div style="width: 250px; font-weight: bold">PADA TANGGAL : {{ tgl_indo($spt->dikeluarkan_tanggal) }}</div>
                 </td>
             </tr>
         </table>
     </div>
-    <br>
 
     <div class="font-11 w-100">
         <table class="w-100 tabel_ttd">
             <tr>
                 <td></td>
-                <td style="width: 30px"></td>
+                <td></td>
                 <td>
                     <div style="width: 250px; font-weight: bold">Sekretaris Deputi</div>
                     <div style="width: 250px; font-weight: bold">Deputi Bidang Kewirausahaan</div>
@@ -222,7 +193,7 @@
                     <div><div>
                     <div></div>
 
-                    {!!( Str::repeat('<br>', 6) )!!}
+                    {!!( Str::repeat('<br>', 4) )!!}
 
                     <div></div>
                     <div></div>
@@ -236,7 +207,10 @@
         <table class="w-100">
             <tr>
                 <td style="width: 250px">
-                    Tembusan :
+                    Tembusan
+                </td>
+                <td style="width: 30px" class="text-center">
+                    :
                 </td>
             </tr>
             <tr>

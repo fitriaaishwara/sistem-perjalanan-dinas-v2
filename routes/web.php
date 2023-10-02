@@ -135,6 +135,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/tujuan/{id}', [App\Http\Controllers\Web\TujuanController::class, 'show'])->name('tujuan/show');
     Route::post('/tujuan/delete/{id}', [App\Http\Controllers\Web\TujuanController::class, 'destroy'])->name('tujuan/delete');
 
+    Route::any('/staffById/getData/{id_perjalanan} ', [App\Http\Controllers\Web\TujuanController::class, 'getStaffByIdPerjalanan'])->name('staffById/getData');
+
     // Route::get('/tujuan', [App\Http\Controllers\Web\TujuanController::class, 'index'])->name('tujuan');
     Route::post('/DataStaffPerjalananDinas/getData', [App\Http\Controllers\Web\DataStaffPerjalananDinasController::class, 'getData'])->name('staffData/getData');
     Route::post('/DataStaffPerjalananDinas/store', [App\Http\Controllers\Web\DataStaffPerjalananDinasController::class, 'store'])->name('staffData/store');
@@ -174,12 +176,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::any('/surat-perjalanan-dinas/store/', [App\Http\Controllers\Web\SpdController::class, 'store'])->name('spd/store');
     Route::get('/surat-perjalanan-dinas/pdf/{id}', [App\Http\Controllers\Web\SpdController::class, 'spdPDF'])->name('spd/pdf');
 
-    //SPD
-    Route::get('/bukti-perjalanan', [App\Http\Controllers\Web\SpdController::class, 'index'])->name('bukti');
-    Route::post('/bukti-perjalanan/getData', [App\Http\Controllers\Web\SpdController::class, 'getData'])->name('bukti/getData');
-    Route::get('/bukti-perjalanan/create/{id}', [App\Http\Controllers\Web\SpdController::class, 'create'])->name('bukti/create');
-    Route::any('/bukti-perjalanan/store/', [App\Http\Controllers\Web\SpdController::class, 'store'])->name('bukti/store');
-    Route::get('/bukti-perjalanan/pdf/{id}', [App\Http\Controllers\Web\SpdController::class, 'sptPDF'])->name('bukti/pdf');
+    Route::get('/bukti-perjalanan', [App\Http\Controllers\Web\UploadBuktiController::class, 'index'])->name('bukti');
+    Route::any('/bukti-perjalananById/getData/{id_staff_perjalanan} ', [App\Http\Controllers\Web\UploadBuktiController::class, 'getUploadByIdBerangkat'])->name('uploadByIdBerangkat/getData');
+    Route::post('/bukti-perjalanan/getData', [App\Http\Controllers\Web\UploadBuktiController::class, 'getData'])->name('bukti/getData');
+    Route::get('/bukti-perjalanan/create/{id}', [App\Http\Controllers\Web\UploadBuktiController::class, 'create'])->name('bukti/create');
+    Route::any('/bukti-perjalanan/store/', [App\Http\Controllers\Web\UploadBuktiController::class, 'store'])->name('bukti/store');
+    Route::get('/bukti-perjalanan/pdf/{id}', [App\Http\Controllers\Web\UploadBuktiController::class, 'sptPDF'])->name('bukti/pdf');
 
     //Kwitansi
     Route::get('/kwitansi', [App\Http\Controllers\Web\SpdController::class, 'index'])->name('kwitansi');
@@ -187,6 +189,24 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/kwitansi/create/{id}', [App\Http\Controllers\Web\SpdController::class, 'create'])->name('kwitansi/create');
     Route::any('/kwitansi/store/', [App\Http\Controllers\Web\SpdController::class, 'store'])->name('kwitansi/store');
     Route::get('/kwitansi/pdf/{id}', [App\Http\Controllers\Web\SpdController::class, 'sptPDF'])->name('kwitansi/pdf');
+
+    //Transportasi
+    Route::post('/transportasi/getData', [App\Http\Controllers\Web\TransportasiController::class, 'getData'])->name('transportasi/getData');
+    Route::get('/transportasi', [App\Http\Controllers\Web\TransportasiController::class, 'index'])->name('transportasi');
+    Route::post('/transportasi/update', [App\Http\Controllers\Web\TransportasiController::class, 'update'])->name('transportasi/update');
+    Route::post('/transportasi/store', [App\Http\Controllers\Web\TransportasiController::class, 'store'])->name('transportasi/store');
+    Route::post('/transportasi/delete/{id}', [App\Http\Controllers\Web\TransportasiController::class, 'destroy'])->name('transportasi/delete');
+    Route::get('/transportasi/{id}', [App\Http\Controllers\Web\TransportasiController::class, 'show'])->name('transportasi/show');
+
+    //Transportasi Berangkat
+    Route::post('/transportasiBerangkat/getData', [App\Http\Controllers\Web\TransportasiBerangkatController::class, 'getData'])->name('transportasiBerangkat/getData');
+    Route::get('/transportasiBerangkat', [App\Http\Controllers\Web\TransportasiBerangkatController::class, 'index'])->name('transportasiBerangkat');
+    Route::post('/transportasiBerangkat/update', [App\Http\Controllers\Web\TransportasiBerangkatController::class, 'update'])->name('transportasiBerangkat/update');
+    Route::post('/transportasiBerangkat/store', [App\Http\Controllers\Web\TransportasiBerangkatController::class, 'store'])->name('transportasiBerangkat/store');
+    Route::post('/transportasiBerangkat/delete/{id}', [App\Http\Controllers\Web\TransportasiBerangkatController::class, 'destroy'])->name('transportasiBerangkat/delete');
+    Route::get('/transportasiBerangkat/{id}', [App\Http\Controllers\Web\TransportasiBerangkatController::class, 'show'])->name('transportasiBerangkat/show');
+
+
 });
 
 require __DIR__.'/auth.php';

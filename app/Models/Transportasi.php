@@ -25,4 +25,10 @@ class Transportasi extends Model
     {
         return $this->hasMany(TransportasiBerangkat::class, 'id_transportasi', 'id');
     }
+
+    public function transportasi_pulang()
+    {
+        return $this->hasMany(TransportasiPulang::class, 'id_transportasi', 'id');
+    }
+
 }

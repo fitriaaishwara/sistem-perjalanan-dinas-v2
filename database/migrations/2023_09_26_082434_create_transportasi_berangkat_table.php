@@ -17,7 +17,7 @@ class CreateTransportasiBerangkatTable extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('id_transportasi');
             $table->foreignUuid('id_staff_perjalanan');
-            $table->string('file');
+            $table->string('file_path');
             $table->string('deskripsi_file');
             $table->string('nominal');
             $table->string('ukuran_file')->nullable();

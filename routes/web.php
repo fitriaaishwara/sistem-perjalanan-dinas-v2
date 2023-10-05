@@ -177,7 +177,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/surat-perjalanan-dinas/pdf/{id}', [App\Http\Controllers\Web\SpdController::class, 'spdPDF'])->name('spd/pdf');
 
     Route::get('/bukti-perjalanan', [App\Http\Controllers\Web\UploadBuktiController::class, 'index'])->name('bukti');
-    Route::any('/bukti-perjalananById/getData/{id_staff_perjalanan} ', [App\Http\Controllers\Web\UploadBuktiController::class, 'getUploadByIdBerangkat'])->name('uploadByIdBerangkat/getData');
+    Route::any('/bukti-perjalananBerangkatById/getData/{id_staff_perjalanan} ', [App\Http\Controllers\Web\UploadBuktiController::class, 'getUploadByIdBerangkat'])->name('uploadByIdBerangkat/getData');
+    Route::any('/bukti-perjalananPulangById/getData/{id_staff_perjalanan} ', [App\Http\Controllers\Web\UploadBuktiController::class, 'getUploadByIdPulang'])->name('uploadByIdPulang/getData');
+    Route::any('/bukti-perjalananHotelById/getData/{id_staff_perjalanan} ', [App\Http\Controllers\Web\UploadBuktiController::class, 'getUploadByIdHotel'])->name('uploadByIdHotel/getData');
     Route::post('/bukti-perjalanan/getData', [App\Http\Controllers\Web\UploadBuktiController::class, 'getData'])->name('bukti/getData');
     Route::get('/bukti-perjalanan/create/{id}', [App\Http\Controllers\Web\UploadBuktiController::class, 'create'])->name('bukti/create');
     Route::any('/bukti-perjalanan/store/', [App\Http\Controllers\Web\UploadBuktiController::class, 'store'])->name('bukti/store');
@@ -206,6 +208,27 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/transportasiBerangkat/delete/{id}', [App\Http\Controllers\Web\TransportasiBerangkatController::class, 'destroy'])->name('transportasiBerangkat/delete');
     Route::get('/transportasiBerangkat/{id}', [App\Http\Controllers\Web\TransportasiBerangkatController::class, 'show'])->name('transportasiBerangkat/show');
 
+    //Transportasi Berangkat
+    Route::post('/transportasiPulang/getData', [App\Http\Controllers\Web\TransportasiPulangController::class, 'getData'])->name('transportasiPulang/getData');
+    Route::get('/transportasiPulang', [App\Http\Controllers\Web\TransportasiPulangController::class, 'index'])->name('transportasiPulang');
+    Route::post('/transportasiPulang/update', [App\Http\Controllers\Web\TransportasiPulangController::class, 'update'])->name('transportasiPulang/update');
+    Route::post('/transportasiPulang/store', [App\Http\Controllers\Web\TransportasiPulangController::class, 'store'])->name('transportasiPulang/store');
+    Route::post('/transportasiPulang/delete/{id}', [App\Http\Controllers\Web\TransportasiPulangController::class, 'destroy'])->name('transportasiPulang/delete');
+    Route::get('/transportasiPulang/{id}', [App\Http\Controllers\Web\TransportasiPulangController::class, 'show'])->name('transportasiPulang/show');
+
+    //Hotel
+    Route::post('/hotel/getData', [App\Http\Controllers\Web\AkomodasiHotelController::class, 'getData'])->name('hotel/getData');
+    Route::get('/hotel', [App\Http\Controllers\Web\AkomodasiHotelController::class, 'index'])->name('hotel');
+    Route::post('/hotel/update', [App\Http\Controllers\Web\AkomodasiHotelController::class, 'update'])->name('hotel/update');
+    Route::post('/hotel/store', [App\Http\Controllers\Web\AkomodasiHotelController::class, 'store'])->name('hotel/store');
+    Route::post('/hotel/delete/{id}', [App\Http\Controllers\Web\AkomodasiHotelController::class, 'destroy'])->name('hotel/delete');
+    Route::get('/hotel/{id}', [App\Http\Controllers\Web\AkomodasiHotelController::class, 'show'])->name('hotel/show');
+
+    Route::get('/hotel/pdf/{id}', [App\Http\Controllers\Web\AkomodasiHotelController::class, 'downloadFile'])->name('hotel/pdf');
+
+    Route::get('/transportasiBerangkat/pdf/{id}', [App\Http\Controllers\Web\TransportasiBerangkatController::class, 'downloadFile'])->name('transportasi-berangkat/pdf');
+
+    Route::get('/transportasiPulang/pdf/{id}', [App\Http\Controllers\Web\TransportasiPulangController::class, 'downloadFile'])->name('transportasi-pulang/pdf');
 
 });
 

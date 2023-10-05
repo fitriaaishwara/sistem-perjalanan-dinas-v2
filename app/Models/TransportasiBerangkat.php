@@ -17,8 +17,8 @@ class TransportasiBerangkat extends Model
     protected $fillable = [
         'id_transportasi',
         'id_staff_perjalanan',
-        'dokumen',
-        'jenis_dokumen',
+        'file_path',
+        'deskripsi_file',
         'nominal',
         'ukuran_file',
     ];

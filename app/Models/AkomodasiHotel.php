@@ -7,26 +7,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class TransportasiPulang extends Model
+class AkomodasiHotel extends Model
 {
     use HasFactory, Uuid, SoftDeletes;
 
-    protected $table = 'transportasi_pulang';
+    protected $table = 'akomodasi_hotel';
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'id_transportasi',
         'id_staff_perjalanan',
+        'nama_hotel',
         'file_path',
         'deskripsi_file',
+        'tanggal_check_in',
+        'tanggal_check_out',
         'nominal',
         'ukuran_file',
     ];
-
-    public function transportasi()
-    {
-        return $this->belongsTo(Transportasi::class, 'id_transportasi', 'id');
-    }
 
     public function staff()
     {

@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\TransportasiBerangkat;
+use App\Models\TransportasiPulang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
-class TransportasiBerangkatController extends Controller
+class TransportasiPulangController extends Controller
 {
     public function store (Request $request)
     {
@@ -18,7 +18,7 @@ class TransportasiBerangkatController extends Controller
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Data failed to update'];
             $file_path = $request->file('file_path');
             $fileName = time() . '_' . Str::random(10) . '.' . $file_path->getClientOriginalExtension();
-            $path     = 'transportasi_berangkat/' . $request->input('id_staff_perjalanan');
+            $path     = 'transportasi_pulang/' . $request->input('id_staff_perjalanan');
 
             $validator = Validator::make($request->all(), [
                 'file_path' => 'required|mimes:pdf|max:200240',
@@ -28,14 +28,11 @@ class TransportasiBerangkatController extends Controller
                 return response()->json(['status' => false, 'code' => 'EC001', 'message' => 'The maximum file size is 20 MB with the format PDF.']);
             }
 
-            if ($validator->fails()) {
-                return response()->json(['status' => false, 'code' => 'EC001', 'message' => 'The maximum file size is 10 MB with the format PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, CSV, PNG, JPG, JPEG, RAR, ZIP.']);
-            }
             $extension = $request->file('file_path')->extension();
             Storage::disk('public')->putFileAs($path, $request->file('file_path'), $fileName);
 
             // Create the record in the database
-            $create = TransportasiBerangkat::create([
+            $create = TransportasiPulang::create([
                 'id_transportasi'     => $request->input('id_transportasi'),
                 'id_staff_perjalanan' => $request->input('id_staff_perjalanan'),
                 'deskripsi_file'      => $request->input('deskripsi_file'),
@@ -57,8 +54,8 @@ class TransportasiBerangkatController extends Controller
     //download file
     public function downloadFile($id)
     {
-        $data = TransportasiBerangkat::findOrFail($id);
-        $path = 'transportasi_berangkat' . DIRECTORY_SEPARATOR . $data->id_staff_perjalanan . DIRECTORY_SEPARATOR;
+        $data = TransportasiPulang::findOrFail($id);
+        $path = 'transportasi_pulang' . DIRECTORY_SEPARATOR . $data->id_staff_perjalanan . DIRECTORY_SEPARATOR;
         $fileName = $data->file_path;
         $filePath = 'app' . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . $path . $fileName;
 
@@ -69,5 +66,4 @@ class TransportasiBerangkatController extends Controller
             'Content-Disposition' => 'inline; filename="'.$fileName.'"'
         ]);
     }
-
 }

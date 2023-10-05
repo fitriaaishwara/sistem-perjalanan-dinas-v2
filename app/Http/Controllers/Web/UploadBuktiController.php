@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\AkomodasiHotel;
 use App\Models\DataStaffPerjalanan;
 use App\Models\TransportasiBerangkat;
+use App\Models\TransportasiPulang;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -61,6 +63,7 @@ class UploadBuktiController extends Controller
 
         $data = ['status' => false, 'message' => 'Tujuan failed to be found'];
         $data = TransportasiBerangkat::where('id_staff_perjalanan', $id)
+            ->with(['transportasi', 'staff'])
             ->where('status', true)
             ->get();
 
@@ -68,31 +71,101 @@ class UploadBuktiController extends Controller
             ->where('status', true)
             ->count();
 
-        $response = [
-            'status'          => true,
-            'draw'            => $request['draw'],
-            'recordsTotal'    => TransportasiBerangkat::where('id_staff_perjalanan', $id)->count(),
-            'recordsFiltered' => $dataCounter,
-            'data'            => $data,
-        ];
-        return $response;
+        return datatables($data)
+            ->addIndexColumn()
+            ->editColumn('file_path', function($db) {
+                $text = "";
+                if ($db->file_path) {
+                    $text .= "<a href='" . route('transportasi-berangkat/pdf', $db->id) . "' class='' target='_blank'>";
+                    $text .= $db->deskripsi_file . '.pdf';
+                    $text .= "</a>";
+                }
+                return $text;
+            })
+            ->rawColumns(['file_path'])
+            ->make(true);
+    }
+
+    public function getUploadByIdPulang(Request $request, $id)
+    {
+        $dataStaff = DataStaffPerjalanan::findOrFail($id);
+
+        $data = ['status' => false, 'message' => 'Tujuan failed to be found'];
+        $data = TransportasiPulang::where('id_staff_perjalanan', $id)
+            ->with(['transportasi', 'staff'])
+            ->where('status', true)
+            ->get();
+
+        $dataCounter = TransportasiPulang::where('id_staff_perjalanan', $id)
+            ->where('status', true)
+            ->count();
+
+        return datatables($data)
+            ->addIndexColumn()
+            ->editColumn('file_path', function($db) {
+                $text = "";
+                if ($db->file_path) {
+                    $text .= "<a href='" . route('transportasi-pulang/pdf', $db->id) . "' class='' target='_blank'>";
+                    $text .= $db->deskripsi_file . '.pdf';
+                    $text .= "</a>";
+                }
+                return $text;
+            })
+            ->rawColumns(['file_path'])
+            ->make(true);
+    }
+
+    public function getUploadByIdHotel(Request $request, $id)
+    {
+        $dataStaff = DataStaffPerjalanan::findOrFail($id);
+
+        $data = ['status' => false, 'message' => 'Tujuan failed to be found'];
+        $data = AkomodasiHotel::where('id_staff_perjalanan', $id)
+            ->with(['staff'])
+            ->where('status', true)
+            ->get();
+
+        $dataCounter = AkomodasiHotel::where('id_staff_perjalanan', $id)
+            ->where('status', true)
+            ->count();
+
+        return datatables($data)
+            ->addIndexColumn()
+            ->editColumn('file_path', function($db) {
+                $text = "";
+                if ($db->file_path) {
+                    $text .= "<a href='" . route('hotel/pdf', $db->id) . "' class='' target='_blank'>";
+                    $text .= $db->deskripsi_file . '.pdf';
+                    $text .= "</a>";
+                }
+                return $text;
+            })
+            ->rawColumns(['file_path'])
+            ->make(true);
+
     }
 
     public function store(Request $request)
     {
         try {
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'File failed to create'];
-            $create = TransportasiBerangkat::create([
-                'id_transportasi'      => $request['id_transportasi'],
-                'id_staff_perjalanan'  => $request['id_staff_perjalanan'],
-                'deskripsi_file'       => $request['deskripsi_file'],
-                'nominal'              => $request['nominal'],
-                'ukuran_file'          => $request['ukuran_file'],
+            $fileName = Str::random(20);
+            $path = 'bukti_berangkat/' . $request['bukti_berangkat'];
+
+            $validator = Validator::make($request->all(), [
+                'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
+            if ($validator->fails()) {
+                return response()->json(['status' => false, 'code' => 'EC001', 'message' => 'The maximum file size is 10 MB with the format PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, CSV, PNG, JPG, JPEG, RAR, ZIP.']);
+            }
+
+
         } catch (\Exception $ex) {
             $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }
 
         return $data;
     }
+
+
 }

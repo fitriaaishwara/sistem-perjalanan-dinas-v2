@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTransportasiPulangTable extends Migration
+class CreateAkomodasiHotelTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateTransportasiPulangTable extends Migration
      */
     public function up()
     {
-        Schema::create('transportasi_pulang', function (Blueprint $table) {
+        Schema::create('akomodasi_hotel', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('id_transportasi');
             $table->foreignUuid('id_staff_perjalanan');
+            $table->string('nama_hotel');
             $table->string('file_path');
             $table->string('deskripsi_file');
+            $table->date('tanggal_check_in');
+            $table->date('tanggal_check_out');
             $table->string('nominal');
             $table->string('ukuran_file')->nullable();
             $table->boolean('status')->default (1);
@@ -28,7 +30,6 @@ class CreateTransportasiPulangTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('id_transportasi')->references('id')->on('transportasi');
             $table->foreign('id_staff_perjalanan')->references('id')->on('data_staff_perjalanan');
         });
     }
@@ -40,6 +41,6 @@ class CreateTransportasiPulangTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transportasi_pulang');
+        Schema::dropIfExists('akomodasi_hotel');
     }
 }

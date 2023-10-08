@@ -424,8 +424,8 @@
                     render: function(data, type, row) {
                         var btnEdit = "";
                         var btnDelete = "";
-                        btnEdit += '<button name="btnEdit" data-id="' + data +
-                            '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
+                        // btnEdit += '<button name="btnEdit" data-id="' + data +
+                        //     '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
                         btnDelete += '<button name="btnDelete" data-id="' + data +
                             '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
 
@@ -706,8 +706,8 @@
                     render: function(data, type, row) {
                         var btnEdit = "";
                         var btnDelete = "";
-                        btnEdit += '<button name="btnEdit" data-id="' + data +
-                            '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
+                        // btnEdit += '<button name="btnEdit" data-id="' + data +
+                        //     '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
                         btnDelete += '<button name="btnDelete" data-id="' + data +
                             '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
 
@@ -1001,8 +1001,8 @@
                     render: function(data, type, row) {
                         var btnEdit = "";
                         var btnDelete = "";
-                        btnEdit += '<button name="btnEdit" data-id="' + data +
-                            '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
+                        // btnEdit += '<button name="btnEdit" data-id="' + data +
+                        //     '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
                         btnDelete += '<button name="btnDelete" data-id="' + data +
                             '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
 

@@ -117,6 +117,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/pengajuan/edit/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'update'])->name('pengajuan/edit');
     Route::post('/pengajuan/edit/{id}/save-staff', [App\Http\Controllers\Web\PengajuanController::class, 'save_staff'])->name('pengajuan/edit/save_staff');
 
+    Route::post('/pengajuan/delete/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'destroy'])->name('pengajuan/delete');
+
     //Instansi
     Route::post('/instansi/getData', [App\Http\Controllers\Web\InstansiController::class, 'getData'])->name('instansi/getData');
 
@@ -186,11 +188,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/bukti-perjalanan/pdf/{id}', [App\Http\Controllers\Web\UploadBuktiController::class, 'sptPDF'])->name('bukti/pdf');
 
     //Kwitansi
-    Route::get('/kwitansi', [App\Http\Controllers\Web\SpdController::class, 'index'])->name('kwitansi');
-    Route::post('/kwitansi/getData', [App\Http\Controllers\Web\SpdController::class, 'getData'])->name('kwitansi/getData');
-    Route::get('/kwitansi/create/{id}', [App\Http\Controllers\Web\SpdController::class, 'create'])->name('kwitansi/create');
-    Route::any('/kwitansi/store/', [App\Http\Controllers\Web\SpdController::class, 'store'])->name('kwitansi/store');
-    Route::get('/kwitansi/pdf/{id}', [App\Http\Controllers\Web\SpdController::class, 'sptPDF'])->name('kwitansi/pdf');
+    Route::get('/kwitansi', [App\Http\Controllers\Web\KwitansiController::class, 'index'])->name('kwitansi');
+    Route::post('/kwitansi/getData', [App\Http\Controllers\Web\KwitansiController::class, 'getData'])->name('kwitansi/getData');
+    Route::get('/kwitansi/create/{id}', [App\Http\Controllers\Web\KwitansiController::class, 'create'])->name('kwitansi/create');
+    Route::any('/kwitansi/store/', [App\Http\Controllers\Web\KwitansiController::class, 'store'])->name('kwitansi/store');
+    Route::get('/kwitansi/pdf/{id_staff_perjalanan}', [App\Http\Controllers\Web\KwitansiController::class, 'kwitansiPDF'])->name('kwitansi/pdf');
 
     //Transportasi
     Route::post('/transportasi/getData', [App\Http\Controllers\Web\TransportasiController::class, 'getData'])->name('transportasi/getData');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataStaffPerjalanan;
+use App\Models\LogStatusPerjalanan;
 use App\Models\Perjalanan;
 use App\Models\PerjalananDinas;
 use App\Models\Staff;
@@ -38,7 +39,17 @@ class PengajuanController extends Controller
                 'description' => $request['description']
             ]);
             if ($create) {
-                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Perjalanan successfully created'];
+                // Assuming you have a StatusPerjalanan model
+                $statusPerjalanan = LogStatusPerjalanan::create([
+                    // Fill in the fields accordingly based on your model
+                    'id_status_perjalanan' => 0,
+                    'id_perjalanan' => $create->id,
+                    // Add other fields as needed
+                ]);
+
+                if ($statusPerjalanan) {
+                    $data = ['status' => true, 'code' => 'SC001', 'message' => 'Perjalanan successfully created'];
+                }
             }
         } catch (\Exception $ex) {
             $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
@@ -122,58 +133,34 @@ class PengajuanController extends Controller
 
         $data = Perjalanan::select()
             ->with('mak', 'tujuan')
+            ->offset($request['start'])
+            ->limit(($request['length'] == -1) ? Perjalanan::where('status', true)->count() : $request['length'])
             ->when($keyword, function ($query, $keyword) {
-                return $query->where('name', 'like', '%' . $keyword . '%');
+                return $query->where('perihal_perjalanan', 'like', '%' . $keyword . '%')
+                    ->orWhereHas('mak', function ($query) use ($keyword) {
+                        return $query->where('kode_mak', 'like', '%' . $keyword . '%');
+                    })
+                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
+                        return $query->where('tempat_tujuan', 'like', '%' . $keyword . '%');
+                    });
             })
             ->where('status', true)
             ->get();
 
         $dataCounter = Perjalanan::select()
             ->when($keyword, function ($query, $keyword) {
-                return $query->where('name', 'like', '%' . $keyword . '%');
+                return $query->where('perihal_perjalanan', 'like', '%' . $keyword . '%');
             })
             ->where('status', true)
             ->count();
 
-        return DataTables::of($data)
-                    ->make(true);
+        $response = [
+            'status'         => true,
+            'draw'           => $request['draw'],
+            'recordsTotal'   => Perjalanan::where('status', true)->count(),
+            'recordsFiltered' => $dataCounter,
+            'data'           => $data,
+        ];
+        return $response;
     }
-
-    // public function getData(Request $request)
-    // {
-    //     $keyword = $request['searchkey'];
-
-    //     $data = Perjalanan::with('mak', 'tujuan', 'nota_dinas', 'data_staff_perjalanan')
-    //         ->when($keyword, function ($query, $keyword) {
-    //             return $query->where('name', 'like', '%' . $keyword . '%');
-    //         })
-    //         ->where('status', true);
-
-    //     return DataTables::of($data)
-    //                 ->editColumn('mak', function($db) {
-    //                     return $db->mak->kode_mak;
-    //                 })
-    //                 ->addColumn('tujuan', function($db) {
-
-    //                 })
-    //                 ->addColumn('tanggal_berakhir', function($db) {
-
-    //                 })
-    //                 ->addColumn('tanggal_kembali', function($db) {
-
-    //                 })
-    //                 ->editColumn('estimasi_biaya', function($db) {
-    //                     return $this->rupiah_format($db->estimasi_biaya);
-    //                 })
-    //                 ->editColumn('status', function($db) {
-    //                     if ($db->status == 1) {
-    //                         return "<span class='badge badge-success'><small>Active</small></span>";
-    //                     } else {
-    //                         return "<span class='badge badge-danger'><small>Inactive</small></span>";
-    //                     }
-    //                 })
-    //                 ->rawColumns(['status'])
-    //                 ->make(true);
-    // }
-
 }

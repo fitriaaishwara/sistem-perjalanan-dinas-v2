@@ -25,7 +25,7 @@
                                 <div class="mb-3 validate">
                                     <label for="nip" class="form-label">NIP/NIPPPK/NIK<span
                                             style="color:red;">*</span></label>
-                                    <input id="nip" type="text" class="form-control" name="nip" minlength="16" maxlength="16">
+                                    <input id="nip" type="text" class="form-control" name="nip" minlength="21" maxlength="22">
                                 </div>
                                 <div class="mb-3 validate">
                                     <label for="name" class="form-label">Name<span

@@ -61,222 +61,7 @@
 			<nav class="navbar navbar-header navbar-expand-lg" data-background-color="blue2">
 
 				<div class="container-fluid">
-					<div class="collapse" id="search-nav">
-						<form class="navbar-left navbar-form nav-search mr-md-3">
-							<div class="input-group">
-								<div class="input-group-prepend">
-									<button type="submit" class="btn btn-search pr-1">
-										<i class="fa fa-search search-icon"></i>
-									</button>
-								</div>
-								<input type="text" placeholder="Search ..." class="form-control">
-							</div>
-						</form>
-					</div>
-					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
-						<li class="nav-item toggle-nav-search hidden-caret">
-							<a class="nav-link" data-toggle="collapse" href="#search-nav" role="button" aria-expanded="false" aria-controls="search-nav">
-								<i class="fa fa-search"></i>
-							</a>
-						</li>
-						<li class="nav-item dropdown hidden-caret">
-							<a class="nav-link dropdown-toggle" href="#" id="messageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<i class="fa fa-envelope"></i>
-							</a>
-							<ul class="dropdown-menu messages-notif-box animated fadeIn" aria-labelledby="messageDropdown">
-								<li>
-									<div class="dropdown-title d-flex justify-content-between align-items-center">
-										Messages
-										<a href="#" class="small">Mark all as read</a>
-									</div>
-								</li>
-								<li>
-									<div class="message-notif-scroll scrollbar-outer">
-										<div class="notif-center">
-											<a href="#">
-												<div class="notif-img">
-													<img src="../assets/img/jm_denis.jpg" alt="Img Profile">
-												</div>
-												<div class="notif-content">
-													<span class="subject">Jimmy Denis</span>
-													<span class="block">
-														How are you ?
-													</span>
-													<span class="time">5 minutes ago</span>
-												</div>
-											</a>
-											<a href="#">
-												<div class="notif-img">
-													<img src="../assets/img/chadengle.jpg" alt="Img Profile">
-												</div>
-												<div class="notif-content">
-													<span class="subject">Chad</span>
-													<span class="block">
-														Ok, Thanks !
-													</span>
-													<span class="time">12 minutes ago</span>
-												</div>
-											</a>
-											<a href="#">
-												<div class="notif-img">
-													<img src="../assets/img/mlane.jpg" alt="Img Profile">
-												</div>
-												<div class="notif-content">
-													<span class="subject">Jhon Doe</span>
-													<span class="block">
-														Ready for the meeting today...
-													</span>
-													<span class="time">12 minutes ago</span>
-												</div>
-											</a>
-											<a href="#">
-												<div class="notif-img">
-													<img src="../assets/img/talha.jpg" alt="Img Profile">
-												</div>
-												<div class="notif-content">
-													<span class="subject">Talha</span>
-													<span class="block">
-														Hi, Apa Kabar ?
-													</span>
-													<span class="time">17 minutes ago</span>
-												</div>
-											</a>
-										</div>
-									</div>
-								</li>
-								<li>
-									<a class="see-all" href="javascript:void(0);">See all messages<i class="fa fa-angle-right"></i> </a>
-								</li>
-							</ul>
-						</li>
-						<li class="nav-item dropdown hidden-caret">
-							<a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								<i class="fa fa-bell"></i>
-								<span class="notification">4</span>
-							</a>
-							<ul class="dropdown-menu notif-box animated fadeIn" aria-labelledby="notifDropdown">
-								<li>
-									<div class="dropdown-title">You have 4 new notification</div>
-								</li>
-								<li>
-									<div class="notif-scroll scrollbar-outer">
-										<div class="notif-center">
-											<a href="#">
-												<div class="notif-icon notif-primary"> <i class="fa fa-user-plus"></i> </div>
-												<div class="notif-content">
-													<span class="block">
-														New user registered
-													</span>
-													<span class="time">5 minutes ago</span>
-												</div>
-											</a>
-											<a href="#">
-												<div class="notif-icon notif-success"> <i class="fa fa-comment"></i> </div>
-												<div class="notif-content">
-													<span class="block">
-														Rahmad commented on Admin
-													</span>
-													<span class="time">12 minutes ago</span>
-												</div>
-											</a>
-											<a href="#">
-												<div class="notif-img">
-													<img src="../assets/img/profile2.jpg" alt="Img Profile">
-												</div>
-												<div class="notif-content">
-													<span class="block">
-														Reza send messages to you
-													</span>
-													<span class="time">12 minutes ago</span>
-												</div>
-											</a>
-											<a href="#">
-												<div class="notif-icon notif-danger"> <i class="fa fa-heart"></i> </div>
-												<div class="notif-content">
-													<span class="block">
-														Farrah liked Admin
-													</span>
-													<span class="time">17 minutes ago</span>
-												</div>
-											</a>
-										</div>
-									</div>
-								</li>
-								<li>
-									<a class="see-all" href="javascript:void(0);">See all notifications<i class="fa fa-angle-right"></i> </a>
-								</li>
-							</ul>
-						</li>
-						<li class="nav-item dropdown hidden-caret">
-							<a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
-								<i class="fas fa-layer-group"></i>
-							</a>
-							<div class="dropdown-menu quick-actions quick-actions-info animated fadeIn">
-								<div class="quick-actions-header">
-									<span class="title mb-1">Quick Actions</span>
-									<span class="subtitle op-8">Shortcuts</span>
-								</div>
-								<div class="quick-actions-scroll scrollbar-outer">
-									<div class="quick-actions-items">
-										<div class="row m-0">
-											<a class="col-6 col-md-4 p-0" href="#">
-												<div class="quick-actions-item">
-													<div class="avatar-item bg-danger rounded-circle">
-														<i class="far fa-calendar-alt"></i>
-													</div>
-													<span class="text">Calendar</span>
-												</div>
-											</a>
-											<a class="col-6 col-md-4 p-0" href="#">
-												<div class="quick-actions-item">
-													<div class="avatar-item bg-warning rounded-circle">
-														<i class="fas fa-map"></i>
-													</div>
-													<span class="text">Maps</span>
-												</div>
-											</a>
-											<a class="col-6 col-md-4 p-0" href="#">
-												<div class="quick-actions-item">
-													<div class="avatar-item bg-info rounded-circle">
-														<i class="fas fa-file-excel"></i>
-													</div>
-													<span class="text">Reports</span>
-												</div>
-											</a>
-											<a class="col-6 col-md-4 p-0" href="#">
-												<div class="quick-actions-item">
-													<div class="avatar-item bg-success rounded-circle">
-														<i class="fas fa-envelope"></i>
-													</div>
-													<span class="text">Emails</span>
-												</div>
-											</a>
-											<a class="col-6 col-md-4 p-0" href="#">
-												<div class="quick-actions-item">
-													<div class="avatar-item bg-primary rounded-circle">
-														<i class="fas fa-file-invoice-dollar"></i>
-													</div>
-													<span class="text">Invoice</span>
-												</div>
-											</a>
-											<a class="col-6 col-md-4 p-0" href="#">
-												<div class="quick-actions-item">
-													<div class="avatar-item bg-secondary rounded-circle">
-														<i class="fas fa-credit-card"></i>
-													</div>
-													<span class="text">Payments</span>
-												</div>
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</li>
-						<li class="nav-item">
-							<a href="#" class="nav-link quick-sidebar-toggler">
-								<i class="fa fa-th"></i>
-							</a>
-						</li>
+                    <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
 						<li class="nav-item dropdown hidden-caret">
 							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
 								<div class="avatar-sm">
@@ -333,17 +118,26 @@
                             <h4 class="text-section">Master Data</h4>
 						</li>
 
-                        <li class="nav-item {{ request()->is('staff') || request()->is('staff/*') ? 'active' : '' }}">
-                            <a href="{{ route('staff') }}">
-                                <i class="fas fa-user-tie"></i>
-                                <p>Data Staff</p>
-                            </a>
-                        </li>
-                        <li class="nav-item {{ request()->is('jabatan') || request()->is('jabatan/*') ? 'active' : '' }}">
-                            <a href="{{ route('jabatan') }}">
-								<i class="fas fa-plane-departure"></i>
-								<p>Jabatan</p>
+                        <li class="nav-item {{ request()->is('staff') || request()->is('staff/*') || request()->is('jabatan') || request()->is('jabatan/*') ? 'active' : '' }}">
+							<a data-toggle="collapse" href="#staff">
+								<i class="fas fa-hand-holding-usd"></i>
+								<p>Data Staff</p>
+								<span class="caret"></span>
 							</a>
+							<div class="{{ request()->is('staff') || request()->is('staff/*') || request()->is('jabatan') || request()->is('jabatan/*') ? 'collapse show' : 'collapse' }}" id="staff">
+								<ul class="nav nav-collapse">
+									<li class="nav-item {{ request()->is('staff') || request()->is('staff/*') ? 'active' : '' }}">
+										<a href="{{ route('staff') }}">
+											<span class="sub-item">Staff</span>
+										</a>
+									</li>
+									<li class="nav-item {{ request()->is('jabatan') || request()->is('jabatan/*') ? 'active' : '' }}">
+										<a href="{{ route('jabatan') }}">
+											<span class="sub-item">Jabatan</span>
+										</a>
+									</li>
+								</ul>
+							</div>
 						</li>
                         <li class="nav-item {{ request()->is('mak') || request()->is('mak/*') ? 'active' : '' }}">
                             <a href="{{ route('mak') }}">
@@ -412,7 +206,8 @@
 								<p>Kwitansi</p>
 							</a>
 						</li>
-						<li class="nav-item">
+
+						{{-- <li class="nav-item">
 							<a data-toggle="collapse" href="#pengeluaran_rill">
 								<i class="fas fa-hand-holding-usd"></i>
 								<p>Pengeluaran Rill</p>
@@ -448,7 +243,30 @@
 									</li>
 								</ul>
 							</div>
+						</li> --}}
+
+                        <li class="nav-item {{ request()->is('staff') || request()->is('staff/*') || request()->is('jabatan') || request()->is('jabatan/*') ? 'active' : '' }}">
+							<a data-toggle="collapse" href="#dokumentasi">
+								<i class="fas fa-hand-holding-usd"></i>
+								<p>Dokumentasi</p>
+								<span class="caret"></span>
+							</a>
+							<div class="{{ request()->is('staff') || request()->is('staff/*') || request()->is('jabatan') || request()->is('jabatan/*') ? 'collapse show' : 'collapse' }}" id="dokumentasi">
+								<ul class="nav nav-collapse">
+									<li class="nav-item {{ request()->is('staff') || request()->is('staff/*') ? 'active' : '' }}">
+										<a href="{{ route('staff') }}">
+											<span class="sub-item">Laporan</span>
+										</a>
+									</li>
+									<li class="nav-item {{ request()->is('jabatan') || request()->is('jabatan/*') ? 'active' : '' }}">
+										<a href="{{ route('jabatan') }}">
+											<span class="sub-item">Gallery Foto</span>
+										</a>
+									</li>
+								</ul>
+							</div>
 						</li>
+
                         <li class="nav-section">
 							<span class="sidebar-mini-icon">
 								<i class="fa fa-ellipsis-h"></i>
@@ -504,222 +322,8 @@
         </div>
 
 		<div class="quick-sidebar">
-			<a href="#" class="close-quick-sidebar">
-				<i class="flaticon-cross"></i>
-			</a>
 			<div class="quick-sidebar-wrapper">
-				<ul class="nav nav-tabs nav-line nav-color-secondary" role="tablist">
-					<li class="nav-item"> <a class="nav-link active show" data-toggle="tab" href="#messages" role="tab" aria-selected="true">Messages</a> </li>
-					<li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tasks" role="tab" aria-selected="false">Tasks</a> </li>
-					<li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#settings" role="tab" aria-selected="false">Settings</a> </li>
-				</ul>
 				<div class="tab-content mt-3">
-					<div class="tab-chat tab-pane fade show active" id="messages" role="tabpanel">
-						<div class="messages-contact">
-							<div class="quick-wrapper">
-								<div class="quick-scroll scrollbar-outer">
-									<div class="quick-content contact-content">
-										<span class="category-title mt-0">Contacts</span>
-										<div class="avatar-group">
-											<div class="avatar">
-												<img src="../assets/img/jm_denis.jpg" alt="..." class="avatar-img rounded-circle border border-white">
-											</div>
-											<div class="avatar">
-												<img src="../assets/img/chadengle.jpg" alt="..." class="avatar-img rounded-circle border border-white">
-											</div>
-											<div class="avatar">
-												<img src="../assets/img/mlane.jpg" alt="..." class="avatar-img rounded-circle border border-white">
-											</div>
-											<div class="avatar">
-												<img src="../assets/img/talha.jpg" alt="..." class="avatar-img rounded-circle border border-white">
-											</div>
-											<div class="avatar">
-												<span class="avatar-title rounded-circle border border-white">+</span>
-											</div>
-										</div>
-										<span class="category-title">Recent</span>
-										<div class="contact-list contact-list-recent">
-											<div class="user">
-												<a href="#">
-													<div class="avatar avatar-online">
-														<img src="../assets/img/jm_denis.jpg" alt="..." class="avatar-img rounded-circle border border-white">
-													</div>
-													<div class="user-data">
-														<span class="name">Jimmy Denis</span>
-														<span class="message">How are you ?</span>
-													</div>
-												</a>
-											</div>
-											<div class="user">
-												<a href="#">
-													<div class="avatar avatar-offline">
-														<img src="../assets/img/chadengle.jpg" alt="..." class="avatar-img rounded-circle border border-white">
-													</div>
-													<div class="user-data">
-														<span class="name">Chad</span>
-														<span class="message">Ok, Thanks !</span>
-													</div>
-												</a>
-											</div>
-											<div class="user">
-												<a href="#">
-													<div class="avatar avatar-offline">
-														<img src="../assets/img/mlane.jpg" alt="..." class="avatar-img rounded-circle border border-white">
-													</div>
-													<div class="user-data">
-														<span class="name">John Doe</span>
-														<span class="message">Ready for the meeting today with...</span>
-													</div>
-												</a>
-											</div>
-										</div>
-										<span class="category-title">Other Contacts</span>
-										<div class="contact-list">
-											<div class="user">
-												<a href="#">
-													<div class="avatar avatar-online">
-														<img src="../assets/img/jm_denis.jpg" alt="..." class="avatar-img rounded-circle border border-white">
-													</div>
-													<div class="user-data2">
-														<span class="name">Jimmy Denis</span>
-														<span class="status">Online</span>
-													</div>
-												</a>
-											</div>
-											<div class="user">
-												<a href="#">
-													<div class="avatar avatar-offline">
-														<img src="../assets/img/chadengle.jpg" alt="..." class="avatar-img rounded-circle border border-white">
-													</div>
-													<div class="user-data2">
-														<span class="name">Chad</span>
-														<span class="status">Active 2h ago</span>
-													</div>
-												</a>
-											</div>
-											<div class="user">
-												<a href="#">
-													<div class="avatar avatar-away">
-														<img src="../assets/img/talha.jpg" alt="..." class="avatar-img rounded-circle border border-white">
-													</div>
-													<div class="user-data2">
-														<span class="name">Talha</span>
-														<span class="status">Away</span>
-													</div>
-												</a>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="messages-wrapper">
-							<div class="messages-title">
-								<div class="user">
-									<div class="avatar avatar-offline float-right ml-2">
-										<img src="../assets/img/chadengle.jpg" alt="..." class="avatar-img rounded-circle border border-white">
-									</div>
-									<span class="name">Chad</span>
-									<span class="last-active">Active 2h ago</span>
-								</div>
-								<button class="return">
-									<i class="flaticon-left-arrow-3"></i>
-								</button>
-							</div>
-							<div class="messages-body messages-scroll scrollbar-outer">
-								<div class="message-content-wrapper">
-									<div class="message message-in">
-										<div class="avatar avatar-sm">
-											<img src="../assets/img/chadengle.jpg" alt="..." class="avatar-img rounded-circle border border-white">
-										</div>
-										<div class="message-body">
-											<div class="message-content">
-												<div class="name">Chad</div>
-												<div class="content">Hello, Rian</div>
-											</div>
-											<div class="date">12.31</div>
-										</div>
-									</div>
-								</div>
-								<div class="message-content-wrapper">
-									<div class="message message-out">
-										<div class="message-body">
-											<div class="message-content">
-												<div class="content">
-													Hello, Chad
-												</div>
-											</div>
-											<div class="message-content">
-												<div class="content">
-													What's up?
-												</div>
-											</div>
-											<div class="date">12.35</div>
-										</div>
-									</div>
-								</div>
-								<div class="message-content-wrapper">
-									<div class="message message-in">
-										<div class="avatar avatar-sm">
-											<img src="../assets/img/chadengle.jpg" alt="..." class="avatar-img rounded-circle border border-white">
-										</div>
-										<div class="message-body">
-											<div class="message-content">
-												<div class="name">Chad</div>
-												<div class="content">
-													Thanks
-												</div>
-											</div>
-											<div class="message-content">
-												<div class="content">
-													When is the deadline of the project we are working on ?
-												</div>
-											</div>
-											<div class="date">13.00</div>
-										</div>
-									</div>
-								</div>
-								<div class="message-content-wrapper">
-									<div class="message message-out">
-										<div class="message-body">
-											<div class="message-content">
-												<div class="content">
-													The deadline is about 2 months away
-												</div>
-											</div>
-											<div class="date">13.10</div>
-										</div>
-									</div>
-								</div>
-								<div class="message-content-wrapper">
-									<div class="message message-in">
-										<div class="avatar avatar-sm">
-											<img src="../assets/img/chadengle.jpg" alt="..." class="avatar-img rounded-circle border border-white">
-										</div>
-										<div class="message-body">
-											<div class="message-content">
-												<div class="name">Chad</div>
-												<div class="content">
-													Ok, Thanks !
-												</div>
-											</div>
-											<div class="date">13.15</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="messages-form">
-								<div class="messages-form-control">
-									<input type="text" placeholder="Type here" class="form-control input-pill input-solid message-input">
-								</div>
-								<div class="messages-form-tool">
-									<a href="#" class="attachment">
-										<i class="flaticon-file"></i>
-									</a>
-								</div>
-							</div>
-						</div>
-					</div>
 					<div class="tab-pane fade" id="tasks" role="tabpanel">
 						<div class="quick-wrapper tasks-wrapper">
 							<div class="tasks-scroll scrollbar-outer">
@@ -820,76 +424,6 @@
 											Add Task
 										</div>
 									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="tab-pane fade" id="settings" role="tabpanel">
-						<div class="quick-wrapper settings-wrapper">
-							<div class="quick-scroll scrollbar-outer">
-								<div class="quick-content settings-content">
-
-									<span class="category-title mt-0">General Settings</span>
-									<ul class="settings-list">
-										<li>
-											<span class="item-label">Enable Notifications</span>
-											<div class="item-control">
-												<input type="checkbox" checked data-toggle="toggle" data-onstyle="primary" data-style="btn-round" data-size>
-											</div>
-										</li>
-										<li>
-											<span class="item-label">Signin with social media</span>
-											<div class="item-control">
-												<input type="checkbox" data-toggle="toggle" data-onstyle="primary" data-style="btn-round">
-											</div>
-										</li>
-										<li>
-											<span class="item-label">Backup storage</span>
-											<div class="item-control">
-												<input type="checkbox" data-toggle="toggle" data-onstyle="primary" data-style="btn-round">
-											</div>
-										</li>
-										<li>
-											<span class="item-label">SMS Alert</span>
-											<div class="item-control">
-												<input type="checkbox" checked data-toggle="toggle" data-onstyle="primary" data-style="btn-round">
-											</div>
-										</li>
-									</ul>
-
-									<span class="category-title mt-0">Notifications</span>
-									<ul class="settings-list">
-										<li>
-											<span class="item-label">Email Notifications</span>
-											<div class="item-control">
-												<input type="checkbox" checked data-toggle="toggle" data-onstyle="primary" data-style="btn-round">
-											</div>
-										</li>
-										<li>
-											<span class="item-label">New Comments</span>
-											<div class="item-control">
-												<input type="checkbox" checked data-toggle="toggle" data-onstyle="primary" data-style="btn-round">
-											</div>
-										</li>
-										<li>
-											<span class="item-label">Chat Messages</span>
-											<div class="item-control">
-												<input type="checkbox" checked data-toggle="toggle" data-onstyle="primary" data-style="btn-round">
-											</div>
-										</li>
-										<li>
-											<span class="item-label">Project Updates</span>
-											<div class="item-control">
-												<input type="checkbox" data-toggle="toggle" data-onstyle="primary" data-style="btn-round">
-											</div>
-										</li>
-										<li>
-											<span class="item-label">New Tasks</span>
-											<div class="item-control">
-												<input type="checkbox" checked data-toggle="toggle" data-onstyle="primary" data-style="btn-round">
-											</div>
-										</li>
-									</ul>
 								</div>
 							</div>
 						</div>

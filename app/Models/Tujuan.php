@@ -30,4 +30,6 @@ class Tujuan extends Model
     {
         return $this->hasMany(DataStaffPerjalanan::class, 'id_tujuan_perjalanan', 'id');
     }
+
+
 }

@@ -621,7 +621,7 @@
                 [10, 15, 25, 50, "All"]
             ],
             "ajax": {
-                "url": "{{ route('staffData/getData') }}",
+                "url": "{{ route('staffById/getData' , ['id_perjalanan' => $perjalanan->id]) }}",
                 "type": "POST",
                 "headers": {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
@@ -638,18 +638,61 @@
                     return (request);
                 },
             },
-            "columns": [
-                {
-                    data: 'DT_RowIndex',
-                    name: 'DT_RowIndex',
-                    // orderable: false,
-                    // searchable: false,
+            "columns": [{
+                    "data": null,
+                    "width": '5%',
+                    render: function(data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
                 },
-                {"data": "nama","name": "nama"},
-                {"data": "jenis","name": "jenis"},
-                {"data": "jabatan","name": "jabatan"},
-                {"data": "golongan","name": "golongan"},
-                {"data": "instansi","name": "instansi"},
+                {
+                    "data": "staff.name",
+                    "width": '15%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        return "<div class='text-wrap'>" + data + "</div>";
+                    },
+                },
+                {
+                    "data": "staff.jenis",
+                    "width": '15%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        if(data == 0){
+                            return "<div class='text-wrap'>PNS</div>";
+                        }else if(data == 1){
+                            return "<div class='text-wrap'>Non PNS (PPPK)</div>";
+                        }else if(data == 2){
+                            return "<div class='text-wrap'>Honorer</div>";
+                        }else{
+                            return "<div class='text-wrap'>Lainnya</div>";
+                        }
+                    },
+                },
+                {
+                    "data": "staff.jabatans.name",
+                    "width": '15%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        return "<div class='text-wrap'>" + data + "</div>";
+                    },
+                },
+                {
+                    "data": "staff.golongans.name",
+                    "width": '15%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        return "<div class='text-wrap'>" + data + "</div>";
+                    },
+                },
+                {
+                    "data": "staff.instansis.name",
+                    "width": '15%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        return "<div class='text-wrap'>" + data + "</div>";
+                    },
+                },
                 {
                     "data": "id",
                     "width": '10%',

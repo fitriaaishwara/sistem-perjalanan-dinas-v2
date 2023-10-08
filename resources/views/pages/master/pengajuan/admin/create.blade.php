@@ -22,7 +22,7 @@
                     <i class="flaticon-right-arrow"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="#">Jabatan</a>
+                    <a href="#">Pengajuan</a>
                 </li>
             </ul>
         </div>

@@ -55,6 +55,7 @@ class TujuanController extends Controller
 
             $data = ['status' => false, 'message' => 'Staff failed to be found'];
             $data = DataStaffPerjalanan::where('id_perjalanan', $id)
+                ->with('staff.golongans', 'staff.jabatans', 'staff.instansis')
                 ->where('status', true)
                 ->get();
 

@@ -31,6 +31,22 @@ class Staff extends Model
         return $this->belongsTo(Instansi::class, 'id_instansi', 'id');
     }
 
+    public function kwitansiBendahara()
+    {
+        return $this->hasMany(Kwitansi::class, 'id_bendahara', 'id');
+    }
+
+    public function kwitansiPejabat()
+    {
+        return $this->hasMany(Kwitansi::class, 'id_pejabat_pembuat_komitmen', 'id');
+    }
+
+    public function dataStaffPerjalanan()
+    {
+        return $this->hasMany(DataStaffPerjalanan::class, 'id_staff', 'id');
+    }
+
+
 
 
 

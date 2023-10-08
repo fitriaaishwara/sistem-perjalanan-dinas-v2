@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\DataStaffPerjalanan;
+use App\Models\Perjalanan;
 use App\Models\TransportasiBerangkat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -43,6 +45,11 @@ class TransportasiBerangkatController extends Controller
                 'file_path'           => $fileName,
             ]);
 
+            $dataStaff = DataStaffPerjalanan::where('id', $request->input('id_staff_perjalanan'))->first();
+            $perjalanan = Perjalanan::where('id', $dataStaff->id_perjalanan)->first();
+            $perjalanan->total_biaya = $perjalanan->total_biaya + $request->input('nominal');
+            $perjalanan->save();
+
             if ($create) {
                 $data = ['status' => true, 'code' => 'SC001', 'message' => 'Jabatan successfully created'];
             }
@@ -68,6 +75,30 @@ class TransportasiBerangkatController extends Controller
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="'.$fileName.'"'
         ]);
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $data = ['status' => false, 'code' => 'EC001', 'message' => 'Staff failed to delete'];
+            $delete = TransportasiBerangkat::where('id', $id) -> first();
+
+            $dataStaff = DataStaffPerjalanan::where('id', $delete->id_staff_perjalanan)->first();
+
+            $perjalanan = Perjalanan::where('id', $dataStaff->id_perjalanan)->first();
+            $perjalanan->total_biaya = $perjalanan->total_biaya - $delete->nominal;
+            $perjalanan->save();
+
+            $delete->status = false;
+            $delete->save();
+
+            if ($delete) {
+                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Staff deleted successfully'];
+            }
+        } catch (\Exception $ex) {
+            $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
+        }
+        return $data;
     }
 
 }

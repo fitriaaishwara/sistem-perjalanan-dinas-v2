@@ -67,7 +67,7 @@ class NotaDinasController extends Controller
         } else {
             //return redirect with Alert
             //css for alert
-            Alert::error('Nota Dinas Tidak Ditemukan', 'Buat Naskah Terlebih Dahulu');
+            alert()->warning('', 'Data Not Found');
             return redirect()->back();
         }
     }

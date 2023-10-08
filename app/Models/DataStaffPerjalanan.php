@@ -53,4 +53,20 @@ class DataStaffPerjalanan extends Model
         return $this->hasMany(TransportasiBerangkat::class, 'id_staff_perjalanan', 'id');
     }
 
+    public function transportasi_pulang()
+    {
+        return $this->hasMany(TransportasiPulang::class, 'id_staff_perjalanan', 'id');
+    }
+
+    public function akomodasi_hotel()
+    {
+        return $this->hasMany(AkomodasiHotel::class, 'id_staff_perjalanan', 'id');
+    }
+
+    public function kwitansiDataStaff()
+    {
+        return $this->hasOne(Kwitansi::class, 'id_staff_perjalanan', 'id');
+    }
+
+
 }

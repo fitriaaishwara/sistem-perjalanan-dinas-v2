@@ -1,11 +1,11 @@
 @extends('pages.layouts.master')
 @section('content')
-@section('title', 'Nota Dinas')
+@section('title', 'Kwitansi')
 
 <div class="container">
     <div class="page-inner">
         <div class="page-header">
-            <h4 class="page-title">Nota Dinas</h4>
+            <h4 class="page-title">Kwitansi</h4>
             <ul class="breadcrumbs">
                 <li class="nav-home">
                     <a href="#">
@@ -22,7 +22,7 @@
                     <i class="flaticon-right-arrow"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="#">Notas Dinas</a>
+                    <a href="#">Kwitansi</a>
                 </li>
             </ul>
         </div>
@@ -40,12 +40,15 @@
                             <table id="myTable" class="display table table-striped table-hover" >
                                 <thead>
                                     <tr>
-                                        <th>Nomor Nota Dinas</th>
-                                        <th>MAK</th>
+                                        <th>NIP/NIK</th>
+                                        <th>Nama</th>
+                                        <th>Perihal Perjalanan</th>
                                         <th>Tujuan</th>
-                                        <th>Tanggal Berangkat</th>
-                                        <th>Tanggal Kembali</th>
-                                        <th>Perihal</th>
+                                        <th>Tanggal</th>
+                                        <th>Total Diterima</th>
+                                        <th>Tahun Anggaran</th>
+                                        <th>Kode MAK</th>
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -86,7 +89,7 @@
                 [10, 15, 25, 50, 100, 250, 500]
             ],
             "ajax": {
-                "url": "{{ route('nota-dinas/getData') }}",
+                "url": "{{ route('kwitansi/getData') }}",
                 "type": "POST",
                 "headers": {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
@@ -106,100 +109,134 @@
             },
             "columns": [
                 {
-                    "data": "nota_dinas",
+                    "data": "data_staff_perjalanan",
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        if (data && data.nomor_nota_dinas) {
-                            return "<div class='text-wrap'>" + data.nomor_nota_dinas + "</div>";
+                        if (data && data.staff && data.staff.nip) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.staff.nip + "</div>";
                         } else {
-                            return "<div class='text-wrap'>Nota Dinas Belum Diisi</div>";
+                            return "<div class='text-wrap'>-</div>";
                         }
                     }
                 },
                 {
-                    "data": "mak",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            if (data && data.kode_mak) {
-                                return "<div class='text-wrap' style='font-size: 12px;'>" + data.kode_mak + "</div>";
-                            } else {
-                                return "<div class='text-wrap'>-</div>";
-                            }
+                    "data": "data_staff_perjalanan",
+                    "width": '15%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        if (data && data.staff && data.staff.name) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.staff.name + "</div>";
+                        } else {
+                            return "<div class='text-wrap'>-</div>";
                         }
+                    }
                 },
                 {
-                    "data": "tujuan",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            console.log(data);
-                            var tujuan = "";
-                            var angka = 1;
-                            for (var i = 0; i < data.length; i++) {
-                                tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + data[i].tempat_tujuan + "</div>";
-                                angka++;
-                            }
-                            return tujuan;
-                            // if (data) {
-                            //     return "<div class='text-wrap'>" + data.tempat_tujuan + "</div>";
-                            // } else {
-                            //     return "<div class='text-wrap'>-</div>";
-                            // }
-                        }
-                },
-                {
-                    "data": "tujuan",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            var tujuan = "";
-                            var angka = 1;
-                            for (var i = 0; i < data.length; i++) {
-                                tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + formatIndonesianDate(data[i].tanggal_berangkat) + "</div>";
-                                angka++;
-                            }
-                            return tujuan;
-                            // if (data && data.tanggal_berangkat) {
-                            //     return "<div class='text-wrap'>" + data.tanggal_berangkat + "</div>";
-                            // } else {
-                            //     return "<div class='text-wrap'>-</div>";
-                            // }
-                        }
+                    "data": "data_staff_perjalanan.perjalanan",
+                    "width": '15%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        var result = "<div class='text-wrap' style='font-size: 12px;'>";
+                        $.each (data, function (key, val) {
+                            // console.log(val);
+                            result += val.perihal_perjalanan + "<br>";
+                        });
 
+                        result += "</div>";
+                        return result;
+                    }
+                },
+                {
+                    "data": "data_staff_perjalanan.tujuan_perjalanan",
+                    "width": '15%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        var result = "<div class='text-wrap' style='font-size: 12px;'>";
+                        $.each (data, function (key, val) {
+                            // console.log(val);
+                            result += val.tempat_tujuan + "<br>";
+                        });
+
+                        result += "</div>";
+                        return result;
+                    }
                 },
                 {
 
-                    "data": "tujuan",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            var tujuan = "";
-                            var angka = 1;
-                            for (var i = 0; i < data.length; i++) {
-                                tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + formatIndonesianDate(data[i].tanggal_pulang) + "</div>";
-                                angka++;
-                            }
-                            return tujuan;
-                            // if (data && data.tanggal_pulang) {
-                            //     return "<div class='text-wrap'>" + data.tanggal_pulang + "</div>";
-                            // } else {
-                            //     return "<div class='text-wrap'>-</div>";
-                            // }
+                    "data": "data_staff_perjalanan.tujuan_perjalanan",
+                    "width": '10%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        if (data) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + formatIndonesianDate(data[0].tanggal_berangkat) + " - " + formatIndonesianDate(data[0].tanggal_pulang) + "</div>";
+                        } else {
+                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
                         }
+                    }
                 },
                 {
-                    "data": "perihal_perjalanan",
+                    "data": "perjalanan",
                     "width": '15%',
                     "defaultContent": "-",
                      //render date format
                     render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap'>" + data + "</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
-                        }
+                        var result = "<div class='text-wrap' style='font-size: 12px;'>";
+                        $.each (data, function (key, val) {
+                            // console.log(val);
+                            result += val.mak.kode_mak + "<br>";
+                        });
+
+                        result += "</div>";
+                        return result;
+                    }
+                },
+                {
+                    "data": "perjalanan",
+                    "width": '15%',
+                    "defaultContent": "-",
+                     //render date format
+                    render: function(data, type, row) {
+                        var result = "<div class='text-wrap' style='font-size: 12px;'>";
+                        $.each (data, function (key, val) {
+                            // console.log(val);
+                            result += val.mak.kode_mak + "<br>";
+                        });
+
+                        result += "</div>";
+                        return result;
+                    }
+                },
+                {
+                    "data": "data_staff_perjalanan.perjalanan",
+                    "width": '15%',
+                    "defaultContent": "-",
+                     //render date format
+                    render: function(data, type, row) {
+                        var result = "<div class='text-wrap' style='font-size: 12px;'>";
+                        $.each (data, function (key, val) {
+                            // console.log(val);
+                            result += val.mak.kode_mak + "<br>";
+                        });
+
+                        result += "</div>";
+                        return result;
+                    }
+                },
+                {
+                    "data": "perjalanan",
+                    "width": '15%',
+                    "defaultContent": "-",
+                     //render date format
+                    render: function(data, type, row) {
+                        var result = "<div class='text-wrap' style='font-size: 12px;'>";
+                        $.each (data, function (key, val) {
+                            // console.log(val);
+                            result += val.mak.kode_mak + "<br>";
+                        });
+
+                        result += "</div>";
+                        return result;
                     }
                 },
                 {
@@ -209,29 +246,23 @@
                         var btnTambah = "";
                         var btnDownload = "";
                         var btnEdit = "";
-                        var btnDelete = "";
 
-                        //if tujuam modal id is empty
-                            if (row.nota_dinas == null) {
-                                btnTambah += '<a href="/nota-dinas/create/' + data +
-                                    '" name="btnTambah" data-id="' + data +
-                                    '" type="button" class="btn btn-success btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
-                            } else if (row.nota_dinas != null) {
-                                btnEdit += '<a href="/nota-dinas/edit/' + data +
-                                    '" name="btnEdit" data-id="' + data +
-                                    '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
-                            }
+                        if (row.spd == "" || row.spd == null) {
+                            btnTambah += '<a href="/kwitansi/create/' + data +
+                                '" name="btnTambah" data-id="' + data +
+                                '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
+                        } else {
+                            btnEdit += '<a href="/kwitansi/edit/' + data +
+                                '" name="btnEdit" data-id="' + data +
+                                '" type="button" class="btn btn-primary btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
+                        }
 
-                        btnDownload += '<a href="/nota-dinas/pdf/' + data +
+                        btnDownload += '<a href="/kwitansi/pdf/' + data +
                             '" name="btnDownload" data-id="' + data +
                             '" type="button" class="btn btn-primary btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
 
-
-                            btnDelete += '<a href="#" name="btnDelete" data-id="' + data +
-                                '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a>';
-
-                            // console.log(row);
-                        return btnTambah + btnEdit + btnDownload + btnDelete;
+                            console.log(row);
+                        return btnTambah + btnEdit + btnDownload;
                     },
                 },
             ]

@@ -13,7 +13,11 @@ class StatusPerjalanan extends Model
     protected $table = 'status_perjalanan';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id_perjalanan', 'id_staff', 'status', 'description', 'created_by', 'updated_by', 'deleted_by',
+        'name', 'description', 'status'
     ];
 
+    public function log_status_perjalanan()
+    {
+        return $this->hasMany(LogStatusPerjalanan::class, 'id_status_perjalanan', 'id');
+    }
 }

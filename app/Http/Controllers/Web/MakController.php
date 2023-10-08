@@ -21,14 +21,14 @@ class MakController extends Controller
             ->offset($request['start'])
             ->limit(($request['length'] == -1) ? Mak::where('status', true)->count() : $request['length'])
             ->when($keyword, function ($query, $keyword) {
-                return $query->where('name', 'like', '%' . $keyword . '%');
+                return $query->where('kode_mak', 'like', '%' . $keyword . '%');
             })
             ->where('status', true)
             ->get();
 
         $dataCounter = Mak::select()
             ->when($keyword, function ($query, $keyword) {
-                return $query->where('name', 'like', '%' . $keyword . '%');
+                return $query->where('kode_mak', 'like', '%' . $keyword . '%');
             })
             ->where('status', true)
             ->count();

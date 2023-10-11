@@ -36,12 +36,6 @@
                                         <input id="saldo_awal_pagu" type="text" class="form-control" name="saldo_awal_pagu">
                                     </div>
                                 </div>
-                                <div class="row mb-4">
-                                    <label for="description" class="col-sm-3 col-form-label">Keterangan</label>
-                                    <div class="col-sm-9 validate">
-                                        <textarea class="form-control" rows="3" id="description" name="description"></textarea>
-                                    </div>
-                                </div>
                             </form>
                         </div>
                         <div class="modal-footer">
@@ -289,7 +283,6 @@
                     success: function(response) {
                         $('#kode_mak').val(response.data.kode_mak);
                         $('#saldo_awal_pagu').val(response.data.saldo_awal_pagu);
-                        $('#description').val(response.data.description);
                     },
                     error: function() {
                         Swal.fire(
@@ -372,7 +365,6 @@
                 $('#kode_mak').val("");
                 $('#saldo_awal_pagu').val("");
                 $('#saldo_pagu').val("");
-                $('#description').val("");
                 isUpdate = false;
             });
         });

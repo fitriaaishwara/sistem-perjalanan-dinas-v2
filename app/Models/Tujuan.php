@@ -13,7 +13,7 @@ class Tujuan extends Model
     protected $table = 'data_tujuan_perjalanan';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id_perjalanan', 'tempat_berangkat', 'tempat_tujuan', 'tanggal_berangkat', 'tanggal_pulang', 'tanggal_tiba', 'lama_perjalanan', 'status'
+        'id_perjalanan', 'tempat_berangkat_id', 'tempat_tujuan_id', 'tanggal_berangkat', 'tanggal_pulang', 'tanggal_tiba', 'lama_perjalanan', 'status'
     ];
 
     public function perjalanan()
@@ -29,6 +29,26 @@ class Tujuan extends Model
     public function staff()
     {
         return $this->hasMany(DataStaffPerjalanan::class, 'id_tujuan_perjalanan', 'id');
+    }
+
+    public function uploadLaporan()
+    {
+        return $this->hasOne(UploadLaporan::class, 'id_tujuan_perjalanan', 'id');
+    }
+
+    public function uploadGallery()
+    {
+        return $this->hasMany(UploadGallery::class, 'id_tujuan_perjalanan', 'id');
+    }
+
+    public function tempatBerangkat()
+    {
+        return $this->belongsTo(Province::class, 'tempat_berangkat_id', 'id');
+    }
+
+    public function tempatTujuan()
+    {
+        return $this->belongsTo(Province::class, 'tempat_tujuan_id', 'id');
     }
 
 

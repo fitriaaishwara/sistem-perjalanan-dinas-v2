@@ -49,7 +49,6 @@ class MakController extends Controller
                 'kode_mak' => $request['kode_mak'],
                 'saldo_awal_pagu' => $request['saldo_awal_pagu'],
                 'saldo_pagu' => $request['saldo_awal_pagu'],
-                'description' => $request['description']
             ]);
             if ($create) {
                 $data = ['status' => true, 'code' => 'SC001', 'message' => 'Mata Anggaran Akun successfully created'];

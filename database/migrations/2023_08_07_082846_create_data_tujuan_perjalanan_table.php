@@ -16,19 +16,29 @@ class CreateDataTujuanPerjalananTable extends Migration
         Schema::create('data_tujuan_perjalanan', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('id_perjalanan');
-            $table->string('tempat_berangkat');
-            $table->string('tempat_tujuan');
+            $table->char('tempat_berangkat_id', 2);
+            $table->char('tempat_tujuan_id', 2);
             $table->date('tanggal_berangkat');
             $table->date('tanggal_pulang');
             $table->date('tanggal_tiba');
             $table->string('lama_perjalanan')->nullable();
+            $table->integer('total_biaya')->default(0);
             $table->boolean('status')->default (1);
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->string('deleted_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
             $table->foreign('id_perjalanan')->references('id')->on('perjalanan');
+            $table->foreign('tempat_berangkat_id')
+                ->references('id')
+                ->on('provinces')
+                ->onUpdate('cascade')->onDelete('restrict');
+            $table->foreign('tempat_tujuan_id')
+                ->references('id')
+                ->on('provinces')
+                ->onUpdate('cascade')->onDelete('restrict');
         });
     }
 

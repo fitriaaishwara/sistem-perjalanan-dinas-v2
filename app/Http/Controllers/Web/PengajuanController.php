@@ -38,19 +38,11 @@ class PengajuanController extends Controller
                 'estimasi_biaya' => $request['estimasi_biaya'],
                 'description' => $request['description']
             ]);
-            if ($create) {
-                // Assuming you have a StatusPerjalanan model
-                $statusPerjalanan = LogStatusPerjalanan::create([
-                    // Fill in the fields accordingly based on your model
-                    'id_status_perjalanan' => 0,
-                    'id_perjalanan' => $create->id,
-                    // Add other fields as needed
-                ]);
 
-                if ($statusPerjalanan) {
+                if ($create) {
                     $data = ['status' => true, 'code' => 'SC001', 'message' => 'Perjalanan successfully created'];
                 }
-            }
+
         } catch (\Exception $ex) {
             $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }

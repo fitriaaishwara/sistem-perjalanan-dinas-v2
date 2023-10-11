@@ -8,6 +8,7 @@
     ],
     "license": "MIT",
     "require": {
+        "azishapidin/indoregion": "^3.0",
         "barryvdh/laravel-debugbar": "3.5.1",
         "barryvdh/laravel-dompdf": "^2.0",
         "fideloper/proxy": "^4.2",

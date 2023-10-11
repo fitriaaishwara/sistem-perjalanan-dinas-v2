@@ -19,19 +19,13 @@
 			}
 		});
 	</script>
-
 	<!-- CSS Files -->
 	<link rel="stylesheet" href="{{ url('assets/css/bootstrap.min.css') }}">
 	<link rel="stylesheet" href="{{ url('assets/css/atlantis.css') }}">
-
 	<!-- CSS Just for demo purpose, don't include it in your project -->
 	<link rel="stylesheet" href="{{ url('assets/css/demo.css') }}">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
-
-
-
 </head>
 <body>
     @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
@@ -245,21 +239,21 @@
 							</div>
 						</li> --}}
 
-                        <li class="nav-item {{ request()->is('staff') || request()->is('staff/*') || request()->is('jabatan') || request()->is('jabatan/*') ? 'active' : '' }}">
-							<a data-toggle="collapse" href="#dokumentasi">
+                        <li class="nav-item {{ request()->is('laporan') || request()->is('laporan/*') || request()->is('gallery') || request()->is('gallery/*') ? 'active' : '' }}">
+							<a data-toggle="collapse" href="#upload_laporan">
 								<i class="fas fa-hand-holding-usd"></i>
 								<p>Dokumentasi</p>
 								<span class="caret"></span>
 							</a>
-							<div class="{{ request()->is('staff') || request()->is('staff/*') || request()->is('jabatan') || request()->is('jabatan/*') ? 'collapse show' : 'collapse' }}" id="dokumentasi">
+							<div class="{{ request()->is('laporan') || request()->is('laporan/*') || request()->is('gallery') || request()->is('gallery/*') ? 'collapse show' : 'collapse' }}" id="upload_laporan">
 								<ul class="nav nav-collapse">
-									<li class="nav-item {{ request()->is('staff') || request()->is('staff/*') ? 'active' : '' }}">
-										<a href="{{ route('staff') }}">
+									<li class="nav-item {{ request()->is('laporan') || request()->is('laporan/*') ? 'active' : '' }}">
+										<a href="{{ route('laporan') }}">
 											<span class="sub-item">Laporan</span>
 										</a>
 									</li>
-									<li class="nav-item {{ request()->is('jabatan') || request()->is('jabatan/*') ? 'active' : '' }}">
-										<a href="{{ route('jabatan') }}">
+									<li class="nav-item {{ request()->is('gallery') || request()->is('gallery/*') ? 'active' : '' }}">
+										<a href="{{ route('gallery') }}">
 											<span class="sub-item">Gallery Foto</span>
 										</a>
 									</li>
@@ -507,78 +501,62 @@
 	<script src="{{ url('assets/js/core/jquery.3.2.1.min.js') }}"></script>
 	<script src="{{ url('assets/js/core/popper.min.js') }}"></script>
 	<script src="{{ url('assets/js/core/bootstrap.min.js') }}"></script>
-
 	<!-- jQuery UI -->
 	<script src="{{ url('assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js') }}"></script>
 	<script src="{{ url('assets/js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js') }}"></script>
-
+    <!-- Bootstrap Toggle -->
+	<script src="{{ url('assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js') }}"></script>
 	<!-- jQuery Scrollbar -->
 	<script src="{{ url('assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
-
-	<!-- Moment JS -->
+    <!-- Magnific Popup -->
+	<script src="{{ url('assets/js/plugin/jquery.magnific-popup/jquery.magnific-popup.min.js') }}"></script>
+	<!-- Atlantis JS -->
+	<script src="{{ url('assets/js/atlantis.min.js') }}"></script>
+	<!-- Atlantis DEMO methods, don't include it in your project! -->
+	<script src="{{ url('assets/js/setting-demo2.js') }}"></script>
+    <!-- Moment JS -->
 	<script src="{{ url('assets/js/plugin/moment/moment.min.js') }}"></script>
-
 	<!-- Chart JS -->
 	<script src="{{ url('assets/js/plugin/chart.js/chart.min.js') }}"></script>
-
 	<!-- jQuery Sparkline -->
 	<script src="{{ url('assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js') }}"></script>
-
 	<!-- Chart Circle -->
 	<script src="{{ url('assets/js/plugin/chart-circle/circles.min.js') }}"></script>
-
 	<!-- Datatables -->
 	<script src="{{ url('assets/js/plugin/datatables/datatables.min.js') }}"></script>
-
 	{{-- <!-- Bootstrap Notify -->
 	<script src="{{ url('assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js') }}"></script> --}}
-
 	<!-- Bootstrap Toggle -->
 	<script src="{{ url('assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js') }}"></script>
-
 	<!-- jQuery Vector Maps -->
 	<script src="{{ url('assets/js/plugin/jqvmap/jquery.vmap.min.js') }}"></script>
 	<script src="{{ url('assets/js/plugin/jqvmap/maps/jquery.vmap.world.js') }}"></script>
-
 	<!-- Google Maps Plugin -->
 	<script src="{{ url('assets/js/plugin/gmaps/gmaps.js') }}"></script>
-
 	<!-- Dropzone -->
 	<script src="{{ url('assets/js/plugin/dropzone/dropzone.min.js') }}"></script>
-
 	<!-- Fullcalendar -->
 	<script src="{{ url('assets/js/plugin/fullcalendar/fullcalendar.min.js') }}"></script>
-
 	<!-- DateTimePicker -->
 	<script src="{{ url('assets/js/plugin/datepicker/bootstrap-datetimepicker.min.js') }}"></script>
-
 	<!-- Bootstrap Tagsinput -->
 	<script src="{{ url('assets/js/plugin/bootstrap-tagsinput/bootstrap-tagsinput.min.js') }}"></script>
-
 	<!-- Bootstrap Wizard -->
 	<script src="{{ url('assets/js/plugin/bootstrap-wizard/bootstrapwizard.js') }}"></script>
-
 	<!-- jQuery Validation -->
 	<script src="{{ url('assets/js/plugin/jquery.validate/jquery.validate.min.js') }}"></script>
-
 	<!-- Summernote -->
 	<script src="{{ url('assets/js/plugin/summernote/summernote-bs4.min.js') }}"></script>
-
 	<!-- Select2 -->
 	<script src="{{ url('assets/js/plugin/select2/select2.full.min.js') }}"></script>
-
 	<!-- Sweet Alert -->
 	<script src="{{ url('assets/js/plugin/sweetalert/sweetalert.min.js') }}"></script>
-
 	<!-- Owl Carousel -->
 	<script src="{{ url('assets/js/plugin/owl-carousel/owl.carousel.min.js') }}"></script>
-
 	<!-- Magnific Popup -->
 	<script src="{{ url('assets/js/plugin/jquery.magnific-popup/jquery.magnific-popup.min.js') }}"></script>
-
 	<!-- Atlantis JS -->
 	<script src="{{ url('assets/js/atlantis.min.js') }}"></script>
-
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
 	<script src="{{ url('assets/js/setting-demo.js') }}"></script>
 	<script src="{{ url('assets/js/demo.js') }}"></script>

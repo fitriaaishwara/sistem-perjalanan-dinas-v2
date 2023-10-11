@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Perjalanan;
+use App\Models\Province;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -56,6 +57,27 @@ class PerjalananController extends Controller
         return DataTables::of($data)
                     ->make(true);
     }
+
+    public function getDataProvinsi(Request $request)
+    {
+        $keyword = $request['searchkey'];
+
+        $data = Province::select()
+            ->when($keyword, function ($query, $keyword) {
+                return $query->where('name', 'like', '%' . $keyword . '%');
+            })
+            ->get();
+
+        $dataCounter = Province::select()
+            ->when($keyword, function ($query, $keyword) {
+                return $query->where('name', 'like', '%' . $keyword . '%');
+            })
+            ->count();
+
+        return DataTables::of($data)
+                    ->make(true);
+    }
+
 
 
 }

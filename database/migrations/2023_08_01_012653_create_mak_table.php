@@ -18,7 +18,7 @@ class CreateMakTable extends Migration
             $table->string('kode_mak')->unique();
             $table->string('saldo_awal_pagu');
             $table->string('saldo_pagu');
-            $table->string('description')->nullable();
+            $table->string('terealisasi')->nullable();
             $table->boolean('status')->default(1);
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

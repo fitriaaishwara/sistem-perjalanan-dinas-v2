@@ -14,7 +14,7 @@ class UploadBuktiController extends Controller
 {
     public function index()
     {
-        return view('pages.upload.index');
+        return view('pages.upload.upload_invoice.index');
     }
 
     public function getData(Request $request)
@@ -54,7 +54,7 @@ class UploadBuktiController extends Controller
     {
         $dataStaff = DataStaffPerjalanan::findOrFail($id);
         // dd($dataStaff);
-        return view('pages.upload.create', compact('dataStaff'));
+        return view('pages.upload.upload_invoice.create', compact('dataStaff'));
     }
 
     public function getUploadByIdBerangkat(Request $request, $id)
@@ -149,10 +149,10 @@ class UploadBuktiController extends Controller
     {
         try {
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'File failed to create'];
-            $fileName = Str::random(20);
+            $fileName = \Str::random(20);
             $path = 'bukti_berangkat/' . $request['bukti_berangkat'];
 
-            $validator = Validator::make($request->all(), [
+            $validator = \Validator::make($request->all(), [
                 'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
             if ($validator->fails()) {

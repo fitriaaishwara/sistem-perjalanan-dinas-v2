@@ -16,7 +16,7 @@ class TujuanController extends Controller
     {
         $keyword = $request['searchkey'];
         $data = Tujuan::select()
-            ->with('perjalanan')
+            ->with('perjalanan', 'tempatBerangkat', 'tempatTujuan')
             // ->offset($request['start'])
             // ->limit(($request['length'] == -1) ? Tujuan::where('status', true)->count() : $request['length'])
             ->when($keyword, function ($query, $keyword) {
@@ -42,6 +42,7 @@ class TujuanController extends Controller
 
             $data = ['status' => false, 'message' => 'Tujuan failed to be found'];
             $data = Tujuan::where('id_perjalanan', $id)
+                ->with('tempatBerangkat', 'tempatTujuan')
                 ->where('status', true)
                 ->get();
 
@@ -67,7 +68,7 @@ class TujuanController extends Controller
     {
         try {
             $data = ['status' => false, 'message' => 'Tujuan failed to be found'];
-            $data = Tujuan::findOrFail($id);
+            $data = Tujuan::with('perjalanan', 'tempatBerangkat', 'tempatTujuan')->findOrFail($id);
             if ($data) {
                 $data = ['status' => true, 'message' => 'Tujuan was successfully found', 'data' => $data];
             }
@@ -100,8 +101,8 @@ class TujuanController extends Controller
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Tujuan failed to be created'];
             $create = Tujuan::create([
                 'id_perjalanan' => $request->id_perjalanan,
-                'tempat_berangkat' => $request->tempat_berangkat,
-                'tempat_tujuan' => $request->tempat_tujuan,
+                'tempat_berangkat_id' => $request->tempat_berangkat_id,
+                'tempat_tujuan_id' => $request->tempat_tujuan_id,
                 'tanggal_berangkat' => $request->tanggal_berangkat,
                 'tanggal_pulang' => $request->tanggal_pulang,
                 'tanggal_tiba' => $request->tanggal_tiba,
@@ -122,8 +123,8 @@ class TujuanController extends Controller
         try {
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Tujuan failed to be updated'];
             $update = Tujuan::where('id', $request['id'])->update([
-                'tempat_berangkat' => $request['tempat_berangkat'], // $request['name'
-                'tempat_tujuan' => $request['tempat_tujuan'], // $request['description
+                'tempat_berangkat_id' => $request['tempat_berangkat_id'], // $request['name'
+                'tempat_tujuan_id' => $request['tempat_tujuan_id'], // $request['description
                 'tanggal_berangkat' => $request['tanggal_berangkat'], // $request['status'
                 'tanggal_pulang' => $request['tanggal_pulang'], // $request['status'
                 'tanggal_tiba' => $request['tanggal_tiba'], // $request['status'

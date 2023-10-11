@@ -119,6 +119,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/pengajuan/delete/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'destroy'])->name('pengajuan/delete');
 
+    Route::post('/provinsi/getData', [App\Http\Controllers\Web\PerjalananController::class, 'getDataProvinsi'])->name('provinsi/getData');
+
     //Instansi
     Route::post('/instansi/getData', [App\Http\Controllers\Web\InstansiController::class, 'getData'])->name('instansi/getData');
 
@@ -231,6 +233,30 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/transportasiBerangkat/pdf/{id}', [App\Http\Controllers\Web\TransportasiBerangkatController::class, 'downloadFile'])->name('transportasi-berangkat/pdf');
 
     Route::get('/transportasiPulang/pdf/{id}', [App\Http\Controllers\Web\TransportasiPulangController::class, 'downloadFile'])->name('transportasi-pulang/pdf');
+
+    //Laporan
+    Route::get('/laporan', [App\Http\Controllers\Web\UploadLaporanController::class, 'index'])->name('laporan');
+    Route::post('/laporan/getData', [App\Http\Controllers\Web\UploadLaporanController::class, 'getData'])->name('laporan/getData');
+    // Route::get('/laporan/create/{id}', [App\Http\Controllers\Web\UploadLaporanController::class, 'create'])->name('laporan/create');
+    Route::post('/laporan/store', [App\Http\Controllers\Web\UploadLaporanController::class, 'store'])->name('laporan/store');
+    Route::get('/laporan/pdf/{id}', [App\Http\Controllers\Web\UploadLaporanController::class, 'downloadFile'])->name('laporan/pdf');
+    Route::post('/laporan/update', [App\Http\Controllers\Web\UploadLaporanController::class, 'update'])->name('laporan/update');
+    Route::get('/laporan/{id}', [App\Http\Controllers\Web\UploadLaporanController::class, 'show'])->name('laporan/show');
+
+    Route::get('/laporan/pdf/{id}', [App\Http\Controllers\Web\UploadLaporanController::class, 'downloadFile'])->name('laporan/pdf');
+
+    //Gallery
+    Route::get('/gallery', [App\Http\Controllers\Web\UploadGalleryController::class, 'index'])->name('gallery');
+    Route::post('/gallery/getData', [App\Http\Controllers\Web\UploadGalleryController::class, 'getData'])->name('gallery/getData');
+    Route::get('/gallery/create/{id}', [App\Http\Controllers\Web\UploadGalleryController::class, 'create'])->name('gallery/create');
+
+    Route::post('/gallery/store', [App\Http\Controllers\Web\UploadGalleryController::class, 'store'])->name('gallery/store');
+    Route::get('/gallery/pdf/{id}', [App\Http\Controllers\Web\UploadGalleryController::class, 'downloadFile'])->name('gallery/pdf');
+    Route::post('/gallery/update', [App\Http\Controllers\Web\UploadGalleryController::class, 'update'])->name('gallery/update');
+    Route::get('/gallery/{id}', [App\Http\Controllers\Web\UploadGalleryController::class, 'show'])->name('gallery/show');
+
+    Route::get('/gallery/pdf/{id}', [App\Http\Controllers\Web\UploadLaporanController::class, 'downloadFile'])->name('gallery/pdf');
+
 
 });
 

@@ -110,7 +110,7 @@
                 <tr>
                     <td class="font-12" style="width: 55%">Uang Sebesar</td>
                     <td style="width: 10%" class="font-12 text-center">:</td>
-                    <td class="font-12">Rp. {{ $kwitansi->dataStaffPerjalanan->perjalanan[0]->total_biaya }}</td>
+                    <td class="font-12">Rp. {{ format_rupiah($kwitansi->dataStaffPerjalanan->perjalanan[0]->total_biaya) }}</td>
                 </tr>
                 <tr>
                     <td class="font-12" style="width: 55%">Untuk Pembayaran</td>

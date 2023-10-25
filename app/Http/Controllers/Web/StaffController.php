@@ -91,7 +91,7 @@ class StaffController extends Controller
     {
         try {
             $data = ['status' => false, 'message' => 'Staff failed to be found'];
-            $data = Staff::with(['golongans', 'jabatans', 'instansis'])->where('id', $id)->first();
+            $data = Staff::with(['golongans', 'jabatans', 'instansis','kwitansiBendahara','kwitansiPejabat','dataStaffPerjalanan'])->where('id', $id)->first();
 
             switch ($data->jenis) {
                 case '0':

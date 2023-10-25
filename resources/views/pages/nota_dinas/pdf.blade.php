@@ -36,6 +36,23 @@
         .tabel_ttd td {
             width: calc(100% / 3)
         }
+
+        .tabel_spd {
+            table-layout:fixed; /* this keeps your columns with at the defined width */
+            display: table;
+            width: 100%;
+        }
+
+        .tabel_spd td {
+            width: calc(100% / 3)
+        }
+
+        .tbl , .tbl th, .tbl td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
     </style>
 </head>
 <body>
@@ -103,6 +120,62 @@
 
     {!!( Str::repeat('<br>', 2) )!!}
 
+    <div class="font-11">
+        <table class="w-100 tbl">
+            <tr>
+                <td style="width: 30px" class="text-center">
+                    No
+                </td>
+                <td class="text-center">
+                    Nama
+                </td>
+                <td style="width: 30px" class="text-center">
+                    Gol
+                </td>
+                <td class="text-center">
+                    Jabatan
+                </td>
+                <td class="text-center">
+                    Instansi
+                </td>
+                <td class="text-center">
+                    Tujuan
+                </td>
+                <td class="text-center">
+                    Ket.
+                </td>
+            </tr>
+            @foreach ($data as $index => $value)
+                <tr>
+                    <td class="text-center">
+                        1
+                    </td>
+                    <td>
+                        {{-- {{ $data->perjalanan[0]->data_staff_perjalanan->staff->name }} --}}
+                    </td>
+                    <td class="text-center">
+                        {{-- Your Gol data --}}
+                    </td>
+                    <td>
+                        {{-- Your Jabatan data --}}
+                    </td>
+                    <td>
+                        {{-- Your Instansi data --}}
+                    </td>
+                    <td>
+                        {{-- Your Tujuan data --}}
+                    </td>
+                    <td>
+                        {{-- Your Ket data --}}
+                    </td>
+                </tr>
+            @endforeach
+        </table>
+    </div>
+
+
+    {!!( Str::repeat('<br>', 2) )!!}
+
     <div class="font-11 w-100">
         <table class="w-100 tabel_ttd">
             <tr>
@@ -114,12 +187,19 @@
 
                     {!!( Str::repeat('<br>', 4) )!!}
 
-                    <div>Adi Trisnojuwono</div>
-                    <div>NIP 19671112 199503 1 001</div>
+                    <div>{{ $data->staff->name }}</div>
+                    <div>NIP {{ $data->staff->nip }}</div>
                 </td>
             </tr>
         </table>
     </div>
+    {{-- <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            width: 100%;
+        }
+    </style> --}}
     <!-- Add other fields as needed -->
 </body>
 </html>

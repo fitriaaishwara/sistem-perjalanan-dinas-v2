@@ -8,6 +8,7 @@ use App\Models\LogStatusPerjalanan;
 use App\Models\Perjalanan;
 use App\Models\PerjalananDinas;
 use App\Models\Staff;
+use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
@@ -78,6 +79,15 @@ class PengajuanController extends Controller
     }
 
     function save_staff(Request $request, $id_perjalanan) {
+
+        // Validator::make($request->all(), [
+        //     'id_staff' => 'required',
+        //     'id_tujuan_perjalanan' => 'required',
+        // ])->validate();
+        // if (Validator::fails()) {
+        //     return redirect()->back()->withErrors($validator)->withInput();
+        // }
+
         $id_staff = $request->id_staff;
         $id_tujuan_perjalanan = $request->id_tujuan_perjalanan;
 
@@ -102,7 +112,7 @@ class PengajuanController extends Controller
     public function createId($id)
     {
 
-        $perjalanan = Perjalanan::findOrFail($id);
+        $perjalanan = Perjalanan::with('tujuan', 'mak', 'data_staff_perjalanan')->findOrFail($id);
 
         $staff = Staff::where('status', 1)->get();
 
@@ -124,7 +134,7 @@ class PengajuanController extends Controller
         $keyword = $request['searchkey'];
 
         $data = Perjalanan::select()
-            ->with('mak', 'tujuan')
+            ->with('mak', 'tujuan', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan')
             ->offset($request['start'])
             ->limit(($request['length'] == -1) ? Perjalanan::where('status', true)->count() : $request['length'])
             ->when($keyword, function ($query, $keyword) {

@@ -46,6 +46,10 @@ class Staff extends Model
         return $this->hasMany(DataStaffPerjalanan::class, 'id_staff', 'id');
     }
 
+    public function nota_dinas()
+    {
+        return $this->hasMany(NotaDinas::class, 'id_staff_penandatangan', 'id');
+    }
 
 
 

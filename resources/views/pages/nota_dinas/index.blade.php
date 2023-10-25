@@ -113,7 +113,7 @@
                         if (data && data.nomor_nota_dinas) {
                             return "<div class='text-wrap'>" + data.nomor_nota_dinas + "</div>";
                         } else {
-                            return "<div class='text-wrap'>Nota Dinas Belum Diisi</div>";
+                            return "<div class='text-wrap badge badge-danger'>Belum ada berkas</div>";
                         }
                     }
                 },
@@ -215,20 +215,22 @@
                             if (row.nota_dinas == null) {
                                 btnTambah += '<a href="/nota-dinas/create/' + data +
                                     '" name="btnTambah" data-id="' + data +
-                                    '" type="button" class="btn btn-success btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
+                                    '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
                             } else if (row.nota_dinas != null) {
                                 btnEdit += '<a href="/nota-dinas/edit/' + data +
                                     '" name="btnEdit" data-id="' + data +
                                     '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
+
+                                btnDownload += '<a href="/nota-dinas/pdf/' + data +
+                                    '" name="btnDownload" data-id="' + data +
+                                    '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
                             }
 
-                        btnDownload += '<a href="/nota-dinas/pdf/' + data +
-                            '" name="btnDownload" data-id="' + data +
-                            '" type="button" class="btn btn-primary btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
 
 
-                            btnDelete += '<a href="#" name="btnDelete" data-id="' + data +
-                                '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a>';
+
+                            // btnDelete += '<a href="#" name="btnDelete" data-id="' + data +
+                            //     '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a>';
 
                             // console.log(row);
                         return btnTambah + btnEdit + btnDownload + btnDelete;

@@ -137,6 +137,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/tujuan/store', [App\Http\Controllers\Web\TujuanController::class, 'store'])->name('tujuan/store');
     Route::post('/tujuan/update', [App\Http\Controllers\Web\TujuanController::class, 'update'])->name('tujuan/update');
     Route::get('/tujuan/{id}', [App\Http\Controllers\Web\TujuanController::class, 'show'])->name('tujuan/show');
+    Route::get('/showStaff/{id}', [App\Http\Controllers\Web\TujuanController::class, 'showStaff'])->name('tujuan/showStaff');
     Route::post('/tujuan/delete/{id}', [App\Http\Controllers\Web\TujuanController::class, 'destroy'])->name('tujuan/delete');
 
     Route::any('/staffById/getData/{id_perjalanan} ', [App\Http\Controllers\Web\TujuanController::class, 'getStaffByIdPerjalanan'])->name('staffById/getData');
@@ -242,8 +243,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/laporan/pdf/{id}', [App\Http\Controllers\Web\UploadLaporanController::class, 'downloadFile'])->name('laporan/pdf');
     Route::post('/laporan/update', [App\Http\Controllers\Web\UploadLaporanController::class, 'update'])->name('laporan/update');
     Route::get('/laporan/{id}', [App\Http\Controllers\Web\UploadLaporanController::class, 'show'])->name('laporan/show');
+    Route::get('/laporan/show/{id}', [App\Http\Controllers\Web\UploadLaporanController::class, 'showing'])->name('laporan/showing');
 
     Route::get('/laporan/pdf/{id}', [App\Http\Controllers\Web\UploadLaporanController::class, 'downloadFile'])->name('laporan/pdf');
+
+
 
     //Gallery
     Route::get('/gallery', [App\Http\Controllers\Web\UploadGalleryController::class, 'index'])->name('gallery');

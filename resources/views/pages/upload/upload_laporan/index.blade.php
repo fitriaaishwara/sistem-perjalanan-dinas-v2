@@ -21,7 +21,52 @@
             <div class="modal-body">
                 <form method="POST" action="{{ route('laporan/store') }}" id="laporanForm" name="laporanForm">
                     @csrf
-                    <input id="id" name="id" type="text" class="form-control" name="id_tujuan_perjalanan">
+                    <input id="id" type="hidden" class="form-control" name="id_tujuan_perjalanan">
+                    <div class="row mb-4">
+                        <label for="name_file" class="col-sm-3 col-form-label">Nama File<span
+                                style="color:red;">*</span></label>
+                        <div class="col-sm-9 validate">
+                            <input id="name_file" type="text" class="form-control" name="name_file">
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <label for="path_file" class="col-sm-3 col-form-label">File<span
+                            style="color:red;">*</span></label>
+                        <div class="col-sm-9 validate">
+                            <input class="form-control" id="path_file" name="path_file" type="file">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark waves-effect waves-light btn-sm" id="saveBtn"
+                    name="saveBtn">Save changes</button>
+                <button type="button" class="btn btn-secondary waves-effect btn-sm"
+                    data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+ <!-- Modal -->
+ <div id="editModal" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header border-0" id="myModalLabel">
+                <h5 class="modal-title">
+                    <span class="fw-mediumbold">
+                    Upload</span>
+                    <span class="fw-light">
+                        Laporan
+                    </span>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{ route('laporan/store') }}" id="laporanForm" name="laporanForm">
+                    @csrf
+                    <input id="id" type="hidden" class="form-control" name="id_tujuan_perjalanan">
                     <div class="row mb-4">
                         <label for="name_file" class="col-sm-3 col-form-label">Nama File<span
                                 style="color:red;">*</span></label>
@@ -248,9 +293,8 @@
                             btnTambah += '<button name="btnTambah" data-id="' + data +
                                 '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></button>';
                         } else {
-                            btnEdit += '<a href="/kwitansi/edit/' + data +
-                                '" name="btnEdit" data-id="' + data +
-                                '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
+                            btnEdit += '<button name="btnEdit" data-id="' + data +
+                                '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
                         }
                         return btnTambah + btnEdit;
                     },
@@ -327,47 +371,28 @@
                 });
         });
 
-        $('#myTable').on("click", ".btnDelete", function() {
-            var id = $(this).attr('data-id');
-            Swal.fire({
-                title: 'Confirmation',
-                text: "You will delete this pengajuan. Are you sure you want to continue?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: "Yes, I'm sure",
-                cancelButtonText: 'No'
-            }).then(function(result) {
-                if (result.value) {
-                    var url = "{{ route('dataPerjalanan/delete', ['id' => ':id']) }}";
-                    url = url.replace(':id', id);
-                    $.ajax({
-                        headers: {
-                            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                                'content'),
-                        },
-                        url: url,
-                        type: "POST",
-                        success: function(data) {
-                            Swal.fire(
-                                (data.status) ? 'Success' : 'Error',
-                                data.message,
-                                (data.status) ? 'success' : 'error'
-                            )
-                            reloadTable();
-                        },
-                        error: function(response) {
-                            Swal.fire(
-                                'Error',
-                                'A system error has occurred. please try again later.',
-                                'error'
-                            )
-                        }
-                    });
-                }
-            })
-        });
+        $('#myTable').on("click", ".btnEdit", function() {
+                $('#editModal').modal('show');
+                isUpdate = true;
+                var id = $(this).attr('data-id');
+                var url = "{{ route('laporan/showing', ['id' => ':id']) }}";
+                url = url.replace(':id', id);
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    success: function(response) {
+                        $('#name_file').val(response.data.name_file);
+                        $('#id').val(response.data.id);
+                    },
+                    error: function() {
+                        Swal.fire(
+                            'Error',
+                            'A system error has occurred. please try again later.',
+                            'error'
+                        )
+                    },
+                });
+            });
     });
 </script>
 

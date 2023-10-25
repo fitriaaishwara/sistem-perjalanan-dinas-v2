@@ -19,7 +19,7 @@ class Kwitansi extends Model
 
     public function dataStaffPerjalanan()
     {
-        return $this->belongsTo(DataStaffPerjalanan::class, 'id_staff_perjalanan', 'id');
+        return $this->hasOne(DataStaffPerjalanan::class, 'id_staff_perjalanan', 'id');
     }
 
     function bendahara() {

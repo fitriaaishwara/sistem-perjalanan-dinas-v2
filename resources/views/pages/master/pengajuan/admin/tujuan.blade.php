@@ -102,11 +102,7 @@
                         <label for="id_staff" class="col-sm-3 col-form-label">Staff<span
                                 style="color:red;">*</span></label>
                         <div class="col-sm-9 validate">
-                            <select name="id_staff" class="form-control select2" required id="id_staff">
-                                <option value="">Pilih Staff</option>
-                                @foreach ($staff as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
+                            <select name="id_staff" class="form-control select2 id_staff" required id="id_staff">
                             </select>
                         </div>
                     </div>
@@ -117,9 +113,9 @@
                         <div class="col-sm-9 validate">
                             <select name="id_tujuan_perjalanan" class="form-control select2" required id="id_tujuan_perjalanan">
                                 <option value="">Pilih Tujuan</option>
-                                @foreach ($perjalanan->tujuan as $item)
+                                    @foreach ($perjalanan->tujuan as $item)
                                     <option value="{{ $item->id }}">{{ $item->tempatBerangkat->name }} - {{ $item->tempatTujuan->name }}</option>
-                                @endforeach
+                                    @endforeach
                             </select>
                         </div>
                     </div>
@@ -778,8 +774,8 @@
                     render: function(data, type, row) {
                         var btnStaffEdit = "";
                         var btnStaffDelete = "";
-                        btnStaffEdit += '<button name="btnStaffEdit" data-id="' + data +
-                            '" type="button" class="btn btn-warning btn-sm btnStaffEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
+                        // btnStaffEdit += '<button name="btnStaffEdit" data-id="' + data +
+                        //     '" type="button" class="btn btn-warning btn-sm btnStaffEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
                         btnStaffDelete += '<button name="btnStaffDelete" data-id="' + data +
                             '" type="button" class="btn btn-danger btn-sm btnStaffDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
                         return btnStaffEdit + btnStaffDelete;
@@ -791,6 +787,49 @@
         function reloadTable() {
             staffTable.ajax.reload(null, false); //reload datatable ajax
         }
+
+        $("#id_staff").select2({
+            theme: 'bootstrap',
+            width: '100%',
+            dropdownParent: $('#myModalStaff'),
+            placeholder: "Pilih Staff",
+            ajax: {
+                url: "{{ route('staff/getData') }}",
+                dataType: 'json',
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                method: 'POST',
+                delay: 250,
+                destroy: true,
+                data: function(params) {
+                    var query = {
+                        searchkey: params.term || '',
+                        start: 0,
+                        length: 50
+                    }
+                    return JSON.stringify(query);
+                },
+                processResults: function(data) {
+                    var result = {
+                        results: [],
+                        more: false
+                    };
+                    if (data && data.data) {
+                        $.each(data.data, function() {
+                            result.results.push({
+                                id: this.id,
+                                text: this.name
+                            });
+                        })
+                    }
+                    return result;
+                },
+                cache: false
+            },
+        });
 
         $('#saveBtnStaff').click(function(e) {
             e.preventDefault();
@@ -839,19 +878,24 @@
             $('#myModalStaff').modal('show');
             isUpdate = true;
             var id = $(this).attr('data-id');
-            var url = "{{ route('staff/show', ['id' => ':id']) }}";
+            var url = "{{ route('tujuan/showStaff', ['id' => ':id']) }}";
             url = url.replace(':id', id);
             $.ajax({
                 type: 'GET',
                 url: url,
                 success: function(response) {
-                    $('#tempat_berangkat').val(response.data.tempat_berangkat);
-                    $('#tempat_tujuan').val(response.data.tempat_tujuan);
-                    $('#tanggal_berangkat').val(response.data.tanggal_berangkat);
-                    $('#tanggal_pulang').val(response.data.tanggal_pulang);
-                    $('#tanggal_tiba').val(response.data.tanggal_tiba);
-                    $('#lama_perjalanan').val(response.data.lama_perjalanan);
                     $('#id').val(response.data.id);
+
+                    if (response.data.staff) {
+                        var staff_data = new Option(response.data.staff.name, response.data.staff.id, true, true);
+                        $('.id_staff').append(staff_data).trigger('change');
+                    }
+
+                    if (response.data.tempat_berangkat) {
+                        var berangkat = new Option(response.data.tempat_berangkat.name, response.data.tempat_berangkat.id, true, true);
+                        $('.tempat_berangkat_id').append(berangkat).trigger('change');
+                    }
+
                 },
                 error: function() {
                     Swal.fire(
@@ -909,10 +953,7 @@
                 name: {
                     required: true,
                 },
-                tempat_berangkat_id: {
-                    required: true,
-                },
-                tempat_tujuan_id: {
+                id_staff: {
                     required: true,
                 },
             },
@@ -931,6 +972,7 @@
 
         $('#addNewStaff').on('click', function() {
             $('#name').val("");
+            $('#id_staff').val("").trigger('change');
             isUpdate = false;
         });
 

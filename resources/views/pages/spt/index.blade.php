@@ -110,11 +110,11 @@
                         "width": '20%',
                         "defaultContent": "-",
                         render: function(data, type, row) {
-                            if (data.nomor_spt != 1) {
-                                return "<div class='text-wrap' style='font-size: 12px;'>/SesDep.4/SPT/IX/2023</div>";
-                            } else {
-                                return "<div class='text-wrap' style='font-size: 12px;'>/Dep.4/SPT/IX/2023</div>";
-                            }
+
+                        if (row.spt == "" || row.spt == null) {
+                            return "<div class='text-wrap badge badge-danger'>Belum ada berkas</div>";
+                        } else
+                            return "<div class='text-wrap'>" + data.nomor_spt + "</div>";
                         }
                 },
                 {
@@ -195,16 +195,16 @@
                         if (row.spt == "" || row.spt == null) {
                                 btnTambah += '<a href="/surat-perintah-tugas/create/' + data +
                                     '" name="btnTambah" data-id="' + data +
-                                    '" type="button" class="btn btn-success btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
+                                    '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
                                 } else {
                                 btnEdit += '<a href="/surat-perintah-tugas/edit/' + data +
                                     '" name="btnEdit" data-id="' + data +
                                     '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
-                            }
 
-                        btnDownload += '<a href="/surat-perintah-tugas/pdf/' + data +
-                            '" name="btnDownload" data-id="' + data +
-                            '" type="button" class="btn btn-primary btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
+                                btnDownload += '<a href="/surat-perintah-tugas/pdf/' + data +
+                                    '" name="btnDownload" data-id="' + data +
+                                    '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
+                            }
 
                             console.log(row);
                         return btnTambah + btnEdit + btnDownload;

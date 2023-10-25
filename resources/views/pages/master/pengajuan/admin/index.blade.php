@@ -178,23 +178,11 @@
                             },
                         },
                         {
-                            "data": "tujuan",
+                            "data": "tujuan.tempat_tujuan",
                             "width": '10%',
                             "defaultContent": "-",
                             render: function(data, type, row) {
-                                console.log(data);
-                                var tujuan = "";
-                                var angka = 1;
-                                for (var i = 0; i < data.length; i++) {
-                                    tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + data[i].tempat_tujuan + "</div>";
-                                    angka++;
-                                }
-                                return tujuan;
-                                // if (data) {
-                                //     return "<div class='text-wrap'>" + data.tempat_tujuan + "</div>";
-                                // } else {
-                                //     return "<div class='text-wrap'>-</div>";
-                                // }
+
                             }
                         },
                         {

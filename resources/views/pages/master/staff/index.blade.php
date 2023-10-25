@@ -40,9 +40,9 @@
                                     name="jenis">
                                         <option value=""></option>
                                         <option value="0">PNS</option>
-                                        <option value="1">Non PNS (PPPK)</option>
-                                        <option value="2">Honorer</option>
-                                        <option value="3">Lainnya</option>
+                                        <option value="1">PPPK</option>
+                                        <option value="2">Honorer/PPNPN</option>
+                                        <option value="3">Outsourcing</option>
                                     </select>
                                 </div>
                                 <div class="mb-3 validate show_in_jenis_pns_only">
@@ -217,9 +217,13 @@
                         if(data == 0) {
                             return "<div class='text-wrap' style='font-size: 12px;'>PNS</div>";
                         } else if(data == 1) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>Non PNS (PPPK)</div>";
-                        } else {
-                            return "<div class='text-wrap' style='font-size: 12px;'>Honorer</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>PPPK</div>";
+                        } else if(data == 2){
+                            return "<div class='text-wrap' style='font-size: 12px;'>Honorer/PPNPN</div>";
+                        } else if(data == 3){
+                            return "<div class='text-wrap' style='font-size: 12px;'>Outsourcing</div>";
+                        } else if(data == 4){
+                            return "<div class='text-wrap' style='font-size: 12px;'>Lainnya</div>";
                         }
                     },
                 },
@@ -557,7 +561,7 @@
         $('select#jenis').change(function (e) {
             e.preventDefault();
 
-            if($(this).val() == '0') {
+            if($(this).val() == '0' || $(this).val() == '1') {
                 $('.show_in_jenis_pns_only').show()
             } else {
                 $('.show_in_jenis_pns_only').hide()

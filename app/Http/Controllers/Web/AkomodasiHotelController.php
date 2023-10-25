@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\AkomodasiHotel;
+use App\Models\DataStaffPerjalanan;
+use App\Models\Perjalanan;
+use App\Models\Tujuan;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Str;
@@ -42,6 +45,22 @@ class AkomodasiHotelController extends Controller
                 'nominal'             => $request->input('nominal'),
                 'file_path'           => $fileName,
             ]);
+
+            $dataStaff = DataStaffPerjalanan::where('id', $request->input('id_staff_perjalanan'))->first();
+            $perjalanan = Perjalanan::where('id', $dataStaff->id_perjalanan)->first();
+            $perjalanan->total_biaya = $perjalanan->total_biaya + $request->input('nominal');
+            $perjalanan->save();
+
+            if ($perjalanan->save()) {
+                $dataStaff->total_biaya = $dataStaff->total_biaya + $request->input('nominal');
+                $dataStaff->save();
+            }
+
+            if ($dataStaff->save()) {
+                $tujuan = Tujuan::where('id', $dataStaff->id_tujuan_perjalanan)->first();
+                $tujuan->total_biaya = $tujuan->total_biaya + $request->input('nominal');
+                $tujuan->save();
+            }
 
             if ($create) {
                 $data = ['status' => true, 'code' => 'SC001', 'message' => 'Jabatan successfully created'];

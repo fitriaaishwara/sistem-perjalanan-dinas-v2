@@ -19,4 +19,10 @@ class NotaDinas extends Model
     function perjalanan() {
         return $this->belongsTo(Perjalanan::class, 'id_perjalanan', 'id');
     }
+
+    function staff() {
+        return $this->belongsTo(Staff::class, 'id_staff_penandatangan', 'id');
+    }
+
+
 }

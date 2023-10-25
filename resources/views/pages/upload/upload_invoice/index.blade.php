@@ -231,18 +231,14 @@
                         if (row.id_spt == "" || row.id_spt == null) {
                             btnTambah += '<a href="/bukti-perjalanan/create/' + data +
                                 '" name="btnTambah" data-id="' + data +
-                                '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
-                        } else {
-                            btnEdit += '<a href="/bukti-perjalanan/edit/' + data +
-                                '" name="btnEdit" data-id="' + data +
-                                '" type="button" class="btn btn-primary btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
+                                '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fas fa-file"></i></a>';
                         }
 
-                        btnDownload += '<a href="/surat-perjalanan-dinas/pdf/' + data +
-                            '" name="btnDownload" data-id="' + data +
-                            '" type="button" class="btn btn-primary btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
+                        // btnDownload += '<a href="/surat-perjalanan-dinas/pdf/' + data +
+                        //     '" name="btnDownload" data-id="' + data +
+                        //     '" type="button" class="btn btn-primary btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
 
-                            console.log(row);
+                        //     console.log(row);
                         return btnTambah + btnEdit + btnDownload;
                     },
                 },

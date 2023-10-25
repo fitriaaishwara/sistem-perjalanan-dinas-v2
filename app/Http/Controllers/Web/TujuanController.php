@@ -8,6 +8,7 @@ use App\Models\Perjalanan;
 use App\Models\Staff;
 use App\Models\Tujuan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 
 class TujuanController extends Controller
@@ -79,6 +80,21 @@ class TujuanController extends Controller
         return $data;
     }
 
+    public function showStaff($id)
+    {
+        try {
+            $data = ['status' => false, 'message' => 'Tujuan failed to be found'];
+            $data = DataStaffPerjalanan::with('staff.golongans', 'staff.jabatans', 'staff.instansis')->findOrFail($id);
+            if ($data) {
+                $data = ['status' => true, 'message' => 'Tujuan was successfully found', 'data' => $data];
+            }
+        } catch (\Exception $ex) {
+            $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
+        }
+
+        return $data;
+    }
+
     public function destroy($id)
     {
         try {
@@ -107,6 +123,7 @@ class TujuanController extends Controller
                 'tanggal_pulang' => $request->tanggal_pulang,
                 'tanggal_tiba' => $request->tanggal_tiba,
                 'lama_perjalanan' => $request->lama_perjalanan,
+                'created_by' => Auth::user()->id,
             ]);
             if ($create) {
                 $data = ['status' => true, 'code' => 'SC001', 'message' => 'Tujuan successfully created'];
@@ -128,7 +145,8 @@ class TujuanController extends Controller
                 'tanggal_berangkat' => $request['tanggal_berangkat'], // $request['status'
                 'tanggal_pulang' => $request['tanggal_pulang'], // $request['status'
                 'tanggal_tiba' => $request['tanggal_tiba'], // $request['status'
-                'lama_perjalanan' => $request['lama_perjalanan'] // $request['status'
+                'lama_perjalanan' => $request['lama_perjalanan'], // $request['status'
+                'created_by' => Auth::user()->id,
             ]);
             if ($update) {
                 $data = ['status' => true, 'code' => 'SC001', 'message' => 'Tujuan successfully updated'];

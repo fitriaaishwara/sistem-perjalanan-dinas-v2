@@ -113,9 +113,9 @@
                     "defaultContent": "-",
                     render: function(data, type, row) {
                         if (data && data.nomor_spd) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.nomor_spd + "</div>";
+                            return "<div class='text-wrap'>" + data.nomor_spd + "</div>";
                         } else {
-                            return "<div class='text-wrap'>-</div>";
+                            return "<div class='text-wrap badge badge-danger'>Belum ada berkas</div>";
                         }
                     }
                 },
@@ -130,7 +130,7 @@
                             else
                                 return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
                         } else {
-                            return "<div class='text-wrap'>-</div>";
+                            return "<div class='text-wrap badge badge-danger'>Belum ada berkas</div>";
                         }
                     }
                 },
@@ -238,12 +238,14 @@
                         } else {
                             btnEdit += '<a href="/surat-perjalanan-dinas/edit/' + data +
                                 '" name="btnEdit" data-id="' + data +
-                                '" type="button" class="btn btn-primary btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
+                                '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
+
+                            btnDownload += '<a href="/surat-perjalanan-dinas/pdf/' + data +
+                                '" name="btnDownload" data-id="' + data +
+                                '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
                         }
 
-                        btnDownload += '<a href="/surat-perjalanan-dinas/pdf/' + data +
-                            '" name="btnDownload" data-id="' + data +
-                            '" type="button" class="btn btn-primary btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
+
 
                             console.log(row);
                         return btnTambah + btnEdit + btnDownload;

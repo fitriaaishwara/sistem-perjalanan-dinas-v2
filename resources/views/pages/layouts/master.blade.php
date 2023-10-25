@@ -182,62 +182,19 @@
 								<p>SPD</p>
                             </a>
 						</li>
-                        <li class="nav-item {{ request()->is('bukti-perjalanan') || request()->is('bukti-perjalanan/*') ? 'active' : '' }}">
-                            <a href="{{ route('bukti')}}">
-                                <i class="fas fa-file-invoice"></i>
-                                <p>Upload Dokumen</p>
-                            </a>
-                        </li>
 						<li class="nav-section">
 							<span class="sidebar-mini-icon">
 								<i class="fa fa-ellipsis-h"></i>
 							</span>
 							<h4 class="text-section">Surat Pra-Perjalanan</h4>
 						</li>
-						<li class="nav-item {{ request()->is('kwitansi') || request()->is('kwitansi/*') ? 'active' : '' }}">
-							<a href="{{ route('kwitansi' )}}">
-								<i class="fas fa-file-invoice-dollar"></i>
-								<p>Kwitansi</p>
-							</a>
-						</li>
 
-						{{-- <li class="nav-item">
-							<a data-toggle="collapse" href="#pengeluaran_rill">
-								<i class="fas fa-hand-holding-usd"></i>
-								<p>Pengeluaran Rill</p>
-								<span class="caret"></span>
-							</a>
-							<div class="collapse" id="pengeluaran_rill">
-								<ul class="nav nav-collapse">
-									<li>
-										<a href="components/avatars.html">
-											<span class="sub-item">Rincian</span>
-										</a>
-									</li>
-									<li>
-										<a href="components/buttons.html">
-											<span class="sub-item">Daftar</span>
-										</a>
-									</li>
-								</ul>
-							</div>
-						</li>
-                        <li class="nav-item">
-							<a data-toggle="collapse" href="#nominal_tip">
-								<i class="fab fa-gratipay"></i>
-								<p>TIP Perjalanan Dinas</p>
-								<span class="caret"></span>
-							</a>
-							<div class="collapse" id="nominal_tip">
-								<ul class="nav nav-collapse">
-									<li>
-										<a href="components/avatars.html">
-											<span class="sub-item">Rincian Nominal</span>
-										</a>
-									</li>
-								</ul>
-							</div>
-						</li> --}}
+                        <li class="nav-item {{ request()->is('bukti-perjalanan') || request()->is('bukti-perjalanan/*') ? 'active' : '' }}">
+                            <a href="{{ route('bukti')}}">
+                                <i class="fas fa-file-invoice"></i>
+                                <p>Bukti Invoice</p>
+                            </a>
+                        </li>
 
                         <li class="nav-item {{ request()->is('laporan') || request()->is('laporan/*') || request()->is('gallery') || request()->is('gallery/*') ? 'active' : '' }}">
 							<a data-toggle="collapse" href="#upload_laporan">
@@ -259,6 +216,13 @@
 									</li>
 								</ul>
 							</div>
+						</li>
+
+                        <li class="nav-item {{ request()->is('kwitansi') || request()->is('kwitansi/*') ? 'active' : '' }}">
+							<a href="{{ route('kwitansi' )}}">
+								<i class="fas fa-file-invoice-dollar"></i>
+								<p>Kwitansi</p>
+							</a>
 						</li>
 
                         <li class="nav-section">

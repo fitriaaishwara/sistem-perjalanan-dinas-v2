@@ -50,14 +50,14 @@ class NotaDinasController extends Controller
     public function edit($id)
     {
         $perjalanan = Perjalanan::with(['nota_dinas']) -> find($id);
-        $notadinas = NotaDinas::where('id_perjalanan', $id)->first();
+        $notadinas = NotaDinas::with(['perjalanan', 'staff']) -> where('id_perjalanan', $id) -> first();
         $staff = Staff::where('status', true)->get();
         return view('pages.nota_dinas.edit', compact('perjalanan', 'staff', 'notadinas'));
     }
 
     public function pdf($id)
     {
-        $perjalanan = Perjalanan::with(['nota_dinas']) -> find($id);
+        $perjalanan = Perjalanan::with(['nota_dinas', 'tujuan', 'mak', 'tujuan.staff', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'tujuan.uploadLaporan', 'tujuan.uploadGallery'])->find($id);
         $data = NotaDinas::where('id_perjalanan', $id)->first();
         $staff = Staff::where('status', true)->get();
         //pdf
@@ -93,8 +93,14 @@ class NotaDinasController extends Controller
         } catch (\Exception $ex) {
             $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }
-        // return $data;
-        return redirect()->back()->with('success', $data['message']);
+
+        if ($data['status'] == true) {
+            Alert::success('Success', $data['message']);
+            return redirect()->route('nota-dinas');
+        } else {
+            Alert::error('Error', $data['message']);
+            return redirect()->back();
+        }
     }
 
     public function update(Request $request, $id)

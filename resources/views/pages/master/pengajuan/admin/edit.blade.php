@@ -23,17 +23,22 @@
                     <input type="hidden" name="id" id="id">
                     <input id="id_perjalanan" type="hidden" class="form-control" name="id_perjalanan" value="{{ $perjalanan->id }}">
                     <div class="row mb-4">
-                        <label for="tempat_tujuan" class="col-sm-3 col-form-label">Tujuan<span
+                        <label for="tempat_berangkat_id" class="col-sm-3 col-form-label">Tempat Berangkat<span
                                 style="color:red;">*</span></label>
                         <div class="col-sm-9 validate">
-                            <input id="tempat_tujuan" type="text" class="form-control" name="tempat_tujuan">
+                            <select id="tempat_berangkat_id" type="text" class="form-control tempat_berangkat_id"
+                                name="tempat_berangkat_id">
+                            </select>
                         </div>
                     </div>
+
                     <div class="row mb-4">
-                        <label for="tempat_berangkat" class="col-sm-3 col-form-label">Tempat Berangkat<span
+                        <label for="tempat_tujuan_id" class="col-sm-3 col-form-label">Tempat Pulang<span
                                 style="color:red;">*</span></label>
                         <div class="col-sm-9 validate">
-                            <input id="tempat_berangkat" type="text" class="form-control" name="tempat_berangkat">
+                            <select id="tempat_tujuan_id" type="text" class="form-control tempat_tujuan_id"
+                                name="tempat_tujuan_id">
+                            </select>
                         </div>
                     </div>
                     <div class="row mb-4">
@@ -113,7 +118,7 @@
                             <select name="id_tujuan_perjalanan" class="form-control select2" required id="id_tujuan_perjalanan">
                                 <option value="">Pilih Tujuan</option>
                                 @foreach ($perjalanan->tujuan as $item)
-                                    <option value="{{ $item->id }}">{{ $item->tempat_berangkat . ' - ' . $item->tempat_tujuan }}</option>
+                                    <option value="{{ $item->id }}">{{ $item->tempatBerangkat->name }} - {{ $item->tempatTujuan->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -331,7 +336,11 @@
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data + "</div>";
+                        if (data && data.name) {
+                            return "<div class='text-wrap'>" + data.name + "</div>";
+                        } else {
+                            return "<div class='text-wrap'>-</div>";
+                        }
                     },
                 },
                 {
@@ -339,7 +348,11 @@
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data + "</div>";
+                        if (data && data.name) {
+                            return "<div class='text-wrap'>" + data.name + "</div>";
+                        } else {
+                            return "<div class='text-wrap'>-</div>";
+                        }
                     },
                 },
                 {
@@ -393,6 +406,92 @@
         function reloadTable() {
             tujuanTable.ajax.reload(null, false); //reload datatable ajax
         }
+
+        $("#tempat_berangkat_id").select2({
+            theme: 'bootstrap',
+            width: '100%',
+            dropdownParent: $('#myModalTujuan'),
+            placeholder: "Pilih Tempat Berangkat",
+            ajax: {
+                url: "{{ route('provinsi/getData') }}",
+                dataType: 'json',
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                method: 'POST',
+                delay: 250,
+                destroy: true,
+                data: function(params) {
+                    var query = {
+                        searchkey: params.term || '',
+                        start: 0,
+                        length: 50
+                    }
+                    return JSON.stringify(query);
+                },
+                processResults: function(data) {
+                    var result = {
+                        results: [],
+                        more: false
+                    };
+                    if (data && data.data) {
+                        $.each(data.data, function() {
+                            result.results.push({
+                                id: this.id,
+                                text: this.name
+                            });
+                        })
+                    }
+                    return result;
+                },
+                cache: false
+            },
+        });
+
+        $("#tempat_tujuan_id").select2({
+            theme: 'bootstrap',
+            width: '100%',
+            dropdownParent: $('#myModalTujuan'),
+            placeholder: "Pilih Tempat Pulang",
+            ajax: {
+                url: "{{ route('provinsi/getData') }}",
+                dataType: 'json',
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                method: 'POST',
+                delay: 250,
+                destroy: true,
+                data: function(params) {
+                    var query = {
+                        searchkey: params.term || '',
+                        start: 0,
+                        length: 50
+                    }
+                    return JSON.stringify(query);
+                },
+                processResults: function(data) {
+                    var result = {
+                        results: [],
+                        more: false
+                    };
+                    if (data && data.data) {
+                        $.each(data.data, function() {
+                            result.results.push({
+                                id: this.id,
+                                text: this.name
+                            });
+                        })
+                    }
+                    return result;
+                },
+                cache: false
+            },
+        });
 
         $('#saveBtnTujuan').click(function(e) {
             e.preventDefault();
@@ -454,6 +553,16 @@
                     $('#tanggal_tiba').val(response.data.tanggal_tiba);
                     $('#lama_perjalanan').val(response.data.lama_perjalanan);
                     $('#id').val(response.data.id);
+
+                    if (response.data.tempat_berangkat) {
+                        var berangkat = new Option(response.data.tempat_berangkat.name, response.data.tempat_berangkat.id, true, true);
+                        $('.tempat_berangkat_id').append(berangkat).trigger('change');
+                    }
+
+                    if (response.data.tempat_tujuan) {
+                        var pulang = new Option(response.data.tempat_tujuan.name, response.data.tempat_tujuan.id, true, true);
+                        $('.tempat_tujuan_id').append(pulang).trigger('change');
+                    }
                 },
                 error: function() {
                     Swal.fire(
@@ -525,8 +634,35 @@
             }
         });
 
+        $('#staffForm').validate({
+            rules: {
+                name: {
+                    required: true,
+                },
+                tempat_berangkat_id: {
+                    required: true,
+                },
+                tempat_tujuan_id: {
+                    required: true,
+                },
+            },
+            errorElement: 'em',
+            errorPlacement: function(error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.validate').append(error);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+
         $('#addNewTujuan').on('click', function() {
             $('#name').val("");
+            $('#tempat_berangkat_id').val("").trigger('change');
+            $('#tempat_tujuan_id').val("").trigger('change');
             isUpdate = false;
         });
 
@@ -699,8 +835,8 @@
                     render: function(data, type, row) {
                         var btnTujuanEdit = "";
                         var btnTujuanDelete = "";
-                        btnTujuanEdit += '<button name="btnTujuanEdit" data-id="' + data +
-                            '" type="button" class="btn btn-warning btn-sm btnTujuanEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
+                        // btnTujuanEdit += '<button name="btnTujuanEdit" data-id="' + data +
+                        //     '" type="button" class="btn btn-warning btn-sm btnTujuanEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
                         btnTujuanDelete += '<button name="btnTujuanDelete" data-id="' + data +
                             '" type="button" class="btn btn-danger btn-sm btnTujuanDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
                         return btnTujuanEdit + btnTujuanDelete;

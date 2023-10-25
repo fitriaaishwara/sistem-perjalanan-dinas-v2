@@ -66,6 +66,14 @@
 @push('js')
     <script type="text/javascript">
 
+    function rupiah($angka){
+        var reverse = $angka.toString().split('').reverse().join(''),
+        ribuan = reverse.match(/\d{1,3}/g);
+        ribuan = ribuan.join('.').split('').reverse().join('');
+        return ribuan;
+    }
+
+
     $(function() {
         let request = {
             start: 0,
@@ -109,31 +117,31 @@
             },
             "columns": [
                 {
-                    "data": "data_staff_perjalanan",
+                    "data": "staff",
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        if (data && data.staff && data.staff.nip) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.staff.nip + "</div>";
+                        if (data && data.nip) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.nip + "</div>";
                         } else {
                             return "<div class='text-wrap'>-</div>";
                         }
                     }
                 },
                 {
-                    "data": "data_staff_perjalanan",
+                    "data": "staff",
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        if (data && data.staff && data.staff.name) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.staff.name + "</div>";
+                        if (data && data.name) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.name + "</div>";
                         } else {
                             return "<div class='text-wrap'>-</div>";
                         }
                     }
                 },
                 {
-                    "data": "data_staff_perjalanan.perjalanan",
+                    "data": "perjalanan",
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
@@ -148,28 +156,52 @@
                     }
                 },
                 {
-                    "data": "data_staff_perjalanan.tujuan_perjalanan",
+                    "data": "tujuan_perjalanan.tempatTujuan",
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        var result = "<div class='text-wrap' style='font-size: 12px;'>";
-                        $.each (data, function (key, val) {
-                            // console.log(val);
-                            result += val.tempat_tujuan + "<br>";
-                        });
-
-                        result += "</div>";
-                        return result;
+                        //name
+                        if (data) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data[0].name + "</div>";
+                        } else {
+                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
+                        }
                     }
                 },
                 {
 
-                    "data": "data_staff_perjalanan.tujuan_perjalanan",
+                    "data": "tujuan_perjalanan",
                     "width": '10%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
                         if (data) {
                             return "<div class='text-wrap' style='font-size: 12px;'>" + formatIndonesianDate(data[0].tanggal_berangkat) + " - " + formatIndonesianDate(data[0].tanggal_pulang) + "</div>";
+                        } else {
+                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
+                        }
+                    }
+                },
+                {
+                    "data": "total_biaya",
+                    "width": '15%',
+                    "defaultContent": "-",
+                     //render date format
+                    render: function(data, type, row) {
+                        if (data) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data) + "</div>";
+                        } else {
+                            return "<div class='text-wrap badge badge-danger' style='font-size: 12px;'>Belum Upload Invoce</div>";
+                        }
+                    }
+                },
+                {
+                    "data": "kwitansi",
+                    "width": '15%',
+                    "defaultContent": "-",
+                     //render date format
+                    render: function(data, type, row) {
+                        if (data) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.tahun_anggaran + "</div>";
                         } else {
                             return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
                         }
@@ -197,46 +229,11 @@
                     "defaultContent": "-",
                      //render date format
                     render: function(data, type, row) {
-                        var result = "<div class='text-wrap' style='font-size: 12px;'>";
-                        $.each (data, function (key, val) {
-                            // console.log(val);
-                            result += val.mak.kode_mak + "<br>";
-                        });
-
-                        result += "</div>";
-                        return result;
-                    }
-                },
-                {
-                    "data": "data_staff_perjalanan.perjalanan",
-                    "width": '15%',
-                    "defaultContent": "-",
-                     //render date format
-                    render: function(data, type, row) {
-                        var result = "<div class='text-wrap' style='font-size: 12px;'>";
-                        $.each (data, function (key, val) {
-                            // console.log(val);
-                            result += val.mak.kode_mak + "<br>";
-                        });
-
-                        result += "</div>";
-                        return result;
-                    }
-                },
-                {
-                    "data": "perjalanan",
-                    "width": '15%',
-                    "defaultContent": "-",
-                     //render date format
-                    render: function(data, type, row) {
-                        var result = "<div class='text-wrap' style='font-size: 12px;'>";
-                        $.each (data, function (key, val) {
-                            // console.log(val);
-                            result += val.mak.kode_mak + "<br>";
-                        });
-
-                        result += "</div>";
-                        return result;
+                        if (row.kwitansi == "" || row.kwitansi == null) {
+                            return "<div class='text-wrap badge badge-danger' style='font-size: 12px;'>Belum Dibuat</div>";
+                        } else {
+                            return "<div class='text-wrap badge badge-success' style='font-size: 12px;'>Terlampir</div>";
+                        }
                     }
                 },
                 {
@@ -247,19 +244,20 @@
                         var btnDownload = "";
                         var btnEdit = "";
 
-                        if (row.spd == "" || row.spd == null) {
+                        if (row.kwitansi == "" || row.kwitansi == null) {
                             btnTambah += '<a href="/kwitansi/create/' + data +
                                 '" name="btnTambah" data-id="' + data +
                                 '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
                         } else {
                             btnEdit += '<a href="/kwitansi/edit/' + data +
                                 '" name="btnEdit" data-id="' + data +
-                                '" type="button" class="btn btn-primary btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
+                                '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
+
+                            btnDownload += '<a href="/kwitansi/pdf/' + data +
+                                '" name="btnDownload" data-id="' + data +
+                                '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
                         }
 
-                        btnDownload += '<a href="/kwitansi/pdf/' + data +
-                            '" name="btnDownload" data-id="' + data +
-                            '" type="button" class="btn btn-primary btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
 
                             console.log(row);
                         return btnTambah + btnEdit + btnDownload;

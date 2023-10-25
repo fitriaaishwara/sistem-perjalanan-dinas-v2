@@ -104,6 +104,20 @@ class UploadLaporanController extends Controller
         return $data;
     }
 
+    public function showing($id)
+    {
+        try {
+            $data = ['status' => false, 'message' => 'Jabatan failed to be found'];
+            $data = UploadLaporan::findOrFail($id);
+            if ($data) {
+                $data = ['status' => true, 'message' => 'Jabatan was successfully found', 'data' => $data];
+            }
+        } catch (\Exception $ex) {
+            $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
+        }
+        return $data;
+    }
+
      //download file
      public function downloadFile($id)
      {

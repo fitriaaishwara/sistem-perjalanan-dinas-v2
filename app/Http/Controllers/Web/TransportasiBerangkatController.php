@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DataStaffPerjalanan;
 use App\Models\Perjalanan;
 use App\Models\TransportasiBerangkat;
+use App\Models\Tujuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
@@ -49,6 +50,17 @@ class TransportasiBerangkatController extends Controller
             $perjalanan = Perjalanan::where('id', $dataStaff->id_perjalanan)->first();
             $perjalanan->total_biaya = $perjalanan->total_biaya + $request->input('nominal');
             $perjalanan->save();
+
+            if ($perjalanan->save()) {
+                $dataStaff->total_biaya = $dataStaff->total_biaya + $request->input('nominal');
+                $dataStaff->save();
+            }
+
+            if ($dataStaff->save()) {
+                $tujuan = Tujuan::where('id', $dataStaff->id_tujuan_perjalanan)->first();
+                $tujuan->total_biaya = $tujuan->total_biaya + $request->input('nominal');
+                $tujuan->save();
+            }
 
             if ($create) {
                 $data = ['status' => true, 'code' => 'SC001', 'message' => 'Jabatan successfully created'];

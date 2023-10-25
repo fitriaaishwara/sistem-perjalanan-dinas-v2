@@ -63,9 +63,9 @@ class DataStaffPerjalanan extends Model
         return $this->hasMany(AkomodasiHotel::class, 'id_staff_perjalanan', 'id');
     }
 
-    public function kwitansiDataStaff()
+    public function kwitansi()
     {
-        return $this->hasOne(Kwitansi::class, 'id_staff_perjalanan', 'id');
+        return $this->hasMany(Kwitansi::class, 'id', 'id_staff_perjalanan');
     }
 
 

@@ -122,42 +122,46 @@
 
     <div class="font-11">
         <table class="w-100 tbl">
-            <tr>
-                <td style="width: 30px" class="text-center">
-                    No
-                </td>
-                <td class="text-center">
-                    Nama
-                </td>
-                <td style="width: 30px" class="text-center">
-                    Gol
-                </td>
-                <td class="text-center">
-                    Jabatan
-                </td>
-                <td class="text-center">
-                    Instansi
-                </td>
-                <td class="text-center">
-                    Tujuan
-                </td>
-                <td class="text-center">
-                    Ket.
-                </td>
-            </tr>
-            @foreach ($data as $index => $value)
+            <thead>
+                <tr>
+                    <td style="width: 30px" class="text-center">
+                        No
+                    </td>
+                    <td class="text-center">
+                        Nama
+                    </td>
+                    <td style="width: 30px" class="text-center">
+                        Gol
+                    </td>
+                    <td class="text-center">
+                        Jabatan
+                    </td>
+                    <td class="text-center">
+                        Instansi
+                    </td>
+                    <td class="text-center">
+                        Tujuan
+                    </td>
+                    <td class="text-center">
+                        Ket.
+                    </td>
+                </tr>
+            </thead>
+
+            @foreach ($dataStaff as $index => $value)
+            <tbody>
                 <tr>
                     <td class="text-center">
-                        1
+                        {{ $loop->iteration }}
                     </td>
                     <td>
-                        {{-- {{ $data->perjalanan[0]->data_staff_perjalanan->staff->name }} --}}
+                        {{ $value->staff->name }}
                     </td>
                     <td class="text-center">
-                        {{-- Your Gol data --}}
+                        {{ ($value->staff->golongans) ? $value->staff->golongans->name : '-' }}
                     </td>
-                    <td>
-                        {{-- Your Jabatan data --}}
+                    <td class="text-center">
+                        {{ ($value->staff->jabatans) ? $value->staff->jabatans->name : '-' }}
                     </td>
                     <td>
                         {{-- Your Instansi data --}}
@@ -169,6 +173,7 @@
                         {{-- Your Ket data --}}
                     </td>
                 </tr>
+            </tbody>
             @endforeach
         </table>
     </div>

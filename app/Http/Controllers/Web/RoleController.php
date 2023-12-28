@@ -59,7 +59,7 @@ class RoleController extends Controller
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Role failed to create'];
             $createRole = Role::create([
                 'name'          => ucwords($request['name']),
-                'description'   => $request['description'],
+                // 'description'   => $request['description'],
                 'guard_name'    => 'web',
             ]);
 
@@ -100,7 +100,7 @@ class RoleController extends Controller
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Role failed to update'];
             $role              = Role::findById($id);
             $role->name        = $request->name;
-            $role->description = $request->description;
+            // $role->description = $request->description;
             $role->save();
 
             $createPermissionToRole = $role->syncPermissions($request->permission);

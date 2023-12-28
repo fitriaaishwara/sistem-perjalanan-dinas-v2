@@ -172,7 +172,7 @@
                         var result = "<div class='text-wrap' style='font-size: 12px;'>";
                         $.each (data, function (key, val) {
                             // console.log(val);
-                            result += val.tempat_tujuan + "<br>";
+                            result += val.tempat_tujuan_id + "<br>";
                         });
 
                         result += "</div>";

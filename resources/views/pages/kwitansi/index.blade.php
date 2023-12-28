@@ -156,13 +156,13 @@
                     }
                 },
                 {
-                    "data": "tujuan_perjalanan.tempatTujuan",
+                    "data": "tujuan_perjalanan",
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
                         //name
                         if (data) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data[0].name + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data[0].tempat_tujuan.name + "</div>";
                         } else {
                             return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
                         }

@@ -43,12 +43,12 @@
                                             </div>
                                         </div>
 
-                                        <div class="row mb-4">
+                                        {{-- <div class="row mb-4">
                                             <label for="description" class="col-md-2 form-control-label text-md-left">Description</label>
                                             <div class="col-md-6 validate">
                                                 <textarea id="description" name="description" class="form-control" rows="3"></textarea>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="row">
                                             <label class="col-md-2 col-form-label" for="permission">Permission<span
                                                     style="color: red">*</span></label>
@@ -132,9 +132,9 @@
                     name: {
                         required: true,
                     },
-                    'permission[]': {
-                        required: true,
-                    },
+                    // 'permission[]': {
+                    //     required: true,
+                    // },
                 },
                 errorElement: 'em',
                 errorPlacement: function(error, element) {

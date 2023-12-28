@@ -50,11 +50,11 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="nomor_spt">Uang Sebesar</label>
-                                                <input type="text" class="form-control" value="" readonly validate>
+                                                <input type="text" class="form-control" value="{{ format_rupiah($dataStaff->total_biaya) }}" readonly validate>
                                             </div>
                                             <div class="form-group">
                                                 <label for="nomor_spt">Untuk Pembayaran</label>
-                                                <input type="text" class="form-control" value="" readonly validate>
+                                                <input type="text" class="form-control" value="Biaya Perjalanan Dinas dalam Rangka {{ $dataStaff->perjalanan[0]->perihal_perjalanan }}" readonly validate>
                                             </div>
                                         </div>
                                     </div>
@@ -73,8 +73,8 @@
                                             <input type="text" class="form-control" value="" readonly validate>
                                         </div>
                                         <div class="form-group">
-                                            <label for="nomor_spt">Untuk Perjalanan Dinas Dari</label>
-                                            <input type="text" class="form-control" value="" readonly validate>
+                                            <label for="nomor_spt">Untuk Perjalanan Dinas Dari - Ke</label>
+                                            <input type="text" class="form-control" value="{{ ($dataStaff->tujuan_perjalanan[0]->tempatBerangkat->name) }} - {{ ($dataStaff->tujuan_perjalanan[0]->tempatTujuan->name) }}" readonly validate>
                                         </div>
                                     </div>
                                 </div>
@@ -82,11 +82,14 @@
                                     <div id="myModal" class="card-body">
                                         <div class="form-group">
                                             <label for="nomor_spt">Terbilang</label>
-                                            <input type="text" class="form-control" value="" readonly validate>
+                                            <input type="text" class="form-control" value="{{ terbilang($dataStaff->total_biaya) }}" readonly validate>
                                         </div>
                                         <div class="form-group">
-                                            <label for="nomor_spt">Yang Menerima</label>
-                                            <input type="text" class="form-control" value="" readonly validate>
+                                            <label for="yang_menerima">Yang Menerima</label>
+                                            <select name="yang_menerima" id="yang_menerima" class="form-control select2" validate>
+                                                <option value=""></option>
+                                                <option value="1">Deputi Bidang Kewirausahaan</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -94,11 +97,17 @@
                                     <div id="myModal" class="card-body">
                                         <div class="form-group">
                                             <label for="nomor_spt">Pejabat Pembuat Komitmen</label>
-                                            <input type="text" class="form-control" value="" readonly validate>
+                                            <select name="pejabat_pembuat_komitmen" id="pejabat_pembuat_komitmen" class="form-control select2" validate>
+                                                <option value=""></option>
+                                                <option value="1">Deputi Bidang Kewirausahaan</option>
+                                            </select>
                                         </div>
                                         <div class="form-group">
                                             <label for="nomor_spt">Bendahara</label>
-                                            <input type="text" class="form-control" value="" readonly validate>
+                                            <select name="bendahara" id="bendahara" class="form-control select2" validate>
+                                                <option value=""></option>
+                                                <option value="1">Deputi Bidang Kewirausahaan</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>

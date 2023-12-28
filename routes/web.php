@@ -40,7 +40,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('user/status/{id}', [App\Http\Controllers\Web\UserController::class, 'status'])->name('user/status');
 
     Route::get('/assignRole', function () {
-        $user = App\Models\User::find('9088519b-815f-4034-9800-bc040d8985ed');
+        $user = App\Models\User::find('8dc6b14d-2f85-4cd0-a03e-9a1d5d26e82e');
         $user->assignRole('Super Admin');
         return 'success';
     });

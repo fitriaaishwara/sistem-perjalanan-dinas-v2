@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataStaffPerjalanan;
+use App\Models\Mak;
 use App\Models\Perjalanan;
 use App\Models\TransportasiPulang;
 use App\Models\Tujuan;
@@ -57,6 +58,18 @@ class TransportasiPulangController extends Controller
                 $tujuan = Tujuan::where('id', $dataStaff->id_tujuan_perjalanan)->first();
                 $tujuan->total_biaya = $tujuan->total_biaya + $request->input('nominal');
                 $tujuan->save();
+            }
+
+            if ($tujuan->save()) {
+                $sisaSaldo = Mak::where('id', $perjalanan->id_mak)->first();
+                $sisaSaldo->saldo_pagu = $sisaSaldo->saldo_pagu - $request->input('nominal');
+                $sisaSaldo->save();
+            }
+
+            if ($sisaSaldo->save()) {
+                $saldoTerealisasi = Mak::where('id', $perjalanan->id_mak)->first();
+                $saldoTerealisasi->terealisasi = $saldoTerealisasi->terealisasi + $request->input('nominal');
+                $saldoTerealisasi->save();
             }
 
 

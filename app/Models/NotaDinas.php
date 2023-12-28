@@ -24,5 +24,9 @@ class NotaDinas extends Model
         return $this->belongsTo(Staff::class, 'id_staff_penandatangan', 'id');
     }
 
+    function data_staff() {
+        return $this->belongsTo(DataStaffPerjalanan::class, 'id_perjalanan', 'id');
+    }
+
 
 }

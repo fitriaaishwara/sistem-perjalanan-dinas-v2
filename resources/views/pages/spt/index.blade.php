@@ -145,7 +145,7 @@
                     }
                 },
                 {
-                    "data": "tempat_tujuan",
+                    "data": "tempat_tujuan_id",
                     "width": '15%',
                     "defaultContent": "-",
                     //render date format

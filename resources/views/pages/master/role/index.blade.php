@@ -45,7 +45,7 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Role Name</th>
-                                                    <th>Description</th>
+                                                    {{-- <th>Description</th> --}}
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -118,14 +118,14 @@
                             return "<div class='text-wrap'>" + data + "</div>";
                         },
                     },
-                    {
-                        "data": "description",
-                        "width": '45%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            return "<div class='text-wrap'>" + (data) ? data : '-' + "</div>";
-                        },
-                    },
+                    // {
+                    //     "data": "description",
+                    //     "width": '45%',
+                    //     "defaultContent": "-",
+                    //     render: function(data, type, row) {
+                    //         return "<div class='text-wrap'>" + (data) ? data : '-' + "</div>";
+                    //     },
+                    // },
                         {
                             "data": "id",
                             "width": '15%',

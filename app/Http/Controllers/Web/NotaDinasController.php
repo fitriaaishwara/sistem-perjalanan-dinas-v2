@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\DataStaffPerjalanan;
 use App\Models\NotaDinas;
 use App\Models\Perjalanan;
 use App\Models\Staff;
@@ -58,11 +59,12 @@ class NotaDinasController extends Controller
     public function pdf($id)
     {
         $perjalanan = Perjalanan::with(['nota_dinas', 'tujuan', 'mak', 'tujuan.staff', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'tujuan.uploadLaporan', 'tujuan.uploadGallery'])->find($id);
+        $dataStaff = DataStaffPerjalanan::with(['perjalanan', 'staff', 'tujuan_perjalanan']) -> where('id_perjalanan', $id) -> get();
         $data = NotaDinas::where('id_perjalanan', $id)->first();
         $staff = Staff::where('status', true)->get();
         //pdf
         if ($data) {
-            $pdf = \PDF::loadView('pages.nota_dinas.pdf', compact('perjalanan', 'staff', 'data'));
+            $pdf = \PDF::loadView('pages.nota_dinas.pdf', compact('perjalanan', 'staff', 'data', 'dataStaff'));
             return $pdf->stream();
         } else {
             //return redirect with Alert

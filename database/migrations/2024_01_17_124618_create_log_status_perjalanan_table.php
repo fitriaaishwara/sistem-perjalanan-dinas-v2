@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStatusPerjalananTable extends Migration
+class CreateLogStatusPerjalananTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateStatusPerjalananTable extends Migration
      */
     public function up()
     {
-        Schema::create('status_perjalanan', function (Blueprint $table) {
+        Schema::create('log_status_perjalanan', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
+            $table->foreignUuid('id_perjalanan');
+            $table->string('status_perjalanan')->nullable();
             $table->string('description')->nullable();
             $table->boolean('status')->default (1);
             $table->string('created_by')->nullable();
@@ -23,6 +24,7 @@ class CreateStatusPerjalananTable extends Migration
             $table->string('deleted_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
+            $table->foreign('id_perjalanan')->references('id')->on('perjalanan');
         });
     }
 
@@ -33,6 +35,6 @@ class CreateStatusPerjalananTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('status_perjalanan');
+        Schema::dropIfExists('log_status_perjalanan');
     }
 }

@@ -22,7 +22,7 @@ class SptController extends Controller
         $keyword = $request['searchkey'];
 
         $data = Tujuan::select()
-            ->with(['perjalanan', 'spt', 'staff', 'staff.staff'])
+            ->with(['perjalanan', 'spt', 'staff', 'staff.staff', 'tempatTujuan'])
             ->offset($request['start'])
             ->limit(($request['length'] == -1) ? Tujuan::where('status', true)->count() : $request['length'])
             ->when($keyword, function ($query, $keyword) {
@@ -49,7 +49,7 @@ class SptController extends Controller
 
     public function create($id)
     {
-        $tujuan = Tujuan::with(['perjalanan', 'spt', 'staff', 'staff.staff'])->find($id);
+        $tujuan = Tujuan::with(['perjalanan', 'spt', 'staff', 'staff.staff', 'tempatTujuan'])->find($id);
         $staff = Staff::where('status', true)->get();
         $dataStaff= DataStaffPerjalanan::with(['staff','perjalanan', 'tujuan_perjalanan'])->where('id_tujuan_perjalanan', $tujuan->id)->get();
         return view('pages.spt.create', compact('tujuan', 'staff', 'dataStaff'));

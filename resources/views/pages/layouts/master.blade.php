@@ -98,13 +98,16 @@
 			<div class="sidebar-wrapper scrollbar scrollbar-inner">
 				<div class="sidebar-content">
 					<ul class="nav nav-primary">
+                        @if (auth()->user()->can('Dashboard'))
                         <li class="nav-item {{ request()->is('dashboard') || request()->is('dashboard/*') ? 'active' : '' }}">
 							<a href="{{ route('dashboard') }}">
 								<i class="fas fa-home"></i>
 								<p>Dashboard</p>
 							</a>
 						</li>
+                        @endif
 
+                        @if (auth()->user()->can('Data Staff', 'Data Jabatan'))
                         <li class="nav-section">
 							<span class="sidebar-mini-icon">
 								<i class="fa fa-ellipsis-h"></i>
@@ -133,31 +136,40 @@
 								</ul>
 							</div>
 						</li>
+                        @endif
+                        @if (auth()->user()->can('Mata Anggaran Akun'))
                         <li class="nav-item {{ request()->is('mak') || request()->is('mak/*') ? 'active' : '' }}">
                             <a href="{{ route('mak') }}">
 								<i class="fas fa-plane-departure"></i>
 								<p>Mata Anggaran Akun</p>
 							</a>
 						</li>
+                        @endif
+                        @if (auth()->user()->can('Perjalanan'))
                         <li class="nav-section">
 							<span class="sidebar-mini-icon">
 								<i class="fa fa-ellipsis-h"></i>
 							</span>
                             <h4 class="text-section">Perjalanan</h4>
 						</li>
+                        @endif
+                        @if (auth()->user()->can('Pengajuan'))
                         <li class="nav-item {{ request()->is('pengajuan') || request()->is('pengajuan/*') ? 'active' : '' }}">
                             <a href="{{ route('pengajuan') }}">
 								<i class="fas fa-plane-departure"></i>
 								<p>Pengajuan</p>
 							</a>
 						</li>
-
+                        @endif
+                        @if (auth()->user()->can('Data Perjalanan'))
                         <li class="nav-item {{ request()->is('data-perjalanan') || request()->is('data-perjalanan/*') ? 'active' : '' }}">
                             <a href="{{ route('dataPerjalanan') }}">
 								<i class="fas fa-plane-departure"></i>
 								<p>Data Perjalanan</p>
 							</a>
 						</li>
+                        @endif
+                        @if (auth()->user()->can('Nota Dinas', 'SPT', 'SPD'))
                         <li class="nav-section">
 							<span class="sidebar-mini-icon">
 								<i class="fa fa-ellipsis-h"></i>
@@ -182,6 +194,8 @@
 								<p>SPD</p>
                             </a>
 						</li>
+                        @endif
+                        @if (auth()->user()->can('Bukti Invoice'))
 						<li class="nav-section">
 							<span class="sidebar-mini-icon">
 								<i class="fa fa-ellipsis-h"></i>
@@ -195,7 +209,8 @@
                                 <p>Bukti Invoice</p>
                             </a>
                         </li>
-
+                        @endif
+                        @if (auth()->user()->can('Laporan' || 'Gallery Foto'))
                         <li class="nav-item {{ request()->is('laporan') || request()->is('laporan/*') || request()->is('gallery') || request()->is('gallery/*') ? 'active' : '' }}">
 							<a data-toggle="collapse" href="#upload_laporan">
 								<i class="fas fa-hand-holding-usd"></i>
@@ -217,14 +232,16 @@
 								</ul>
 							</div>
 						</li>
-
+                        @endif
+                        @if (auth()->user()->can('Kwitansi'))
                         <li class="nav-item {{ request()->is('kwitansi') || request()->is('kwitansi/*') ? 'active' : '' }}">
 							<a href="{{ route('kwitansi' )}}">
 								<i class="fas fa-file-invoice-dollar"></i>
 								<p>Kwitansi</p>
 							</a>
 						</li>
-
+                        @endif
+                        @if (auth()->user()->can('User' || 'Role'))
                         <li class="nav-section">
 							<span class="sidebar-mini-icon">
 								<i class="fa fa-ellipsis-h"></i>
@@ -243,6 +260,7 @@
 								<p>User</p>
 							</a>
 						</li>
+                        @endif
 					</ul>
 				</div>
 			</div>

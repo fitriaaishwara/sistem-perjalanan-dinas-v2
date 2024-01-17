@@ -40,7 +40,7 @@ class PerjalananController extends Controller
         $keyword = $request['searchkey'];
 
         $data = Perjalanan::select()
-            ->with('mak', 'tujuan')
+            ->with('mak', 'tujuan.tempatTujuan')
             ->when($keyword, function ($query, $keyword) {
                 return $query->where('name', 'like', '%' . $keyword . '%');
             })

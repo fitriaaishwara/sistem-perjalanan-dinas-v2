@@ -17,6 +17,12 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:User', ['only' => ['index']]);
+    }
+
+
     public function index()
     {
         return view('pages.master.user.index');

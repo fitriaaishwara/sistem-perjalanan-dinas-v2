@@ -1000,7 +1000,7 @@
 				var date1 = new Date(tanggal_berangkat);
 				var date2 = new Date(tanggal_kembali);
 				var Difference_In_Time = date2.getTime() - date1.getTime();
-				var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24) + " Hari";
+				var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24) + 1 + " Hari";
 				$('#lama_perjalanan').val(Difference_In_Days);
 			} else {
 				$('#lama_perjalanan').val('0 hari');

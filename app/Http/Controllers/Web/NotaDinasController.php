@@ -23,7 +23,7 @@ class NotaDinasController extends Controller
         $keyword = $request['searchkey'];
 
         $data = Perjalanan::select()
-            ->with('mak', 'tujuan', 'nota_dinas')
+            ->with('mak', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'tujuan.staff', 'nota_dinas')
             ->when($keyword, function ($query, $keyword) {
                 return $query->where('name', 'like', '%' . $keyword . '%');
             })
@@ -59,7 +59,7 @@ class NotaDinasController extends Controller
     public function pdf($id)
     {
         $perjalanan = Perjalanan::with(['nota_dinas', 'tujuan', 'mak', 'tujuan.staff', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'tujuan.uploadLaporan', 'tujuan.uploadGallery'])->find($id);
-        $dataStaff = DataStaffPerjalanan::with(['perjalanan', 'staff', 'tujuan_perjalanan']) -> where('id_perjalanan', $id) -> get();
+        $dataStaff = DataStaffPerjalanan::with(['perjalanan', 'staff', 'tujuan_perjalanan.tempatBerangkat', 'tujuan_perjalanan.tempatTujuan'])->where('id_perjalanan', $id)->get();
         $data = NotaDinas::where('id_perjalanan', $id)->first();
         $staff = Staff::where('status', true)->get();
         //pdf

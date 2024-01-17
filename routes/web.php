@@ -40,7 +40,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('user/status/{id}', [App\Http\Controllers\Web\UserController::class, 'status'])->name('user/status');
 
     Route::get('/assignRole', function () {
-        $user = App\Models\User::find('8dc6b14d-2f85-4cd0-a03e-9a1d5d26e82e');
+        $user = App\Models\User::find('828fc769-3f31-4e8a-9d72-f7a88acd1831');
         $user->assignRole('Super Admin');
         return 'success';
     });
@@ -128,8 +128,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/golongan/getData', [App\Http\Controllers\Web\GolonganController::class, 'getData'])->name('golongan/getData');
 
     //statusPerjalanan
-    Route::get('/statusPerjalanan/{id}', [App\Http\Controllers\Web\PerjalananController::class, 'show_status'])->name('statusPerjalanan/show');
-    Route::post('/statusPerjalanan/update', [App\Http\Controllers\Web\PerjalananController::class, 'update_status'])->name('statusPerjalanan/update');
+    Route::get('/status_perjalanan/show/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'show_status'])->name('statusPerjalanan/show');
+    Route::post('/status_perjalanan/store', [App\Http\Controllers\Web\PengajuanController::class, 'store_status'])->name('statusPerjalanan/store');
+
+    //detail-status
+    Route::get('/detail-status/{id}', [App\Http\Controllers\Web\DetailStatusController::class, 'index'])->name('detail-status');
+    Route::post('/detail-status/getData', [App\Http\Controllers\Web\DetailStatusController::class, 'getData'])->name('detail-statusv/getData');
 
     // Route::get('/tujuan', [App\Http\Controllers\Web\TujuanController::class, 'index'])->name('tujuan');
     Route::post('/tujuan/getData', [App\Http\Controllers\Web\TujuanController::class, 'getData'])->name('tujuan/getData');
@@ -246,8 +250,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/laporan/show/{id}', [App\Http\Controllers\Web\UploadLaporanController::class, 'showing'])->name('laporan/showing');
 
     Route::get('/laporan/pdf/{id}', [App\Http\Controllers\Web\UploadLaporanController::class, 'downloadFile'])->name('laporan/pdf');
-
-
 
     //Gallery
     Route::get('/gallery', [App\Http\Controllers\Web\UploadGalleryController::class, 'index'])->name('gallery');

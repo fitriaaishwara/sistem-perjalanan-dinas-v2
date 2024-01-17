@@ -164,10 +164,10 @@
                         {{ ($value->staff->jabatans) ? $value->staff->jabatans->name : '-' }}
                     </td>
                     <td>
-                        {{-- Your Instansi data --}}
+                        {{ ($value->staff->instansis) ? $value->staff->instansis->name : '-' }}
                     </td>
                     <td>
-                        {{-- Your Tujuan data --}}
+                        {{-- {{ ($value->tujuan_perjalanan->tempat_tujuan->name) ? $value->tujuan_perjalanan : '-' }} --}}
                     </td>
                     <td>
                         {{-- Your Ket data --}}
@@ -192,7 +192,7 @@
 
                     {!!( Str::repeat('<br>', 4) )!!}
 
-                    <div>{{ $data->staff->name }}</div>
+                    <div>{{ ucfirst($data->staff->name) }}</div>
                     <div>NIP {{ $data->staff->nip }}</div>
                 </td>
             </tr>

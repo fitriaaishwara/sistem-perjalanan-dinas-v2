@@ -60,7 +60,7 @@
                                             </div>
                                             <div id="showDikeluarkan_tanggal" class="form-group">
                                                 <label for="dikeluarkan_tanggal">Tujuan</label>
-                                                <input type="text" class="form-control date" value="{{ $tujuan->tempat_tujuan }}" readonly>
+                                                <input type="text" class="form-control date" value="{{ $tujuan->tempatTujuan->name }}" readonly>
                                             </div>
                                             <div class="form-group">
                                                 <label for="nomor_spt">Tanggal Berangkat - Tanggal Kembali</label>

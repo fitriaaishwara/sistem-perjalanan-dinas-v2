@@ -140,7 +140,7 @@
                     :
                 </td>
                 <td>
-                    {{ $tujuan->tempat_tujuan }}
+                    {{ $tujuan->tempatTujuan->name }}
                 </td>
             </tr>
             <tr>

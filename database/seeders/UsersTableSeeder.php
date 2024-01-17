@@ -18,7 +18,7 @@ class UsersTableSeeder extends Seeder
     {
         $data = [
             0 => [
-                'id' => Str::uuid(),
+                'id' => '828fc769-3f31-4e8a-9d72-f7a88acd1831',
                 'name' => 'Super Admin',
                 'username' => 'superadmin',
                 'email' => 'superadmin@gmail.com',

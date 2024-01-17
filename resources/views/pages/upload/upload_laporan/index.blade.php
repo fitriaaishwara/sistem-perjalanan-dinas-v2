@@ -233,12 +233,12 @@
                     }
                 },
                 {
-                    "data": "tempat_tujuan_id",
+                    "data": "tempat_tujuan",
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
                         if (data) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.name + "</div>";
                         } else {
                             return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
                         }

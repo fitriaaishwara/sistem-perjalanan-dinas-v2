@@ -8,6 +8,7 @@ use App\Models\LogStatusPerjalanan;
 use App\Models\Perjalanan;
 use App\Models\PerjalananDinas;
 use App\Models\Staff;
+use App\Models\Tujuan;
 use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -134,7 +135,7 @@ class PengajuanController extends Controller
         $keyword = $request['searchkey'];
 
         $data = Perjalanan::select()
-            ->with('mak', 'tujuan', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan')
+            ->with('mak', 'tujuan', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'log_status_perjalanan')
             ->offset($request['start'])
             ->limit(($request['length'] == -1) ? Perjalanan::where('status', true)->count() : $request['length'])
             ->when($keyword, function ($query, $keyword) {
@@ -164,5 +165,47 @@ class PengajuanController extends Controller
             'data'           => $data,
         ];
         return $response;
+    }
+
+    public function store_status(Request $request)
+    {
+        try {
+            $data = ['status' => false, 'code' => 'EC001', 'message' => 'Perjalanan failed to create'];
+            $create = LogStatusPerjalanan::create([
+                'id_perjalanan' => $request->input('id_perjalanan'),
+                'status_perjalanan' => $request->input('status_perjalanan'),
+                'description' => $request->input('description')
+            ]);
+
+            if ($create) {
+                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Perjalanan successfully created'];
+            }
+
+        } catch (\Exception $ex) {
+            $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
+        }
+
+        // if else return with Alert Sweet Alert and redirect to route or view or url page
+        if ($data['status'] == true) {
+            Alert::success('Success', $data['message']);
+            return redirect()->route('pengajuan');
+        } else {
+            Alert::error('Error', $data['message']);
+            return redirect()->back();
+        }
+    }
+
+    public function show_status($id)
+    {
+        try {
+            $data = ['status' => false, 'message' => 'Jabatan failed to be found'];
+            $data = Perjalanan::find($id);
+            if ($data) {
+                $data = ['status' => true, 'message' => 'Jabatan was successfully found', 'data' => $data];
+            }
+        } catch (\Exception $ex) {
+            $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
+        }
+        return $data;
     }
 }

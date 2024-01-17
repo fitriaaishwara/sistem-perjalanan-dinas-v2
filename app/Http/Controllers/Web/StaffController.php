@@ -68,7 +68,7 @@ class StaffController extends Controller
                 // NIP does not exist, proceed with creating a new record
                 $create = Staff::create([
                     'nip'         => $request['nip'],
-                    'name'        => strtoupper($request['name']),
+                    'name'        => ucwords($request['name']),
                     'jenis'       => $request['jenis'],
                     'id_golongan' => $request['id_golongan'],
                     'id_jabatan'  => $request['id_jabatan'],
@@ -146,7 +146,7 @@ class StaffController extends Controller
 
             $update = Staff::where('id', $request['id'])->update([
                 'nip' => $request['nip'],
-                'name'        => strtoupper($request['name']),
+                'name'        => ucwords($request['name']),
                 'id_golongan' => $request['id_golongan'],
                 'id_jabatan' => $request['id_jabatan'],
                 'id_instansi' => $instansiID,

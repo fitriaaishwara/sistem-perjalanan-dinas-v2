@@ -22,7 +22,7 @@ class UploadGalleryController extends Controller
         $keyword = $request['searchkey'];
 
         $data = Tujuan::select()
-            ->with('perjalanan', 'perjalanan.data_staff_perjalanan.staff', 'uploadLaporan', 'uploadGallery')
+            ->with('perjalanan', 'perjalanan.data_staff_perjalanan.staff', 'uploadLaporan', 'uploadGallery', 'TempatTujuan')
             ->offset($request['start'])
             ->limit(($request['length'] == -1) ? Tujuan::where('status', true)->count() : $request['length'])
             ->when($keyword, function ($query, $keyword) {

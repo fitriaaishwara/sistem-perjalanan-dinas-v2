@@ -150,19 +150,19 @@
                 },
                 {
 
-                    "data": "tujuan_perjalanan",
-                    "width": '10%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        var result = "<div class='text-wrap' style='font-size: 12px;'>";
-                        $.each (data, function (key, val) {
-                            // console.log(val);
-                            result += val.tempat_tujuan_id + "<br>";
-                        });
+                "data": "tujuan_perjalanan",
+                "width": '10%',
+                "defaultContent": "-",
+                render: function(data, type, row) {
+                    var result = "<div class='text-wrap' style='font-size: 12px;'>";
+                    $.each (data, function (key, val) {
+                        // console.log(val);
+                        result += val.tempat_tujuan.name + "<br>";
+                    });
 
-                        result += "</div>";
-                        return result;
-                    }
+                    result += "</div>";
+                    return result;
+                }
                 },
                 {
                     "data": "tujuan_perjalanan",

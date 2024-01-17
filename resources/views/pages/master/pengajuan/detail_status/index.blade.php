@@ -1,60 +1,6 @@
 @extends('pages.layouts.master')
 @section('content')
 @section('title', 'Data Pengajuan')
-
-<div id="myModalStatus" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalStatusLabel" aria-hidden="true">
-    <div class="modal-dialog" >
-        <div class="modal-content">
-            <div class="modal-header border-0" id="myModalStatusLabel">
-                <h5 class="modal-title">
-                    <span class="fw-mediumbold">
-                    Form</span>
-                    <span class="fw-light">
-                        Ubah Status
-                    </span>
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="{{ route('statusPerjalanan/store') }}" id="statusForm" name="statusForm">
-                    @csrf
-                    <input id="id" type="hidden" class="form-control" name="id_perjalanan">
-                    <div class="mb-3 validate">
-                        <label for="status_perjalanan" class="form-label">Status Perjalanan<span
-                                style="color:red;">*</span>
-                        </label>
-                        <select id="status_perjalanan" type="text" class="form-control col-12 status_perjalanan"
-                        name="status_perjalanan">
-                            <option value=""></option>
-                            @if (auth()->user()->can('Asdep'))
-                            <option value="0">Disetujui</option>
-                            <option value="1">Belum Disetujui</option>
-                            @elseif  (auth()->user()->can('Kabid'))
-                            <option value="2">Sudah Disetujui</option>
-                            <option value="3">Belum Disetujui</option>
-                            @endif
-
-
-                        </select>
-                    </div>
-                    <div class="mb-3 validate">
-                        <label for="description" class="form-label">Deskripsi Revisi</label>
-                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-dark waves-effect waves-light btn-sm" id="saveBtnStatus"
-                    name="saveBtnStatus">Save changes</button>
-                <button type="button" class="btn btn-secondary waves-effect btn-sm"
-                    data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="container">
     <div class="page-inner">
         <div class="page-header">
@@ -310,7 +256,11 @@
                 if (isValid) {
                     $('#saveBtnStatus').text('Save...');
                     $('#saveBtnStatus').attr('disabled', true);
-                    var url = "{{ route('statusPerjalanan/store') }}";
+                    if (!isUpdate) {
+                        var url = "{{ route('statusPerjalanan/store') }}";
+                    } else {
+                        var url = "{{ route('statusPerjalanan/store') }}";
+                    }
                     var formData = new FormData($('#statusForm')[0]);
                     $.ajax({
                         url: url,
@@ -345,7 +295,7 @@
 
             $('#pengajuanTable').on("click", ".btnStatusPerjalanan", function() {
                 $('#myModalStatus').modal('show');
-                isUpdate = false;
+                isUpdate = true;
                 var id = $(this).attr('data-id');
                 var url = "{{ route('statusPerjalanan/show', ':id') }}";
                 url = url.replace(':id', id);

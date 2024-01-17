@@ -138,7 +138,7 @@
                             var tujuan = "";
                             var angka = 1;
                             for (var i = 0; i < data.length; i++) {
-                                tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + data[i].tempat_tujuan_id + "</div>";
+                                tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + data[i].tempat_tujuan.name + "</div>";
                                 angka++;
                             }
                             return tujuan;

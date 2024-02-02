@@ -119,6 +119,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/pengajuan/delete/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'destroy'])->name('pengajuan/delete');
 
+
     Route::post('/provinsi/getData', [App\Http\Controllers\Web\PerjalananController::class, 'getDataProvinsi'])->name('provinsi/getData');
 
     //Instansi
@@ -130,14 +131,15 @@ Route::group(['middleware' => ['auth']], function () {
     //statusPerjalanan
     Route::get('/status_perjalanan/show/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'show_status'])->name('statusPerjalanan/show');
     Route::post('/status_perjalanan/store', [App\Http\Controllers\Web\PengajuanController::class, 'store_status'])->name('statusPerjalanan/store');
+    Route::post('/status_perjalanan/update', [App\Http\Controllers\Web\PengajuanController::class, 'update_status'])->name('statusPerjalanan/update');
 
     //detail-status
     Route::get('/detail-status/{id}', [App\Http\Controllers\Web\DetailStatusController::class, 'index'])->name('detail-status');
-    Route::post('/detail-status/getData', [App\Http\Controllers\Web\DetailStatusController::class, 'getData'])->name('detail-statusv/getData');
+    Route::post('/detail-status/getData/{id_perjalanan}', [App\Http\Controllers\Web\DetailStatusController::class, 'getData'])->name('detail-status/getData');
 
     // Route::get('/tujuan', [App\Http\Controllers\Web\TujuanController::class, 'index'])->name('tujuan');
     Route::post('/tujuan/getData', [App\Http\Controllers\Web\TujuanController::class, 'getData'])->name('tujuan/getData');
-    Route::any('/tujuanById/getData/{id_perjalanan} ', [App\Http\Controllers\Web\TujuanController::class, 'getTujuanByIdPerjalanan'])->name('tujuanById/getData');
+    Route::any('/tujuanById/{id_perjalanan} ', [App\Http\Controllers\Web\TujuanController::class, 'getTujuanByIdPerjalanan'])->name('tujuanById/getData');
     Route::post('/tujuan/store', [App\Http\Controllers\Web\TujuanController::class, 'store'])->name('tujuan/store');
     Route::post('/tujuan/update', [App\Http\Controllers\Web\TujuanController::class, 'update'])->name('tujuan/update');
     Route::get('/tujuan/{id}', [App\Http\Controllers\Web\TujuanController::class, 'show'])->name('tujuan/show');
@@ -199,7 +201,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/kwitansi/getData', [App\Http\Controllers\Web\KwitansiController::class, 'getData'])->name('kwitansi/getData');
     Route::get('/kwitansi/create/{id}', [App\Http\Controllers\Web\KwitansiController::class, 'create'])->name('kwitansi/create');
     Route::any('/kwitansi/store/', [App\Http\Controllers\Web\KwitansiController::class, 'store'])->name('kwitansi/store');
-    Route::get('/kwitansi/pdf/{id_staff_perjalanan}', [App\Http\Controllers\Web\KwitansiController::class, 'kwitansiPDF'])->name('kwitansi/pdf');
+    Route::get('/kwitansi/pdf/{id}', [App\Http\Controllers\Web\KwitansiController::class, 'kwitansiPDF'])->name('kwitansi/pdf');
 
     //Transportasi
     Route::post('/transportasi/getData', [App\Http\Controllers\Web\TransportasiController::class, 'getData'])->name('transportasi/getData');

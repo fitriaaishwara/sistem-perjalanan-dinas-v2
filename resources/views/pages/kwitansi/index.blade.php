@@ -249,14 +249,14 @@
                                 '" name="btnTambah" data-id="' + data +
                                 '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
                         } else {
-                            btnEdit += '<a href="/kwitansi/edit/' + data +
-                                '" name="btnEdit" data-id="' + data +
-                                '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
+                            // btnEdit += '<a href="/kwitansi/edit/' + data +
+                            //     '" name="btnEdit" data-id="' + data +
+                            //    '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
 
                             btnDownload += '<a href="/kwitansi/pdf/' + data +
                                 '" name="btnDownload" data-id="' + data +
                                 '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
-                        }
+                         }
 
 
                             console.log(row);

@@ -17,12 +17,6 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
-    function __construct()
-    {
-        $this->middleware('permission:User', ['only' => ['index']]);
-    }
-
-
     public function index()
     {
         return view('pages.master.user.index');
@@ -234,22 +228,35 @@ class UserController extends Controller
 
     public function createUser(Request $request, $id)
     {
+        $jumlah = "1";
         $staff = Staff::find($id);
         try {
-            $data = ['status' => false, 'code' => 'EC001', 'message' => 'Staff failed to create'];
+            $data = ['status' => false, 'code' => 'EC001', 'message' => 'User failed to create'];
             $create = User::create([
                 'name' => $staff->name,
-                'username' => $staff->nip,
+                'username' => 'adi',
                 'email' => $request['email'],
                 'password' => bcrypt('12345678'),
+                'is_active' => 0,
             ]);
             if ($create) {
-                Alert::success('Success', 'User successfully created');
+                $update = Staff::where('id', $id)->update([
+                    'id_user' => $create->id,
+                ]);
             }
+            if($update) {
+                $data = ['status' => true, 'code' => 'SC001', 'message' => 'User successfully created'];
+            }
+
         } catch (\Exception $ex) {
-            Alert::error('Error', 'A system error has occurred. please try again later. ' . $ex);
+            $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }
-        return $data;
+         if ($data['status'] == true) {
+            Alert::success('Success', $data['message']);
+            return redirect()->route('staff');
+            Alert::error('Error', $data['message']);
+            return redirect()->back();
+        }
     }
 
     public function status(Request $request, $id)

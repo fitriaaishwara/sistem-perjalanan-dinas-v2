@@ -42,7 +42,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="nomor_spt">Tempat Berangkat - Tempat Tujuan</label>
-                                                <input type="text" class="form-control"  value="{{ $dataStaff->tujuan_perjalanan[0]->tempat_berangkat }} - {{ $dataStaff->tujuan_perjalanan[0]->tempat_tujuan }}" readonly validate>
+                                                <input type="text" class="form-control"  value="{{ $dataStaff->tujuan_perjalanan[0]->tempatBerangkat->name }} - {{ $dataStaff->tujuan_perjalanan[0]->tempatTujuan->name }}" readonly validate>
                                             </div>
                                             <div class="form-group">
                                                 <label for="nomor_spt">Tanggal Berangkat - Tanggal Tujuan</label>

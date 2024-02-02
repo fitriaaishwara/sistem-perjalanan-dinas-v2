@@ -66,11 +66,11 @@
                                     <div id="myModal" class="card-body">
                                         <div class="form-group">
                                             <label for="nomor_spt">Nomor</label>
-                                            <input type="text" class="form-control" value="" readonly validate>
+                                            <input type="text" class="form-control" value="{{ $dataStaff->spd->nomor_spd }}" readonly validate>
                                         </div>
                                         <div class="form-group">
                                             <label for="nomor_spt">Tanggal</label>
-                                            <input type="text" class="form-control" value="" readonly validate>
+                                            <input type="text" class="form-control" value=" {{ tgl_indo($dataStaff->spd->tanggal_spd) }} " readonly validate>
                                         </div>
                                         <div class="form-group">
                                             <label for="nomor_spt">Untuk Perjalanan Dinas Dari - Ke</label>

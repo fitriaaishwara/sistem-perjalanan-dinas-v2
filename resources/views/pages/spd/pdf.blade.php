@@ -51,6 +51,12 @@
         .tabel_spd td {
             width: calc(100% / 3)
         }
+
+        .tbl , .tbl th, .tbl td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -61,7 +67,7 @@
     <br>
 
     <div class="font-11">
-        <table class="w-100 table table-bordered">
+        <table class="w-100 table table-bordered tbl">
             <tbody>
                 <tr>
                     <td class="text-center p-sm-2" style="width: 10%">1.</td>
@@ -209,10 +215,10 @@
 
     <style>
         table, th, td {
-            border: 1px solid black;
             border-collapse: collapse;
             width: 100%;
         }
+
     </style>
 </body>
 </html>

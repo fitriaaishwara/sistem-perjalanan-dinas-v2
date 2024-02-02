@@ -111,7 +111,7 @@
                     :
                 </td>
                 <td>
-                    {{ $item->staff->jabatans->name }}
+                    {{ $item->staff->jabatans->name ?? '' }}
                 </td>
             </tr>
             @endforeach

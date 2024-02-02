@@ -167,7 +167,7 @@
                         {{ ($value->staff->instansis) ? $value->staff->instansis->name : '-' }}
                     </td>
                     <td>
-                        {{-- {{ ($value->tujuan_perjalanan->tempat_tujuan->name) ? $value->tujuan_perjalanan : '-' }} --}}
+                        {{-- {{ ($value->tujuan_perjalanan->tempatTujuan->name) ?? '-' }} --}}
                     </td>
                     <td>
                         {{-- Your Ket data --}}

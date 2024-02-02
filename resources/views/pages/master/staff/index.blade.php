@@ -236,12 +236,12 @@
                         var btnCreate = "";
                         btnEdit += '<button name="btnEdit" data-id="' + data +
                             '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
-                            btnCreate += '<a href="user/' + data +
-                                        '/createUser" name="btnCreate" data-id="' + data +
-                                        '" type="button" class="btn btn-primary btn-sm btnCreate m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-user"></i></a>';
                             btnDelete += '<button name="btnDelete" data-id="' + data +
                             '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
-                        return btnEdit + btnCreate + btnDelete;
+                            btnCreate += '<a href="user/' + data +
+                                        '/createUser" name="btnCreate" data-id="' + data +
+                                        '" type="button" class="btn btn-primary btn-sm btnCreate m-1" data-toggle="tooltip" data-placement="top" title="Buat Akun"><i class="fa fa-user"></i></a>';
+                        return btnEdit + btnDelete + btnCreate ;
                     },
                 },
             ]

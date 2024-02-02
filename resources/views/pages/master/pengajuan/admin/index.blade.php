@@ -35,8 +35,6 @@
                             <option value="2">Sudah Disetujui</option>
                             <option value="3">Belum Disetujui</option>
                             @endif
-
-
                         </select>
                     </div>
                     <div class="mb-3 validate">
@@ -262,12 +260,13 @@
                                 var btnStatusPerjalanan = "";
                                 var btnDetailStatus = "";
 
-                                btnStatusPerjalanan += '<button name="btnStatusPerjalanan" data-id="' + data +
-                                '" type="button" class="btn btn-dark btn-sm btnStatusPerjalanan m-1" data-toggle="tooltip" data-placement="top" title="Ubah Status"><i class="fa fa-pen"></i></button>';
-                                btnDetailStatus += '<a href="/detail-status/' + data +
-                                '" name="btnEdit" data-id="' + data +
-                                '" type="button" class="btn btn-warning btn-sm btnDetailStatus m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-pen"></i></a>';
-
+                                @if (auth()->user()->can('asdep', 'kabid'))
+                                    btnStatusPerjalanan += '<button name="btnStatusPerjalanan" data-id="' + data +
+                                    '" type="button" class="btn btn-dark btn-sm btnStatusPerjalanan m-1" data-toggle="tooltip" data-placement="top" title="Ubah Status"><i class="fa fa-pen"></i></button>';
+                                    btnDetailStatus += '<a href="/detail-status/' + data +
+                                    '" name="btnEdit" data-id="' + data +
+                                    '" type="button" class="btn btn-warning btn-sm btnDetailStatus m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-pen"></i></a>';
+                                @endif
                                 return "<div class='text-wrap' style='font-size: 12px;'>" + data.status_perjalanan + "</div>" + btnStatusPerjalanan + btnDetailStatus;
                             },
 
@@ -284,9 +283,10 @@
                                 '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
                             btnStatus += '<button name="btnStatus" data-id="' + data +
                                 '" type="button" class="btn btn-primary btn-sm btnStatus m-1" data-toggle="tooltip" data-placement="top" title="Change Status"><i class="fa fa-bookmark"></i></button>';
+                            @if (auth()->user()->can('superadmin'))
                             btnDelete += '<button name="btnDelete" data-id="' + data +
                                 '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
-
+                            @endif
                             return btnEdit + btnStatus + btnDelete;
                         },
                     },

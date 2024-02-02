@@ -4,42 +4,31 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\LogStatusPerjalanan;
+use App\Models\Perjalanan;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class DetailStatusController extends Controller
 {
-    public function index()
+    public function index($id)
     {
-        return view('pages.master.pengajuan.detail_status.index');
+        $perjalanan = Perjalanan::find($id);
+        return view('pages.master.pengajuan.detail_status.index', compact('perjalanan'));
     }
 
-    public function getData(Request $request)
+    public function getData(Request $request, $id)
     {
-        $keyword = $request['searchkey'];
+        $perjalanan = Perjalanan::findOrFail($id);
 
-        $data = LogStatusPerjalanan::where('id_perjalanan', $request['id_perjalanan'])
-            ->offset($request['start'])
-            ->limit(($request['length'] == -1) ? LogStatusPerjalanan::where('id_perjalanan', $request['id_perjalanan'])->count() : $request['length'])
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('status_perjalanan', 'like', '%' . $keyword . '%');
-            })
+        $data = ['status' => false, 'message' => 'Log Status Perjalanan failed to be found'];
+        $data = LogStatusPerjalanan::where('id_perjalanan', $id)
             ->where('status', true)
             ->get();
 
-        $dataCounter = LogStatusPerjalanan::where('id_perjalanan', $request['id_perjalanan'])
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('status_perjalanan', 'like', '%' . $keyword . '%');
-            })
-            ->where('status', true)
-            ->count();
+        return DataTables::of($data)
+            ->make(true);
 
-        $response = [
-            'status'          => true,
-            'draw'            => $request['draw'],
-            'recordsTotal'    => LogStatusPerjalanan::where('id_perjalanan', $request['id_perjalanan'])->count(),
-            'recordsFiltered' => $dataCounter,
-            'data'            => $data,
-        ];
+
 
     }
 }

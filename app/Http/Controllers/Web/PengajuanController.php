@@ -185,14 +185,7 @@ class PengajuanController extends Controller
             $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }
 
-        // if else return with Alert Sweet Alert and redirect to route or view or url page
-        if ($data['status'] == true) {
-            Alert::success('Success', $data['message']);
-            return redirect()->route('pengajuan');
-        } else {
-            Alert::error('Error', $data['message']);
-            return redirect()->back();
-        }
+        return $data;
     }
 
     public function show_status($id)
@@ -205,6 +198,24 @@ class PengajuanController extends Controller
             }
         } catch (\Exception $ex) {
             $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
+        }
+        return $data;
+    }
+
+     public function update_status(Request $request, $id)
+    {
+        try {
+            $data = ['status' => false, 'code' => 'EC001', 'message' => 'Perjalanan failed to update'];
+            $update = Perjalanan::where('id', $id)->update([
+                'id_perjalanan' => $request['id_perjalanan'],
+                'status_perjalanan' => $request['status_perjalanan'],
+                'description' => $request['description']
+            ]);
+            if ($update) {
+                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Perjalanan successfully updated'];
+            }
+        } catch (\Exception $ex) {
+            $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }
         return $data;
     }

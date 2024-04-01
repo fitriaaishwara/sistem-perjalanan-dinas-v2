@@ -37,7 +37,7 @@ class Province extends Model
 
     public function uangHarian()
     {
-        return $this->hasMany(UangHarian::class, 'province_id', 'id');
+        return $this->hasOne(UangHarian::class, 'province_id', 'id');
     }
 
     public function tujuanPerjalanan()

@@ -102,6 +102,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/jabatan/{id}', [App\Http\Controllers\Web\JabatanController::class, 'show'])->name('jabatan/show');
     Route::post('/jabatan/delete/{id}', [App\Http\Controllers\Web\JabatanController::class, 'destroy'])->name('jabatan/delete');
 
+    //Jabatan
+    Route::get('/uang_harian', [App\Http\Controllers\Web\UangHarianController::class, 'index'])->name('uang_harian');
+    Route::post('/uang_harian/getData', [App\Http\Controllers\Web\UangHarianController::class, 'getData'])->name('uang_harian/getData');
+    Route::post('/uang_harian/store', [App\Http\Controllers\Web\UangHarianController::class, 'store'])->name('uang_harian/store');
+    Route::post('/uang_harian/update', [App\Http\Controllers\Web\UangHarianController::class, 'update'])->name('uang_harian/update');
+    Route::get('/uang_harian/{id}', [App\Http\Controllers\Web\UangHarianController::class, 'show'])->name('uang_harian/show');
+    Route::post('/uang_harian/delete/{id}', [App\Http\Controllers\Web\UangHarianController::class, 'destroy'])->name('uang_harian/delete');
+
 
     //Pengajuan
     Route::get('/pengajuan', [App\Http\Controllers\Web\PengajuanController::class, 'index'])->name('pengajuan');
@@ -264,6 +272,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/gallery/{id}', [App\Http\Controllers\Web\UploadGalleryController::class, 'show'])->name('gallery/show');
 
     Route::get('/gallery/pdf/{id}', [App\Http\Controllers\Web\UploadLaporanController::class, 'downloadFile'])->name('gallery/pdf');
+
+    //Geo Tagging
+    Route::get('/geo-tagging', [App\Http\Controllers\Web\GeoTaggingController::class, 'index'])->name('geo-tagging');
+    Route::post('/geo-tagging/getData', [App\Http\Controllers\Web\GeoTaggingController::class, 'getData'])->name('geo-tagging/getData');
+    Route::get('/geo-tagging/create/{id}', [App\Http\Controllers\Web\GeoTaggingController::class, 'create'])->name('geo-tagging/create');
+    Route::any('/geo-tagging/store/', [App\Http\Controllers\Web\GeoTaggingController::class, 'store'])->name('geo-tagging/store');
+    Route::get('/geo-tagging/pdf/{id}', [App\Http\Controllers\Web\GeoTaggingController::class, 'kwitansiPDF'])->name('geo-tagging/pdf');
 
 
 });

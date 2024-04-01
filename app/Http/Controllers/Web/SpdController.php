@@ -12,7 +12,7 @@ class SpdController extends Controller
 {
     public function index()
     {
-        return view('pages.spd.index');
+        return view('pages.pre-perjalanan.spd.index');
     }
 
     public function getData(Request $request)
@@ -51,7 +51,7 @@ class SpdController extends Controller
 
         $dataStaff = DataStaffPerjalanan::with(['staff', 'perjalanan.mak', 'tujuan_perjalanan'])->find($id);
         // dd($dataStaff);
-        return view('pages.spd.create', compact('dataStaff'));
+        return view('pages.pre-perjalanan.spd.create', compact('dataStaff'));
     }
 
     public function store(Request $request)
@@ -85,7 +85,7 @@ class SpdController extends Controller
     public function spdPDF($id)
     {
         $spd = DataStaffPerjalanan::with(['perjalanan.mak', 'staff.instansis', 'penandatangan', 'tujuan_perjalanan', 'spd'])->find($id);
-        $pdf = \PDF::loadView('pages.spd.pdf', compact('spd'));
+        $pdf = \PDF::loadView('pages.pre-perjalanan.spd.pdf', compact('spd'));
         return $pdf->stream();
     }
 }

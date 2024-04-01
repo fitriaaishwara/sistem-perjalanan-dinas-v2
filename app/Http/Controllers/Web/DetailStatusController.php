@@ -13,7 +13,7 @@ class DetailStatusController extends Controller
     public function index($id)
     {
         $perjalanan = Perjalanan::find($id);
-        return view('pages.master.pengajuan.detail_status.index', compact('perjalanan'));
+        return view('pages.master.perjalanan.pengajuan.detail_status.index', compact('perjalanan'));
     }
 
     public function getData(Request $request, $id)

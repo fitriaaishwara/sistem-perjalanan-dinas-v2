@@ -15,7 +15,7 @@ class NotaDinasController extends Controller
 {
     public function index()
     {
-        return view('pages.nota_dinas.index');
+        return view('pages.pre-perjalanan.nota_dinas.index');
     }
 
     public function getData(Request $request)

@@ -16,6 +16,7 @@ class CreateDataTujuanPerjalananTable extends Migration
         Schema::create('data_tujuan_perjalanan', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('id_perjalanan');
+            $table->char('id_uang_harian', 2);
             $table->char('tempat_berangkat_id', 2);
             $table->char('tempat_tujuan_id', 2);
             $table->date('tanggal_berangkat');
@@ -38,6 +39,10 @@ class CreateDataTujuanPerjalananTable extends Migration
             $table->foreign('tempat_tujuan_id')
                 ->references('id')
                 ->on('provinces')
+                ->onUpdate('cascade')->onDelete('restrict');
+            $table->foreign('id_uang_harian')
+                ->references('province_id')
+                ->on('uang_harian')
                 ->onUpdate('cascade')->onDelete('restrict');
         });
     }

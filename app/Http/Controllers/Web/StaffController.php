@@ -13,7 +13,7 @@ class StaffController extends Controller
     public function index()
     {
         $instansi = Instansi::where('status', true)->get();
-        return view('pages.master.staff.index', compact('instansi'));
+        return view('pages.master-data.staff.index', compact('instansi'));
     }
 
     public function getData(Request $request)

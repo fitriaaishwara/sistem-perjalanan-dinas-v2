@@ -10,7 +10,7 @@ class MakController extends Controller
 {
     public function index()
     {
-        return view('pages.master.mak.index');
+        return view('pages.master-data.mak.index');
     }
 
     public function getData(Request $request)
@@ -47,8 +47,8 @@ class MakController extends Controller
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Mata Anggaran Akun failed to create'];
             $create = Mak::create([
                 'kode_mak' => $request['kode_mak'],
-                'saldo_awal_pagu' => $request['saldo_awal_pagu'],
-                'saldo_pagu' => $request['saldo_awal_pagu'],
+                'saldo_pagu' => $request['saldo_pagu'],
+                'saldo_awal_pagu' => $request['saldo_pagu'],
             ]);
             if ($create) {
                 $data = ['status' => true, 'code' => 'SC001', 'message' => 'Mata Anggaran Akun successfully created'];
@@ -75,14 +75,15 @@ class MakController extends Controller
     public function update(Request $request)
     {
         try {
-            $data = ['status' => false, 'code' => 'EC001', 'message' => 'Mata Anggaran Akun failed to update'];
+            $data = ['status' => false, 'code' => 'EC001', 'message' => 'Jabatan failed to update'];
 
             $update = Mak::where('id', $request['id'])->update([
-                'name'        => ucwords($request['name']),
-                'description' => $request['description']
+                'kode_mak'        => ucwords($request['kode_mak']),
+                'saldo_pagu' => $request['saldo_pagu'],
+                'saldo_awal_pagu' => $request['saldo_pagu']
             ]);
             if ($update) {
-                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Mata Anggaran Akun successfully updated'];
+                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Jabatan successfully updated'];
             }
         } catch (\Exception $ex) {
             $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];

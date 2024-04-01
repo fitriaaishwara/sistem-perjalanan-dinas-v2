@@ -14,7 +14,7 @@ class UploadBuktiController extends Controller
 {
     public function index()
     {
-        return view('pages.upload.upload_invoice.index');
+        return view('pages.pra-perjalanan.bukti_invoice.index');
     }
 
     public function getData(Request $request)
@@ -54,7 +54,7 @@ class UploadBuktiController extends Controller
     {
         $dataStaff = DataStaffPerjalanan::findOrFail($id);
         // dd($dataStaff);
-        return view('pages.upload.upload_invoice.create', compact('dataStaff'));
+        return view('pages.pra-perjalanan.bukti_invoice.create', compact('dataStaff'));
     }
 
     public function getUploadByIdBerangkat(Request $request, $id)

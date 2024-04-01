@@ -33,6 +33,9 @@ class IndoRegionSeeder extends Seeder
         $this->call(UangHarianSeeder::class);
         $this->call(RolesTableSeeder::class);
         $this->call(ModelHasRolesTableSeeder::class);
+        $this->call(PermissionTableSeeder::class);
+        $this->call(TransportasiTableSeeder::class);
+        $this->call(MakTableSeeder::class);
 
     }
 }

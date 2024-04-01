@@ -30,6 +30,7 @@ class CreateDataStaffPerjalananTable extends Migration
             $table->foreign('id_perjalanan')->references('id')->on('perjalanan');
             $table->foreign('id_tujuan_perjalanan')->references('id')->on('data_tujuan_perjalanan');
 
+
         });
     }
 

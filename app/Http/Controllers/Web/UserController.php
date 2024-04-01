@@ -19,7 +19,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        return view('pages.master.user.index');
+        return view('pages.management-user.user.index');
     }
 
     public function getData(Request $request)

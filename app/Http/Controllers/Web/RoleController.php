@@ -11,7 +11,7 @@ class RoleController extends Controller
 {
     public function index()
     {
-        return view('pages.master.role.index');
+        return view('pages.management-user.role.index');
     }
     public function getData(Request $request)
     {
@@ -50,7 +50,7 @@ class RoleController extends Controller
             $groupName = $row->group_permission;
             $groupPermission[$groupName][] = $row;
         }
-        return view('pages.master.role.create', compact('groupPermission'));
+        return view('pages.management-user.role.create', compact('groupPermission'));
     }
     public function store(Request $request)
     {
@@ -91,7 +91,7 @@ class RoleController extends Controller
             ->join('permissions', 'role_has_permissions.permission_id', '=', 'permissions.id')
             ->where('role_id', $id)->pluck('permission_id')->all();
 
-        return view('pages.master.role.edit', compact('role', 'groupPermission', 'hasPermission'));
+        return view('pages.management-user.role.edit', compact('role', 'groupPermission', 'hasPermission'));
     }
     public function update(Request $request, $id)
     {

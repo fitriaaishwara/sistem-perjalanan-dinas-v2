@@ -20,4 +20,11 @@ class UangHarian extends Model
     {
         return $this->belongsTo(Province::class, 'province_id', 'id');
     }
+
+    public function tujuan()
+    {
+        return $this->hasMany(Tujuan::class, 'id_uang_harian', 'province_id');
+    }
+
+
 }

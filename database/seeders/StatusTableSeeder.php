@@ -14,14 +14,6 @@ class StatusTableSeeder extends Seeder
      */
     public function run()
     {
-        $data = [
-            0 => [
-                'id' => Str::uuid(),
-                'province_id' => '11',
-                'nominal' => '360000',
-            ],
-        ];
 
-        UangHarian::insert($data);
     }
 }

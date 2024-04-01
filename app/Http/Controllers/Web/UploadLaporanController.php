@@ -14,7 +14,7 @@ class UploadLaporanController extends Controller
 {
     public function index()
     {
-        return view('pages.upload.upload_laporan.index');
+        return view('pages.pra-perjalanan.dokumentasi.laporan.index');
     }
 
     public function getData(Request $request)

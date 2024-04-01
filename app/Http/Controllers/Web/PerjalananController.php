@@ -12,7 +12,7 @@ class PerjalananController extends Controller
 {
     public function index()
     {
-        return view('pages.master.perjalanan.index');
+        return view('pages.perjalanan.perjalanan.index');
     }
 
     public function staff(Request $request)

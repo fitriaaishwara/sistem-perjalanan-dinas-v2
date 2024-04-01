@@ -145,6 +145,14 @@
 							</a>
 						</li>
                         @endif
+                        @if (auth()->user()->can('Mata Anggaran Akun'))
+                        <li class="nav-item {{ request()->is('uang_harian') || request()->is('uang_harian/*') ? 'active' : '' }}">
+                            <a href="{{ route('uang_harian') }}">
+								<i class="fas fa-plane-departure"></i>
+								<p>Uang Harian</p>
+							</a>
+						</li>
+                        @endif
                         @if (auth()->user()->can('Perjalanan'))
                         <li class="nav-section">
 							<span class="sidebar-mini-icon">
@@ -211,13 +219,13 @@
                         </li>
                         @endif
                         @if (auth()->user()->can('Laporan' || 'Gallery Foto'))
-                        <li class="nav-item {{ request()->is('laporan') || request()->is('laporan/*') || request()->is('gallery') || request()->is('gallery/*') ? 'active' : '' }}">
+                        <li class="nav-item {{ request()->is('laporan') || request()->is('laporan/*') || request()->is('gallery') || request()->is('gallery/*') || request()->is('geo-tagging') || request()->is('geo-tagging/*') ? 'active' : '' }}">
 							<a data-toggle="collapse" href="#upload_laporan">
 								<i class="fas fa-hand-holding-usd"></i>
 								<p>Dokumentasi</p>
 								<span class="caret"></span>
 							</a>
-							<div class="{{ request()->is('laporan') || request()->is('laporan/*') || request()->is('gallery') || request()->is('gallery/*') ? 'collapse show' : 'collapse' }}" id="upload_laporan">
+							<div class="{{ request()->is('laporan') || request()->is('laporan/*') || request()->is('gallery') || request()->is('gallery/*') || request()->is('geo-tagging') || request()->is('geo-tagging/*') ? 'collapse show' : 'collapse' }}" id="upload_laporan">
 								<ul class="nav nav-collapse">
 									<li class="nav-item {{ request()->is('laporan') || request()->is('laporan/*') ? 'active' : '' }}">
 										<a href="{{ route('laporan') }}">
@@ -227,6 +235,11 @@
 									<li class="nav-item {{ request()->is('gallery') || request()->is('gallery/*') ? 'active' : '' }}">
 										<a href="{{ route('gallery') }}">
 											<span class="sub-item">Gallery Foto</span>
+										</a>
+									</li>
+                                    <li class="nav-item {{ request()->is('geo-tagging') || request()->is('geo-tagging/*') ? 'active' : '' }}">
+										<a href="{{ route('geo-tagging') }}">
+											<span class="sub-item">Geo Tagging</span>
 										</a>
 									</li>
 								</ul>

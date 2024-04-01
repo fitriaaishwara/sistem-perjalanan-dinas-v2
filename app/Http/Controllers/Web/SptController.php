@@ -14,7 +14,7 @@ class SptController extends Controller
 {
     public function index()
     {
-        return view('pages.spt.index');
+        return view('pages.pre-perjalanan.spt.index');
     }
 
     public function getData(Request $request)
@@ -52,7 +52,7 @@ class SptController extends Controller
         $tujuan = Tujuan::with(['perjalanan', 'spt', 'staff', 'staff.staff', 'tempatTujuan'])->find($id);
         $staff = Staff::where('status', true)->get();
         $dataStaff= DataStaffPerjalanan::with(['staff.jabatans','perjalanan', 'tujuan_perjalanan'])->where('id_tujuan_perjalanan', $tujuan->id)->get();
-        return view('pages.spt.create', compact('tujuan', 'staff', 'dataStaff'));
+        return view('pages.pre-perjalanan.spt.create', compact('tujuan', 'staff', 'dataStaff'));
     }
 
     public function store(Request $request)
@@ -89,7 +89,7 @@ class SptController extends Controller
 
         //pdf
         if ($spt) {
-            $pdf = \PDF::loadView('pages.spt.pdf', compact('tujuan', 'dataStaff', 'spt'));
+            $pdf = \PDF::loadView('pages.pre-perjalanan.spt.pdf', compact('tujuan', 'dataStaff', 'spt'));
             return $pdf->stream();
         } else {
             //return redirect with Alert

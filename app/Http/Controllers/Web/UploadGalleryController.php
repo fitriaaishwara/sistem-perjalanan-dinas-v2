@@ -14,7 +14,7 @@ class UploadGalleryController extends Controller
 {
     public function index()
     {
-        return view('pages.upload.upload_gallery.index');
+        return view('pages.pra-perjalanan.dokumentasi.gallery.index');
     }
 
     public function getData(Request $request)
@@ -54,7 +54,7 @@ class UploadGalleryController extends Controller
     {
         $tujuan = Tujuan::with('perjalanan', 'perjalanan.data_staff_perjalanan.staff', 'uploadLaporan', 'uploadGallery')->findOrFail($id);
 
-        return view('pages.upload.upload_gallery.create', compact('tujuan'));
+        return view('pages.pra-perjalanan.dokumentasi.gallery.create', compact('tujuan'));
     }
 
     public function store (Request $request)

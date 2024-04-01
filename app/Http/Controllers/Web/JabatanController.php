@@ -10,7 +10,7 @@ class JabatanController extends Controller
 {
     public function index()
     {
-        return view('pages.master.jabatan.index');
+        return view('pages.master-data.jabatan.index');
     }
 
     public function getData(Request $request)

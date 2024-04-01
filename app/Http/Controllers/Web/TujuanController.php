@@ -57,7 +57,7 @@ class TujuanController extends Controller
 
             $data = ['status' => false, 'message' => 'Staff failed to be found'];
             $data = DataStaffPerjalanan::where('id_perjalanan', $id)
-                ->with('staff.golongans', 'staff.jabatans', 'staff.instansis')
+                ->with('staff.golongans', 'staff.jabatans', 'staff.instansis', 'tujuan_perjalanan.tempatBerangkat', 'tujuan_perjalanan.tempatTujuan')
                 ->where('status', true)
                 ->get();
 
@@ -119,12 +119,14 @@ class TujuanController extends Controller
                 'id_perjalanan' => $request->id_perjalanan,
                 'tempat_berangkat_id' => $request->tempat_berangkat_id,
                 'tempat_tujuan_id' => $request->tempat_tujuan_id,
+                'id_uang_harian' => $request->tempat_tujuan_id,
                 'tanggal_berangkat' => $request->tanggal_berangkat,
                 'tanggal_pulang' => $request->tanggal_pulang,
                 'tanggal_tiba' => $request->tanggal_tiba,
                 'lama_perjalanan' => $request->lama_perjalanan,
                 'created_by' => Auth::user()->id,
             ]);
+
             if ($create) {
                 $data = ['status' => true, 'code' => 'SC001', 'message' => 'Tujuan successfully created'];
             }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataStaffPerjalanan;
+use App\Models\DataUangHarian;
 use App\Models\LogStatusPerjalanan;
 use App\Models\Perjalanan;
 use App\Models\PerjalananDinas;
@@ -19,12 +20,12 @@ class PengajuanController extends Controller
 {
     public function index()
     {
-        return view('pages.master.pengajuan.admin.index');
+        return view('pages.perjalanan.pengajuan.admin.index');
     }
 
     public function create()
     {
-        return view('pages.master.pengajuan.admin.create');
+        return view('pages.perjalanan.pengajuan.admin.create');
     }
 
     public function stores(Request $request) {
@@ -76,18 +77,10 @@ class PengajuanController extends Controller
             $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }
 
-        return view('pages.master.pengajuan.admin.edit', compact('data','perjalanan', 'staff'));
+        return view('pages.perjalanan.pengajuan.admin.edit', compact('data','perjalanan', 'staff'));
     }
 
     function save_staff(Request $request, $id_perjalanan) {
-
-        // Validator::make($request->all(), [
-        //     'id_staff' => 'required',
-        //     'id_tujuan_perjalanan' => 'required',
-        // ])->validate();
-        // if (Validator::fails()) {
-        //     return redirect()->back()->withErrors($validator)->withInput();
-        // }
 
         $id_staff = $request->id_staff;
         $id_tujuan_perjalanan = $request->id_tujuan_perjalanan;
@@ -106,6 +99,14 @@ class PengajuanController extends Controller
         $staff->id_staff = $id_staff;
         $staff->id_tujuan_perjalanan = $id_tujuan_perjalanan;
         $staff->save();
+
+        // Check if the save was successful
+        // if ($staff->id) {
+        //     // If so, associate the id_data_staff_perjalanan with DataUangHarian
+        //     $uangHarian = new DataUangHarian;
+        //     $uangHarian->id_data_staff_perjalanan = $staff->id;
+        //     $uangHarian->save();
+        // }
 
         return redirect()->back() -> with('success', 'Data berhasil disimpan');
     }
@@ -127,7 +128,7 @@ class PengajuanController extends Controller
             $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }
 
-        return view('pages.master.pengajuan.admin.tujuan', compact('data','perjalanan', 'staff'));
+        return view('pages.perjalanan.pengajuan.admin.tujuan', compact('data','perjalanan', 'staff'));
     }
 
     public function getData(Request $request)

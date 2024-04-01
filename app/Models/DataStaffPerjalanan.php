@@ -17,6 +17,7 @@ class DataStaffPerjalanan extends Model
     protected $fillable = [
         'id_perjalanan',
         'id_staff',
+        'id_tujuan_perjalanan',
         'created_by',
         'updated_by',
         'deleted_by'
@@ -67,6 +68,11 @@ class DataStaffPerjalanan extends Model
     {
         return $this->hasMany(Kwitansi::class, 'id_staff_perjalanan', 'id');
     }
+
+    // public function data_uang_harian()
+    // {
+    //     return $this->hasMany(DataUangHarian::class, 'id_data_staff_perjalanan', 'id');
+    // }
 
 
 }

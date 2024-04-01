@@ -52,7 +52,7 @@ class KwitansiController extends Controller
         $dataStaff = DataStaffPerjalanan::with(['staff', 'perjalanan.mak', 'tujuan_perjalanan'])->find($id);
         // dd($dataStaff);
 
-        return view('pages.kwitansi.create', compact('dataStaff', 'staff'));
+        return view('pages.pra-perjalanan.kwitansi.create', compact('dataStaff', 'staff'));
     }
 
     public function store(Request $request)
@@ -109,7 +109,7 @@ class KwitansiController extends Controller
 
         // $kwitansi = Kwitansi::with(['dataStaffPerjalanan.staff', 'dataStaffPerjalanan.perjalanan.mak', 'dataStaffPerjalanan.tujuan_perjalanan', 'bendahara', 'pejabatPembuatKomitmen', 'dataStaffPerjalanan.spd'])->find($id);
         $kwitansi = DataStaffPerjalanan::with(['staff', 'perjalanan.mak', 'tujuan_perjalanan', 'spd', 'kwitansi'])->find($id);
-        $pdf = \PDF::loadView('pages.kwitansi.pdf', compact('kwitansi'));
+        $pdf = \PDF::loadView('pages.pra-perjalanan.kwitansi.pdf', compact('kwitansi'));
         return $pdf->stream();
     }
 }

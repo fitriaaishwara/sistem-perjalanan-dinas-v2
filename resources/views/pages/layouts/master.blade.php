@@ -153,6 +153,12 @@
 							</a>
 						</li>
                         @endif
+						<li class="nav-item {{ request()->is('rekap-data') || request()->is('rekap-data/*') ? 'active' : '' }}">
+                            <a href="{{ route('rekap-data') }}">
+								<i class="fas fa-plane-departure"></i>
+								<p>Rekap Data Perjalanan</p>
+							</a>
+						</li>
                         @if (auth()->user()->can('Perjalanan'))
                         <li class="nav-section">
 							<span class="sidebar-mini-icon">
@@ -176,7 +182,7 @@
 								<p>Data Perjalanan</p>
 							</a>
 						</li>
-                        @endif
+                        @endif						
                         @if (auth()->user()->can('Nota Dinas', 'SPT', 'SPD'))
                         <li class="nav-section">
 							<span class="sidebar-mini-icon">

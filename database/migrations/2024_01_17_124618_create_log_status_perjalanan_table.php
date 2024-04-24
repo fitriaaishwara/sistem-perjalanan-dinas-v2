@@ -18,6 +18,7 @@ class CreateLogStatusPerjalananTable extends Migration
             $table->foreignUuid('id_perjalanan');
             $table->string('status_perjalanan')->nullable();
             $table->string('description')->nullable();
+            $table->string('direvisi_oleh')->nullable();
             $table->boolean('status')->default (1);
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

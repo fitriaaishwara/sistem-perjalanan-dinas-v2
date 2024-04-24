@@ -13,22 +13,19 @@ class DetailStatusController extends Controller
     public function index($id)
     {
         $perjalanan = Perjalanan::find($id);
-        return view('pages.master.perjalanan.pengajuan.detail_status.index', compact('perjalanan'));
+        return view('pages.perjalanan.pengajuan.detail_status.index', compact('perjalanan'));
     }
 
     public function getData(Request $request, $id)
     {
         $perjalanan = Perjalanan::findOrFail($id);
 
-        $data = ['status' => false, 'message' => 'Log Status Perjalanan failed to be found'];
         $data = LogStatusPerjalanan::where('id_perjalanan', $id)
             ->where('status', true)
+            ->orderBy('created_at', 'desc') // Sort by created_at timestamp in descending order
             ->get();
 
         return DataTables::of($data)
             ->make(true);
-
-
-
     }
 }

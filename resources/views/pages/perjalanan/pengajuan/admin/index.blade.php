@@ -39,18 +39,24 @@
                         <select id="status_perjalanan" type="text" class="form-control col-12 status_perjalanan"
                         name="status_perjalanan">
                             <option value=""></option>
-                            @if (auth()->user()->can('Asdep'))
-                            <option value="0">Disetujui</option>
-                            <option value="1">Belum Disetujui</option>
-                            @elseif  (auth()->user()->can('Kabid'))
-                            <option value="2">Sudah Disetujui</option>
-                            <option value="3">Belum Disetujui</option>
-                            @endif
+                            <option value="Disetujui">Disetujui</option>
+                            <option value="Belum Disetujui">Belum Disetujui</option>
                         </select>
                     </div>
                     <div class="mb-3 validate">
                         <label for="description" class="form-label">Deskripsi Revisi</label>
                         <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3 validate">
+                        <label for="direvisi_oleh" class="form-label">Direvisi Oleh<span
+                                style="color:red;">*</span>
+                        </label>
+                        <select id="direvisi_oleh" type="text" class="form-control col-12 direvisi_oleh"
+                        name="direvisi_oleh">
+                            <option value=""></option>
+                            <option value="Asisten Deputi Pemetaan Data dan Analis Usaha">Asisten Deputi Pemetaan Data dan Analis Usaha</option>
+                            <option value="Kepala Bidang Pemetaan Data">Kepala Bidang Pemetaan Data</option>
+                        </select>
                     </div>
                 </form>
             </div>
@@ -272,15 +278,38 @@
                                 var btnDetailStatus = "";
 
                                 @if (auth()->user()->can('asdep', 'kabid'))
-                                    btnStatusPerjalanan += '<button name="btnStatusPerjalanan" data-id="' + data +
+                                btnStatusPerjalanan += '<button name="btnStatusPerjalanan" data-id="' + data +
                                     '" type="button" class="btn btn-dark btn-sm btnStatusPerjalanan m-1" data-toggle="tooltip" data-placement="top" title="Ubah Status"><i class="fa fa-pen"></i></button>';
-                                    btnDetailStatus += '<a href="/detail-status/' + data +
+                                btnDetailStatus += '<a href="/detail-status/' + data +
                                     '" name="btnEdit" data-id="' + data +
                                     '" type="button" class="btn btn-warning btn-sm btnDetailStatus m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-pen"></i></a>';
                                 @endif
-                                return "<div class='text-wrap' style='font-size: 12px;'>" + data.status_perjalanan + "</div>" + btnStatusPerjalanan + btnDetailStatus;
-                            },
 
+                            //    // status terbaru default adalah "-"
+                            //     var latestStatus = "Belum Direview";
+
+                            //     // jika log_status_perjalanan tidak null dan memiliki panjang lebih dari 0, maka ambil status_perjalanan dari indeks terakhir log_status_perjalanan
+                            //     if (row.log_status_perjalanan && row.log_status_perjalanan.length > 0) {
+                            //         var lastStatus = row.log_status_perjalanan[row.log_status_perjalanan.length - 1].status_perjalanan;
+                            //     }
+
+                            //     // Kembalikan latestStatus bersama dengan tombol
+                            //     return "<div class='text-wrap' style='font-size: 12px;'>" + latestStatus + "</div>" + btnStatusPerjalanan + btnDetailStatus;
+
+                            // Inisialisasi objek untuk menyimpan status per ID perjalanan
+                            var latestStatus = "Belum Direview";
+                            var latestStatusId = 0;
+
+                            // Jika log_status_perjalanan tidak null dan memiliki panjang lebih dari 0, maka ambil status_perjalanan dari indeks terakhir log_status_perjalanan
+                            if (row.log_status_perjalanan && row.log_status_perjalanan.length > 0) {
+                                latestStatus = row.log_status_perjalanan[row.log_status_perjalanan.length - 1].status_perjalanan;
+                                latestStatusId = row.log_status_perjalanan[row.log_status_perjalanan.length - 1].id;
+                            }
+
+                            // Kembalikan latestStatus bersama dengan tombol
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + latestStatus + "</div>" + btnStatusPerjalanan + btnDetailStatus;
+
+                            },
                         },
                     {
                         "data": "id",
@@ -306,9 +335,17 @@
 
             function reloadTable() {
                 pengajuanTable.ajax.reload(null, false); //reload datatable ajax
+                location.reload(); // Reload the page
             }
 
             $("#status_perjalanan").select2({
+            theme: 'bootstrap',
+            width: '100%',
+            dropdownParent: $('#myModalStatus'),
+            placeholder: "Pilih Status",
+            })
+
+            $("#direvisi_oleh").select2({
             theme: 'bootstrap',
             width: '100%',
             dropdownParent: $('#myModalStatus'),

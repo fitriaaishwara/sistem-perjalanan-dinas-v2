@@ -120,6 +120,7 @@
 
     {!!( Str::repeat('<br>', 2) )!!}
 
+    @if ($data->status_nota_dinas == '1')
     <div class="font-11">
         <table class="w-100 tbl">
             <thead>
@@ -147,36 +148,38 @@
                     </td>
                 </tr>
             </thead>
-
-            @foreach ($dataStaff as $index => $value)
             <tbody>
-                <tr>
-                    <td class="text-center">
-                        {{ $loop->iteration }}
-                    </td>
-                    <td>
-                        {{ $value->staff->name }}
-                    </td>
-                    <td class="text-center">
-                        {{ ($value->staff->golongans) ? $value->staff->golongans->name : '-' }}
-                    </td>
-                    <td class="text-center">
-                        {{ ($value->staff->jabatans) ? $value->staff->jabatans->name : '-' }}
-                    </td>
-                    <td>
-                        {{ ($value->staff->instansis) ? $value->staff->instansis->name : '-' }}
-                    </td>
-                    <td>
-                        {{-- {{ ($value->tujuan_perjalanan->tempatTujuan->name) ?? '-' }} --}}
-                    </td>
-                    <td>
-                        {{-- Your Ket data --}}
-                    </td>
-                </tr>
+                @foreach ($dataStaff as $index => $value)
+                    <tr>
+                        <td class="text-center">
+                            {{ $loop->iteration }}
+                        </td>
+                        <td>
+                            {{ $value->staff->name }}
+                        </td>
+                        <td class="text-center">
+                            {{ ($value->staff->golongans) ? $value->staff->golongans->name : '-' }}
+                        </td>
+                        <td class="text-center">
+                            {{ ($value->staff->jabatans) ? $value->staff->jabatans->name : '-' }}
+                        </td>
+                        <td>
+                            {{ ($value->staff->instansis) ? $value->staff->instansis->name : '-' }}
+                        </td>
+                        <td>
+                            {{-- {{ ($value->tujuan_perjalanan->tempatTujuan->name) ?? '-' }} --}}
+                        </td>
+                        <td>
+                            {{-- Your Ket data --}}
+                        </td>
+                    </tr>
+                @endforeach
             </tbody>
-            @endforeach
         </table>
     </div>
+    @else
+        {{-- Your else content --}}
+    @endif
 
 
     {!!( Str::repeat('<br>', 2) )!!}

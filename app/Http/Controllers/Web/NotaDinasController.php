@@ -45,7 +45,7 @@ class NotaDinasController extends Controller
     {
         $perjalanan = Perjalanan::find($id);
         $staff = Staff::where('status', true)->get();
-        return view('pages.nota_dinas.create', compact('perjalanan', 'staff'));
+        return view('pages.pre-perjalanan.nota_dinas.create', compact('perjalanan', 'staff'));
     }
 
     public function edit($id)
@@ -53,7 +53,7 @@ class NotaDinasController extends Controller
         $perjalanan = Perjalanan::with(['nota_dinas']) -> find($id);
         $notadinas = NotaDinas::with(['perjalanan', 'staff']) -> where('id_perjalanan', $id) -> first();
         $staff = Staff::where('status', true)->get();
-        return view('pages.nota_dinas.edit', compact('perjalanan', 'staff', 'notadinas'));
+        return view('pages.pre-perjalanan.nota_dinas.edit', compact('perjalanan', 'staff', 'notadinas'));
     }
 
     public function pdf($id)
@@ -64,7 +64,7 @@ class NotaDinasController extends Controller
         $staff = Staff::where('status', true)->get();
         //pdf
         if ($data) {
-            $pdf = \PDF::loadView('pages.nota_dinas.pdf', compact('perjalanan', 'staff', 'data', 'dataStaff'));
+            $pdf = \PDF::loadView('pages.pre-perjalanan.nota_dinas.pdf', compact('perjalanan', 'staff', 'data', 'dataStaff'));
             return $pdf->stream();
         } else {
             //return redirect with Alert
@@ -118,6 +118,7 @@ class NotaDinasController extends Controller
                 'perihal' => $request->perihal,
                 'tanggal_nota_dinas' => $request->tanggal_nota_dinas,
                 'isi_nota_dinas' => $request->isi_nota_dinas,
+                'status_nota_dinas' => $request->status_nota_dinas,
             ]);
 
             if ($create) {
@@ -129,6 +130,47 @@ class NotaDinasController extends Controller
 
         // return $data;
         return redirect() -> back() -> with('success', $data['message']);
+    }
+
+    public function setStatus(Request $request)
+    {
+        // Assuming you have a user_id associated with the status, you can replace it with your logic
+        $user_id = auth()->user()->id;
+
+        // Update the status in the database
+        NotaDinas::where('user_id', $user_id)->update(['status_nota_dinas' => $request->status]);
+
+        return response()->json(['message' => 'Status updated successfully']);
+    }
+
+    public function getStatus()
+    {
+        // Assuming you have a user_id associated with the status, you can replace it with your logic
+        $user_id = auth()->user()->id;
+
+        // Get the status from the database
+        $status = NotaDinas::where('user_id', $user_id)->value('status_nota_dinas');
+
+        return response()->json($status);
+    }
+
+    public function editStatus(Request $request)
+    {
+        $user_id = auth()->user()->id;
+
+        $notaDinas = NotaDinas::where('user_id', $user_id)->first();
+
+        return view('pages.nota_dinas.edit', compact('notaDinas'));
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $notaDinas = NotaDinas::findOrFail($id);
+        $notaDinas->status_nota_dinas = $request->status_nota_dinas;
+        $notaDinas->save();
+
+        return redirect()->route('nota-dinas')->with('success', 'Nota Dinas status updated successfully.');
+
     }
 
 }

@@ -19,6 +19,7 @@
 			}
 		});
 	</script>
+    {{-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6lX-qLPjxyR960WMyZUh_PSg5GtpB6Jo&callback=initMap" async defer></script> --}}
 	<!-- CSS Files -->
 	<link rel="stylesheet" href="{{ url('assets/css/bootstrap.min.css') }}">
 	<link rel="stylesheet" href="{{ url('assets/css/atlantis.css') }}">
@@ -26,6 +27,13 @@
 	<link rel="stylesheet" href="{{ url('assets/css/demo.css') }}">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Load OpenLayers from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/ol@6.8.1/dist/ol.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@6.8.1/dist/ol.css" type="text/css">
+
+    <script src="https://cdn.jsdelivr.net/npm/ol@6.8.1/dist/ol.js" type="text/javascript"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@6.8.1/dist/ol.css" type="text/css">
 </head>
 <body>
     @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
@@ -558,6 +566,7 @@
 	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
+
         function formatIndonesianDate(date) {
             const months = [
                 "Januari", "Februari", "Maret", "April", "Mei", "Juni",

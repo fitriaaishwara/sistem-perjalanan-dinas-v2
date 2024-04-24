@@ -50,6 +50,7 @@
                                         <th>Waktu</th>
                                         <th>Status Perjalanan</th>
                                         <th>Deskripsi</th>
+                                        <th>Direvisi Oleh</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -118,7 +119,7 @@
                             },
                         },
                         {
-                            "data": "log_status_perjalanan.created_at",
+                            "data": "created_at",
                             "width": '20%',
                             "defaultContent": "-",
                             render: function(data, type, row, meta) {
@@ -126,16 +127,31 @@
                             },
                         },
                         {
-                            "data": "log_status_perjalanan",
+                            "data": "status_perjalanan",
                             "width": '20%',
                             "defaultContent": "-",
+                            render: function(data, type, row, meta) {
+                                return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                            },
 
                         },
                         {
-                            "data": "log_status_perjalanan",
+                            "data": "description",
                             "width": '55%',
                             "defaultContent": "-",
+                            render: function(data, type, row, meta) {
+                                return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                            },
 
+                        },
+
+                        {
+                            "data": ".direvisi_oleh",
+                            "width": '20%',
+                            "defaultContent": "-",
+                            render: function(data, type, row, meta) {
+                                return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                            },
                         },
                 ]
             });

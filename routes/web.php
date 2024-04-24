@@ -183,7 +183,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::any('/nota-dinas/store/', [App\Http\Controllers\Web\NotaDinasController::class, 'store'])->name('nota-dinas/store');
     Route::any('/nota-dinas/update/{id}', [App\Http\Controllers\Web\NotaDinasController::class, 'update'])->name('nota-dinas/update');
     Route::get('/nota-dinas/pdf/{id}', [App\Http\Controllers\Web\NotaDinasController::class, 'pdf'])->name('nota-dinas/pdf');
-
+    Route::post('/set-status-nota-dinas', [App\Http\Controllers\Web\NotaDinasController::class, 'setStatus'])->name('set-status-nota-dinas');
+    Route::get('/get-status-nota-dinas', [App\Http\Controllers\Web\NotaDinasController::class, 'getStatus'])->name('get-status-nota-dinas');
+    Route::get('/nota-dinas/edit', [App\Http\Controllers\Web\NotaDinasController::class, 'editStatus'])->name('nota-dinas.edit');
+    Route::put('nota-dinas/{id}', [App\Http\Controllers\Web\NotaDinasController::class, 'updateStatus'])->name('nota-dinas.update');
     //SPT
     Route::get('/surat-perintah-tugas', [App\Http\Controllers\Web\SptController::class, 'index'])->name('spt');
     Route::any('/surat-perintah-tugas/getData', [App\Http\Controllers\Web\SptController::class, 'getData'])->name('spt/getData');
@@ -279,11 +282,11 @@ Route::group(['middleware' => ['auth']], function () {
     //Geo Tagging
     Route::get('/geo-tagging', [App\Http\Controllers\Web\GeoTaggingController::class, 'index'])->name('geo-tagging');
     Route::post('/geo-tagging/getData', [App\Http\Controllers\Web\GeoTaggingController::class, 'getData'])->name('geo-tagging/getData');
-    Route::get('/geo-tagging/create/{id}', [App\Http\Controllers\Web\GeoTaggingController::class, 'create'])->name('geo-tagging/create');
-    Route::any('/geo-tagging/store/', [App\Http\Controllers\Web\GeoTaggingController::class, 'store'])->name('geo-tagging/store');
+    Route::get('/geo-tagging/{id}', [App\Http\Controllers\Web\GeoTaggingController::class, 'create'])->name('geo-tagging/create');
+    // Route::any('/geo-tagging/store/', [App\Http\Controllers\Web\GeoTaggingController::class, 'store'])->name('geo-tagging/store');
     Route::get('/geo-tagging/pdf/{id}', [App\Http\Controllers\Web\GeoTaggingController::class, 'kwitansiPDF'])->name('geo-tagging/pdf');
-
-
+    Route::post('webcam', [App\Http\Controllers\Web\GeoTaggingController::class, 'store'])->name('webcam.capture');
+    Route::get('/geo-tagging/view/{id}', [App\Http\Controllers\Web\GeoTaggingController::class, 'show'])->name('geo-tagging/show');
 });
 
 require __DIR__.'/auth.php';

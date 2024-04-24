@@ -2,6 +2,17 @@
 @section('content')
 @section('title', 'Geo Tagging')
 
+<style>
+    .container {
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+  </style>
+
             <!-- Modal -->
 			<div id="myModal" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class="modal-dialog" >
@@ -92,7 +103,7 @@
 								</div>
 								<div class="card-body">
 									<div class="table-responsive">
-										<table id="jabatanTable" class="display table table-striped table-hover" >
+										<table id="geoTable" class="display table table-striped table-hover" >
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
@@ -100,7 +111,7 @@
                                                     <th>Nama</th>
                                                     <th>Tujuan</th>
                                                     <th>Tanggal</th>
-                                                    <th>Tahun<th>
+                                                    <th>Tahun</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -117,151 +128,182 @@
 				</div>
 			</div>
 @endsection
-{{-- @push('js')
+@push('js')
     <script type="text/javascript">
-        $(function() {
-            let request = {
-                start: 0,
-                length: 10
-            };
-            var isUpdate = false;
 
-            var jabatanTable = $('#jabatanTable').DataTable({
-                "language": {
-                    "paginate": {
-                        "next": '<i class="fas fa-arrow-right"></i>',
-                        "previous": '<i class="fas fa-arrow-left"></i>'
-                    }
-                },
-                "aaSorting": [],
-                "autoWidth": false,
-                "ordering": false,
-                "serverSide": true,
-                "responsive": true,
-                "lengthMenu": [
-                    [10, 15, 25, 50, -1],
-                    [10, 15, 25, 50, "All"]
-                ],
-                "ajax": {
-                    "url": "{{ route('jabatan/getData') }}",
-                    "type": "POST",
-                    "headers": {
-                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
-                    },
-                    "beforeSend": function(xhr) {
-                        xhr.setRequestHeader("Authorization", "Bearer " + $('#secret').val());
-                    },
-                    "Content-Type": "application/json",
-                    "data": function(data) {
-                        request.draw = data.draw;
-                        request.start = data.start;
-                        request.length = data.length;
-                        request.searchkey = data.search.value || "";
+    function rupiah($angka){
+        var reverse = $angka.toString().split('').reverse().join(''),
+        ribuan = reverse.match(/\d{1,3}/g);
+        ribuan = ribuan.join('.').split('').reverse().join('');
+        return ribuan;
+    }
 
-                        return (request);
-                    },
-                },
-                "columns": [{
-                        "data": null,
-                        "width": '5%',
-                        render: function(data, type, row, meta) {
-                            return meta.row + meta.settings._iDisplayStart + 1;
-                        }
-                    },
-                    {
-                        "data": "name",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
-                        },
-                    },
-                    {
-                        "data": "description",
-                        "width": '30%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            let description = (data) ? data : '-';
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + description + "</div>";
-                        },
-                    },
-                    {
-                        "data": "id",
-                        "width": '10%',
-                        render: function(data, type, row) {
-                            var btnEdit = "";
-                            var btnDelete = "";
-                            btnEdit += '<button name="btnEdit" data-id="' + data +
-                                '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
-                            btnDelete += '<button name="btnDelete" data-id="' + data +
-                                '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
 
-                            return btnEdit + btnDelete;
-                        },
-                    },
-                ]
-            });
+    $(function() {
+        let request = {
+            start: 0,
+            length: 10
+        };
+        var isUpdate = false;
 
-            function reloadTable() {
-                jabatanTable.ajax.reload(null, false); //reload datatable ajax
-            }
-
-            $('#saveBtn').click(function(e) {
-                e.preventDefault();
-                var isValid = $("#jabatanForm").valid();
-                if (isValid) {
-                    $('#saveBtn').text('Save...');
-                    $('#saveBtn').attr('disabled', true);
-                    if (!isUpdate) {
-                        var url = "{{ route('jabatan/store') }}";
-                    } else {
-                        var url = "{{ route('jabatan/update') }}";
-                    }
-                    var formData = new FormData($('#jabatanForm')[0]);
-                    $.ajax({
-                        url: url,
-                        type: "POST",
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        dataType: "JSON",
-                        success: function(data) {
-                            Swal.fire(
-                                (data.status) ? 'Success' : 'Error',
-                                data.message,
-                                (data.status) ? 'success' : 'error'
-                            )
-                            $('#saveBtn').text('Save');
-                            $('#saveBtn').attr('disabled', false);
-                            reloadTable();
-                            $('#myModal').modal('hide');
-                        },
-                        error: function(data) {
-                            Swal.fire(
-                                'Error',
-                                'A system error has occurred. please try again later.',
-                                'error'
-                            )
-                            $('#saveBtn').text('Save');
-                            $('#saveBtn').attr('disabled', false);
-                        }
-                    });
+        var geoTable = $('#geoTable').DataTable({
+            "language": {
+                "paginate": {
+                    "next": '<i class="fas fa-arrow-right"></i>',
+                    "previous": '<i class="fas fa-arrow-left"></i>'
                 }
-            });
+            },
+            "aaSorting": [],
+            "ordering": false,
+            "responsive": true,
+            "serverSide": true,
+            "lengthMenu": [
+                [10, 15, 25, 50, 100, 250, 500],
+                [10, 15, 25, 50, 100, 250, 500]
+            ],
+            "ajax": {
+                "url": "{{ route('geo-tagging/getData') }}",
+                "type": "POST",
+                "headers": {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
+                },
+                "beforeSend": function(xhr) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + $('#secret').val());
+                },
+                "Content-Type": "application/json",
+                "data": function(data) {
+                    request.draw = data.draw;
+                    request.start = data.start;
+                    request.length = data.length;
+                    request.searchkey = data.search.value || "";
 
-            $('#jabatanTable').on("click", ".btnEdit", function() {
-                $('#myModal').modal('show');
+                    return (request);
+                },
+            },
+            "columns": [
+               {
+                    "data": null,
+                    "width": '5%',
+                    render: function(data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                {
+                    "data": "perjalanan",
+                    "width": '15%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        var result = "<div class='text-wrap' style='font-size: 12px;'>";
+                        $.each (data, function (key, val) {
+                            // console.log(val);
+                            result += val.perihal_perjalanan + "<br>";
+                        });
+
+                        result += "</div>";
+                        return result;
+                    }
+                },
+                {
+                    "data": "staff",
+                    "width": '15%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        if (data && data.name) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.name + "</div>";
+                        } else {
+                            return "<div class='text-wrap'>-</div>";
+                        }
+                    }
+                },
+                {
+                    "data": "tujuan_perjalanan",
+                    "width": '15%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        //name
+                        if (data) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data[0].tempat_tujuan.name + "</div>";
+                        } else {
+                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
+                        }
+                    }
+                },
+                {
+
+                    "data": "tujuan_perjalanan",
+                    "width": '30%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        if (data) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + formatIndonesianDate(data[0].tanggal_berangkat) + " - " + formatIndonesianDate(data[0].tanggal_pulang) + "</div>";
+                        } else {
+                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
+                        }
+                    }
+                },
+                {
+                    "data": "created_at",
+                    "width": '5%',
+                    "defaultContent": "-",
+                     //render date format
+                    render: function(data, type, row) {
+                       //return year center
+                        return "<div class='text-wrap' style='font-size: 12px;'>" + data.substring(0, 4) + "</div>";
+                    }
+                },
+                {
+                    "data": "perjalanan",
+                    "width": '15%',
+                    "defaultContent": "-",
+                     //render date format
+                    render: function(data, type, row) {
+                        if (row.geotaging == "" || row.geotaging == null) {
+                            return "<div class='text-wrap badge badge-danger' style='font-size: 12px;'>Belum Dibuat</div>";
+                        } else {
+                            return "<div class='text-wrap badge badge-success' style='font-size: 12px;'>Terlampir</div>";
+                        }
+                    }
+                },
+                {
+                    "data": "id",
+                    "width": '15%',
+                    render: function(data, type, row) {
+                        var btnTambah = "";
+                        var btnView = "";
+
+                        // Check if geotaging data is available
+                        if (row.geotaging == "" || row.geotaging == null) {
+                            btnTambah += '<a href="/geo-tagging/' + data +
+                                '" name="btnTambah" data-id="' + data +
+                                '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fas fa-file-image"></i></a>';
+                        } else {
+                            btnView += '<a href="/geo-tagging/view/' + row.geotaging[0].id +
+                                '" name="btnView" data-id="' + data +
+                                '" type="button" class="btn btn-success btn-sm btnView m-1" data-toggle="tooltip" data-placement="top" title="View"><i class="fas fa-eye"></i></a>';
+                        }
+
+                        return btnTambah + btnView;
+                    },
+                },
+            ]
+        });
+
+        function reloadTable() {
+            geoTable.ajax.reload(null, false); //reload datatable ajax
+        }
+
+        $('#geoTable').on("click", ".btnStatus", function() {
                 isUpdate = true;
                 var id = $(this).attr('data-id');
-                var url = "{{ route('jabatan/show', ['id' => ':id']) }}";
+                var url = "{{ route('statusPerjalanan/show', ['id' => ':id']) }}";
                 url = url.replace(':id', id);
                 $.ajax({
                     type: 'GET',
                     url: url,
                     success: function(response) {
-                        $('#name').val(response.data.name);
-                        $('#description').val(response.data.description);
                         $('#id').val(response.data.id);
+                        $('#status').val(response.data.id_status_perjalanan);
+                        $('#myModal').modal('show');
                     },
                     error: function() {
                         Swal.fire(
@@ -271,75 +313,57 @@
                         )
                     },
                 });
-            });
-
-            $('#jabatanTable').on("click", ".btnDelete", function() {
-                var id = $(this).attr('data-id');
-                Swal.fire({
-                    title: 'Confirmation',
-                    text: "Kamu akan menghapus jabatan. Apakah kamu ingin melanjutkan?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: "Yes, I'm sure",
-                    cancelButtonText: 'No'
-                }).then(function(result) {
-                    if (result.value) {
-                        var url = "{{ route('jabatan/delete', ['id' => ':id']) }}";
-                        url = url.replace(':id', id);
-                        $.ajax({
-                            headers: {
-                                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                                    'content'),
-                            },
-                            url: url,
-                            type: "POST",
-                            success: function(data) {
-                                Swal.fire(
-                                    (data.status) ? 'Success' : 'Error',
-                                    data.message,
-                                    (data.status) ? 'success' : 'error'
-                                )
-                                reloadTable();
-                            },
-                            error: function(response) {
-                                Swal.fire(
-                                    'Error',
-                                    'A system error has occurred. please try again later.',
-                                    'error'
-                                )
-                            }
-                        });
-                    }
-                })
-            });
-
-            $('#jabatanForm').validate({
-                rules: {
-                    name: {
-                        required: true,
-                    },
-                },
-                errorElement: 'em',
-                errorPlacement: function(error, element) {
-                    error.addClass('invalid-feedback');
-                    element.closest('.validate').append(error);
-                },
-                highlight: function(element, errorClass, validClass) {
-                    $(element).addClass('is-invalid');
-                },
-                unhighlight: function(element, errorClass, validClass) {
-                    $(element).removeClass('is-invalid');
-                }
-            });
-
-            $('#addNew').on('click', function() {
-                $('#name').val("");
-                isUpdate = false;
-            });
         });
-    </script>
-@endpush --}}
+
+        $('#geoTable').on("click", ".btnDelete", function() {
+            var id = $(this).attr('data-id');
+            Swal.fire({
+                title: 'Confirmation',
+                text: "You will delete this pengajuan. Are you sure you want to continue?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: "Yes, I'm sure",
+                cancelButtonText: 'No'
+            }).then(function(result) {
+                if (result.value) {
+                    var url = "{{ route('dataPerjalanan/delete', ['id' => ':id']) }}";
+                    url = url.replace(':id', id);
+                    $.ajax({
+                        headers: {
+                            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                                'content'),
+                        },
+                        url: url,
+                        type: "POST",
+                        success: function(data) {
+                            Swal.fire(
+                                (data.status) ? 'Success' : 'Error',
+                                data.message,
+                                (data.status) ? 'success' : 'error'
+                            )
+                            reloadTable();
+                        },
+                        error: function(response) {
+                            Swal.fire(
+                                'Error',
+                                'A system error has occurred. please try again later.',
+                                'error'
+                            )
+                        }
+                    });
+                }
+            })
+        });
+    });
+</script>
+
+@endpush
+
+
+
+
+
 
 

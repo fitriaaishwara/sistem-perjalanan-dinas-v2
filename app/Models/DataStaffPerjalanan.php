@@ -74,5 +74,10 @@ class DataStaffPerjalanan extends Model
     //     return $this->hasMany(DataUangHarian::class, 'id_data_staff_perjalanan', 'id');
     // }
 
+    public function geotaging()
+    {
+        return $this->hasMany(Geotaging::class, 'id_staff_perjalanan', 'id');
+    }
+
 
 }

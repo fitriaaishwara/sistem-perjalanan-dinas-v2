@@ -68,10 +68,10 @@ class PengajuanController extends Controller
         $staff = Staff::where('status', 1)->get();
 
         try {
-            $data = ['status' => false, 'message' => 'Jabatan failed to be found'];
+            $data = ['status' => false, 'message' => 'Status failed to be found'];
             $data = Perjalanan::findOrFail($id);
             if ($data) {
-                $data = ['status' => true, 'message' => 'Jabatan was successfully found', 'data' => $data];
+                $data = ['status' => true, 'message' => 'Status was successfully found', 'data' => $data];
             }
         } catch (\Exception $ex) {
             $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
@@ -119,10 +119,10 @@ class PengajuanController extends Controller
         $staff = Staff::where('status', 1)->get();
 
         try {
-            $data = ['status' => false, 'message' => 'Jabatan failed to be found'];
+            $data = ['status' => false, 'message' => 'Status failed to be found'];
             $data = Perjalanan::findOrFail($id);
             if ($data) {
-                $data = ['status' => true, 'message' => 'Jabatan was successfully found', 'data' => $data];
+                $data = ['status' => true, 'message' => 'Status was successfully found', 'data' => $data];
             }
         } catch (\Exception $ex) {
             $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
@@ -136,7 +136,12 @@ class PengajuanController extends Controller
         $keyword = $request['searchkey'];
 
         $data = Perjalanan::select()
-            ->with('mak', 'tujuan', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'log_status_perjalanan')
+            ->with(['mak', 'tujuan', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'log_status_perjalanan' => function ($query) {
+                $query->latest()->limit(1); // Retrieve only the latest log_status_perjalanan entry
+            }])
+            ->whereDoesntHave('log_status_perjalanan', function ($query) {
+                $query->where('status_perjalanan', 'Disetujui');
+            })
             ->offset($request['start'])
             ->limit(($request['length'] == -1) ? Perjalanan::where('status', true)->count() : $request['length'])
             ->when($keyword, function ($query, $keyword) {
@@ -152,6 +157,9 @@ class PengajuanController extends Controller
             ->get();
 
         $dataCounter = Perjalanan::select()
+            ->whereDoesntHave('log_status_perjalanan', function ($query) {
+                $query->where('status_perjalanan', 'Disetujui');
+            })
             ->when($keyword, function ($query, $keyword) {
                 return $query->where('perihal_perjalanan', 'like', '%' . $keyword . '%');
             })
@@ -168,6 +176,7 @@ class PengajuanController extends Controller
         return $response;
     }
 
+
     public function store_status(Request $request)
     {
         try {
@@ -175,7 +184,8 @@ class PengajuanController extends Controller
             $create = LogStatusPerjalanan::create([
                 'id_perjalanan' => $request->input('id_perjalanan'),
                 'status_perjalanan' => $request->input('status_perjalanan'),
-                'description' => $request->input('description')
+                'description' => $request->input('description'),
+                'direvisi_oleh' => $request->input('direvisi_oleh'),
             ]);
 
             if ($create) {
@@ -192,10 +202,10 @@ class PengajuanController extends Controller
     public function show_status($id)
     {
         try {
-            $data = ['status' => false, 'message' => 'Jabatan failed to be found'];
+            $data = ['status' => false, 'message' => 'Status failed to be found'];
             $data = Perjalanan::find($id);
             if ($data) {
-                $data = ['status' => true, 'message' => 'Jabatan was successfully found', 'data' => $data];
+                $data = ['status' => true, 'message' => 'Status was successfully found', 'data' => $data];
             }
         } catch (\Exception $ex) {
             $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
@@ -206,14 +216,15 @@ class PengajuanController extends Controller
      public function update_status(Request $request, $id)
     {
         try {
-            $data = ['status' => false, 'code' => 'EC001', 'message' => 'Perjalanan failed to update'];
+            $data = ['status' => false, 'code' => 'EC001', 'message' => 'Status failed to update'];
             $update = Perjalanan::where('id', $id)->update([
                 'id_perjalanan' => $request['id_perjalanan'],
                 'status_perjalanan' => $request['status_perjalanan'],
-                'description' => $request['description']
+                'description' => $request['description'],
+                'direvisi_oleh' => $request['direvisi_oleh'],
             ]);
             if ($update) {
-                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Perjalanan successfully updated'];
+                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Status successfully updated'];
             }
         } catch (\Exception $ex) {
             $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];

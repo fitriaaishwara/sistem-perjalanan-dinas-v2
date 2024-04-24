@@ -13,7 +13,7 @@ class LogStatusPerjalanan extends Model
     protected $table = 'log_status_perjalanan';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id_perjalanan', 'status_perjalanan', 'description', 'status', 'created_by', 'updated_by', 'deleted_by',
+        'id_perjalanan', 'status_perjalanan', 'description', 'direvisi_oleh', 'status', 'created_by', 'updated_by', 'deleted_by',
     ];
 
     public function status_perjalanan()

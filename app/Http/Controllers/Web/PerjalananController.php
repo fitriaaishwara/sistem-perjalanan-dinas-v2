@@ -36,8 +36,9 @@ class PerjalananController extends Controller
     }
 
     public function getData(Request $request)
-    {
-        $keyword = $request['searchkey'];
+{
+    $keyword = $request['searchkey'];
+
 
         $data = Perjalanan::select()
             ->with('mak', 'tujuan.tempatTujuan')
@@ -62,7 +63,34 @@ class PerjalananController extends Controller
 
         return DataTables::of($data)
                     ->make(true);
+
+    $data = Perjalanan::select()
+        ->with('mak', 'tujuan.tempatTujuan', 'log_status_perjalanan')
+        ->where('status', true);
+
+    if ($keyword) {
+        $data->where('name', 'like', '%' . $keyword . '%');
+
     }
+
+    $data->whereHas('log_status_perjalanan', function ($query) {
+        $query->where('status_perjalanan', 'Disetujui');
+    });
+
+    $data = $data->get();
+
+    $dataCounter = Perjalanan::when($keyword, function ($query, $keyword) {
+            return $query->where('name', 'like', '%' . $keyword . '%');
+        })
+        ->where('status', true)
+        ->whereHas('log_status_perjalanan', function ($query) {
+            $query->where('status_perjalanan', 'Disetujui');
+        })
+        ->count();
+
+    return DataTables::of($data)
+                ->make(true);
+}
 
     public function getDataProvinsi(Request $request)
     {

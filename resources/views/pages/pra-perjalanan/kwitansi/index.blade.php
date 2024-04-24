@@ -207,6 +207,7 @@
                     }
                 },
                 {
+
                     "data": "tujuan_perjalanan",
                     "width": '15%',
                     "defaultContent": "-",
@@ -221,15 +222,15 @@
                 },
                 {
                     "data": "kwitansi",
+
+                    "data": "created_at",
+
                     "width": '15%',
                     "defaultContent": "-",
                      //render date format
                     render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.tahun_anggaran + "</div>";
-                        } else {
-                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
-                        }
+                       //return year center
+                        return "<div class='text-wrap' style='font-size: 12px;'>" + data.substring(0, 4) + "</div>";
                     }
                 },
                 {

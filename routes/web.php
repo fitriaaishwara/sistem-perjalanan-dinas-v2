@@ -94,6 +94,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/data-perjalanan/delete/{id}', [App\Http\Controllers\Web\PerjalananController::class, 'destroy'])->name('dataPerjalanan/delete');
     Route::get('/data-perjalanan/{id}', [App\Http\Controllers\Web\PerjalananController::class, 'show'])->name('dataPerjalanan/show');
 
+    //Data Perjalanan
+    Route::get('/rekap-data', [App\Http\Controllers\Web\RekapController::class, 'index'])->name('rekap-data');
+
     //Jabatan
     Route::get('/jabatan', [App\Http\Controllers\Web\JabatanController::class, 'index'])->name('jabatan');
     Route::post('/jabatan/getData', [App\Http\Controllers\Web\JabatanController::class, 'getData'])->name('jabatan/getData');

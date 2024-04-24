@@ -17,27 +17,52 @@ class PerjalananController extends Controller
 
     public function staff(Request $request)
     {
-        $staff = \App\Models\Staff::select('id as id', 'name as text', 'nip') -> get();
+        $staff = \App\Models\Staff::select('id as id', 'name as text', 'nip')->get();
 
-        if($request->has('q')){
+        if ($request->has('q')) {
             $staff = \App\Models\Staff::select('id as id', 'name as text', 'nip')
-                                        ->where('name', 'like', '%' . $request->get('q') . '%')
-                                        ->get();
+                ->where('name', 'like', '%' . $request->get('q') . '%')
+                ->get();
         }
 
-        return response() -> json(['staff' => $staff]);
+        return response()->json(['staff' => $staff]);
     }
 
     public function staff_by_id($id)
     {
         $staff = \App\Models\Staff::where('id', $id)->first();
 
-        return response() -> json(['staff' => $staff]);
+        return response()->json(['staff' => $staff]);
     }
 
     public function getData(Request $request)
 {
     $keyword = $request['searchkey'];
+
+
+        $data = Perjalanan::select()
+            ->with('mak', 'tujuan.tempatTujuan')
+            ->where('status', true)
+            ->when($keyword, function ($query, $keyword) {
+                return $query->where(function ($query) use ($keyword) {
+                    $query
+                        ->whereHas('mak', function ($query) use ($keyword) {
+                            $query->where('mak.kode_mak', 'like', '%' . $keyword . '%');
+                        })
+                        ->orWhere('perihal_perjalanan', 'like', '%' . $keyword . '%');
+                });
+            })
+            ->get();
+        // return response()->json($data);
+        // $dataCounter = Perjalanan::select()
+        //     ->when($keyword, function ($query, $keyword) {
+        //         return $query->where('name', 'like', '%' . $keyword . '%');
+        //     })
+        //     ->where('status', true)
+        //     ->count();
+
+        return DataTables::of($data)
+                    ->make(true);
 
     $data = Perjalanan::select()
         ->with('mak', 'tujuan.tempatTujuan', 'log_status_perjalanan')
@@ -45,6 +70,7 @@ class PerjalananController extends Controller
 
     if ($keyword) {
         $data->where('name', 'like', '%' . $keyword . '%');
+
     }
 
     $data->whereHas('log_status_perjalanan', function ($query) {
@@ -83,9 +109,6 @@ class PerjalananController extends Controller
             ->count();
 
         return DataTables::of($data)
-                    ->make(true);
+            ->make(true);
     }
-
-
-
 }

@@ -57,6 +57,7 @@
                                         <th>Tujuan</th>
                                         <th>Tanggal</th>
                                         <th>Total Diterima</th>
+                                        <th>Total Uang Harian</th>
                                         <th>Tahun Anggaran</th>
                                         <th>Kode MAK</th>
                                         <th>Status</th>
@@ -206,7 +207,24 @@
                     }
                 },
                 {
+
+                    "data": "tujuan_perjalanan",
+                    "width": '15%',
+                    "defaultContent": "-",
+                     //render date format
+                    render: function(data, type, row) {
+                        if (data) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data[0].uang_harian.nominal*data[0].lama_perjalanan) + "</div>";
+                        } else {
+                            return "<div class='text-wrap badge badge-danger' style='font-size: 12px;'>Belum Upload Invoce</div>";
+                        }
+                    }
+                },
+                {
+                    "data": "kwitansi",
+
                     "data": "created_at",
+
                     "width": '15%',
                     "defaultContent": "-",
                      //render date format

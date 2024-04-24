@@ -110,7 +110,7 @@
                 <tr>
                     <td class="font-12" style="width: 55%">Uang Sebesar</td>
                     <td style="width: 10%" class="font-12 text-center">:</td>
-                    <td class="font-12">Rp. {{ format_rupiah($kwitansi->perjalanan[0]->total_biaya) }}</td>
+                    <td class="font-12">Rp. {{ format_rupiah($kwitansi->tujuan_perjalanan[0]->uangHarian->nominal*$kwitansi->tujuan_perjalanan[0]->lama_perjalanan) }}</td>
                 </tr>
                 <tr>
                     <td class="font-12" style="width: 55%">Untuk Pembayaran</td>
@@ -158,7 +158,7 @@
                 <tr>
                     <td class="font-12" style="width: 55%">Terbilang</td>
                     <td style="width: 10%" class="font-12 text-center">:</td>
-                    <td class="font-12" style="font-weight: bold; background-color: #ffffff; border: 2px solid #030607; padding-left: 30px; padding-right: 30px; width:15%">{{ terbilang($kwitansi->perjalanan[0]->total_biaya) }}</td>
+                    <td class="font-12" style="font-weight: bold; background-color: #ffffff; border: 2px solid #030607; padding-left: 30px; padding-right: 30px; width:15%">{{ terbilang($kwitansi->tujuan_perjalanan[0]->uangHarian->nominal*$kwitansi->tujuan_perjalanan[0]->lama_perjalanan) }}</td>
                 </tr>
 
             </tbody>

@@ -16,6 +16,7 @@ class CreateAkomodasiHotelTable extends Migration
         Schema::create('akomodasi_hotel', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('id_staff_perjalanan');
+            $table->foreignUuid('id_sbm_hotel');
             $table->string('nama_hotel');
             $table->string('file_path');
             $table->string('deskripsi_file');
@@ -31,6 +32,7 @@ class CreateAkomodasiHotelTable extends Migration
             $table->softDeletes();
 
             $table->foreign('id_staff_perjalanan')->references('id')->on('data_staff_perjalanan');
+            $table->foreign('id_sbm_hotel')->references('id')->on('sbm_hotel');
         });
     }
 

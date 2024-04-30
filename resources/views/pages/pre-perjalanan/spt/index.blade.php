@@ -188,12 +188,12 @@
 
                 },
                 {
-                    "data": "dikeluarkan_tanggal",
+                    "data": "id",
                     "width": '15%',
                     "defaultContent": "-",
                      //render date format
                     render: function(data, type, row) {
-                        if (data) {
+                        if (data == "" || data == null) {
                             return "<div class='text-wrap' style='font-size: 12px;'>" + moment(data).format('DD MMM YYYY') + "</div>";
                         } else {
                             return "<div class='text-wrap' style='font-size: 12px;'>Belum Diterbitkan</div>";

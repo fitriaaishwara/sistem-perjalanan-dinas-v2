@@ -113,7 +113,7 @@
                                         <th>Tujuan</th>
                                         <th>Tanggal Berangkat</th>
                                         <th>Tanggal Kembali</th>
-                                        <th>Estimasi Biaya</th>
+                                        {{-- <th>Estimasi Biaya</th> --}}
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -260,15 +260,15 @@
                                 // }
                             }
                         },
-                        {
-                            "data": "estimasi_biaya",
-                            "width": '10%',
-                            "defaultContent": "-",
-                            render: function(data, type, row) {
-                            //format_rupiah
-                            return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data) + "</div>";
-                            },
-                        },
+                        // {
+                        //     "data": "estimasi_biaya",
+                        //     "width": '10%',
+                        //     "defaultContent": "-",
+                        //     render: function(data, type, row) {
+                        //     //format_rupiah
+                        //     return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data) + "</div>";
+                        //     },
+                        // },
                         {
                             "data": "id",
                             "width": '10%',

@@ -1,6 +1,6 @@
 @extends('pages.layouts.master')
 @section('content')
-@section('title', 'Rekaptulasi Perjalanan')
+@section('title', 'Kartu Kredit Pemerintah')
 <style>
     .container {
       overflow-x: auto;
@@ -59,7 +59,7 @@
 <div class="container">
     <div class="page-inner">
         <div class="page-header">
-            <h4 class="page-title">Data Rekap Perjalanan</h4>
+            <h4 class="page-title">Kartu Kredit Pemerintah</h4>
             <ul class="breadcrumbs">
                 <li class="nav-home">
                     <a href="#">
@@ -76,7 +76,7 @@
                     <i class="flaticon-right-arrow"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="#">Rekap Data Perjalanan</a>
+                    <a href="#">KKP</a>
                 </li>
             </ul>
         </div>
@@ -261,18 +261,11 @@
                     "data": "id",
                     "width": '15%',
                     render: function(data, type, row) {
-                        var btnEdit = "";
-                        var btnStatus = "";
-                        var btnDelete = "";
-                        btnEdit += '<a href="/pengajuan/edit/' + data +
-                            '" name="btnEdit" data-id="' + data +
-                            '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
-                        btnStatus += '<button name="btnStatus" data-id="' + data +
-                            '" type="button" class="btn btn-primary btn-sm btnStatus m-1" data-toggle="tooltip" data-placement="top" title="Change Status"><i class="fa fa-bookmark"></i></button>';
-                        btnDelete += '<button name="btnDelete" data-id="' + data +
-                            '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
-
-                        return btnEdit + btnStatus + btnDelete;
+                        var btnDetail = "";
+                        btnDetail += '<a href="/kkp-detail/' + data +
+                                    '" name="btnEdit" data-id="' + data +
+                                    '" type="button" class="btn btn-warning btn-sm btnDetailStatus m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-bookmark"></i></a>';
+                        return btnDetail;
                     },
                 },
             ]

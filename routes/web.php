@@ -87,6 +87,7 @@ Route::group(['middleware' => ['auth']], function () {
     //Data Perjalanan
     Route::get('/data-perjalanan', [App\Http\Controllers\Web\PerjalananController::class, 'index'])->name('dataPerjalanan');
     Route::post('/data-perjalanan/getData', [App\Http\Controllers\Web\PerjalananController::class, 'getData'])->name('dataPerjalanan/getData');
+    Route::post('/data-perjalanan/getData/rekap', [App\Http\Controllers\Web\PerjalananController::class, 'getDataRekap'])->name('dataPerjalanan/getData/rekap');
     Route::get('/data-perjalanan/create', [App\Http\Controllers\Web\PerjalananController::class, 'create'])->name('dataPerjalanan/create');
     Route::post('/data-perjalanan/store', [App\Http\Controllers\Web\PerjalananController::class, 'store'])->name('dataPerjalanan/store');
     Route::get('/data-perjalanan/edit/{id}', [App\Http\Controllers\Web\PerjalananController::class, 'edit'])->name('dataPerjalanan/edit');
@@ -183,9 +184,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::any('/nota-dinas/store/', [App\Http\Controllers\Web\NotaDinasController::class, 'store'])->name('nota-dinas/store');
     Route::any('/nota-dinas/update/{id}', [App\Http\Controllers\Web\NotaDinasController::class, 'update'])->name('nota-dinas/update');
     Route::get('/nota-dinas/pdf/{id}', [App\Http\Controllers\Web\NotaDinasController::class, 'pdf'])->name('nota-dinas/pdf');
-    Route::post('/set-status-nota-dinas', [App\Http\Controllers\Web\NotaDinasController::class, 'setStatus'])->name('set-status-nota-dinas');
-    Route::get('/get-status-nota-dinas', [App\Http\Controllers\Web\NotaDinasController::class, 'getStatus'])->name('get-status-nota-dinas');
-    Route::get('/nota-dinas/edit', [App\Http\Controllers\Web\NotaDinasController::class, 'editStatus'])->name('nota-dinas.edit');
     Route::put('nota-dinas/{id}', [App\Http\Controllers\Web\NotaDinasController::class, 'updateStatus'])->name('nota-dinas.update');
     //SPT
     Route::get('/surat-perintah-tugas', [App\Http\Controllers\Web\SptController::class, 'index'])->name('spt');
@@ -287,6 +285,16 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/geo-tagging/pdf/{id}', [App\Http\Controllers\Web\GeoTaggingController::class, 'kwitansiPDF'])->name('geo-tagging/pdf');
     Route::post('webcam', [App\Http\Controllers\Web\GeoTaggingController::class, 'store'])->name('webcam.capture');
     Route::get('/geo-tagging/view/{id}', [App\Http\Controllers\Web\GeoTaggingController::class, 'show'])->name('geo-tagging/show');
+
+    //kkp
+    Route::get('/kkp', [App\Http\Controllers\Web\KkpController::class, 'index'])->name('kkp');
+    Route::post('/kkp/getData', [App\Http\Controllers\Web\KkpController::class, 'getData'])->name('kkp/getData');
+    Route::get('/kkp/{id}', [App\Http\Controllers\Web\KkpController::class, 'create'])->name('kkp/create');
+    Route::get('/kkp/pdf/{id}', [App\Http\Controllers\Web\KkpController::class, 'kwitansiPDF'])->name('kkp/pdf');
+
+    Route::get('/kkp-detail/{id}', [App\Http\Controllers\Web\KkpController::class, 'detail'])->name('kkp-detail');
+    Route::post('/kkp-detail/getData', [App\Http\Controllers\Web\KkpController::class, 'getData'])->name('kkp-detail/getData');
+
 });
 
 require __DIR__.'/auth.php';

@@ -1,6 +1,6 @@
 @extends('pages.layouts.master')
 @section('content')
-@section('title', 'Rekaptulasi Perjalanan')
+@section('title', 'Detail Kartu Kredit Pemerintah')
 <style>
     .container {
       overflow-x: auto;
@@ -12,54 +12,10 @@
     }
   </style>
 
-
-<div id="myModal" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" >
-        <div class="modal-content">
-            <div class="modal-header border-0" id="myModalLabel">
-                <h5 class="modal-title">
-                    <span class="fw-mediumbold">
-                    Form</span>
-                    <span class="fw-light">
-                        Change Status
-                    </span>
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="{{ route('statusPerjalanan/update') }}" id="statusForm" name="statusForm">
-                    @csrf
-                    <input id="id" type="hidden" class="form-control" name="id">
-                    <div class="row mb-4">
-                        <label for="name" class="col-sm-3 col-form-label">Status<span
-                                style="color:red;">*</span></label>
-                        <div class="col-sm-9 validate">
-                            <select class="form-control" id="status" name="status">
-                                <option value="">-- Pilih Status --</option>
-                                {{-- @foreach ($statusPerjalanan as $status)
-                                    <option value="{{ $status->id }}">{{ $status->name }}</option>
-                                @endforeach --}}
-                            </select>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-dark waves-effect waves-light btn-sm" onclick="$('#myModal form').submit()"
-                    name="saveBtn">Save changes</button>
-                <button type="button" class="btn btn-secondary waves-effect btn-sm"
-                    data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="container">
     <div class="page-inner">
         <div class="page-header">
-            <h4 class="page-title">Data Rekap Perjalanan</h4>
+            <h4 class="page-title">Detail Kartu Kredit Pemerintah</h4>
             <ul class="breadcrumbs">
                 <li class="nav-home">
                     <a href="#">
@@ -76,7 +32,7 @@
                     <i class="flaticon-right-arrow"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="#">Rekap Data Perjalanan</a>
+                    <a href="#">KKP</a>
                 </li>
             </ul>
         </div>
@@ -88,13 +44,13 @@
                             <table id="myTable" class="display table table-striped table-hover" >
                                 <thead>
                                     <tr>
-                                        <th>MAK</th>
-                                        <th>Perihal</th>
+                                        <th>No</th>
+                                        <th>Nama</th>
+                                        <th>Golongan</th>
+                                        <th>Jabatan</th>
                                         <th>Tujuan</th>
-                                        <th>Tanggal Berangkat</th>
-                                        <th>Tanggal Kembali</th>
                                         {{-- <th>Estimasi Biaya</th> --}}
-                                        <th>Status</th>
+                                        <th>Tanggal</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -109,7 +65,7 @@
     </div>
 </div>
 @endsection
-@push('js')
+ @push('js')
     <script type="text/javascript">
 
     function rupiah($angka){
@@ -142,7 +98,7 @@
                 [10, 15, 25, 50, 100, 250, 500]
             ],
             "ajax": {
-                "url": "{{ route('dataPerjalanan/getData/rekap') }}",
+                "url": "{{ route('kkp-detail/getData') }}",
                 "type": "POST",
                 "headers": {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
@@ -165,21 +121,28 @@
                         "data": "mak",
                         "width": '10%',
                         "defaultContent": "-",
-                        render: function(data, type, row) {
-                            if (data && data.kode_mak) {
-                                return "<div class='text-wrap' style='font-size: 12px;'>" + data.kode_mak + "</div>";
-                            } else {
-                                return "<div class='text-wrap'>-</div>";
-                            }
-                        }
+                        // render: function(data, type, row) {
+                        //     if (data && data.kode_mak) {
+                        //         return "<div class='text-wrap' style='font-size: 12px;'>" + data.kode_mak + "</div>";
+                        //     } else {
+                        //         return "<div class='text-wrap'>-</div>";
+                        //     }
+                        // }
                     },
                     {
-                        "data": "perihal_perjalanan",
+                        // "data": "perihal_perjalanan",
+                        // "width": '10%',
+                        // "defaultContent": "-",
+                        // render: function(data, type, row) {
+                        //     return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                        // },
+
+                        "data": "staff.name",
                         "width": '10%',
                         "defaultContent": "-",
                         render: function(data, type, row) {
                             return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
-                        },
+                        }
                     },
                     {
                         "data": "tujuan",
@@ -261,18 +224,11 @@
                     "data": "id",
                     "width": '15%',
                     render: function(data, type, row) {
-                        var btnEdit = "";
-                        var btnStatus = "";
-                        var btnDelete = "";
-                        btnEdit += '<a href="/pengajuan/edit/' + data +
-                            '" name="btnEdit" data-id="' + data +
-                            '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
-                        btnStatus += '<button name="btnStatus" data-id="' + data +
-                            '" type="button" class="btn btn-primary btn-sm btnStatus m-1" data-toggle="tooltip" data-placement="top" title="Change Status"><i class="fa fa-bookmark"></i></button>';
-                        btnDelete += '<button name="btnDelete" data-id="' + data +
-                            '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
-
-                        return btnEdit + btnStatus + btnDelete;
+                        var btnDetail = "";
+                        btnDetail += '<a href="/kkp-detail/' + data +
+                                    '" name="btnEdit" data-id="' + data +
+                                    '" type="button" class="btn btn-warning btn-sm btnDetailStatus m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-bookmark"></i></a>';
+                        return btnDetail;
                     },
                 },
             ]
@@ -350,7 +306,6 @@
 </script>
 
 @endpush
-
 
 
 

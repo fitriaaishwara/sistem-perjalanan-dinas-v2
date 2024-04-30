@@ -100,6 +100,17 @@
             </tr>
             <tr>
                 <td style="width: 100px">
+                    Lampiran
+                </td>
+                <td style="width: 30px" class="text-center">
+                    :
+                </td>
+                <td>
+                    {{ $data->lampiran }}
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 100px">
                     Tanggal
                 </td>
                 <td style="width: 30px" class="text-center">

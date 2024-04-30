@@ -38,7 +38,7 @@ class PengajuanController extends Controller
             $create = Perjalanan::create([
                 'id_mak' => $request['id_mak'],
                 'perihal_perjalanan' => $request['perihal_perjalanan'],
-                'estimasi_biaya' => $request['estimasi_biaya'],
+                // 'estimasi_biaya' => $request['estimasi_biaya'],
                 'description' => $request['description']
             ]);
 

@@ -17,6 +17,11 @@ class SptController extends Controller
         return view('pages.pre-perjalanan.spt.index');
     }
 
+    public function indexDownload()
+    {
+        return view('pages.pre-perjalanan.spt.index-download');
+    }
+
     public function getData(Request $request)
     {
         $keyword = $request['searchkey'];

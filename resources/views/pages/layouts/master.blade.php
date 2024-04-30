@@ -167,6 +167,12 @@
 								<p>Rekap Data Perjalanan</p>
 							</a>
 						</li>
+                        <li class="nav-item {{ request()->is('kkp') || request()->is('kkp/*') ? 'active' : '' }}">
+                            <a href="{{ route('kkp') }}">
+								<i class="fas fa-plane-departure"></i>
+								<p>KKP</p>
+							</a>
+						</li>
                         @if (auth()->user()->can('Perjalanan'))
                         <li class="nav-section">
 							<span class="sidebar-mini-icon">
@@ -190,7 +196,7 @@
 								<p>Data Perjalanan</p>
 							</a>
 						</li>
-                        @endif						
+                        @endif
                         @if (auth()->user()->can('Nota Dinas', 'SPT', 'SPD'))
                         <li class="nav-section">
 							<span class="sidebar-mini-icon">

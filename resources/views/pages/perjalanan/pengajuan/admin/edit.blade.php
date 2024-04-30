@@ -183,12 +183,12 @@
                                 </label>
                                     <input type="text" class="form-control" id="perihal_perjalanan" name="perihal_perjalanan" placeholder="Input Perihal Perjalanan" validate value="{{ $perjalanan->perihal_perjalanan }}">
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="estimasi_biaya" class="form-label">Estimasi Biaya</span
                                         style="color:red;">*</span>
                                 </label>
                                     <input type="text" class="form-control" id="estimasi_biaya" name="estimasi_biaya" placeholder="Input Estimasi Biaya" validate value="{{ $perjalanan->estimasi_biaya }}">
-                                </div>
+                                </div> --}}
                                 <div class="form-group">
                                     <label for="description" class="form-label">Description</span
                                         style="color:red;">*</span>
@@ -695,7 +695,7 @@
 				var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24) + 1;
 				$('#lama_perjalanan').val(Difference_In_Days);
 			} else {
-				$('#lama_perjalanan').val('0 hari');
+				$('#lama_perjalanan').val('0');
 			}
         });
 

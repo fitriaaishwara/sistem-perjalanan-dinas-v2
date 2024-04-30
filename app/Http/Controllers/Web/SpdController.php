@@ -15,6 +15,11 @@ class SpdController extends Controller
         return view('pages.pre-perjalanan.spd.index');
     }
 
+    public function indexDownload()
+    {
+        return view('pages.pre-perjalanan.spd.index-download');
+    }
+
     public function getData(Request $request)
     {
         $keyword = $request['searchkey'];

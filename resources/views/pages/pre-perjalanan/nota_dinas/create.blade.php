@@ -50,7 +50,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="perihal">Perihal</label>
-                                    <input type="text" class="form-control" id="perihal" name="perihal" placeholder="Perihal Nota Dinas" value="{{ $perjalanan->perihal_perjalanan }}" readonly>
+                                    <input type="text" class="form-control" id="perihal" name="perihal" placeholder="Perihal Nota Dinas">
+                                </div>
+                                <div class="form-group">
+                                    <label for="perihal">Lampiran</label>
+                                    <input type="text" class="form-control" id="lampiran" name="lampiran" placeholder="Perihal Nota Dinas">
                                 </div>
                                 <div id="showTanggal_nota_dinas" class="form-group">
                                     <label for="tanggal_nota_dinas">Tanggal Nota Dinas</label>
@@ -75,6 +79,7 @@
                                         <input type="checkbox" class="custom-control-input" id="status_nota_dinas" name="status_nota_dinas">
                                         <label class="custom-control-label" for="status_nota_dinas" id="statusLabel">Off</label>
                                     </div>
+                                    <input type="hidden" id="status_nota_dinas_hidden" name="status_nota_dinas_hidden" value="0">
                                 </div>
                             </div>
                         </div>
@@ -94,53 +99,12 @@
             // dateFormat: "d-m-Y",
         });
 
-        // Initial check of the status and label
-        checkStatus();
-
+        // Toggle button for status_nota_dinas
         $('#status_nota_dinas').change(function () {
             var status = $(this).is(':checked') ? 1 : 0;
-            setStatus(status);
+            $('#statusLabel').text($(this).is(':checked') ? 'On' : 'Off');
+            $('#status_nota_dinas_hidden').val(status);
         });
-
-        function setStatus(status) {
-            $.ajax({
-                url: '{{ route("set-status-nota-dinas") }}',
-                type: 'POST',
-                data: {
-                    status: status
-                },
-                success: function (response) {
-                    // Handle success response
-                    console.log(response);
-                    checkStatus();
-                },
-                error: function (xhr, status, error) {
-                    // Handle error
-                    console.error(error);
-                }
-            });
-        }
-
-        function checkStatus() {
-            $.ajax({
-                url: '{{ route("get-status-nota-dinas") }}',
-                type: 'GET',
-                success: function (response) {
-                    // Set the switch and label based on the status
-                    if (response == 1) {
-                        $('#status_nota_dinas').prop('checked', true);
-                        $('#statusLabel').text('On');
-                    } else {
-                        $('#status_nota_dinas').prop('checked', false);
-                        $('#statusLabel').text('Off');
-                    }
-                },
-                error: function (xhr, status, error) {
-                    // Handle error
-                    console.error(error);
-                }
-            });
-        }
     });
 </script>
 @endpush

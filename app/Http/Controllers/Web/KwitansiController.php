@@ -15,6 +15,12 @@ class KwitansiController extends Controller
     {
         return view('pages.pra-perjalanan.kwitansi.index');
     }
+
+    public function indexDownload()
+    {
+        return view('pages.pra-perjalanan.kwitansi.index-download');
+    }
+
     public function getData(Request $request)
     {
         $keyword = $request['searchkey'];

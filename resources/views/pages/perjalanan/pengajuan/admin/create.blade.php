@@ -50,12 +50,12 @@
                                 </label>
                                     <input type="text" class="form-control" id="perihal_perjalanan" name="perihal_perjalanan" placeholder="Input Perihal Perjalanan" validate>
                                 </div>
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label for="estimasi_biaya" class="form-label">Estimasi Biaya</span
                                         style="color:red;">*</span>
                                 </label>
                                     <input type="text" class="form-control" id="estimasi_biaya" name="estimasi_biaya" placeholder="Input Estimasi Biaya" validate>
-                                </div>
+                                </div> --}}
                                 <div class="form-group">
                                     <label for="description" class="form-label">Description</span
                                         style="color:red;">*</span>
@@ -128,9 +128,9 @@
                     perihal_perjalanan: {
                         required: true,
                     },
-                    estimasi_biaya: {
-                        required: true,
-                    },
+                    // estimasi_biaya: {
+                    //     required: true,
+                    // },
 
 
                 },

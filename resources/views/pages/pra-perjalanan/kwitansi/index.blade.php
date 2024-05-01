@@ -267,8 +267,9 @@
                     "width": '15%',
                     render: function(data, type, row) {
                         var btnTambah = "";
-                        var btnDownload = "";
-                        var btnEdit = "";
+                        // var btnDownload = "";
+                        // var btnEdit = "";
+                        var btnDetail= "";
 
                         if (row.kwitansi == "" || row.kwitansi == null) {
                             btnTambah += '<a href="/kwitansi/create/' + data +
@@ -284,13 +285,16 @@
                             // btnDownload += '<a href="/kwitansi/pdf/' + row.kwitansi[0].id +
                             //     '" name="btnDownload" data-id="' + row.kwitansi[0].id +
                             //     '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
-                            btnDownload += '<a href="/kwitansi/pdf/' + data +
-                                '" name="btnDownload" data-id="' + data +
-                                '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
+                            // btnDownload += '<a href="/kwitansi/pdf/' + data +
+                            //     '" name="btnDownload" data-id="' + data +
+                            //     '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
+                            btnDetail += '<a href="/kwitansi/' + data +
+                                '" name="btnEdit" data-id="' + data +
+                                '" type="button" class="btn btn-warning btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-bookmark"></i></a>';
                         }
 
                         console.log(row);
-                        return btnTambah + btnEdit + btnDownload; // Returning all buttons
+                        return btnTambah + btnDetail; // Returning all buttons
                     },
                 },
             ]

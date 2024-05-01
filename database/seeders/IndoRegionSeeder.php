@@ -36,6 +36,9 @@ class IndoRegionSeeder extends Seeder
         $this->call(PermissionTableSeeder::class);
         $this->call(TransportasiTableSeeder::class);
         $this->call(MakTableSeeder::class);
+        $this->call(sbm_hotelTableSeeder::class);
+        $this->call(sbm_tiketTableSeeder::class);
+        $this->call(sbm_translokTableSeeder::class);
 
     }
 }

@@ -17,7 +17,6 @@ class CreateSbmTiket extends Migration
             $table->uuid('id')->primary();
             $table->char('province_id', 2);
             $table->unsignedInteger('id_golongan');
-            $table->foreignUuid('id_jabatan')->nullable();
             $table->string('nominal', 50);
             $table->foreign('province_id')
                 ->references('id')
@@ -32,7 +31,6 @@ class CreateSbmTiket extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('id_jabatan')->references('id')->on('jabatan');
             $table->foreign('id_golongan')->references('id')->on('golongan');
         });
     }

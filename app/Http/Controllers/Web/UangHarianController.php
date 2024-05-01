@@ -10,7 +10,7 @@ class UangHarianController extends Controller
 {
     public function index()
     {
-        return view('pages.master-data.uang_harian.index');
+        return view('pages.master-data.sbm.uang_harian.index');
     }
 
     public function getData(Request $request)

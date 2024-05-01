@@ -145,19 +145,42 @@
 							</div>
 						</li>
                         @endif
+                        <li class="nav-item {{ request()->is('sbm-sbm-translok') || request()->is('sbm-sbm-translok/*') || request()->is('sbm-tiket') || request()->is('sbm-tiket/*') || request()->is('sbm-hotel') || request()->is('sbm-hotel/*') || request()->is('uang_harian') || request()->is('uang_harian/*') ? 'collapse show' : 'collapse' }}">
+							<a data-toggle="collapse" href="#sbm">
+								<i class="fas fa-hand-holding-usd"></i>
+								<p>SBM</p>
+								<span class="caret"></span>
+							</a>
+							<div class="{{ request()->is('sbm-translok') || request()->is('sbm-translok/*') || request()->is('sbm-tiket') || request()->is('sbm-tiket/*') || request()->is('sbm-hotel') || request()->is('sbm-hotel/*') || request()->is('uang_harian') || request()->is('uang_harian/*') ? 'collapse show' : 'collapse' }}" id="sbm">
+								<ul class="nav nav-collapse">
+									<li class="nav-item {{ request()->is('sbm-translok') || request()->is('sbm-translok/*') ? 'active' : '' }}">
+										<a href="{{ route('sbm-translok') }}">
+											<span class="sub-item">Transportasi Lokal</span>
+										</a>
+									</li>
+									<li class="nav-item {{ request()->is('sbm-tiket') || request()->is('sbm-tiket/*') ? 'active' : '' }}">
+										<a href="{{ route('sbm-tiket') }}">
+											<span class="sub-item">Tiket</span>
+										</a>
+									</li>
+                                    <li class="nav-item {{ request()->is('sbm-hotel') || request()->is('sbm-hotel/*') ? 'active' : '' }}">
+										<a href="{{ route('sbm-hotel') }}">
+											<span class="sub-item">Hotel</span>
+										</a>
+									</li>
+                                    <li class="nav-item {{ request()->is('uang_harian') || request()->is('uang_harian/*') ? 'active' : '' }}">
+                                        <a href="{{ route('uang_harian') }}">
+                                            <span class="sub-item">Uang Harian</span>
+                                        </a>
+                                    </li>
+								</ul>
+							</div>
+						</li>
                         @if (auth()->user()->can('Mata Anggaran Akun'))
                         <li class="nav-item {{ request()->is('mak') || request()->is('mak/*') ? 'active' : '' }}">
                             <a href="{{ route('mak') }}">
 								<i class="fas fa-plane-departure"></i>
 								<p>Mata Anggaran Akun</p>
-							</a>
-						</li>
-                        @endif
-                        @if (auth()->user()->can('Mata Anggaran Akun'))
-                        <li class="nav-item {{ request()->is('uang_harian') || request()->is('uang_harian/*') ? 'active' : '' }}">
-                            <a href="{{ route('uang_harian') }}">
-								<i class="fas fa-plane-departure"></i>
-								<p>Uang Harian</p>
 							</a>
 						</li>
                         @endif

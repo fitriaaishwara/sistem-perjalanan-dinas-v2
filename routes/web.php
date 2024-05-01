@@ -106,13 +106,34 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/jabatan/{id}', [App\Http\Controllers\Web\JabatanController::class, 'show'])->name('jabatan/show');
     Route::post('/jabatan/delete/{id}', [App\Http\Controllers\Web\JabatanController::class, 'destroy'])->name('jabatan/delete');
 
-    //Jabatan
+    //sbm
     Route::get('/uang_harian', [App\Http\Controllers\Web\UangHarianController::class, 'index'])->name('uang_harian');
     Route::post('/uang_harian/getData', [App\Http\Controllers\Web\UangHarianController::class, 'getData'])->name('uang_harian/getData');
     Route::post('/uang_harian/store', [App\Http\Controllers\Web\UangHarianController::class, 'store'])->name('uang_harian/store');
     Route::post('/uang_harian/update', [App\Http\Controllers\Web\UangHarianController::class, 'update'])->name('uang_harian/update');
     Route::get('/uang_harian/{id}', [App\Http\Controllers\Web\UangHarianController::class, 'show'])->name('uang_harian/show');
     Route::post('/uang_harian/delete/{id}', [App\Http\Controllers\Web\UangHarianController::class, 'destroy'])->name('uang_harian/delete');
+
+    Route::get('/sbm-translok', [App\Http\Controllers\Web\UangHarianController::class, 'index'])->name('sbm-translok');
+    Route::post('/sbm-translok/getData', [App\Http\Controllers\Web\UangHarianController::class, 'getData'])->name('sbm-translok/getData');
+    Route::post('/sbm-translok/store', [App\Http\Controllers\Web\UangHarianController::class, 'store'])->name('sbm-translok/store');
+    Route::post('/sbm-translok/update', [App\Http\Controllers\Web\UangHarianController::class, 'update'])->name('sbm-translok/update');
+    Route::get('/sbm-translok/{id}', [App\Http\Controllers\Web\UangHarianController::class, 'show'])->name('sbm-translok/show');
+    Route::post('/sbm-translok/delete/{id}', [App\Http\Controllers\Web\UangHarianController::class, 'destroy'])->name('sbm-translok/delete');
+
+    Route::get('/sbm-tiket', [App\Http\Controllers\Web\UangHarianController::class, 'index'])->name('sbm-tiket');
+    Route::post('/sbm-tiket/getData', [App\Http\Controllers\Web\UangHarianController::class, 'getData'])->name('sbm-tiket/getData');
+    Route::post('/sbm-tiket/store', [App\Http\Controllers\Web\UangHarianController::class, 'store'])->name('sbm-tiket/store');
+    Route::post('/sbm-tiket/update', [App\Http\Controllers\Web\UangHarianController::class, 'update'])->name('sbm-tiket/update');
+    Route::get('/sbm-tiket/{id}', [App\Http\Controllers\Web\UangHarianController::class, 'show'])->name('sbm-tiket/show');
+    Route::post('/sbm-tiket/delete/{id}', [App\Http\Controllers\Web\UangHarianController::class, 'destroy'])->name('tsbm-iket/delete');
+
+    Route::get('/sbm-hotel', [App\Http\Controllers\Web\HotelController::class, 'index'])->name('sbm-hotel');
+    Route::post('/sbm-hotel/getData', [App\Http\Controllers\Web\HotelController::class, 'getData'])->name('sbm-hotel/getData');
+    Route::post('/sbm-hotel/store', [App\Http\Controllers\Web\HotelController::class, 'store'])->name('sbm-hotel/store');
+    Route::post('sbm-hotel/update', [App\Http\Controllers\Web\HotelController::class, 'update'])->name('sbm-hotel/update');
+    Route::get('/sbm-hotel/{id}', [App\Http\Controllers\Web\HotelController::class, 'show'])->name('sbm-hotel/show');
+    Route::post('/sbm-hotel/delete/{id}', [App\Http\Controllers\Web\HotelController::class, 'destroy'])->name('sbm-hotel/delete');
 
 
     //Pengajuan
@@ -198,6 +219,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/surat-perjalanan-dinas/create/{id}', [App\Http\Controllers\Web\SpdController::class, 'create'])->name('spd/create');
     Route::any('/surat-perjalanan-dinas/store/', [App\Http\Controllers\Web\SpdController::class, 'store'])->name('spd/store');
     Route::get('/surat-perjalanan-dinas/pdf/{id}', [App\Http\Controllers\Web\SpdController::class, 'spdPDF'])->name('spd/pdf');
+    Route::get('/surat-perjalanan-dinas/pdf2/{id}', [App\Http\Controllers\Web\SpdController::class, 'spdPDF2'])->name('spd/pdf2');
+    Route::get('/surat-perjalanan-dinas/{id}', [App\Http\Controllers\Web\SpdController::class, 'detail'])->name('spd-detail');
 
     Route::get('/bukti-perjalanan', [App\Http\Controllers\Web\UploadBuktiController::class, 'index'])->name('bukti');
     Route::any('/bukti-perjalananBerangkatById/getData/{id_staff_perjalanan} ', [App\Http\Controllers\Web\UploadBuktiController::class, 'getUploadByIdBerangkat'])->name('uploadByIdBerangkat/getData');
@@ -214,6 +237,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/kwitansi/create/{id}', [App\Http\Controllers\Web\KwitansiController::class, 'create'])->name('kwitansi/create');
     Route::any('/kwitansi/store/', [App\Http\Controllers\Web\KwitansiController::class, 'store'])->name('kwitansi/store');
     Route::get('/kwitansi/pdf/{id}', [App\Http\Controllers\Web\KwitansiController::class, 'kwitansiPDF'])->name('kwitansi/pdf');
+    Route::get('/kwitansi/pdf2/{id}', [App\Http\Controllers\Web\KwitansiController::class, 'kwitansiPDF2'])->name('kwitansi/pdf2');
+    Route::get('/kwitansi/pdf3/{id}', [App\Http\Controllers\Web\KwitansiController::class, 'kwitansiPDF3'])->name('kwitansi/pdf3');
+    Route::get('/kwitansi/{id}', [App\Http\Controllers\Web\KwitansiController::class, 'detail'])->name('kwitansi-detail');
 
     //Transportasi
     Route::post('/transportasi/getData', [App\Http\Controllers\Web\TransportasiController::class, 'getData'])->name('transportasi/getData');

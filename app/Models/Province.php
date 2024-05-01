@@ -49,4 +49,16 @@ class Province extends Model
     {
         return $this->hasMany(DataTujuanPerjalanan::class, 'tempat_tujuan_id', 'id');
     }
+
+    public function hotel() {
+        return $this->hasMany(sbm_hotel::class, 'province_id', 'id');
+    }
+
+    public function tiket() {
+        return $this->hasMany(sbm_tiket::class, 'province_id', 'id');
+    }
+
+    public function translok() {
+        return $this->hasMany(sbm_translok::class, 'province_id', 'id');
+    }
 }

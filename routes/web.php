@@ -290,10 +290,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/kkp', [App\Http\Controllers\Web\KkpController::class, 'index'])->name('kkp');
     Route::post('/kkp/getData', [App\Http\Controllers\Web\KkpController::class, 'getData'])->name('kkp/getData');
     Route::get('/kkp/{id}', [App\Http\Controllers\Web\KkpController::class, 'create'])->name('kkp/create');
-    Route::get('/kkp/pdf/{id}', [App\Http\Controllers\Web\KkpController::class, 'kwitansiPDF'])->name('kkp/pdf');
+    Route::get('/kkp/pdf/{id}', [App\Http\Controllers\Web\KkpController::class, 'kkpPDF'])->name('kkp/pdf');
 
     Route::get('/kkp-detail/{id}', [App\Http\Controllers\Web\KkpController::class, 'detail'])->name('kkp-detail');
-    Route::post('/kkp-detail/getData', [App\Http\Controllers\Web\KkpController::class, 'getData'])->name('kkp-detail/getData');
+    Route::post('/kkp-detail/getData/{id}', [App\Http\Controllers\Web\KkpController::class, 'getData'])->name('kkp-detail/getData');
 
 });
 

@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class sbm_translok extends Model
 {
     use HasFactory;
+    protected $table = 'sbm_translok';
 }

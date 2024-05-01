@@ -49,7 +49,7 @@
                                         <th>Golongan</th>
                                         <th>Jabatan</th>
                                         <th>Tujuan</th>
-                                        {{-- <th>Estimasi Biaya</th> --}}
+                                        <th>Estimasi Biaya</th>
                                         <th>Tanggal</th>
                                         <th>Action</th>
                                     </tr>
@@ -81,7 +81,6 @@
             length: 10
         };
         var isUpdate = false;
-
         var myTable = $('#myTable').DataTable({
             "language": {
                 "paginate": {
@@ -98,7 +97,7 @@
                 [10, 15, 25, 50, 100, 250, 500]
             ],
             "ajax": {
-                "url": "{{ route('kkp-detail/getData') }}",
+                "url": "{{ route('kkp-detail/getData', ['id' => $id_detail]) }}",
                 "type": "POST",
                 "headers": {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
@@ -118,16 +117,11 @@
             },
             "columns": [
                     {
-                        "data": "mak",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        // render: function(data, type, row) {
-                        //     if (data && data.kode_mak) {
-                        //         return "<div class='text-wrap' style='font-size: 12px;'>" + data.kode_mak + "</div>";
-                        //     } else {
-                        //         return "<div class='text-wrap'>-</div>";
-                        //     }
-                        // }
+                        "data": null,
+                        "width": '5%',
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
                     },
                     {
                         // "data": "perihal_perjalanan",
@@ -145,7 +139,31 @@
                         }
                     },
                     {
-                        "data": "tujuan",
+                        "data": "golongan",
+                        "width": '10%',
+                        "defaultContent": "-",
+                        render: function(data, type, row) {
+                            if (data) {
+                                return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                            } else {
+                                return "<div class='text-wrap'>-</div>";
+                            }
+                        }
+                    },
+                    {
+                        "data": "jabatan",
+                        "width": '10%',
+                        "defaultContent": "-",
+                        render: function(data, type, row) {
+                            if (data) {
+                                return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                            } else {
+                                return "<div class='text-wrap'>-</div>";
+                            }
+                        }
+                    },
+                    {
+                        "data": "tujuan_perjalanan",
                         "width": '10%',
                         "defaultContent": "-",
                         render: function(data, type, row) {
@@ -163,74 +181,43 @@
                             //     return "<div class='text-wrap'>-</div>";
                             // }
                         }
-                        },
+                    },
                     {
-                        "data": "tujuan",
+                        "data": "tujuan_perjalanan",
                         "width": '10%',
                         "defaultContent": "-",
                         render: function(data, type, row) {
-                            var tujuan = "";
-                            var angka = 1;
-                            for (var i = 0; i < data.length; i++) {
-                                tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + formatIndonesianDate(data[i].tanggal_berangkat) + "</div>";
-                                angka++;
+                            if (data) {
+                                // Tambahkan Data Lain Disini (data hotel, tiket, transportasi)
+                                return "<div class='text-wrap'>" + 'Rp. ' + rupiah((parseInt(data[0].tempat_tujuan.hotel[0].nominal) + parseInt(data[0].tempat_tujuan.tiket[0].nominal)+ parseInt(data[0].tempat_tujuan.translok[0].nominal))) + "</div>";
+                            } else {
+                                return "<div class='text-wrap'>-</div>";
                             }
-                            return tujuan;
-                            // if (data && data.tanggal_berangkat) {
-                            //     return "<div class='text-wrap'>" + data.tanggal_berangkat + "</div>";
-                            // } else {
-                            //     return "<div class='text-wrap'>-</div>";
-                            // }
                         }
                     },
                     {
-                        "data": "tujuan",
+                        "data": "tujuan_perjalanan",
                         "width": '10%',
                         "defaultContent": "-",
                         render: function(data, type, row) {
-                            var tujuan = "";
-                            var angka = 1;
-                            for (var i = 0; i < data.length; i++) {
-                                tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + formatIndonesianDate(data[i].tanggal_pulang) + "</div>";
-                                angka++;
+                            if (data) {
+                                return "<div class='text-wrap'>" + formatIndonesianDate(data[0].tanggal_berangkat) + " - " + formatIndonesianDate(data[0].tanggal_pulang) + "</div>";
+                            } else {
+                                return "<div class='text-wrap'>-</div>";
                             }
-                            return tujuan;
-                            // if (data && data.tanggal_pulang) {
-                            //     return "<div class='text-wrap'>" + data.tanggal_pulang + "</div>";
-                            // } else {
-                            //     return "<div class='text-wrap'>-</div>";
-                            // }
                         }
                     },
-                    // {
-                    //     "data": "estimasi_biaya",
-                    //     "width": '10%',
-                    //     "defaultContent": "-",
-                    //     render: function(data, type, row) {
-                    //         //get the function formatRupiah on Helpers.php
-                    //         return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data) + "</div>";
-                    //     },
-                    // },
                     {
-                        "data": "status_perjalanan",
-                        "width": '10%',
-                        "defaultContent": "-",
+                        "data": "id",
+                        "width": '15%',
                         render: function(data, type, row) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>Active</div>";
+                            var btnDetail = "";
+                            btnDetail += '<a href="/kkp/pdf/' + data +
+                                        '" name="btnEdit" data-id="' + data +
+                                        '" type="button" class="btn btn-warning btn-sm btnDetailStatus m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-bookmark"></i></a>';
+                            return btnDetail;
                         },
-
                     },
-                {
-                    "data": "id",
-                    "width": '15%',
-                    render: function(data, type, row) {
-                        var btnDetail = "";
-                        btnDetail += '<a href="/kkp-detail/' + data +
-                                    '" name="btnEdit" data-id="' + data +
-                                    '" type="button" class="btn btn-warning btn-sm btnDetailStatus m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-bookmark"></i></a>';
-                        return btnDetail;
-                    },
-                },
             ]
         });
 

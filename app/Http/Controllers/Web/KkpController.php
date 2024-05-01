@@ -17,20 +17,55 @@ class KkpController extends Controller
 
     public function detail($id)
     {
-        return view('pages.master-data.kkp.detail');
+        // $data = DataStaffPerjalanan::select()
+        // ->with(['staff.golongans', 'staff.jabatans', 'staff.instansis', 'perjalanan', 'tujuan_perjalanan.uangHarian'])
+        // ->where('id_perjalanan', $id)
+        // ->where('status', true)->get();
+
+        // return response()->json([
+        //     'message' => 'success',
+        //     'id_perjalanan' => $id,
+        //     'data' => $data
+        // ]);
+        return view('pages.master-data.kkp.detail', ['id_detail' => $id]);
     }
 
-    public function getData(Request $request)
+    public function getData(Request $request, $id)
     {
         $keyword = $request['searchkey'];
 
         $data = DataStaffPerjalanan::select()
-        ->with(['staff.golongans', 'staff.jabatans', 'staff.instansis', 'perjalanan', 'tujuan_perjalanan.uangHarian'])
+        ->with(['staff.golongans', 'staff.jabatans', 'staff.instansis', 'perjalanan', 'tujuan_perjalanan.uangHarian',
+        'tujuan_perjalanan.tempatTujuan.hotel' => function ($query) {
+            $query->where('id_golongan', function ($subquery) {
+                $subquery->select('id_golongan')
+                    ->from('staff');
+            });
+        },
+        'tujuan_perjalanan.tempatTujuan.tiket' => function ($query) {
+            $query->where('id_golongan', function ($subquery) {
+                $subquery->select('id_golongan')
+                    ->from('staff');
+            });
+        }
+        ,
+        'tujuan_perjalanan.tempatTujuan.translok' => function ($query) {
+            $query->where('id_golongan', function ($subquery) {
+                $subquery->select('id_golongan')
+                    ->from('staff');
+            });
+        }])
+        ->where('id_perjalanan', $id)
         ->when($keyword, function ($query, $keyword) {
             return $query->where('name', 'like', '%' . $keyword . '%');
         })
         ->where('status', true);
-
+    //     return response()->json([
+    //         'message' => 'success',
+    //         'request' => $request->all(),
+    //         'data' => $data
+    //     ]);
+    // }
     // $dataCounter = DataStaffPerjalanan::select()
     //     ->when($keyword, function ($query, $keyword) {
     //         return $query->where('name', 'like', '%' . $keyword . '%');
@@ -116,5 +151,46 @@ class KkpController extends Controller
         })
         ->rawColumns(['nama', 'golongan', 'jenis', 'jabatan', 'instansi'])
         ->make(true);
+    }
+
+    public function kkpPDF($id)
+    {
+        $data = DataStaffPerjalanan::with([
+            'staff.golongans',
+            'staff.jabatans',
+            'staff.instansis',
+            'perjalanan',
+            'tujuan_perjalanan.uangHarian',
+            'tujuan_perjalanan.tempatTujuan.hotel' => function ($query) {
+                $query->where('id_golongan', function ($subquery) {
+                    $subquery->select('id_golongan')
+                        ->from('staff');
+                });
+            },
+            'tujuan_perjalanan.tempatTujuan.tiket' => function ($query) {
+                $query->where('id_golongan', function ($subquery) {
+                    $subquery->select('id_golongan')
+                        ->from('staff');
+                });
+            }
+            ,
+            'tujuan_perjalanan.tempatTujuan.translok' => function ($query) {
+                $query->where('id_golongan', function ($subquery) {
+                    $subquery->select('id_golongan')
+                        ->from('staff');
+                });
+            }
+        ])
+        ->where('status', true)
+        ->find($id);
+        $pdf = \PDF::loadView('pages.master-data.kkp.pdf', compact('data'));
+        // return response()->json([
+        //     'hotel' => $data->tujuan_perjalanan[0]->tempatTujuan->hotel[0]->nominal,
+        //     'tiket' => $data->tujuan_perjalanan[0]->tempatTujuan->tiket[0]->nominal,
+        //     'translok' => $data->tujuan_perjalanan[0]->tempatTujuan->translok[0]->nominal,
+        //     'data' => $data
+        // ]);
+        // return view('pages.master-data.kkp.pdf', ['data' => $data]);
+        return $pdf->stream();
     }
 }

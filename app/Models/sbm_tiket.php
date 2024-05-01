@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class sbm_tiket extends Model
 {
     use HasFactory;
+    protected $table = 'sbm_tiket';
 }

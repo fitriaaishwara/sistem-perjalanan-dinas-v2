@@ -42,12 +42,12 @@ class Province extends Model
 
     public function tujuanPerjalanan()
     {
-        return $this->hasMany(DataTujuanPerjalanan::class, 'tempat_berangkat_id', 'id');
+        return $this->hasMany(Tujuan::class, 'tempat_berangkat_id', 'id');
     }
 
     public function tujuanPerjalanan2()
     {
-        return $this->hasMany(DataTujuanPerjalanan::class, 'tempat_tujuan_id', 'id');
+        return $this->hasMany(Tujuan::class, 'tempat_tujuan_id', 'id');
     }
 
     public function hotel() {

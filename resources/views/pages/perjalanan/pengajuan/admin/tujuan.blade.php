@@ -1,8 +1,8 @@
 @extends('pages.layouts.master')
 @section('content')
 @section('title', 'Data Pengajuan')
-    <!-- Modal -->
-    <div id="myModalTujuan" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalTujuanLabel" aria-hidden="true">
+<!-- Modal -->
+<div id="myModalTujuan" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalTujuanLabel" aria-hidden="true">
     <div class="modal-dialog" >
         <div class="modal-content">
             <div class="modal-header border-0" id="myModalTujuanLabel">
@@ -20,6 +20,7 @@
             <div class="modal-body">
                 <form method="POST" action="{{ route('tujuan/store') }}" id="tujuanForm" name="tujuanForm">
                     @csrf
+                    <input type="hidden" name="id" id="id">
                     <input id="id_perjalanan" type="hidden" class="form-control" name="id_perjalanan" value="{{ $perjalanan->id }}">
                     <div class="row mb-4">
                         <label for="tempat_berangkat_id" class="col-sm-3 col-form-label">Tempat Berangkat<span
@@ -40,7 +41,6 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="row mb-4">
                         <label for="tanggal_berangkat" class="col-sm-3 col-form-label">Tanggal Berangkat<span
                                 style="color:red;">*</span></label>
@@ -80,7 +80,7 @@
         </div>
     </div>
 </div>
-<div id="myModalStaff" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalStaffLabel" aria-hidden="true">
+<div id="myModalStaff" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalTujuanLabel" aria-hidden="true">
     <div class="modal-dialog" >
         <div class="modal-content">
             <div class="modal-header border-0">
@@ -102,7 +102,13 @@
                         <label for="id_staff" class="col-sm-3 col-form-label">Staff<span
                                 style="color:red;">*</span></label>
                         <div class="col-sm-9 validate">
-                            <select name="id_staff" class="form-control select2 id_staff" required id="id_staff">
+                            <select name="id_staff" class="form-control select2" required id="id_staff">
+                                <option value="">Pilih Staff</option>
+                                @foreach ($staff as $item)
+                                    @if ($item->status === 1)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endif
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -113,9 +119,11 @@
                         <div class="col-sm-9 validate">
                             <select name="id_tujuan_perjalanan" class="form-control select2" required id="id_tujuan_perjalanan">
                                 <option value="">Pilih Tujuan</option>
-                                    @foreach ($perjalanan->tujuan as $item)
-                                    <option value="{{ $item->id }}">{{ $item->tempatBerangkat->name }} - {{ $item->tempatTujuan->name }}</option>
-                                    @endforeach
+                                @foreach ($perjalanan->tujuan as $item)
+                                    @if ($item->status === 1)
+                                        <option value="{{ $item->id }}">{{ $item->tempatBerangkat->name }} - {{ $item->tempatTujuan->name }}</option>
+                                    @endif
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -152,11 +160,7 @@
 				<li class="nav-item">
 					<a href="#">Form Pengajuan</a>
 				</li>
-                <li class="separator">
-					<i class="flaticon-right-arrow"></i>
-				</li>
-                <a href="{{ route('pengajuan') }}" class="btn btn-primary btn-round ml-auto">Selesai</a>
-            </ul>
+			</ul>
 		</div>
         <div class="row">
             <div class="col-md-12">
@@ -166,9 +170,9 @@
                             <h4 class="card-title">Informasi Tujuan</h4>
                             <a href="javascript:void(0)" class="btn btn-primary btn-round ml-auto"
                                 data-toggle="modal" data-target="#myModalTujuan" id="addNewTujuan" name="addNewTujuan"><i class="fa fa-plus"></i> Tambah</a>
-                                {{--  <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal">
+                                {{-- <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal">
                                 <i class="fa fa-plus"></i>Create
-                                </button>  --}}
+                                </button> --}}
                         </div>
                     </div>
                     <div class="card-body">
@@ -177,8 +181,8 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Tempat Tujuan</th>
                                         <th>Tempat Berangkat</th>
+                                        <th>Tempat Tujuan</th>
                                         <th>Tanggal Berangkat</th>
                                         <th>Tanggal Kembali</th>
                                         <th>Tanggal Tiba</th>
@@ -202,7 +206,7 @@
                         <div class="d-flex align-items-center">
                             <h4 class="card-title">Staff Yang Ditugaskan</h4>
                             <a href="javascript:void(0)" class="btn btn-primary btn-round ml-auto"
-                                data-toggle="modal" data-target="#myModalStaff" id="addNewStaff" name="addNewStaff"><i class="fa fa-plus"></i> Tambah</a>
+                                data-toggle="modal" data-target="#myModalStaff" id="addNewStaff" name="addNewTujuan"><i class="fa fa-plus"></i> Tambah</a>
                                 {{-- <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal">
                                 <i class="fa fa-plus"></i>Create
                                 </button> --}}
@@ -245,7 +249,7 @@
             length: 10
         };
         var isUpdate = false;
-        var tujuanTable = $('#tujuanTable').DataTable({
+        var jabatanTable = $('#tujuanTable').DataTable({
             "language": {
                 "paginate": {
                     "next": '<i class="fas fa-arrow-right"></i>',
@@ -287,7 +291,7 @@
                     }
                 },
                 {
-                    "data": "tempat_tujuan",
+                    "data": "tempat_berangkat",
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
@@ -299,7 +303,7 @@
                     },
                 },
                 {
-                    "data": "tempat_berangkat",
+                    "data": "tempat_tujuan",
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
@@ -315,7 +319,7 @@
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data + "</div>";
+                        return "<div class='text-wrap'>" + formatIndonesianDate(data) + "</div>";
 
                     },
                 },
@@ -324,7 +328,7 @@
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data + "</div>";
+                        return "<div class='text-wrap'>" + formatIndonesianDate(data) + "</div>";
                     },
                 },
                 {
@@ -332,7 +336,7 @@
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data + "</div>";
+                        return "<div class='text-wrap'>" + formatIndonesianDate(data) + "</div>";
                     },
                 },
                 {
@@ -348,17 +352,17 @@
                     "width": '10%',
                     render: function(data, type, row) {
                         var btnTujuanEdit = "";
-                        var btnTujuanDelete = "";
+                        // var btnTujuanDelete = "";
                         btnTujuanEdit += '<button name="btnTujuanEdit" data-id="' + data +
                             '" type="button" class="btn btn-warning btn-sm btnTujuanEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
-                        btnTujuanDelete += '<button name="btnTujuanDelete" data-id="' + data +
-                            '" type="button" class="btn btn-danger btn-sm btnTujuanDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
-                        return btnTujuanEdit + btnTujuanDelete;
+                        // btnTujuanDelete += '<button name="btnTujuanDelete" data-id="' + data +
+                        //     '" type="button" class="btn btn-danger btn-sm btnTujuanDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
+                        return btnTujuanEdit;
                     },
                 },
             ]
         });
-        function reloadTable() {
+        function reloadTable(){
             tujuanTable.ajax.reload(null, false); // Reload datatable ajax
             window.location.reload(); // Reload the page
         }
@@ -449,7 +453,6 @@
             },
         });
 
-
         $('#saveBtnTujuan').click(function(e) {
             e.preventDefault();
             var isValid = $("#tujuanForm").valid();
@@ -478,7 +481,10 @@
                         $('#saveBtnTujuan').text('Save');
                         $('#saveBtnTujuan').attr('disabled', false);
                         reloadTable();
+                        $('#myModal').modal('hide');
+                        //if success close modal and reload ajax table
                         $('#myModalTujuan').modal('hide');
+                        window.location.reload(); // Reload the page
                     },
                     error: function(data) {
                         Swal.fire(
@@ -503,6 +509,8 @@
                 type: 'GET',
                 url: url,
                 success: function(response) {
+                    $('#tempat_berangkat').val(response.data.tempat_berangkat);
+                    $('#tempat_tujuan').val(response.data.tempat_tujuan);
                     $('#tanggal_berangkat').val(response.data.tanggal_berangkat);
                     $('#tanggal_pulang').val(response.data.tanggal_pulang);
                     $('#tanggal_tiba').val(response.data.tanggal_tiba);
@@ -518,7 +526,6 @@
                         var pulang = new Option(response.data.tempat_tujuan.name, response.data.tempat_tujuan.id, true, true);
                         $('.tempat_tujuan_id').append(pulang).trigger('change');
                     }
-
                 },
                 error: function() {
                     Swal.fire(
@@ -558,6 +565,10 @@
                                 (data.status) ? 'success' : 'error'
                             )
                             reloadTable();
+                            //if success close modal and reload ajax table
+                            $('#myModalTujuan').modal('hide');
+                            window.location.reload(); // Reload the page
+
                         },
                         error: function(response) {
                             Swal.fire(
@@ -574,6 +585,31 @@
         $('#tujuanForm').validate({
             rules: {
                 name: {
+                    required: true,
+                },
+            },
+            errorElement: 'em',
+            errorPlacement: function(error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.validate').append(error);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+
+        $('#staffForm').validate({
+            rules: {
+                name: {
+                    required: true,
+                },
+                tempat_berangkat_id: {
+                    required: true,
+                },
+                tempat_tujuan_id: {
                     required: true,
                 },
             },
@@ -621,10 +657,10 @@
 				var date1 = new Date(tanggal_berangkat);
 				var date2 = new Date(tanggal_kembali);
 				var Difference_In_Time = date2.getTime() - date1.getTime();
-				var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+				var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24) + 1;
 				$('#lama_perjalanan').val(Difference_In_Days);
 			} else {
-				$('#lama_perjalanan').val('0 Hari');
+				$('#lama_perjalanan').val('0');
 			}
         });
 
@@ -670,14 +706,7 @@
                 cache: false
             },
         });
-    });
 
-    $(function () {
-        let request = {
-            start: 0,
-            length: 10
-        };
-        var isUpdate = false;
         var staffTable = $('#staffTable').DataTable({
             "language": {
                 "paginate": {
@@ -720,34 +749,28 @@
                     }
                 },
                 {
-                    "data": "staff",
+                    "data": "staff.name",
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        if (data && data.name) {
-                            return "<div class='text-wrap'>" + data.name + "</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
-                        }
+                        return "<div class='text-wrap'>" + data + "</div>";
                     },
                 },
                 {
-                    "data": "staff",
+                    "data": "staff.jenis",
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        if(data && data.jenis == 0){
+                        if(data == 0){
                             return "<div class='text-wrap'>PNS</div>";
-                        } else if(data && data.jenis == 1){
-                            return "<div class='text-wrap'>Non - PNS (PPPK)</div>";
-                        } else if(data && data.jenis == 2){
+                        }else if(data == 1){
+                            return "<div class='text-wrap'>Non PNS (PPPK)</div>";
+                        }else if(data == 2){
                             return "<div class='text-wrap'>Honorer</div>";
-                        } else if(data && data.jenis == 3){
-                            return "<div class='text-wrap'>(Lainnya)</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
+                        }else{
+                            return "<div class='text-wrap'>Lainnya</div>";
                         }
-                    }
+                    },
                 },
                 {
                     "data": "staff.jabatans.name",
@@ -755,7 +778,6 @@
                     "defaultContent": "-",
                     render: function(data, type, row) {
                         return "<div class='text-wrap'>" + data + "</div>";
-
                     },
                 },
                 {
@@ -786,13 +808,13 @@
                     "data": "id",
                     "width": '10%',
                     render: function(data, type, row) {
-                        var btnStaffEdit = "";
-                        var btnStaffDelete = "";
-                        // btnStaffEdit += '<button name="btnStaffEdit" data-id="' + data +
-                        //     '" type="button" class="btn btn-warning btn-sm btnStaffEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
-                        btnStaffDelete += '<button name="btnStaffDelete" data-id="' + data +
-                            '" type="button" class="btn btn-danger btn-sm btnStaffDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
-                        return btnStaffEdit + btnStaffDelete;
+                        var btnTujuanEdit = "";
+                        var btnTujuanDelete = "";
+                        btnTujuanEdit += '<button name="btnTujuanEdit" data-id="' + data +
+                            '" type="button" class="btn btn-warning btn-sm btnTujuanEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
+                        // btnTujuanDelete += '<button name="btnTujuanDelete" data-id="' + data +
+                        //     '" type="button" class="btn btn-danger btn-sm btnTujuanDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
+                        return btnTujuanEdit + btnTujuanDelete;
                     },
                 },
             ]
@@ -802,269 +824,10 @@
             staffTable.ajax.reload(null, false); // Reload datatable ajax
         }
 
-        $("#id_staff").select2({
-            theme: 'bootstrap',
-            width: '100%',
-            dropdownParent: $('#myModalStaff'),
-            placeholder: "Pilih Staff",
-            ajax: {
-                url: "{{ route('staff/getData') }}",
-                dataType: 'json',
-                headers: {
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                method: 'POST',
-                delay: 250,
-                destroy: true,
-                data: function(params) {
-                    var query = {
-                        searchkey: params.term || '',
-                        start: 0,
-                        length: 50
-                    }
-                    return JSON.stringify(query);
-                },
-                processResults: function(data) {
-                    var result = {
-                        results: [],
-                        more: false
-                    };
-                    if (data && data.data) {
-                        $.each(data.data, function() {
-                            result.results.push({
-                                id: this.id,
-                                text: this.name
-                            });
-                        })
-                    }
-                    return result;
-                },
-                cache: false
-            },
-        });
 
-        $('#saveBtnStaff').click(function(e) {
-            e.preventDefault();
-            var isValid = $("#tujuanForm").valid();
-            if (isValid) {
-                $('#saveBtnStaff').text('Save...');
-                $('#saveBtnStaff').attr('disabled', true);
-                if (!isUpdate) {
-                    var url = "{{ route('staff/store') }}";
-                } else {
-                    var url = "{{ route('staff/update') }}";
-                }
-                var formData = new FormData($('#staffForm')[0]);
-                $.ajax({
-                    url: url,
-                    type: "POST",
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    dataType: "JSON",
-                    success: function(data) {
-                        Swal.fire(
-                            (data.status) ? 'Success' : 'Error',
-                            data.message,
-                            (data.status) ? 'success' : 'error'
-                        )
-                        $('#saveBtnStaff').text('Save');
-                        $('#saveBtnStaff').attr('disabled', false);
-                        reloadTable();
-                        $('#myModalStaff').modal('hide');
-                    },
-                    error: function(data) {
-                        Swal.fire(
-                            'Error',
-                            'A system error has occurred. please try again later.',
-                            'error'
-                        )
-                        $('#saveBtnStaff').text('Save');
-                        $('#saveBtnStaff').attr('disabled', false);
-                    }
-                });
-            }
-        });
 
-        $('#staffTable').on("click", ".btnStaffEdit", function() {
-            $('#myModalStaff').modal('show');
-            isUpdate = true;
-            var id = $(this).attr('data-id');
-            var url = "{{ route('tujuan/showStaff', ['id' => ':id']) }}";
-            url = url.replace(':id', id);
-            $.ajax({
-                type: 'GET',
-                url: url,
-                success: function(response) {
-                    $('#id').val(response.data.id);
 
-                    if (response.data.staff) {
-                        var staff_data = new Option(response.data.staff.name, response.data.staff.id, true, true);
-                        $('.id_staff').append(staff_data).trigger('change');
-                    }
-
-                    if (response.data.tempat_berangkat) {
-                        var berangkat = new Option(response.data.tempat_berangkat.name, response.data.tempat_berangkat.id, true, true);
-                        $('.tempat_berangkat_id').append(berangkat).trigger('change');
-                    }
-
-                },
-                error: function() {
-                    Swal.fire(
-                        'Error',
-                        'A system error has occurred. please try again later.',
-                        'error'
-                    )
-                },
-            });
-        });
-        $('#staffTable').on("click", ".btnStaffDelete", function() {
-            var id = $(this).attr('data-id');
-            Swal.fire({
-                title: 'Confirmation',
-                text: "Kamu akan menghapus Staff. Apakah kamu ingin melanjutkan?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: "Yes, I'm sure",
-                cancelButtonText: 'No'
-            }).then(function(result) {
-                if (result.value) {
-                    var url = "{{ route('staff/delete', ['id' => ':id']) }}";
-                    url = url.replace(':id', id);
-                    $.ajax({
-                        headers: {
-                            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                                'content'),
-                        },
-                        url: url,
-                        type: "POST",
-                        success: function(data) {
-                            Swal.fire(
-                                (data.status) ? 'Success' : 'Error',
-                                data.message,
-                                (data.status) ? 'success' : 'error'
-                            )
-                            reloadTable();
-                        },
-                        error: function(response) {
-                            Swal.fire(
-                                'Error',
-                                'A system error has occurred. please try again later.',
-                                'error'
-                            )
-                        }
-                    });
-                }
-            })
-        });
-
-        $('#staffForm').validate({
-            rules: {
-                name: {
-                    required: true,
-                },
-                id_staff: {
-                    required: true,
-                },
-            },
-            errorElement: 'em',
-            errorPlacement: function(error, element) {
-                error.addClass('invalid-feedback');
-                element.closest('.validate').append(error);
-            },
-            highlight: function(element, errorClass, validClass) {
-                $(element).addClass('is-invalid');
-            },
-            unhighlight: function(element, errorClass, validClass) {
-                $(element).removeClass('is-invalid');
-            }
-        });
-
-        $('#addNewStaff').on('click', function() {
-            $('#name').val("");
-            $('#id_staff').val("").trigger('change');
-            isUpdate = false;
-        });
-
-        $('#tanggal_berangkat').flatpickr({
-            dateFormat: "Y-m-d",
-            //disable past date
-            minDate: "today",
-        });
-
-        $('#tanggal_pulang').flatpickr({
-            dateFormat: "Y-m-d",
-            minDate: "today",
-        });
-
-        $('#tanggal_tiba').flatpickr({
-            dateFormat: "Y-m-d",
-            minDate: "today",
-        });
-
-        //make tangga_berangkat and tanggal_kembali to be total days without save data hasilnya berupa misal 2 hari
-        $('#tanggal_berangkat , #tanggal_pulang').change(function(){
-            var tanggal_berangkat = $('#tanggal_berangkat').val();
-            var tanggal_kembali = $('#tanggal_pulang').val();
-			if(tanggal_berangkat != '' && tanggal_kembali != '') {
-				var date1 = new Date(tanggal_berangkat);
-				var date2 = new Date(tanggal_kembali);
-				var Difference_In_Time = date2.getTime() - date1.getTime();
-				var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24) + 1 ;
-				$('#lama_perjalanan').val(Difference_In_Days);
-			} else {
-				$('#lama_perjalanan').val('0 hari');
-			}
-        });
-
-        $("#id_mak").select2({
-            theme: 'bootstrap',
-            width: '100%',
-            dropdownParent: $('#myForm'),
-            placeholder: "Pilih Kode Akun / Mata Anggaran Kegiatan",
-            ajax: {
-                url: "{{ route('mak/getData') }}",
-                dataType: 'json',
-                headers: {
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                method: 'POST',
-                delay: 250,
-                destroy: true,
-                data: function(params) {
-                    var query = {
-                        searchkey: params.term || '',
-                        start: 0,
-                        length: 50
-                    }
-                    return JSON.stringify(query);
-                },
-                processResults: function(data) {
-                    var result = {
-                        results: [],
-                        more: false
-                    };
-                    if (data && data.data) {
-                        $.each(data.data, function() {
-                            result.results.push({
-                                id: this.id,
-                                text: this.kode_mak
-                            });
-                        })
-                    }
-                    return result;
-                },
-                cache: false
-            },
-        });
     });
-
 
 </script>
 

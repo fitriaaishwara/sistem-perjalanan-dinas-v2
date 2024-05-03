@@ -18,25 +18,22 @@ class StaffController extends Controller
 
     public function getData(Request $request)
     {
-        $keyword = $request['searchkey'];
+        $keyword = $request->input('searchkey');
 
-        $data = Staff::select()
-            ->with(['golongans', 'jabatans', 'instansis'])
-            ->offset($request['start'])
-            ->limit(($request['length'] == -1) ? Staff::where('status', true)->count() : $request['length'])
+        $data = Staff::with(['golongans', 'jabatans', 'instansis'])
+            ->where('status', true)
             ->when($keyword, function ($query, $keyword) {
-                //name nip golongan jabatan instansi
                 return $query->where('name', 'like', '%' . $keyword . '%')
                     ->orWhere('nip', 'like', '%' . $keyword . '%')
                     ->orWhereHas('golongans', function ($query) use ($keyword) {
                         return $query->where('name', 'like', '%' . $keyword . '%');
                     });
             })
-            ->where('status', true)
+            ->offset($request->input('start'))
+            ->limit(($request->input('length') == -1) ? Staff::where('status', true)->count() : $request->input('length'))
             ->get();
 
-        $dataCounter = Staff::select()
-            ->when($keyword, function ($query, $keyword) {
+        $dataCounter = Staff::when($keyword, function ($query, $keyword) {
                 return $query->where('name', 'like', '%' . $keyword . '%')
                     ->orWhere('nip', 'like', '%' . $keyword . '%')
                     ->orWhereHas('golongans', function ($query) use ($keyword) {
@@ -45,13 +42,15 @@ class StaffController extends Controller
             })
             ->where('status', true)
             ->count();
+
         $response = [
             'status'          => true,
-            'draw'            => $request['draw'],
+            'draw'            => $request->input('draw'),
             'recordsTotal'    => Staff::where('status', true)->count(),
             'recordsFiltered' => $dataCounter,
             'data'            => $data,
         ];
+
         return $response;
     }
     public function store(Request $request)

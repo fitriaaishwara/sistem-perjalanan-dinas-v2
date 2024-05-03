@@ -28,5 +28,9 @@ class NotaDinas extends Model
         return $this->belongsTo(DataStaffPerjalanan::class, 'id_perjalanan', 'id');
     }
 
+    function tembusan() {
+        return $this->hasMany(nd_tembusan::class, 'id_nota_dinas', 'id');
+    }
+
 
 }

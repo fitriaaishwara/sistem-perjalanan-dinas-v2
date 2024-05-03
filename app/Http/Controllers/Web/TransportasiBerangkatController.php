@@ -21,7 +21,7 @@ class TransportasiBerangkatController extends Controller
         try {
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Data failed to update'];
             $file_path = $request->file('file_path');
-            $fileName = time() . '_' . Str::random(10) . '.' . $file_path->getClientOriginalExtension();
+            $fileName = $request->input('deskripsi_file') . '_' . date('d-m-Y') . '_' . time() . '_' . Str::random(10) . '.' . $file_path->getClientOriginalExtension();
             $path     = 'transportasi_berangkat/' . $request->input('id_staff_perjalanan');
 
             $validator = Validator::make($request->all(), [

@@ -47,8 +47,7 @@ class UangHarianController extends Controller
         try {
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Uang Harian failed to create'];
             $create = UangHarian::create([
-                'name'        => ucwords($request['name']),
-                'description' => $request['description']
+                'nominal' => $request['nominal'],
             ]);
             if ($create) {
                 $data = ['status' => true, 'code' => 'SC001', 'message' => 'Uang Harian successfully created'];
@@ -78,8 +77,7 @@ class UangHarianController extends Controller
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Uang Harian failed to update'];
 
             $update = UangHarian::where('id', $request['id'])->update([
-                'name'        => ucwords($request['name']),
-                'description' => $request['description']
+                'nominal' => $request['nominal'],
             ]);
             if ($update) {
                 $data = ['status' => true, 'code' => 'SC001', 'message' => 'Uang Harian successfully updated'];

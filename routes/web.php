@@ -114,19 +114,19 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/uang_harian/{id}', [App\Http\Controllers\Web\UangHarianController::class, 'show'])->name('uang_harian/show');
     Route::post('/uang_harian/delete/{id}', [App\Http\Controllers\Web\UangHarianController::class, 'destroy'])->name('uang_harian/delete');
 
-    Route::get('/sbm-translok', [App\Http\Controllers\Web\UangHarianController::class, 'index'])->name('sbm-translok');
-    Route::post('/sbm-translok/getData', [App\Http\Controllers\Web\UangHarianController::class, 'getData'])->name('sbm-translok/getData');
-    Route::post('/sbm-translok/store', [App\Http\Controllers\Web\UangHarianController::class, 'store'])->name('sbm-translok/store');
-    Route::post('/sbm-translok/update', [App\Http\Controllers\Web\UangHarianController::class, 'update'])->name('sbm-translok/update');
-    Route::get('/sbm-translok/{id}', [App\Http\Controllers\Web\UangHarianController::class, 'show'])->name('sbm-translok/show');
-    Route::post('/sbm-translok/delete/{id}', [App\Http\Controllers\Web\UangHarianController::class, 'destroy'])->name('sbm-translok/delete');
+    Route::get('/sbm-translok', [App\Http\Controllers\Web\TranslokController::class, 'index'])->name('sbm-translok');
+    Route::post('/sbm-translok/getData', [App\Http\Controllers\Web\TranslokController::class, 'getData'])->name('sbm-translok/getData');
+    Route::post('/sbm-translok/store', [App\Http\Controllers\Web\TranslokController::class, 'store'])->name('sbm-translok/store');
+    Route::post('/sbm-translok/update', [App\Http\Controllers\Web\TranslokController::class, 'update'])->name('sbm-translok/update');
+    Route::get('/sbm-translok/{id}', [App\Http\Controllers\Web\TranslokController::class, 'show'])->name('sbm-translok/show');
+    Route::post('/sbm-translok/delete/{id}', [App\Http\Controllers\Web\TranslokController::class, 'destroy'])->name('sbm-translok/delete');
 
-    Route::get('/sbm-tiket', [App\Http\Controllers\Web\UangHarianController::class, 'index'])->name('sbm-tiket');
-    Route::post('/sbm-tiket/getData', [App\Http\Controllers\Web\UangHarianController::class, 'getData'])->name('sbm-tiket/getData');
-    Route::post('/sbm-tiket/store', [App\Http\Controllers\Web\UangHarianController::class, 'store'])->name('sbm-tiket/store');
-    Route::post('/sbm-tiket/update', [App\Http\Controllers\Web\UangHarianController::class, 'update'])->name('sbm-tiket/update');
-    Route::get('/sbm-tiket/{id}', [App\Http\Controllers\Web\UangHarianController::class, 'show'])->name('sbm-tiket/show');
-    Route::post('/sbm-tiket/delete/{id}', [App\Http\Controllers\Web\UangHarianController::class, 'destroy'])->name('tsbm-iket/delete');
+    Route::get('/sbm-tiket', [App\Http\Controllers\Web\TiketController::class, 'index'])->name('sbm-tiket');
+    Route::post('/sbm-tiket/getData', [App\Http\Controllers\Web\TiketController::class, 'getData'])->name('sbm-tiket/getData');
+    Route::post('/sbm-tiket/store', [App\Http\Controllers\Web\TiketController::class, 'store'])->name('sbm-tiket/store');
+    Route::post('/sbm-tiket/update', [App\Http\Controllers\Web\TiketController::class, 'update'])->name('sbm-tiket/update');
+    Route::get('/sbm-tiket/{id}', [App\Http\Controllers\Web\TiketController::class, 'show'])->name('sbm-tiket/show');
+    Route::post('/sbm-tiket/delete/{id}', [App\Http\Controllers\Web\TiketController::class, 'destroy'])->name('sbm-tiket/delete');
 
     Route::get('/sbm-hotel', [App\Http\Controllers\Web\HotelController::class, 'index'])->name('sbm-hotel');
     Route::post('/sbm-hotel/getData', [App\Http\Controllers\Web\HotelController::class, 'getData'])->name('sbm-hotel/getData');
@@ -312,14 +312,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('webcam', [App\Http\Controllers\Web\GeoTaggingController::class, 'store'])->name('webcam.capture');
     Route::get('/geo-tagging/view/{id}', [App\Http\Controllers\Web\GeoTaggingController::class, 'show'])->name('geo-tagging/show');
 
-    //kkp
-    Route::get('/kkp', [App\Http\Controllers\Web\KkpController::class, 'index'])->name('kkp');
-    Route::post('/kkp/getData', [App\Http\Controllers\Web\KkpController::class, 'getData'])->name('kkp/getData');
-    Route::get('/kkp/{id}', [App\Http\Controllers\Web\KkpController::class, 'create'])->name('kkp/create');
-    Route::get('/kkp/pdf/{id}', [App\Http\Controllers\Web\KkpController::class, 'kkpPDF'])->name('kkp/pdf');
+     //kkp
+     Route::get('/kkp', [App\Http\Controllers\Web\KkpController::class, 'index'])->name('kkp');
+     Route::post('/kkp/getData', [App\Http\Controllers\Web\KkpController::class, 'getData'])->name('kkp/getData');
+     Route::get('/kkp/{id}', [App\Http\Controllers\Web\KkpController::class, 'create'])->name('kkp/create');
+     Route::get('/kkp/pdf/{id}', [App\Http\Controllers\Web\KkpController::class, 'kkpPDF'])->name('kkp/pdf');
 
-    Route::get('/kkp-detail/{id}', [App\Http\Controllers\Web\KkpController::class, 'detail'])->name('kkp-detail');
-    Route::post('/kkp-detail/getData/{id}', [App\Http\Controllers\Web\KkpController::class, 'getData'])->name('kkp-detail/getData');
+     Route::get('/kkp-detail/{id}', [App\Http\Controllers\Web\KkpController::class, 'detail'])->name('kkp-detail');
+     Route::post('/kkp-detail/getData/{id}', [App\Http\Controllers\Web\KkpController::class, 'getData'])->name('kkp-detail/getData');
 
 });
 

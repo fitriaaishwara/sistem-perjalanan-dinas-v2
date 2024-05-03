@@ -31,6 +31,26 @@ class GolonganTableSeeder extends Seeder
                 'id' => 4,
                 'name' => 'IV',
             ],
+            4 => [
+                'id' => 5,
+                'name' => 'Eselon I',
+            ],
+            5 => [
+                'id' => 6,
+                'name' => 'Eselon II',
+            ],
+            6 => [
+                'id' => 7,
+                'name' => 'Eselon III',
+            ],
+            7 => [
+                'id' => 8,
+                'name' => 'Eselon IV',
+            ],
+            8 => [
+                'id' => 9,
+                'name' => 'Eselon V',
+            ],
         ];
 
         Golongan::insert($data);

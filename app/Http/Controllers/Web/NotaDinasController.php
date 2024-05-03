@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataStaffPerjalanan;
+use App\Models\nd_tembusan;
 use App\Models\NotaDinas;
 use App\Models\Perjalanan;
 use App\Models\Staff;
@@ -65,7 +66,7 @@ class NotaDinasController extends Controller
     {
         $perjalanan = Perjalanan::with(['nota_dinas', 'tujuan', 'mak', 'tujuan.staff', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'tujuan.uploadLaporan', 'tujuan.uploadGallery'])->find($id);
         $dataStaff = DataStaffPerjalanan::with(['perjalanan', 'staff', 'tujuan_perjalanan.tempatBerangkat', 'tujuan_perjalanan.tempatTujuan'])->where('id_perjalanan', $id)->get();
-        $data = NotaDinas::where('id_perjalanan', $id)->first();
+        $data = NotaDinas::with(['perjalanan', 'staff', 'tembusan'])->where('id_perjalanan', $id)->first();
         $staff = Staff::where('status', true)->get();
         //pdf
         if ($data) {
@@ -142,6 +143,14 @@ class NotaDinasController extends Controller
 
         // Save the NotaDinas instance
         $notaDinas->save();
+
+        // Check if keterangan is provided and save to nd_tembusan
+        if ($request->has('keterangan')) {
+            $ndTembusan = new nd_tembusan();
+            $ndTembusan->keterangan = $request->keterangan;
+            $ndTembusan->id_nota_dinas = $notaDinas->id; // Set the id_nota_dinas
+            $ndTembusan->save();
+        }
 
         // Redirect back with success message
         return redirect()->back()->with('success', 'Nota Dinas saved successfully');

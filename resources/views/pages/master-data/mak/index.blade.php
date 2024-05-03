@@ -45,6 +45,7 @@
                                             style="color:red;">*</span></label>
                                     <div class="col-sm-9 validate">
                                         <input id="saldo_pagu" type="text" class="form-control" name="saldo_pagu">
+                                        <small id="formatted_saldo_pagu" class="form-text text-muted"></small>
                                     </div>
                                 </div>
                             </form>
@@ -122,6 +123,60 @@
 			</div>
 @endsection
 @push('js')
+<script>
+    document.getElementById('saldo_pagu').addEventListener('input', function (e) {
+        let saldoPagu = e.target.value;
+
+        // Remove non-numeric characters
+        saldoPagu = saldoPagu.replace(/\D/g, '');
+
+        // Limit the length of nominal
+        if (saldoPagu.length > 9) {
+            saldoPagu = saldoPagu.substring(0, 9);
+        }
+
+        // Format the nominal
+        const formattedSaldoPagu = formatCurrency(saldoPagu);
+
+        // Set the formatted nominal below the form
+        document.getElementById('formatted_saldo_pagu').textContent = formattedSaldoPagu;
+
+        // Set the value in the input field
+        e.target.value = saldoPagu;
+
+        // Update the validation message
+        updateValidationMessage(saldoPagu);
+    });
+
+    function formatCurrency(amount) {
+        if (!amount) return '';
+
+        // Convert to currency format Rp 300.000
+        return 'Rp ' + Number(amount).toLocaleString('id-ID');
+    }
+
+    // Validate only numbers
+    document.getElementById('saldoPagu').addEventListener('keypress', function (e) {
+        const keyCode = e.keyCode;
+        if (keyCode < 48 || keyCode > 57) {
+            e.preventDefault();
+        }
+    });
+
+    // Update the validation message
+    function updateValidationMessage(saldoPagu) {
+        const notification = document.getElementById('notification');
+        if (saldoPagu !== '') {
+            if (!/^\d+$/.test(saldoPagu)) {
+                notification.textContent = 'Nominal harus berupa angka';
+            } else {
+                notification.textContent = '';
+            }
+        } else {
+            notification.textContent = '';
+        }
+    }
+</script>
     <script type="text/javascript">
         function rupiah($angka){
             var reverse = $angka.toString().split('').reverse().join(''),
@@ -355,10 +410,13 @@
                     },
                     saldo_pagu: {
                         required: true,
+                        number: true // Menambahkan aturan untuk hanya menerima angka
                     },
+                },
+                messages: {
                     saldo_pagu: {
-                        required: true,
-                    },
+                        number: "Nominal harus berupa angka"
+                    }
                 },
                 errorElement: 'em',
                 errorPlacement: function(error, element) {

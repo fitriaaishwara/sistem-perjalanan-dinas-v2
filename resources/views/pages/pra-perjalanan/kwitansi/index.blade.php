@@ -56,8 +56,9 @@
                                         <th>Perihal Perjalanan</th>
                                         <th>Tujuan</th>
                                         <th>Tanggal</th>
-                                        <th>Total Diterima</th>
+                                        {{-- <th>Total </th> --}}
                                         <th>Total Uang Harian</th>
+                                        {{-- <th>Total Diterima</th> --}}
                                         <th>Tahun Anggaran</th>
                                         <th>Kode MAK</th>
                                         <th>Status</th>
@@ -193,19 +194,19 @@
                         }
                     }
                 },
-                {
-                    "data": "total_biaya",
-                    "width": '15%',
-                    "defaultContent": "-",
-                     //render date format
-                    render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data) + "</div>";
-                        } else {
-                            return "<div class='text-wrap badge badge-danger' style='font-size: 12px;'>Belum Upload Invoce</div>";
-                        }
-                    }
-                },
+                // {
+                //     "data": "total_biaya",
+                //     "width": '15%',
+                //     "defaultContent": "-",
+                //      //render date format
+                //     render: function(data, type, row) {
+                //         if (data) {
+                //             return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data) + "</div>";
+                //         } else {
+                //             return "<div class='text-wrap badge badge-danger' style='font-size: 12px;'>Belum Upload Invoce</div>";
+                //         }
+                //     }
+                // },
                 {
 
                     "data": "tujuan_perjalanan",

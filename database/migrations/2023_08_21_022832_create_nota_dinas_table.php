@@ -24,6 +24,7 @@ class CreateNotaDinasTable extends Migration
             $table->date('tanggal_nota_dinas');
             $table->text('isi_nota_dinas');
             $table->string('status_nota_dinas')->nullable();
+            $table->string('lampiran')->nullable();
             $table->boolean('status')->default (1);
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

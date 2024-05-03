@@ -1,6 +1,6 @@
 @extends('pages.layouts.master')
 @section('content')
-@section('title', 'Data Uang Harian')
+@section('title', 'Data SBM Hotel')
 
 <style>
     .container {
@@ -34,17 +34,12 @@
                             <form method="POST" action="{{ route('sbm-hotel/store') }}" id="hotelForm" name="hotelForm">
                                 @csrf
                                 <input id="id" type="hidden" class="form-control" name="id">
-                                {{-- <div class="row mb-4">
-                                    <label for="province_id" class="col-sm-3 col-form-label">Provinsi<span
-                                            style="color:red;">*</span></label>
-                                    <div class="col-sm-9 validate">
-                                        <input id="province_id" type="text" class="form-control" name="province_id">
-                                    </div>
-                                </div> --}}
                                 <div class="row mb-4">
                                     <label for="nominal" class="col-sm-3 col-form-label">Nominal</label>
                                     <div class="col-sm-9 validate">
-                                        <textarea class="form-control" rows="3" id="nominal" name="nominal"></textarea>
+                                        <input class="form-control" id="nominal" name="nominal">
+                                        <small id="formatted_nominal"></small>
+                                        <div id="notification" style="color: red;"></div>
                                     </div>
                                 </div>
                             </form>
@@ -62,7 +57,7 @@
 			<div class="container">
 				<div class="page-inner">
 					<div class="page-header">
-						<h4 class="page-title">Uang Harian</h4>
+						<h4 class="page-title">SBM Hotel</h4>
 						<ul class="breadcrumbs">
 							<li class="nav-home">
 								<a href="#">
@@ -79,7 +74,7 @@
 								<i class="flaticon-right-arrow"></i>
 							</li>
 							<li class="nav-item">
-								<a href="#">Uang Harian</a>
+								<a href="#">sbm Hotel</a>
 							</li>
 						</ul>
 					</div>
@@ -121,6 +116,60 @@
 			</div>
 @endsection
 @push('js')
+    <script>
+        document.getElementById('nominal').addEventListener('input', function (e) {
+            let nominal = e.target.value;
+
+            // Remove non-numeric characters
+            nominal = nominal.replace(/\D/g, '');
+
+            // Limit the length of nominal
+            if (nominal.length > 9) {
+                nominal = nominal.substring(0, 9);
+            }
+
+            // Format the nominal
+            const formattedNominal = formatCurrency(nominal);
+
+            // Set the formatted nominal below the form
+            document.getElementById('formatted_nominal').textContent = formattedNominal;
+
+            // Set the value in the input field
+            e.target.value = nominal;
+
+            // Update the validation message
+            updateValidationMessage(nominal);
+        });
+
+        function formatCurrency(amount) {
+            if (!amount) return '';
+
+            // Convert to currency format Rp 300.000
+            return 'Rp ' + Number(amount).toLocaleString('id-ID');
+        }
+
+        // Validate only numbers
+        document.getElementById('nominal').addEventListener('keypress', function (e) {
+            const keyCode = e.keyCode;
+            if (keyCode < 48 || keyCode > 57) {
+                e.preventDefault();
+            }
+        });
+
+        // Update the validation message
+        function updateValidationMessage(nominal) {
+            const notification = document.getElementById('notification');
+            if (nominal !== '') {
+                if (!/^\d+$/.test(nominal)) {
+                    notification.textContent = 'Nominal harus berupa angka';
+                } else {
+                    notification.textContent = '';
+                }
+            } else {
+                notification.textContent = '';
+            }
+        }
+    </script>
     <script type="text/javascript">
         $(function() {
             let request = {
@@ -349,7 +398,7 @@
             });
 
             $('#addNew').on('click', function() {
-                $('#name').val("");
+                $('#nominal').val("");
                 isUpdate = false;
             });
         });

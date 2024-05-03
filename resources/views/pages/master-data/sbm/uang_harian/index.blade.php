@@ -34,17 +34,12 @@
                             <form method="POST" action="{{ route('uang_harian/store') }}" id="uang_harianForm" name="uang_harianForm">
                                 @csrf
                                 <input id="id" type="hidden" class="form-control" name="id">
-                                {{-- <div class="row mb-4">
-                                    <label for="province_id" class="col-sm-3 col-form-label">Provinsi<span
-                                            style="color:red;">*</span></label>
-                                    <div class="col-sm-9 validate">
-                                        <input id="province_id" type="text" class="form-control" name="province_id">
-                                    </div>
-                                </div> --}}
                                 <div class="row mb-4">
                                     <label for="nominal" class="col-sm-3 col-form-label">Nominal</label>
                                     <div class="col-sm-9 validate">
-                                        <textarea class="form-control" rows="3" id="nominal" name="nominal"></textarea>
+                                        <input class="form-control" id="nominal" name="nominal">
+                                        <small id="formatted_nominal" class="form-text text-muted"></small>
+                                        <small id="notification" class="text-muted"></small>
                                     </div>
                                 </div>
                             </form>
@@ -87,14 +82,6 @@
 						<div class="col-md-12">
 							<div class="card">
 								<div class="card-header">
-									<div class="d-flex align-items-center">
-										{{-- <h4 class="card-title">Data Jabatan</h4> --}}
-                                        {{-- <a href="javascript:void(0)" class="btn btn-primary btn-round ml-auto"
-                                            data-toggle="modal" data-target="#myModal" id="addNew" name="addNew"><i class="fa fa-plus"></i> Tambah Uang Harian</a> --}}
-                                            {{-- <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal">
-                                            <i class="fa fa-plus"></i>Create
-                                            </button> --}}
-									</div>
 								</div>
 								<div class="card-body">
 									<div class="table-responsive">
@@ -120,6 +107,60 @@
 			</div>
 @endsection
 @push('js')
+<script>
+    document.getElementById('nominal').addEventListener('input', function (e) {
+        let nominal = e.target.value;
+
+        // Remove non-numeric characters
+        nominal = nominal.replace(/\D/g, '');
+
+        // Limit the length of nominal
+        if (nominal.length > 9) {
+            nominal = nominal.substring(0, 9);
+        }
+
+        // Format the nominal
+        const formattedNominal = formatCurrency(nominal);
+
+        // Set the formatted nominal below the form
+        document.getElementById('formatted_nominal').textContent = formattedNominal;
+
+        // Set the value in the input field
+        e.target.value = nominal;
+
+        // Update the validation message
+        updateValidationMessage(nominal);
+    });
+
+    function formatCurrency(amount) {
+        if (!amount) return '';
+
+        // Convert to currency format Rp 300.000
+        return 'Rp ' + Number(amount).toLocaleString('id-ID');
+    }
+
+    // Validate only numbers
+    document.getElementById('nominal').addEventListener('keypress', function (e) {
+        const keyCode = e.keyCode;
+        if (keyCode < 48 || keyCode > 57) {
+            e.preventDefault();
+        }
+    });
+
+    // Update the validation message
+    function updateValidationMessage(nominal) {
+        const notification = document.getElementById('notification');
+        if (nominal !== '') {
+            if (!/^\d+$/.test(nominal)) {
+                notification.textContent = 'Nominal harus berupa angka';
+            } else {
+                notification.textContent = '';
+            }
+        } else {
+            notification.textContent = '';
+        }
+    }
+</script>
     <script type="text/javascript">
         $(function() {
             let request = {
@@ -185,7 +226,7 @@
                         "defaultContent": "-",
                         render: function(data, type, row) {
                             let nominal = (data) ? data : '-';
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + nominal + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + formatCurrency(nominal) + "</div>";
                         },
                     },
                     {
@@ -324,6 +365,14 @@
                     name: {
                         required: true,
                     },
+                    nominal: {
+                        number: true
+                    }
+                },
+                messages: {
+                   nominal: {
+                        number: "Nominal harus berupa angka"
+                    }
                 },
                 errorElement: 'em',
                 errorPlacement: function(error, element) {
@@ -339,11 +388,9 @@
             });
 
             $('#addNew').on('click', function() {
-                $('#name').val("");
+                $('#nominal').val("");
                 isUpdate = false;
             });
         });
     </script>
 @endpush
-
-

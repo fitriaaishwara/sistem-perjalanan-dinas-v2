@@ -22,7 +22,7 @@ class AkomodasiHotelController extends Controller
         try {
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Data failed to update'];
             $file_path = $request->file('file_path');
-            $fileName = time() . '_' . Str::random(10) . '.' . $file_path->getClientOriginalExtension();
+            $fileName = $request->input('deskripsi_file') . '_' . date('d-m-Y') . '_' . time() . '_' . Str::random(10) . '.' . $file_path->getClientOriginalExtension();
             $path     = 'akomodasi_hotel/' . $request->input('id_staff_perjalanan');
 
             $validator = Validator::make($request->all(), [
@@ -39,6 +39,7 @@ class AkomodasiHotelController extends Controller
             // Create the record in the database
             $create = AkomodasiHotel::create([
                 'id_staff_perjalanan' => $request->input('id_staff_perjalanan'),
+                'id_sbm_hotel'        => $request->input('id_sbm_hotel'), // 'id_sbm_hotel' => 'required|integer',
                 'nama_hotel'          => $request->input('nama_hotel'),
                 'deskripsi_file'      => $request->input('deskripsi_file'),
                 'tanggal_check_in'    => $request->input('tanggal_check_in'),

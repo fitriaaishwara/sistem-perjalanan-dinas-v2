@@ -26,7 +26,7 @@ class KwitansiController extends Controller
         $keyword = $request['searchkey'];
 
         $data = DataStaffPerjalanan::select()
-            ->with('staff', 'perjalanan', 'perjalanan.mak', 'tujuan_perjalanan.tempatTujuan', 'tujuan_perjalanan.uangHarian', 'spd', 'kwitansi')
+            ->with('staff', 'perjalanan', 'perjalanan.mak', 'tujuan_perjalanan.tempatTujuan', 'tujuan_perjalanan.uangHarian', 'spd', 'kwitansi', 'transportasi_berangkat', 'transportasi_pulang', 'akomodasi_hotel')
             ->offset($request['start'])
             ->limit(($request['length'] == -1) ? Kwitansi::where('status', true)->count() : $request['length'])
             ->when($keyword, function ($query, $keyword) {
@@ -122,11 +122,12 @@ class KwitansiController extends Controller
 
         // $kwitansi = Kwitansi::with(['dataStaffPerjalanan.staff', 'dataStaffPerjalanan.perjalanan.mak', 'dataStaffPerjalanan.tujuan_perjalanan', 'bendahara', 'pejabatPembuatKomitmen', 'dataStaffPerjalanan.spd'])->find($id);
         $kwitansi = DataStaffPerjalanan::with(['staff', 'perjalanan.mak', 'tujuan_perjalanan.uangHarian', 'spd', 'kwitansi', 'transportasi_berangkat', 'transportasi_pulang', 'akomodasi_hotel'])->find($id);
-        $pdf = \PDF::loadView('pages.pra-perjalanan.kwitansi.pdf', compact('kwitansi'));
-        // return response()->json([
-        //     'data' => $kwitansi->tujuan_perjalanan[0]->uangHarian->nominal*$kwitansi->tujuan_perjalanan[0]->lama_perjalanan
-        // ]);
-        return $pdf->stream();
+        // return view('pages.pra-perjalanan.kwitansi.pdf', compact('kwitansi'));
+        // $pdf = \PDF::loadView('pages.pra-perjalanan.kwitansi.pdf', compact('kwitansi'));
+        return response()->json([
+            'data' => $kwitansi
+        ]);
+        // return $pdf->stream();
     }
 
     public function kwitansiPDF2($id)

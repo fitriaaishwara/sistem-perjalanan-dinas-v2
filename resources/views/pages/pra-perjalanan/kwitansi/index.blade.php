@@ -4,14 +4,15 @@
 
 <style>
     .container {
-      overflow-x: auto;
-      white-space: nowrap;
+        overflow-x: auto;
+        white-space: nowrap;
     }
+
     table {
-      border-collapse: collapse;
-      width: 100%;
+        border-collapse: collapse;
+        width: 100%;
     }
-  </style>
+</style>
 
 <div class="container">
     <div class="page-inner">
@@ -48,7 +49,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="myTable" class="display table table-striped table-hover" >
+                            <table id="myTable" class="display table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>NIP/NIK</th>
@@ -57,6 +58,7 @@
                                         <th>Tujuan</th>
                                         <th>Tanggal</th>
                                         <th>Total Diterima</th>
+                                        <th>Total Biaya Perajalanan</th>
                                         <th>Total Uang Harian</th>
                                         <th>Tahun Anggaran</th>
                                         <th>Kode MAK</th>
@@ -76,11 +78,10 @@
 </div>
 @endsection
 @push('js')
-    <script type="text/javascript">
-
-    function rupiah($angka){
+<script type="text/javascript">
+    function rupiah($angka) {
         var reverse = $angka.toString().split('').reverse().join(''),
-        ribuan = reverse.match(/\d{1,3}/g);
+            ribuan = reverse.match(/\d{1,3}/g);
         ribuan = ribuan.join('.').split('').reverse().join('');
         return ribuan;
     }
@@ -127,14 +128,14 @@
                     return (request);
                 },
             },
-            "columns": [
-                {
+            "columns": [{
                     "data": "staff",
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
                         if (data && data.nip) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.nip + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data
+                                .nip + "</div>";
                         } else {
                             return "<div class='text-wrap'>-</div>";
                         }
@@ -146,7 +147,8 @@
                     "defaultContent": "-",
                     render: function(data, type, row) {
                         if (data && data.name) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.name + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data
+                                .name + "</div>";
                         } else {
                             return "<div class='text-wrap'>-</div>";
                         }
@@ -158,7 +160,7 @@
                     "defaultContent": "-",
                     render: function(data, type, row) {
                         var result = "<div class='text-wrap' style='font-size: 12px;'>";
-                        $.each (data, function (key, val) {
+                        $.each(data, function(key, val) {
                             // console.log(val);
                             result += val.perihal_perjalanan + "<br>";
                         });
@@ -174,7 +176,8 @@
                     render: function(data, type, row) {
                         //name
                         if (data) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data[0].tempat_tujuan.name + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data[0]
+                                .tempat_tujuan.name + "</div>";
                         } else {
                             return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
                         }
@@ -187,7 +190,9 @@
                     "defaultContent": "-",
                     render: function(data, type, row) {
                         if (data) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + formatIndonesianDate(data[0].tanggal_berangkat) + " - " + formatIndonesianDate(data[0].tanggal_pulang) + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>" +
+                                formatIndonesianDate(data[0].tanggal_berangkat) + " - " +
+                                formatIndonesianDate(data[0].tanggal_pulang) + "</div>";
                         } else {
                             return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
                         }
@@ -197,10 +202,27 @@
                     "data": "total_biaya",
                     "width": '15%',
                     "defaultContent": "-",
-                     //render date format
+                    //render date format
                     render: function(data, type, row) {
                         if (data) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data) + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>Rp. " +
+                                rupiah(data) + "</div>";
+                        } else {
+                            return "<div class='text-wrap badge badge-danger' style='font-size: 12px;'>Belum Upload Invoce</div>";
+                        }
+                    }
+                },
+                {
+                    "data": null,
+                    "width": '15%',
+                    "defaultContent": "-",
+                    //render date format
+                    render: function(data, type, row) {
+                        if (data) {
+                            const total = parseInt(row.transportasi_berangkat[0]?.nominal ?? 0) + parseInt(row.transportasi_pulang[0]?.nominal ?? 0) + parseInt(row.akomodasi_hotel[0]?.nominal ?? 0)
+                            return "<div class='text-wrap' style='font-size: 12px;'>Rp. " +
+                                rupiah(total)
+                                "</div>";
                         } else {
                             return "<div class='text-wrap badge badge-danger' style='font-size: 12px;'>Belum Upload Invoce</div>";
                         }
@@ -211,10 +233,12 @@
                     "data": "tujuan_perjalanan",
                     "width": '15%',
                     "defaultContent": "-",
-                     //render date format
+                    //render date format
                     render: function(data, type, row) {
                         if (data) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data[0].uang_harian.nominal*data[0].lama_perjalanan) + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>Rp. " +
+                                rupiah(data[0].uang_harian.nominal * data[0].lama_perjalanan) +
+                                "</div>";
                         } else {
                             return "<div class='text-wrap badge badge-danger' style='font-size: 12px;'>Belum Upload Invoce</div>";
                         }
@@ -227,20 +251,21 @@
 
                     "width": '15%',
                     "defaultContent": "-",
-                     //render date format
+                    //render date format
                     render: function(data, type, row) {
-                       //return year center
-                        return "<div class='text-wrap' style='font-size: 12px;'>" + data.substring(0, 4) + "</div>";
+                        //return year center
+                        return "<div class='text-wrap' style='font-size: 12px;'>" + data
+                            .substring(0, 4) + "</div>";
                     }
                 },
                 {
                     "data": "perjalanan",
                     "width": '15%',
                     "defaultContent": "-",
-                     //render date format
+                    //render date format
                     render: function(data, type, row) {
                         var result = "<div class='text-wrap' style='font-size: 12px;'>";
-                        $.each (data, function (key, val) {
+                        $.each(data, function(key, val) {
                             // console.log(val);
                             result += val.mak.kode_mak + "<br>";
                         });
@@ -253,7 +278,7 @@
                     "data": "perjalanan",
                     "width": '15%',
                     "defaultContent": "-",
-                     //render date format
+                    //render date format
                     render: function(data, type, row) {
                         if (row.kwitansi == "" || row.kwitansi == null) {
                             return "<div class='text-wrap badge badge-danger' style='font-size: 12px;'>Belum Dibuat</div>";
@@ -301,26 +326,26 @@
         }
 
         $('#myTable').on("click", ".btnStatus", function() {
-                isUpdate = true;
-                var id = $(this).attr('data-id');
-                var url = "{{ route('statusPerjalanan/show', ['id' => ':id']) }}";
-                url = url.replace(':id', id);
-                $.ajax({
-                    type: 'GET',
-                    url: url,
-                    success: function(response) {
-                        $('#id').val(response.data.id);
-                        $('#status').val(response.data.id_status_perjalanan);
-                        $('#myModal').modal('show');
-                    },
-                    error: function() {
-                        Swal.fire(
-                            'Error',
-                            'A system error has occurred. please try again later.',
-                            'error'
-                        )
-                    },
-                });
+            isUpdate = true;
+            var id = $(this).attr('data-id');
+            var url = "{{ route('statusPerjalanan/show', ['id' => ':id']) }}";
+            url = url.replace(':id', id);
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function(response) {
+                    $('#id').val(response.data.id);
+                    $('#status').val(response.data.id_status_perjalanan);
+                    $('#myModal').modal('show');
+                },
+                error: function() {
+                    Swal.fire(
+                        'Error',
+                        'A system error has occurred. please try again later.',
+                        'error'
+                    )
+                },
+            });
         });
 
         $('#myTable').on("click", ".btnDelete", function() {
@@ -366,12 +391,4 @@
         });
     });
 </script>
-
 @endpush
-
-
-
-
-
-
-

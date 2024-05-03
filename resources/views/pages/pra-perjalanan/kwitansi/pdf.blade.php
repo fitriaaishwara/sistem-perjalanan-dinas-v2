@@ -110,7 +110,12 @@
                 <tr>
                     <td class="font-12" style="width: 55%">Uang Sebesar</td>
                     <td style="width: 10%" class="font-12 text-center">:</td>
-                    <td class="font-12">Rp. {{ format_rupiah($kwitansi->tujuan_perjalanan[0]->uangHarian->nominal*$kwitansi->tujuan_perjalanan[0]->lama_perjalanan) }}</td>
+                    <td class="font-12">Rp. {{ format_rupiah(
+                        ($kwitansi->tujuan_perjalanan[0]->uangHarian->nominal*$kwitansi->tujuan_perjalanan[0]->lama_perjalanan) +
+                        ($kwitansi->transportasi_berangkat[0]->nominal ?? 0) +
+                        ($kwitansi->transportasi_pulang[0]->nominal ?? 0) +
+                        ($kwitansi->akomodasi_hotel[0]->nominal ?? 0)
+                        ) }}</td>
                 </tr>
                 <tr>
                     <td class="font-12" style="width: 55%">Untuk Pembayaran</td>

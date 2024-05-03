@@ -183,13 +183,21 @@
                         }
                     },
                     {
-                        "data": "tujuan_perjalanan",
+                        "data": null,
                         "width": '10%',
                         "defaultContent": "-",
                         render: function(data, type, row) {
+                            let golongan = row.staff.golongans.id
+                            let hotel = row.tujuan_perjalanan[0].tempat_tujuan.hotel
+                            let tiket = row.tujuan_perjalanan[0].tempat_tujuan.tiket
+                            let translok = row.tujuan_perjalanan[0].tempat_tujuan.translok
+                            const filteredHotel = hotel.filter(item => item.id_golongan === golongan);
+                            const filteredTiket = tiket.filter(item => item.id_golongan === golongan);
+                            const filteredTranslok = translok.filter(item => item.id_golongan === golongan);
                             if (data) {
                                 // Tambahkan Data Lain Disini (data hotel, tiket, transportasi)
-                                return "<div class='text-wrap'>" + 'Rp. ' + rupiah((parseInt(data[0].tempat_tujuan.hotel[0].nominal) + parseInt(data[0].tempat_tujuan.tiket[0].nominal)+ parseInt(data[0].tempat_tujuan.translok[0].nominal))) + "</div>";
+                                // return "<div class='text-wrap'>" + filteredTranslok[0].nominal + "</div>";
+                                return "<div class='text-wrap'>" + 'Rp. ' + rupiah((parseInt(filteredHotel[0].nominal) + parseInt(filteredTiket[0].nominal)+ parseInt(filteredTranslok[0].nominal))) + "</div>";
                             } else {
                                 return "<div class='text-wrap'>-</div>";
                             }

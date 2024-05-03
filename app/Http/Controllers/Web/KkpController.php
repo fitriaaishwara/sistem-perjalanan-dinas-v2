@@ -36,25 +36,10 @@ class KkpController extends Controller
 
         $data = DataStaffPerjalanan::select()
         ->with(['staff.golongans', 'staff.jabatans', 'staff.instansis', 'perjalanan', 'tujuan_perjalanan.uangHarian',
-        'tujuan_perjalanan.tempatTujuan.hotel' => function ($query) {
-            $query->where('id_golongan', function ($subquery) {
-                $subquery->select('id_golongan')
-                    ->from('staff');
-            });
-        },
-        'tujuan_perjalanan.tempatTujuan.tiket' => function ($query) {
-            $query->where('id_golongan', function ($subquery) {
-                $subquery->select('id_golongan')
-                    ->from('staff');
-            });
-        }
-        ,
-        'tujuan_perjalanan.tempatTujuan.translok' => function ($query) {
-            $query->where('id_golongan', function ($subquery) {
-                $subquery->select('id_golongan')
-                    ->from('staff');
-            });
-        }])
+        'tujuan_perjalanan.tempatTujuan.hotel',
+        'tujuan_perjalanan.tempatTujuan.tiket',
+        'tujuan_perjalanan.tempatTujuan.translok'
+        ])
         ->where('id_perjalanan', $id)
         ->when($keyword, function ($query, $keyword) {
             return $query->where('name', 'like', '%' . $keyword . '%');
@@ -161,36 +146,35 @@ class KkpController extends Controller
             'staff.instansis',
             'perjalanan',
             'tujuan_perjalanan.uangHarian',
-            'tujuan_perjalanan.tempatTujuan.hotel' => function ($query) {
-                $query->where('id_golongan', function ($subquery) {
-                    $subquery->select('id_golongan')
-                        ->from('staff');
-                });
-            },
-            'tujuan_perjalanan.tempatTujuan.tiket' => function ($query) {
-                $query->where('id_golongan', function ($subquery) {
-                    $subquery->select('id_golongan')
-                        ->from('staff');
-                });
-            }
-            ,
-            'tujuan_perjalanan.tempatTujuan.translok' => function ($query) {
-                $query->where('id_golongan', function ($subquery) {
-                    $subquery->select('id_golongan')
-                        ->from('staff');
-                });
-            }
+            'tujuan_perjalanan.tempatTujuan.hotel',
+            'tujuan_perjalanan.tempatTujuan.tiket',
+            'tujuan_perjalanan.tempatTujuan.translok'
         ])
         ->where('status', true)
         ->find($id);
-        $pdf = \PDF::loadView('pages.master-data.kkp.pdf', compact('data'));
+
+        if ($data && $data->tujuan_perjalanan->count() > 0 && $data->tujuan_perjalanan[0]->tempatTujuan) {
+            $filteredHotel = $data->tujuan_perjalanan[0]->tempatTujuan->hotel->first(function ($item) use ($data) {
+                return $item['id_golongan'] === $data->staff->golongans->id;
+            });
+
+            $filteredTiket = $data->tujuan_perjalanan[0]->tempatTujuan->tiket->first(function ($item) use ($data) {
+                return $item['id_golongan'] === $data->staff->golongans->id;
+            });
+
+            $filteredTranslok = $data->tujuan_perjalanan[0]->tempatTujuan->translok->first(function ($item) use ($data) {
+                return $item['id_golongan'] === $data->staff->golongans->id;
+            });
+        }
+
+        $pdf = \PDF::loadView('pages.master-data.kkp.pdf', compact('data', 'filteredHotel', 'filteredTiket', 'filteredTranslok'));
         // return response()->json([
-        //     'hotel' => $data->tujuan_perjalanan[0]->tempatTujuan->hotel[0]->nominal,
-        //     'tiket' => $data->tujuan_perjalanan[0]->tempatTujuan->tiket[0]->nominal,
-        //     'translok' => $data->tujuan_perjalanan[0]->tempatTujuan->translok[0]->nominal,
+        //     'hotel' => $filteredHotel,
+        //     'tiket' => $filteredTiket,
+        //     'translok' => $filteredTranslok,
         //     'data' => $data
         // ]);
-        // return view('pages.master-data.kkp.pdf', ['data' => $data]);
+        // return view('pages.master-data.kkp.pdf', ['data' => $data, 'hotel' => $filteredHotel]);
         return $pdf->stream();
     }
 }

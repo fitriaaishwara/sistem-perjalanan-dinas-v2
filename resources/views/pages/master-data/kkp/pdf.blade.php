@@ -66,20 +66,20 @@
             <tbody>
                 <tr>
                     <td></td>
-                    <td class="font-12">Hotel           : {{ rupiah($data->tujuan_perjalanan[0]->tempatTujuan->hotel[0]->nominal) }}</td>
+                    <td class="font-12">Hotel           : {{ rupiah($filteredHotel->nominal) }}</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td class="font-12">Tiket       : {{ rupiah($data->tujuan_perjalanan[0]->tempatTujuan->tiket[0]->nominal) }}</td>
+                    <td class="font-12">Tiket       : {{ rupiah($filteredTiket->nominal) }}</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td class="font-12">Transport      : {{ rupiah($data->tujuan_perjalanan[0]->tempatTujuan->translok[0]->nominal) }}</td>
+                    <td class="font-12">Transport      : {{ rupiah($filteredTranslok->nominal) }}</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td class="font-12">Total      : {{ rupiah($data->tujuan_perjalanan[0]->tempatTujuan->hotel[0]->nominal +
-                    $data->tujuan_perjalanan[0]->tempatTujuan->tiket[0]->nominal +  $data->tujuan_perjalanan[0]->tempatTujuan->translok[0]->nominal) }}</td>
+                    <td class="font-12">Total      : {{ rupiah($filteredHotel->nominal +
+                    $filteredTiket->nominal +  $filteredTranslok->nominal) }}</td>
                 </tr>
             </tbody>
         </table>

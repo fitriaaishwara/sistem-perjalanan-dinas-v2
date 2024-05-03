@@ -16,7 +16,7 @@ class sbm_hotel extends Model
     protected $fillable = [
         'id',
         'province_id',
-        'id_goloongan',
+        'id_golongan',
         'nominal',
         'status',
         'created_by',
@@ -26,4 +26,14 @@ class sbm_hotel extends Model
         'updated_at',
         'deleted_at'
     ];
+
+    public function province()
+    {
+        return $this->belongsTo(Province::class, 'province_id', 'id');
+    }
+
+    public function golongan()
+    {
+        return $this->belongsTo(Golongan::class, 'id_golongan', 'id');
+    }
 }

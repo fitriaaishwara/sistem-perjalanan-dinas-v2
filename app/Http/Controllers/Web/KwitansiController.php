@@ -52,6 +52,13 @@ class KwitansiController extends Controller
         return $response;
     }
 
+
+    public function detail($id)
+    {
+        $kwitansi = DataStaffPerjalanan::with(['perjalanan.mak', 'staff.instansis', 'penandatangan', 'tujuan_perjalanan', 'spd', 'kwitansi'])->find($id);
+        return view('pages.pra-perjalanan.kwitansi.detail', compact('kwitansi'));
+    }
+
     public function create($id)
     {
         $staff  = Staff::where('status', true)->get();
@@ -121,5 +128,53 @@ class KwitansiController extends Controller
             'data' => $kwitansi
         ]);
         // return $pdf->stream();
+    }
+
+    public function kwitansiPDF2($id)
+    {
+        // $kwitansi = Kwitansi::with(['dataStaffPerjalanan.staff', 'dataStaffPerjalanan.perjalanan.mak', 'dataStaffPerjalanan.tujuan_perjalanan', 'bendahara', 'pejabatPembuatKomitmen', 'dataStaffPerjalanan.spd'])->find($id);
+        // // dd($kwitansi);
+
+        // // return $pdf->stream();
+
+        // if ($kwitansi) {
+        //     $pdf = \PDF::loadView('pages.kwitansi.pdf', compact('kwitansi'));
+        //     return $pdf->stream();
+        // } else {
+        //     alert()->warning('', 'Data tidak ditemukan');
+        //     return redirect()->back();
+        // }
+
+        // $kwitansi = Kwitansi::with(['dataStaffPerjalanan.staff', 'dataStaffPerjalanan.perjalanan.mak', 'dataStaffPerjalanan.tujuan_perjalanan', 'bendahara', 'pejabatPembuatKomitmen', 'dataStaffPerjalanan.spd'])->find($id);
+        $kwitansi = DataStaffPerjalanan::with(['staff', 'perjalanan.mak', 'tujuan_perjalanan.uangHarian', 'spd', 'kwitansi'])->find($id);
+        $pdf = \PDF::loadView('pages.pra-perjalanan.kwitansi.pdf2', compact('kwitansi'));
+        // return response()->json([
+        //     'data' => $kwitansi->tujuan_perjalanan[0]->uangHarian->nominal*$kwitansi->tujuan_perjalanan[0]->lama_perjalanan
+        // ]);
+        return $pdf->stream();
+    }
+
+    public function kwitansiPDF3($id)
+    {
+        // $kwitansi = Kwitansi::with(['dataStaffPerjalanan.staff', 'dataStaffPerjalanan.perjalanan.mak', 'dataStaffPerjalanan.tujuan_perjalanan', 'bendahara', 'pejabatPembuatKomitmen', 'dataStaffPerjalanan.spd'])->find($id);
+        // // dd($kwitansi);
+
+        // // return $pdf->stream();
+
+        // if ($kwitansi) {
+        //     $pdf = \PDF::loadView('pages.kwitansi.pdf', compact('kwitansi'));
+        //     return $pdf->stream();
+        // } else {
+        //     alert()->warning('', 'Data tidak ditemukan');
+        //     return redirect()->back();
+        // }
+
+        // $kwitansi = Kwitansi::with(['dataStaffPerjalanan.staff', 'dataStaffPerjalanan.perjalanan.mak', 'dataStaffPerjalanan.tujuan_perjalanan', 'bendahara', 'pejabatPembuatKomitmen', 'dataStaffPerjalanan.spd'])->find($id);
+        $kwitansi = DataStaffPerjalanan::with(['staff', 'perjalanan.mak', 'tujuan_perjalanan.uangHarian', 'spd', 'kwitansi'])->find($id);
+        $pdf = \PDF::loadView('pages.pra-perjalanan.kwitansi.pdf3', compact('kwitansi'));
+        // return response()->json([
+        //     'data' => $kwitansi->tujuan_perjalanan[0]->uangHarian->nominal*$kwitansi->tujuan_perjalanan[0]->lama_perjalanan
+        // ]);
+        return $pdf->stream();
     }
 }

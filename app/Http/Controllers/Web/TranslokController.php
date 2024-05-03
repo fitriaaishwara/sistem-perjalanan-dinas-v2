@@ -3,50 +3,56 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\UangHarian;
+use App\Models\sbm_translok;
 use Illuminate\Http\Request;
 
-class UangHarianController extends Controller
+class TranslokController extends Controller
 {
     public function index()
     {
-        return view('pages.master-data.sbm.uang_harian.index');
+        return view('pages.master-data.sbm.translok.index');
     }
 
     public function getData(Request $request)
     {
         $keyword = $request['searchkey'];
 
-        $data = UangHarian::select()
-            ->with('province')
-            ->offset($request['start'])
-            ->limit(($request['length'] == -1) ? UangHarian::where('status', true)->count() : $request['length'])
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('name', 'like', '%' . $keyword . '%');
-            })
-            ->where('status', true)
-            ->get();
+        $query = sbm_translok::query()
+                ->with('province', 'golongan')
+                ->where('status', true)
+                ->orderBy('province_id')
+                ->orderBy('id_golongan');
 
-        $dataCounter = UangHarian::select()
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('name', 'like', '%' . $keyword . '%');
-            })
-            ->where('status', true)
-            ->count();
+        if ($keyword) {
+            $query->whereHas('province', function ($query) use ($keyword) {
+                $query->where('name', 'like', '%' . $keyword . '%');
+            })->orWhereHas('golongan', function ($query) use ($keyword) {
+                $query->where('name', 'like', '%' . $keyword . '%');
+            })->orWhere('nominal', 'like', '%' . $keyword . '%');
+        }
+
+        $data = $query->offset($request['start'])
+                    ->limit(($request['length'] == -1) ? sbm_translok::where('status', true)->count() : $request['length'])
+                    ->get();
+
+        $dataCounter = $query->count();
+
         $response = [
             'status'          => true,
             'draw'            => $request['draw'],
-            'recordsTotal'    => UangHarian::where('status', true)->count(),
+            'recordsTotal'    => sbm_translok::where('status', true)->count(),
             'recordsFiltered' => $dataCounter,
             'data'            => $data,
         ];
+
         return $response;
     }
+
     public function store(Request $request)
     {
         try {
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Uang Harian failed to create'];
-            $create = UangHarian::create([
+            $create = sbm_translok::create([
                 'nominal' => $request['nominal'],
             ]);
             if ($create) {
@@ -58,11 +64,12 @@ class UangHarianController extends Controller
 
         return $data;
     }
+
     public function show($id)
     {
         try {
             $data = ['status' => false, 'message' => 'Uang Harian failed to be found'];
-            $data = UangHarian::findOrFail($id);
+            $data = sbm_translok::findOrFail($id);
             if ($data) {
                 $data = ['status' => true, 'message' => 'Uang Harian was successfully found', 'data' => $data];
             }
@@ -70,13 +77,15 @@ class UangHarianController extends Controller
             $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }
         return $data;
+
     }
+
     public function update(Request $request)
     {
         try {
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Uang Harian failed to update'];
 
-            $update = UangHarian::where('id', $request['id'])->update([
+            $update = sbm_translok::where('id', $request['id'])->update([
                 'nominal' => $request['nominal'],
             ]);
             if ($update) {
@@ -87,11 +96,12 @@ class UangHarianController extends Controller
         }
         return $data;
     }
+
     public function destroy($id)
     {
         try {
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Uang Harian failed to delete'];
-            $delete = UangHarian::where('id', $id)->update([
+            $delete = sbm_translok::where('id', $id)->update([
                 'status' => false
             ]);
             if ($delete) {

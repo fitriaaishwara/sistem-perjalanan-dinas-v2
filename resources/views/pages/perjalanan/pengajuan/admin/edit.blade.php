@@ -105,7 +105,9 @@
                             <select name="id_staff" class="form-control select2" required id="id_staff">
                                 <option value="">Pilih Staff</option>
                                 @foreach ($staff as $item)
+                                    @if ($item->status === 1)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>
@@ -118,7 +120,9 @@
                             <select name="id_tujuan_perjalanan" class="form-control select2" required id="id_tujuan_perjalanan">
                                 <option value="">Pilih Tujuan</option>
                                 @foreach ($perjalanan->tujuan as $item)
-                                    <option value="{{ $item->id }}">{{ $item->tempatBerangkat->name }} - {{ $item->tempatTujuan->name }}</option>
+                                    @if ($item->status === 1)
+                                        <option value="{{ $item->id }}">{{ $item->tempatBerangkat->name }} - {{ $item->tempatTujuan->name }}</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>
@@ -361,7 +365,7 @@
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data + "</div>";
+                        return "<div class='text-wrap'>" + formatIndonesianDate(data) + "</div>";
 
                     },
                 },
@@ -370,7 +374,7 @@
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data + "</div>";
+                        return "<div class='text-wrap'>" + formatIndonesianDate(data) + "</div>";
                     },
                 },
                 {
@@ -378,7 +382,7 @@
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data + "</div>";
+                        return "<div class='text-wrap'>" + formatIndonesianDate(data) + "</div>";
                     },
                 },
                 {
@@ -394,12 +398,12 @@
                     "width": '10%',
                     render: function(data, type, row) {
                         var btnTujuanEdit = "";
-                        var btnTujuanDelete = "";
+                        // var btnTujuanDelete = "";
                         btnTujuanEdit += '<button name="btnTujuanEdit" data-id="' + data +
                             '" type="button" class="btn btn-warning btn-sm btnTujuanEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
-                        btnTujuanDelete += '<button name="btnTujuanDelete" data-id="' + data +
-                            '" type="button" class="btn btn-danger btn-sm btnTujuanDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
-                        return btnTujuanEdit + btnTujuanDelete;
+                        // btnTujuanDelete += '<button name="btnTujuanDelete" data-id="' + data +
+                        //     '" type="button" class="btn btn-danger btn-sm btnTujuanDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
+                        return btnTujuanEdit;
                     },
                 },
             ]
@@ -524,6 +528,9 @@
                         $('#saveBtnTujuan').attr('disabled', false);
                         reloadTable();
                         $('#myModal').modal('hide');
+                        //if success close modal and reload ajax table
+                        $('#myModalTujuan').modal('hide');
+                        window.location.reload(); // Reload the page
                     },
                     error: function(data) {
                         Swal.fire(
@@ -845,10 +852,10 @@
                     render: function(data, type, row) {
                         var btnTujuanEdit = "";
                         var btnTujuanDelete = "";
-                        // btnTujuanEdit += '<button name="btnTujuanEdit" data-id="' + data +
-                        //     '" type="button" class="btn btn-warning btn-sm btnTujuanEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
-                        btnTujuanDelete += '<button name="btnTujuanDelete" data-id="' + data +
-                            '" type="button" class="btn btn-danger btn-sm btnTujuanDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
+                        btnTujuanEdit += '<button name="btnTujuanEdit" data-id="' + data +
+                            '" type="button" class="btn btn-warning btn-sm btnTujuanEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
+                        // btnTujuanDelete += '<button name="btnTujuanDelete" data-id="' + data +
+                        //     '" type="button" class="btn btn-danger btn-sm btnTujuanDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
                         return btnTujuanEdit + btnTujuanDelete;
                     },
                 },

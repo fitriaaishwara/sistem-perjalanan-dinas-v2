@@ -1,17 +1,13 @@
 <?php
-
 /*
  * This file is part of the IndoRegion package.
  *
  * (c) Azis Hapidin <azishapidin.com | azishapidin@gmail.com>
  *
  */
-
 namespace App\Models;
-
 use AzisHapidin\IndoRegion\Traits\ProvinceTrait;
 use Illuminate\Database\Eloquent\Model;
-
 /**
  * Province Model.
  */
@@ -24,7 +20,6 @@ class Province extends Model
      * @var string
      */
     protected $table = 'provinces';
-
     /**
      * Province has many regencies.
      *
@@ -34,20 +29,17 @@ class Province extends Model
     {
         return $this->hasMany(Regency::class);
     }
-
     public function uangHarian()
     {
         return $this->hasOne(UangHarian::class, 'province_id', 'id');
     }
-
     public function tujuanPerjalanan()
     {
-        return $this->hasMany(DataTujuanPerjalanan::class, 'tempat_berangkat_id', 'id');
+        return $this->hasMany(Tujuan::class, 'tempat_berangkat_id', 'id');
     }
-
     public function tujuanPerjalanan2()
     {
-        return $this->hasMany(DataTujuanPerjalanan::class, 'tempat_tujuan_id', 'id');
+        return $this->hasMany(Tujuan::class, 'tempat_tujuan_id', 'id');
     }
 
     public function hotel() {

@@ -138,6 +138,7 @@ class KkpController extends Controller
         ->make(true);
     }
 
+
     public function kkpPDF($id)
     {
         $data = DataStaffPerjalanan::with([

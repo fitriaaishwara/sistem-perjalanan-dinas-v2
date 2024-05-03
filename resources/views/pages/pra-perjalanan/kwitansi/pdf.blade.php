@@ -70,11 +70,17 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td class="font-12">Bukti Kas No        : {{ $kwitansi->bukti_kas_nomor }}</td>
+                    <td class="font-12">Bukti Kas No:
+                        @if(!empty($kwitansi->kwitansi[0]->bukti_kas_nomor))
+                            {{ $kwitansi->kwitansi[0]->bukti_kas_nomor }}
+                        @else
+                            -
+                        @endif
+                    </td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td class="font-12">Tahun Anggaran      : {{ $kwitansi->tahun_anggaran }}</td>
+                    <td class="font-12">Tahun Anggaran      : {{ $kwitansi->kwitansi[0]->tahun_anggaran }}</td>
                 </tr>
             </tbody>
         </table>
@@ -105,7 +111,7 @@
                 <tr>
                     <td class="font-12" style="width: 55%">Sudah terima dari</td>
                     <td style="width: 10%" class="font-12 text-center">:</td>
-                    <td class="font-12">{{ $kwitansi->sudah_diterima_dari }}</td>
+                    <td class="font-12">{{ $kwitansi->kwitansi[0]->sudah_diterima_dari }}</td>
                 </tr>
                 <tr>
                     <td class="font-12" style="width: 55%">Uang Sebesar</td>
@@ -131,10 +137,12 @@
                     <td class="font-12" style="width: 55%">Nomor</td>
                     <td style="width: 10%" class="font-12 text-center">:</td>
                     <td class="font-12">
-                        @if($kwitansi->perjalanan[0]->nomor_spd == null)
+                        @if($kwitansi->spd == null)
+                            -
+                        @elseif($kwitansi->spd->nomor_spd == null)
                             -
                         @else
-                            {{ $kwitansi->perjalanan[0]->nomor_spd }}
+                            {{ $kwitansi->spd->nomor_spd }}
                         @endif
                     </td>
                 </tr>
@@ -142,10 +150,12 @@
                     <td class="font-12" style="width: 55%">Tanggal</td>
                     <td style="width: 10%" class="font-12 text-center">:</td>
                     <td class="font-12">
-                        @if($kwitansi->perjalanan[0]->pada_tanggal == null)
-                        -
+                        @if($kwitansi->spd == null)
+                            -
+                        @elseif($kwitansi->spd->pada_tanggal == null)
+                            -
                         @else
-                            {{ $kwitansi->perjalanan[0]->pada_tanggal }}
+                            {{ date('j F Y', strtotime($kwitansi->spd->pada_tanggal)) }}
                         @endif
                     </td>
                 </tr>
@@ -153,10 +163,10 @@
                     <td class="font-12" style="width: 55%">Untuk perjalanan dinas dari</td>
                     <td style="width: 10%" class="font-12 text-center">:</td>
                     <td class="font-12">
-                        @if($kwitansi->tujuan_perjalanan[0] == null)
-                        -
+                        @if($kwitansi->tujuan_perjalanan->isEmpty())
+                            -
                         @else
-                            {{ $kwitansi->tujuan_perjalanan[0]->tempat_berangkat }} ke: {{ $kwitansi->tujuan_perjalanan[0]->tempat_tujuan }}
+                            {{ ucfirst($kwitansi->tujuan_perjalanan[0]->tempatBerangkat->name) }} ke: {{ ucfirst($kwitansi->tujuan_perjalanan[0]->tempatTujuan->name) }}
                         @endif
                     </td>
                 </tr>
@@ -192,8 +202,8 @@
 
                     {!!( Str::repeat('<br>', 4) )!!}
 
-                    <div class="text-center font-12">(......................................................)</div>
-                    <div class="font-12" style=" padding-left: 30px;">NIP 19751222 199903 2 001</div>
+                    <div class="text-center font-12">({{ $kwitansi->staff->name }})</div>
+                    <div class="font-12" style=" padding-left: 30px;">NIP {{ $kwitansi->staff->nip }}</div>
                 </td>
             </tr>
         </table>

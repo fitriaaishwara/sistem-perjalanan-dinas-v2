@@ -4,55 +4,47 @@
     <title>Nota Dinas {{ $data->nomor_nota_dinas }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arial">
-
-
     <style>
-        .body {
-            text-indent: 25px;
-            text-align: justify
-        }
-
         body {
-            padding-top: 6rem;
-            padding-bottom: 6rem;
-            padding-left: 2rem;
-            padding-right: 2rem;
+            padding: 6rem 2rem;
             font-family: "Arial";
         }
 
         .font-11 {
-            font-size: 11px !important;
+            font-size: 11px;
         }
 
         .font-12 {
-            font-size: 12px !important;
+            font-size: 12px;
         }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .tbl {
+            width: 100%;
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+
+        .tbl th, .tbl td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+
+        .w-100 {
+            width: 100%;
+        }
+
         .tabel_ttd {
-            table-layout:fixed; /* this keeps your columns with at the defined width */
-            display: table;
+            table-layout: fixed;
             width: 100%;
         }
 
         .tabel_ttd td {
-            width: calc(100% / 3)
+            width: calc(100% / 3);
         }
-
-        .tabel_spd {
-            table-layout:fixed; /* this keeps your columns with at the defined width */
-            display: table;
-            width: 100%;
-        }
-
-        .tabel_spd td {
-            width: calc(100% / 3)
-        }
-
-        .tbl , .tbl th, .tbl td {
-            border: 1px solid black;
-            border-collapse: collapse;
-            width: 100%;
-        }
-
     </style>
 </head>
 <body>
@@ -66,59 +58,29 @@
     <div class="font-11">
         <table class="w-100">
             <tr>
-                <td style="width: 100px">
-                    Yth
-                </td>
-                <td style="width: 30px" class="text-center">
-                    :
-                </td>
-                <td>
-                    {{ $data->yth }}
-                </td>
+                <td style="width: 100px">Yth</td>
+                <td style="width: 30px" class="text-center">:</td>
+                <td>{{ $data->yth }}</td>
             </tr>
             <tr>
-                <td style="width: 100px">
-                    Dari
-                </td>
-                <td style="width: 30px" class="text-center">
-                    :
-                </td>
-                <td>
-                    {{ $data->dari }}
-                </td>
+                <td>Dari</td>
+                <td class="text-center">:</td>
+                <td>{{ $data->dari }}</td>
             </tr>
             <tr>
-                <td style="width: 100px">
-                    Hal
-                </td>
-                <td style="width: 30px" class="text-center">
-                    :
-                </td>
-                <td>
-                    {{ $data->perihal }}
-                </td>
+                <td>Hal</td>
+                <td class="text-center">:</td>
+                <td>{{ $data->perihal }}</td>
             </tr>
             <tr>
-                <td style="width: 100px">
-                    Lampiran
-                </td>
-                <td style="width: 30px" class="text-center">
-                    :
-                </td>
-                <td>
-                    {{ $data->lampiran }}
-                </td>
+                <td>Lampiran</td>
+                <td class="text-center">:</td>
+                <td>{{ $data->lampiran }}</td>
             </tr>
             <tr>
-                <td style="width: 100px">
-                    Tanggal
-                </td>
-                <td style="width: 30px" class="text-center">
-                    :
-                </td>
-                <td>
-                    {{ tgl_indo($data->tanggal_nota_dinas) }}
-                </td>
+                <td>Tanggal</td>
+                <td class="text-center">:</td>
+                <td>{{ tgl_indo($data->tanggal_nota_dinas) }}</td>
             </tr>
         </table>
     </div>
@@ -129,60 +91,32 @@
         {{ $data->isi_nota_dinas }}
     </div>
 
-    {!!( Str::repeat('<br>', 2) )!!}
+    {!! Str::repeat('<br>', 2) !!}
 
     @if ($data->status_nota_dinas == '1')
     <div class="font-11">
         <table class="w-100 tbl">
             <thead>
                 <tr>
-                    <td style="width: 30px" class="text-center">
-                        No
-                    </td>
-                    <td class="text-center">
-                        Nama
-                    </td>
-                    <td style="width: 30px" class="text-center">
-                        Gol
-                    </td>
-                    <td class="text-center">
-                        Jabatan
-                    </td>
-                    <td class="text-center">
-                        Instansi
-                    </td>
-                    <td class="text-center">
-                        Tujuan
-                    </td>
-                    <td class="text-center">
-                        Ket.
-                    </td>
+                    <th style="width: 30px" class="text-center">No</th>
+                    <th class="text-center">Nama</th>
+                    <th style="width: 30px" class="text-center">Gol</th>
+                    <th class="text-center">Jabatan</th>
+                    <th class="text-center">Instansi</th>
+                    <th class="text-center">Tujuan</th>
+                    <th class="text-center">Ket.</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($dataStaff as $index => $value)
                     <tr>
-                        <td class="text-center">
-                            {{ $loop->iteration }}
-                        </td>
-                        <td>
-                            {{ $value->staff->name }}
-                        </td>
-                        <td class="text-center">
-                            {{ ($value->staff->golongans) ? $value->staff->golongans->name : '-' }}
-                        </td>
-                        <td class="text-center">
-                            {{ ($value->staff->jabatans) ? $value->staff->jabatans->name : '-' }}
-                        </td>
-                        <td>
-                            {{ ($value->staff->instansis) ? $value->staff->instansis->name : '-' }}
-                        </td>
-                        <td>
-                            {{-- {{ ($value->tujuan_perjalanan->tempatTujuan->name) ?? '-' }} --}}
-                        </td>
-                        <td>
-                            {{-- Your Ket data --}}
-                        </td>
+                        <td class="text-center">{{ $loop->iteration }}</td>
+                        <td>{{ $value->staff->name }}</td>
+                        <td class="text-center">{{ $value->staff->golongans ? $value->staff->golongans->name : '-' }}</td>
+                        <td class="text-center">{{ $value->staff->jabatans ? $value->staff->jabatans->name : '-' }}</td>
+                        <td>{{ $value->staff->instansis ? $value->staff->instansis->name : '-' }}</td>
+                        <td>{{ $value->tujuan_perjalanan->tempatTujuan->name ?? '-' }}</td>
+                        <td>Your Ket data</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -192,8 +126,7 @@
         {{-- Your else content --}}
     @endif
 
-
-    {!!( Str::repeat('<br>', 2) )!!}
+    {!! Str::repeat('<br>', 2) !!}
 
     <div class="font-11 w-100">
         <table class="w-100 tabel_ttd">
@@ -203,22 +136,29 @@
                 <td>
                     <div>Asisten Deputi</div>
                     <div>Pemetaan Data dan Analisis Usaha</div>
-
-                    {!!( Str::repeat('<br>', 4) )!!}
-
+                    {!! Str::repeat('<br>', 4) !!}
                     <div>{{ ucfirst($data->staff->name) }}</div>
                     <div>NIP {{ $data->staff->nip }}</div>
                 </td>
             </tr>
         </table>
     </div>
-    {{-- <style>
-        table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-            width: 100%;
-        }
-    </style> --}}
-    <!-- Add other fields as needed -->
+
+    <br>
+    <br>
+    <br>
+
+    <div class="font-11 w-100">
+        <table class="w-100">
+            <tr>
+                <td style="width: 250px">Tembusan :</td>
+            </tr>
+            @foreach ($data->tembusan as $index => $tembusan)
+            <tr>
+                <td style="width: 100px">{{ $index + 1 }}. {{ $tembusan->keterangan }}</td>
+            </tr>
+            @endforeach
+        </table>
+    </div>
 </body>
 </html>

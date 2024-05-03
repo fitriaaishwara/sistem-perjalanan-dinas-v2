@@ -76,7 +76,7 @@
                                     <div id="myModal" class="card-body">
                                         <div class="col-lg-12">
                                             <input type="hidden" name="id_tujuan" id="id_tujuan" value="{{ $tujuan->id }}">
-                                            <input type="hidden" name="id_staff" id="id_staff" value="{{ $tujuan->id_staff }}">
+                                            <input type="hidden" name="id_staff" id="id_staff" value="{{ $tujuan->staff[0]->id }}">
                                             <div class="form-group">
                                                 <label for="nomor_spt">Nomor SPT</label>
                                                 <select name="nomor_spt" id="nomor_spt" class="form-control select2" validate>

@@ -150,8 +150,11 @@
                             var tujuan = "";
                             var angka = 1;
                             for (var i = 0; i < data.length; i++) {
+                                if (data[i].status === 1) {
+
                                 tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + data[i].tempat_tujuan.name + "</div>";
                                 angka++;
+                                }
                             }
                             return tujuan;
                             // if (data) {
@@ -169,8 +172,10 @@
                             var tujuan = "";
                             var angka = 1;
                             for (var i = 0; i < data.length; i++) {
+                                if (data[i].status === 1) {
                                 tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + formatIndonesianDate(data[i].tanggal_berangkat) + "</div>";
                                 angka++;
+                                }
                             }
                             return tujuan;
                             // if (data && data.tanggal_berangkat) {
@@ -190,8 +195,10 @@
                             var tujuan = "";
                             var angka = 1;
                             for (var i = 0; i < data.length; i++) {
+                                if (data[i].status === 1) {
                                 tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + formatIndonesianDate(data[i].tanggal_pulang) + "</div>";
                                 angka++;
+                                }
                             }
                             return tujuan;
                             // if (data && data.tanggal_pulang) {

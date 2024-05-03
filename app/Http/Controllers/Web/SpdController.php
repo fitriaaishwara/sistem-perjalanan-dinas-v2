@@ -51,6 +51,12 @@ class SpdController extends Controller
         return $response;
     }
 
+    public function detail($id)
+    {
+        $spd = DataStaffPerjalanan::with(['perjalanan.mak', 'staff.instansis', 'penandatangan', 'tujuan_perjalanan', 'spd'])->find($id);
+        return view('pages.pre-perjalanan.spd.detail', compact('spd'));
+    }
+
     public function create($id)
     {
 
@@ -89,8 +95,18 @@ class SpdController extends Controller
 
     public function spdPDF($id)
     {
+        $spd = DataStaffPerjalanan::with(['perjalanan.mak', 'staff.instansis', 'penandatangan', 'tujuan_perjalanan.tempatBerangkat', 'spd', 'staff.jabatans', 'staff.golongans'])->find($id);
+
+        // Load view dengan konfigurasi ukuran kertas A5
+        $pdf = \PDF::loadView('pages.pre-perjalanan.spd.pdf', compact('spd'))->setPaper('a5');
+
+        return $pdf->stream();
+    }
+
+    public function spdPDF2($id)
+    {
         $spd = DataStaffPerjalanan::with(['perjalanan.mak', 'staff.instansis', 'penandatangan', 'tujuan_perjalanan', 'spd'])->find($id);
-        $pdf = \PDF::loadView('pages.pre-perjalanan.spd.pdf', compact('spd'));
+        $pdf = \PDF::loadView('pages.pre-perjalanan.spd.pdf2', compact('spd'));
         return $pdf->stream();
     }
 }

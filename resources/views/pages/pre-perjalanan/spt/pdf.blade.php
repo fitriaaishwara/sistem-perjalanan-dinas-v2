@@ -37,7 +37,7 @@
         }
 
         .font-12 {
-            font-size: 12px !important;
+            font-size: 13px !important;
         }
         .tabel_ttd {
             table-layout:fixed; /* this keeps your columns with at the defined width */
@@ -46,7 +46,8 @@
         }
 
         .tabel_ttd td {
-            width: calc(100% / 3)
+            width: calc(100% / 3);
+            padding: 5px; /* Add padding */
         }
 
         .tabel_spd {
@@ -56,12 +57,17 @@
         }
 
         .tabel_spd td {
-            width: calc(100% / 3)
+            width: calc(100% / 3);
+            padding: 5px; /* Add padding */
+        }
+
+        .text-center {
+            text-align: center;
         }
     </style>
 </head>
 <body>
-    <div class="text-center font-11">
+    <div class="text-center font-12">
         <u><h1>SURAT PERINTAH TUGAS</h1></u>
         @if ($spt->nomor_spt == 1)
             <p style="font-size: 12px">Nomor :&emsp;&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;&emsp;SesDep.4  /SPT/         IX            2023</p>
@@ -72,7 +78,7 @@
 
     <br>
 
-    <div class="font-11">
+    <div class="font-12">
         <table class="w-100">
             <tr>
                 <td style="width: 30px" class="text-center">
@@ -169,7 +175,7 @@
                     :
                 </td>
                 <td>
-                    1. Setelah selesai dilakukan perjalanan dinas ini segera membuat lapoan kepada kami.
+                    1. Setelah selesai dilakukan perjalanan dinas ini segera membuat laporan kepada kami.
                     <br>2. SPT ini mulai berlaku sejak tanggal dikeluarkan.
                 </td>
             </tr>
@@ -209,8 +215,8 @@
 
                     {!!( Str::repeat('<br>', 4) )!!}
 
-                    <div style="width: 250px; font-weight: bold">Bastian</div>
-                    <div style="width: 250px; font-weight: bold">NIP 196904 17 199403 1 001</div>
+                    <div style="width: 250px; font-weight: bold">{{ $tujuan->spt[0]->staff_penandatangan->name }}</div>
+                    <div style="width: 250px; font-weight: bold">NIP {{ $tujuan->spt[0]->staff_penandatangan->nip }}</div>
                 </td>
             </tr>
         </table>

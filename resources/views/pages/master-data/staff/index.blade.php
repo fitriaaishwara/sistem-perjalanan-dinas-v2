@@ -34,21 +34,16 @@
                                 @csrf
                                 <input id="id" type="hidden" class="form-control" name="id">
                                 <div class="mb-3 validate">
-                                    <label for="nip" class="form-label">NIP/NIPPPK/NIK<span
-                                            style="color:red;">*</span></label>
-                                    <input id="nip" type="text" class="form-control" name="nip" minlength="21" maxlength="22">
+                                    <label for="nip" class="form-label">NIP/NIPPPK/NIK<span style="color:red;">*</span></label>
+                                    <input id="nip" type="text" class="form-control" name="nip" minlength="16" maxlength="18" required>
                                 </div>
                                 <div class="mb-3 validate">
-                                    <label for="name" class="form-label">Name<span
-                                            style="color:red;">*</span></label>
-                                    <input id="name" type="text" class="form-control" name="name">
+                                    <label for="name" class="form-label">Name<span style="color:red;">*</span></label>
+                                    <input id="name" type="text" class="form-control" name="name" required>
                                 </div>
                                 <div class="mb-3 validate">
-                                    <label for="jenis" class="form-label">Jenis<span
-                                            style="color:red;">*</span>
-                                    </label>
-                                    <select id="jenis" type="text" class="form-control col-12 jenis"
-                                    name="jenis">
+                                    <label for="jenis" class="form-label">Jenis<span style="color:red;">*</span></label>
+                                    <select id="jenis" type="text" class="form-control col-12 jenis" name="jenis" required>
                                         <option value=""></option>
                                         <option value="0">PNS</option>
                                         <option value="1">PPPK</option>
@@ -57,32 +52,22 @@
                                     </select>
                                 </div>
                                 <div class="mb-3 validate show_in_jenis_pns_only">
-                                    <label for="id_golongan" class="form-label">Golongan<span
-                                            style="color:red;">*</span>
-                                    </label>
-                                    <select id="id_golongan" type="text" class="form-control col-12 id_golongan"
-                                    name="id_golongan">
+                                    <label for="id_golongan" class="form-label">Golongan<span style="color:red;">*</span></label>
+                                    <select id="id_golongan" type="text" class="form-control col-12 id_golongan" name="id_golongan" required>
                                     </select>
                                 </div>
                                 <div class="mb-3 validate show_in_jenis_pns_only">
-                                    <label for="id_jabatan" class="form-label">Jabatan<span
-                                            style="color:red;">*</span></label>
-                                    <select id="id_jabatan" type="text" class="form-control col-md-12 col-xs-12 id_jabatan"
-                                        name="id_jabatan">
+                                    <label for="id_jabatan" class="form-label">Jabatan<span style="color:red;">*</span></label>
+                                    <select id="id_jabatan" type="text" class="form-control col-md-12 col-xs-12 id_jabatan" name="id_jabatan" required>
                                     </select>
                                 </div>
                                 <div class="mb-3 validate">
-                                    <label for="instansi_id" class="form-label">Instansi<span
-                                            style="color:red;">*</span>
-                                    </label>
-                                    <select id="instansi_id" type="text" class="form-control col-12 instansi_id"
-                                    name="instansi_id">
+                                    <label for="instansi_id" class="form-label">Instansi<span style="color:red;">*</span></label>
+                                    <select id="instansi_id" type="text" class="form-control col-12 instansi_id required" name="instansi_id" required>
                                     </select>
                                 </div>
                                 <div class="mb-3 validate other_instance_input">
-                                    <!-- <label for="instansi" class="form-label"><span
-                                            style="color:red;">*</span></label> -->
-                                    <input id="instansi_other_id" type="text" class="form-control" name="instansi_other_id" placeholder="Ketikkan Instansi">
+                                    <input id="instansi_other_id" type="text" class="form-control" name="instansi_other_id" placeholder="Ketikkan Instansi" required>
                                 </div>
                             </form>
                         </div>
@@ -267,6 +252,7 @@
         function reloadTable() {
             staffTable.ajax.reload(null, false); //reload datatable ajax
         }
+
         $("#jenis").select2({
             theme: 'bootstrap',
             width: '100%',
@@ -537,6 +523,8 @@
             rules: {
                 nip: {
                     required: true,
+                    minlength: 16,
+                    maxlength: 18
                 },
                 name: {
                     required: true,
@@ -549,6 +537,9 @@
                 },
 
                 jenis: {
+                    required: true,
+                },
+                instansi_id: {
                     required: true,
                 },
             },

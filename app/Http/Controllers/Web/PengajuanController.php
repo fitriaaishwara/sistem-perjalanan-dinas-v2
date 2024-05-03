@@ -153,7 +153,7 @@ class PengajuanController extends Controller
                         return $query->where('tempat_tujuan', 'like', '%' . $keyword . '%');
                     });
             })
-            ->where('status', true)
+            ->where('status', 1)
             ->get();
 
         $dataCounter = Perjalanan::select()

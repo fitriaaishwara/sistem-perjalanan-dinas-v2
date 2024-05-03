@@ -1,6 +1,7 @@
 @extends('pages.layouts.master')
 @section('content')
-@section('title', 'Mata Akun Anggaran')
+@section('title', 'Data Uang Harian')
+
 <style>
     .container {
       overflow-x: auto;
@@ -13,7 +14,7 @@
   </style>
 
 
-<!-- Modal -->
+            <!-- Modal -->
 			<div id="myModal" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel" aria-hidden="true">
 				<div class="modal-dialog" >
 					<div class="modal-content">
@@ -22,7 +23,7 @@
 								<span class="fw-mediumbold">
 								Data</span>
 								<span class="fw-light">
-									Mata Akun Anggaran
+									Uang Harian
 								</span>
 							</h5>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -30,22 +31,15 @@
 							</button>
 						</div>
                         <div class="modal-body">
-                            <form method="POST" action="{{ route('mak/store') }}" id="makForm" name="makForm">
+                            <form method="POST" action="{{ route('uang_harian/store') }}" id="uang_harianForm" name="uang_harianForm">
                                 @csrf
                                 <input id="id" type="hidden" class="form-control" name="id">
                                 <div class="row mb-4">
-                                    <label for="kode_mak" class="col-sm-3 col-form-label">Kode Mata Akun Anggaran<span
-                                            style="color:red;">*</span></label>
+                                    <label for="nominal" class="col-sm-3 col-form-label">Nominal</label>
                                     <div class="col-sm-9 validate">
-                                        <input id="kode_mak" type="text" class="form-control" name="kode_mak">
-                                    </div>
-                                </div>
-                                <div class="row mb-4">
-                                    <label for="saldo_pagu" class="col-sm-3 col-form-label">Saldo Awal Pagu<span
-                                            style="color:red;">*</span></label>
-                                    <div class="col-sm-9 validate">
-                                        <input id="saldo_pagu" type="text" class="form-control" name="saldo_pagu">
-                                        <small id="formatted_saldo_pagu" class="form-text text-muted"></small>
+                                        <input class="form-control" id="nominal" name="nominal">
+                                        <small id="formatted_nominal" class="form-text text-muted"></small>
+                                        <small id="notification" class="text-muted"></small>
                                     </div>
                                 </div>
                             </form>
@@ -63,7 +57,7 @@
 			<div class="container">
 				<div class="page-inner">
 					<div class="page-header">
-						<h4 class="page-title">Kode Mata Anggaran Kegiatan</h4>
+						<h4 class="page-title">Uang Harian</h4>
 						<ul class="breadcrumbs">
 							<li class="nav-home">
 								<a href="#">
@@ -80,7 +74,7 @@
 								<i class="flaticon-right-arrow"></i>
 							</li>
 							<li class="nav-item">
-								<a href="#">Kode Mata Anggaran Kegiatan</a>
+								<a href="#">Uang Harian</a>
 							</li>
 						</ul>
 					</div>
@@ -88,25 +82,15 @@
 						<div class="col-md-12">
 							<div class="card">
 								<div class="card-header">
-									<div class="d-flex align-items-center">
-										{{-- <h4 class="card-title">Data Mata Akun</h4> --}}
-                                        <a href="javascript:void(0)" class="btn btn-primary btn-round ml-auto"
-                                            data-toggle="modal" data-target="#myModal" id="addNew" name="addNew"><i class="fa fa-plus"></i> Tambah</a>
-                                            {{-- <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal">
-                                            <i class="fa fa-plus"></i>Create
-                                            </button> --}}
-									</div>
 								</div>
 								<div class="card-body">
 									<div class="table-responsive">
-										<table id="makTable" class="display table table-striped table-hover" >
+										<table id="uang_harianTable" class="display table table-striped table-hover" >
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>Kode Mata Anggaran</th>
-                                                    <th>Saldo Awal Pagu</th>
-                                                    <th>Saldo Pagu</th>
-                                                    <th>Terealisasi</th>
+                                                    <th>Provinsi</th>
+                                                    <th>Nominal</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -124,28 +108,28 @@
 @endsection
 @push('js')
 <script>
-    document.getElementById('saldo_pagu').addEventListener('input', function (e) {
-        let saldoPagu = e.target.value;
+    document.getElementById('nominal').addEventListener('input', function (e) {
+        let nominal = e.target.value;
 
         // Remove non-numeric characters
-        saldoPagu = saldoPagu.replace(/\D/g, '');
+        nominal = nominal.replace(/\D/g, '');
 
         // Limit the length of nominal
-        if (saldoPagu.length > 9) {
-            saldoPagu = saldoPagu.substring(0, 9);
+        if (nominal.length > 9) {
+            nominal = nominal.substring(0, 9);
         }
 
         // Format the nominal
-        const formattedSaldoPagu = formatCurrency(saldoPagu);
+        const formattedNominal = formatCurrency(nominal);
 
         // Set the formatted nominal below the form
-        document.getElementById('formatted_saldo_pagu').textContent = formattedSaldoPagu;
+        document.getElementById('formatted_nominal').textContent = formattedNominal;
 
         // Set the value in the input field
-        e.target.value = saldoPagu;
+        e.target.value = nominal;
 
         // Update the validation message
-        updateValidationMessage(saldoPagu);
+        updateValidationMessage(nominal);
     });
 
     function formatCurrency(amount) {
@@ -156,7 +140,7 @@
     }
 
     // Validate only numbers
-    document.getElementById('saldoPagu').addEventListener('keypress', function (e) {
+    document.getElementById('nominal').addEventListener('keypress', function (e) {
         const keyCode = e.keyCode;
         if (keyCode < 48 || keyCode > 57) {
             e.preventDefault();
@@ -164,10 +148,10 @@
     });
 
     // Update the validation message
-    function updateValidationMessage(saldoPagu) {
+    function updateValidationMessage(nominal) {
         const notification = document.getElementById('notification');
-        if (saldoPagu !== '') {
-            if (!/^\d+$/.test(saldoPagu)) {
+        if (nominal !== '') {
+            if (!/^\d+$/.test(nominal)) {
                 notification.textContent = 'Nominal harus berupa angka';
             } else {
                 notification.textContent = '';
@@ -178,12 +162,6 @@
     }
 </script>
     <script type="text/javascript">
-        function rupiah($angka){
-            var reverse = $angka.toString().split('').reverse().join(''),
-            ribuan = reverse.match(/\d{1,3}/g);
-            ribuan = ribuan.join('.').split('').reverse().join('');
-            return ribuan;
-        }
         $(function() {
             let request = {
                 start: 0,
@@ -191,7 +169,7 @@
             };
             var isUpdate = false;
 
-            var makTable = $('#makTable').DataTable({
+            var uang_harianTable = $('#uang_harianTable').DataTable({
                 "language": {
                     "paginate": {
                         "next": '<i class="fas fa-arrow-right"></i>',
@@ -208,7 +186,7 @@
                     [10, 15, 25, 50, "All"]
                 ],
                 "ajax": {
-                    "url": "{{ route('mak/getData') }}",
+                    "url": "{{ route('uang_harian/getData') }}",
                     "type": "POST",
                     "headers": {
                         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
@@ -234,43 +212,21 @@
                         }
                     },
                     {
-                        "data": "kode_mak",
-                        "width": '10%',
+                        "data": "province.name",
+                        "width": '30%',
                         "defaultContent": "-",
                         render: function(data, type, row) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
-                        },
+                            let province = (data) ? data : '-';
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + province + "</div>";
+                        }
                     },
                     {
-                        "data": "saldo_awal_pagu",
-                        "width": '10%',
+                        "data": "nominal",
+                        "width": '30%',
                         "defaultContent": "-",
                         render: function(data, type, row) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data) + "</div>";
-                        },
-                    },
-                    {
-                        "data": "saldo_pagu",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            if (data == null) {
-                                return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
-                            } else {
-                                return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data) + "</div>";
-                            }
-                        },
-                    },
-                    {
-                        "data": "keterangan",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            if (data == null) {
-                                return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
-                            } else {
-                                return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
-                            }
+                            let nominal = (data) ? data : '-';
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + formatCurrency(nominal) + "</div>";
                         },
                     },
                     {
@@ -281,31 +237,32 @@
                             var btnDelete = "";
                             btnEdit += '<button name="btnEdit" data-id="' + data +
                                 '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
-                            btnDelete += '<button name="btnDelete" data-id="' + data +
-                                '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
+                            // btnDelete += '<button name="btnDelete" data-id="' + data +
+                            //     '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
 
-                            return btnEdit + btnDelete;
+                            // return btnEdit + btnDelete;
+                            return btnEdit;
                         },
                     },
                 ]
             });
 
             function reloadTable() {
-                makTable.ajax.reload(null, false); //reload datatable ajax
+                uang_harianTable.ajax.reload(null, false); //reload datatable ajax
             }
 
             $('#saveBtn').click(function(e) {
                 e.preventDefault();
-                var isValid = $("#makForm").valid();
+                var isValid = $("#uang_harianForm").valid();
                 if (isValid) {
                     $('#saveBtn').text('Save...');
                     $('#saveBtn').attr('disabled', true);
                     if (!isUpdate) {
-                        var url = "{{ route('mak/store') }}";
+                        var url = "{{ route('uang_harian/store') }}";
                     } else {
-                        var url = "{{ route('mak/update') }}";
+                        var url = "{{ route('uang_harian/update') }}";
                     }
-                    var formData = new FormData($('#makForm')[0]);
+                    var formData = new FormData($('#uang_harianForm')[0]);
                     $.ajax({
                         url: url,
                         type: "POST",
@@ -337,18 +294,18 @@
                 }
             });
 
-            $('#makTable').on("click", ".btnEdit", function() {
+            $('#uang_harianTable').on("click", ".btnEdit", function() {
                 $('#myModal').modal('show');
                 isUpdate = true;
                 var id = $(this).attr('data-id');
-                var url = "{{ route('mak/show', ['id' => ':id']) }}";
+                var url = "{{ route('uang_harian/show', ['id' => ':id']) }}";
                 url = url.replace(':id', id);
                 $.ajax({
                     type: 'GET',
                     url: url,
                     success: function(response) {
-                        $('#kode_mak').val(response.data.kode_mak);
-                        $('#saldo_pagu').val(response.data.saldo_pagu);
+                        $('#province_id').val(response.data.province_id);
+                        $('#nominal').val(response.data.nominal);
                         $('#id').val(response.data.id);
                     },
                     error: function() {
@@ -361,11 +318,11 @@
                 });
             });
 
-            $('#makTable').on("click", ".btnDelete", function() {
+            $('#uang_harianTable').on("click", ".btnDelete", function() {
                 var id = $(this).attr('data-id');
                 Swal.fire({
                     title: 'Confirmation',
-                    text: "Kamu akan menghapus Mata Akun Anggaran. Apakah kamu ingin melanjutkan?",
+                    text: "Kamu akan menghapus uang_harian. Apakah kamu ingin melanjutkan?",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -374,7 +331,7 @@
                     cancelButtonText: 'No'
                 }).then(function(result) {
                     if (result.value) {
-                        var url = "{{ route('mak/delete', ['id' => ':id']) }}";
+                        var url = "{{ route('uang_harian/delete', ['id' => ':id']) }}";
                         url = url.replace(':id', id);
                         $.ajax({
                             headers: {
@@ -403,18 +360,17 @@
                 })
             });
 
-            $('#makForm').validate({
+            $('#uang_harianForm').validate({
                 rules: {
-                    kode_mak: {
+                    name: {
                         required: true,
                     },
-                    saldo_pagu: {
-                        required: true,
-                        number: true // Menambahkan aturan untuk hanya menerima angka
-                    },
+                    nominal: {
+                        number: true
+                    }
                 },
                 messages: {
-                    saldo_pagu: {
+                   nominal: {
                         number: "Nominal harus berupa angka"
                     }
                 },
@@ -432,12 +388,9 @@
             });
 
             $('#addNew').on('click', function() {
-                $('#kode_mak').val("");
-                $('#saldo_pagu').val("");
+                $('#nominal').val("");
                 isUpdate = false;
             });
         });
     </script>
 @endpush
-
-

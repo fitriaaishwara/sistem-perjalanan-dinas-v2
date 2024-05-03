@@ -240,8 +240,9 @@
                     "width": '15%',
                     render: function(data, type, row) {
                         var btnTambah = "";
-                        var btnDownload = "";
-                        var btnEdit = "";
+                        // var btnDownload = "";
+                        // var btnEdit = "";
+                        var btnDetail= "";
 
                         if (row.spd == "" || row.spd == null) {
                             btnTambah += '<a href="/surat-perjalanan-dinas/create/' + data +
@@ -252,15 +253,20 @@
                             //     '" name="btnEdit" data-id="' + data +
                             //     '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
 
-                            btnDownload += '<a href="/surat-perjalanan-dinas/pdf/' + data +
-                                '" name="btnDownload" data-id="' + data +
-                                '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
+                            // btnDownload += '<a href="/surat-perjalanan-dinas/pdf/' + data +
+                            //     '" name="btnDownload" data-id="' + data +
+                            //     '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
+
+                            btnDetail += '<a href="/surat-perjalanan-dinas/' + data +
+                                '" name="btnEdit" data-id="' + data +
+                                '" type="button" class="btn btn-warning btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-bookmark"></i></a>';
                         }
 
 
 
-                            console.log(row);
-                        return btnTambah + btnEdit + btnDownload;
+                        console.log(row);
+                        return btnTambah + btnDetail;
+
                     },
                 },
             ]

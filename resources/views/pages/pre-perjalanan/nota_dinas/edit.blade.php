@@ -72,11 +72,27 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="status_nota_dinas">Status Nota Dinas</label>
-                                    <input type="hidden" class="form-control" id="status_nota_dinas" name="status_nota_dinas" value = "0">
-                                    <input type="checkbox" class="form-control" id="status_nota_dinas" name="status_nota_dinas" value = "{{true}}" {{ $notadinas->status_nota_dinas == 1 ? 'checked' : '' }}>
+                                    <label for="status_nota_dinas">Table</label>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="status_nota_dinas" name="status_nota_dinas">
+                                        <label class="custom-control-label" for="status_nota_dinas" id="statusLabel">Off</label>
+                                    </div>
+                                    <input type="hidden" id="status_nota_dinas_hidden" name="status_nota_dinas_hidden" value="0">
                                 </div>
 
+                                <div class="form-group">
+                                    <label for="status_keterangan">Tembusan</label>
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" class="custom-control-input" id="status_keterangan" name="status_keterangan">
+                                        <label class="custom-control-label" for="status_keterangan" id="keteranganLabel">Off</label>
+                                    </div>
+                                    <input type="hidden" id="status_keterangan_hidden" name="status_keterangan_hidden" value="0">
+                                </div>
+
+                                <div class="form-group" id="keteranganField" style="display: none;">
+                                    <label for="keterangan">Tembusan</label>
+                                    <textarea class="form-control" id="keterangan" name="keterangan" rows="3" placeholder="Tembusan"></textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -90,6 +106,25 @@
 @endsection
 
 @push('js')
+
+<script type="text/javascript">
+    $(function () {
+
+        // Toggle button for status_keterangan
+        $('#status_keterangan').change(function () {
+            var status = $(this).is(':checked') ? 1 : 0;
+            $('#keteranganLabel').text($(this).is(':checked') ? 'On' : 'Off');
+            $('#status_keterangan_hidden').val(status);
+
+            // Show/hide keterangan field based on status_keterangan
+            if (status === 1) {
+                $('#keteranganField').show();
+            } else {
+                $('#keteranganField').hide();
+            }
+        });
+    });
+</script>
 
 <script type="text/javascript">
     $(function () {

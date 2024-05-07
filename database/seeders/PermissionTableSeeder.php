@@ -105,6 +105,24 @@ class PermissionTableSeeder extends Seeder
                     'guard_name' => 'web',
                 ],
 
+                15 => [
+                    'id' => '16',
+                    'name' => 'Data Rekap ',
+                    'guard_name' => 'web',
+                ],
+
+                16 => [
+                    'id' => '17',
+                    'name' => 'Data SBM',
+                    'guard_name' => 'web',
+                ],
+
+                17 => [
+                    'id' => '18',
+                    'name' => 'Kartu Kredit Pemerintah',
+                    'guard_name' => 'web',
+                ],
+
             ];
 
             \DB::table('permissions')->insert($data);

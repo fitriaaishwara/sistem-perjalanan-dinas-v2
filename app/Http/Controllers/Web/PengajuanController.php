@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\DataKegiatan;
 use App\Models\DataStaffPerjalanan;
 use App\Models\DataUangHarian;
 use App\Models\LogStatusPerjalanan;
@@ -100,15 +101,18 @@ class PengajuanController extends Controller
         $staff->id_tujuan_perjalanan = $id_tujuan_perjalanan;
         $staff->save();
 
-        // Check if the save was successful
-        // if ($staff->id) {
-        //     // If so, associate the id_data_staff_perjalanan with DataUangHarian
-        //     $uangHarian = new DataUangHarian;
-        //     $uangHarian->id_data_staff_perjalanan = $staff->id;
-        //     $uangHarian->save();
-        // }
+        // Save data into Data_Kegiatan_Perjalanan table
+        $kegiatan = new DataKegiatan;
+        $kegiatan->id_perjalanan = $id_perjalanan;
+        $kegiatan->id_tujuan = $id_tujuan_perjalanan;
+        $kegiatan->nip_staff = $nip_staff;
+        $kegiatan->id_kegiatan = $request->id_kegiatan; // Assuming this field is coming from the request
+        $kegiatan->status = 1;
+        $kegiatan->created_by = Auth::id();
+        $kegiatan->updated_by = Auth::id();
+        $kegiatan->save();
 
-        return redirect()->back() -> with('success', 'Data berhasil disimpan');
+        return redirect()->back()->with('success', 'Data berhasil disimpan');
     }
 
     public function createId($id)

@@ -145,6 +145,7 @@
 							</div>
 						</li>
                         @endif
+                        @if (auth()->user()->can('Data SBM'))
                         <li class="nav-item {{ request()->is('sbm-sbm-translok') || request()->is('sbm-sbm-translok/*') || request()->is('sbm-tiket') || request()->is('sbm-tiket/*') || request()->is('sbm-hotel') || request()->is('sbm-hotel/*') || request()->is('uang_harian') || request()->is('uang_harian/*') ? 'collapse show' : 'collapse' }}">
 							<a data-toggle="collapse" href="#sbm">
 								<i class="fas fa-hand-holding-usd"></i>
@@ -176,6 +177,7 @@
 								</ul>
 							</div>
 						</li>
+                        @endif
                         @if (auth()->user()->can('Mata Anggaran Akun'))
                         <li class="nav-item {{ request()->is('mak') || request()->is('mak/*') ? 'active' : '' }}">
                             <a href="{{ route('mak') }}">
@@ -184,18 +186,23 @@
 							</a>
 						</li>
                         @endif
+                        @if (auth()->user()->can('Rekap Data'))
 						<li class="nav-item {{ request()->is('rekap-data') || request()->is('rekap-data/*') ? 'active' : '' }}">
                             <a href="{{ route('rekap-data') }}">
 								<i class="fas fa-plane-departure"></i>
 								<p>Rekap Data Perjalanan</p>
 							</a>
 						</li>
+                        @endif
+                        @if (auth()->user()->can('Kartu Kredit Pemerintah'))
                         <li class="nav-item {{ request()->is('kkp') || request()->is('kkp/*') ? 'active' : '' }}">
                             <a href="{{ route('kkp') }}">
 								<i class="fas fa-plane-departure"></i>
 								<p>KKP</p>
 							</a>
 						</li>
+                        @endif
+
                         @if (auth()->user()->can('Perjalanan'))
                         <li class="nav-section">
 							<span class="sidebar-mini-icon">

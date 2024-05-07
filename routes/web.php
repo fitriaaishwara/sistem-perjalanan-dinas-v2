@@ -179,6 +179,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/showStaff/{id}', [App\Http\Controllers\Web\TujuanController::class, 'showStaff'])->name('tujuan/showStaff');
     Route::post('/tujuan/delete/{id}', [App\Http\Controllers\Web\TujuanController::class, 'destroy'])->name('tujuan/delete');
 
+    Route::post('/kegiatan/getData', [App\Http\Controllers\Web\KegiatanController::class, 'getData'])->name('kegiatan/getData');
+    Route::any('/kegiatanById/{id_perjalanan} ', [App\Http\Controllers\Web\KegiatanController::class, 'getKegiatanByIdPerjalanan'])->name('kegiatanById/getData');
+    Route::post('/kegiatan/store', [App\Http\Controllers\Web\KegiatanController::class, 'store'])->name('kegiatan/store');
+    Route::post('/kegiatan/update', [App\Http\Controllers\Web\KegiatanController::class, 'update'])->name('kegiatan/update');
+    Route::get('/kegiatan/{id}', [App\Http\Controllers\Web\KegiatanController::class, 'show'])->name('kegiatan/show');
+    // Route::get('/showStaff/{id}', [App\Http\Controllers\Web\TujuanController::class, 'showStaff'])->name('tujuan/showStaff');
+    Route::post('/kegiatan/delete/{id}', [App\Http\Controllers\Web\KegiatanController::class, 'destroy'])->name('kegiatan/delete');
+
     Route::any('/staffById/getData/{id_perjalanan} ', [App\Http\Controllers\Web\TujuanController::class, 'getStaffByIdPerjalanan'])->name('staffById/getData');
 
     // Route::get('/tujuan', [App\Http\Controllers\Web\TujuanController::class, 'index'])->name('tujuan');

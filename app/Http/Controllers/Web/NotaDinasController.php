@@ -80,38 +80,6 @@ class NotaDinasController extends Controller
         }
     }
 
-    // public function store(Request $request)
-    // {
-    //     // dd($request->all());
-    //     try {
-    //         $data = ['status' => false, 'code' => 'EC001', 'message' => 'Jabatan failed to create'];
-    //         $create =  NotaDinas::create([
-    //             'id_perjalanan' => $request->id_perjalanan,
-    //             'id_staff_penandatangan' => $request->id_staff_penandatangan,
-    //             'nomor_nota_dinas' => $request->nomor_nota_dinas,
-    //             'yth' => $request->yth,
-    //             'dari' => $request->dari,
-    //             'perihal' => $request->perihal,
-    //             'lampiran' => $request->lampiran,
-    //             'tanggal_nota_dinas' => $request->tanggal_nota_dinas,
-    //             'isi_nota_dinas' => $request->isi_nota_dinas,
-    //         ]);
-    //         if ($create) {
-    //             $data = ['status' => true, 'code' => 'SC001', 'message' => 'Jabatan successfully created'];
-    //         }
-    //     } catch (\Exception $ex) {
-    //         $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
-    //     }
-
-    //     if ($data['status'] == true) {
-    //         Alert::success('Success', $data['message']);
-    //         return redirect()->route('nota-dinas');
-    //     } else {
-    //         Alert::error('Error', $data['message']);
-    //         return redirect()->back();
-    //     }
-    // }
-
     public function store(Request $request)
     {
         // Validate the request data
@@ -123,7 +91,7 @@ class NotaDinasController extends Controller
             'lampiran' => 'required|string',
             'tanggal_nota_dinas' => 'required|date',
             'isi_nota_dinas' => 'required|string',
-            'id_staff_penandatangan' => 'required|exists:staff,id',
+            'nip_staff_penandatangan' => 'required|exists:staff,nip',
             'id_perjalanan' => 'required|exists:perjalanan,id',
             'status_nota_dinas_hidden' => 'required|boolean', // Ensure it's a boolean value
         ]);
@@ -137,7 +105,7 @@ class NotaDinasController extends Controller
         $notaDinas->lampiran = $validatedData['lampiran'];
         $notaDinas->tanggal_nota_dinas = $validatedData['tanggal_nota_dinas'];
         $notaDinas->isi_nota_dinas = $validatedData['isi_nota_dinas'];
-        $notaDinas->id_staff_penandatangan = $validatedData['id_staff_penandatangan'];
+        $notaDinas->nip_staff_penandatangan = $validatedData['nip_staff_penandatangan'];
         $notaDinas->id_perjalanan = $validatedData['id_perjalanan'];
         $notaDinas->status_nota_dinas = $validatedData['status_nota_dinas_hidden']; // Use the hidden field value
 
@@ -162,7 +130,7 @@ class NotaDinasController extends Controller
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Jabatan failed to create'];
             $create =  NotaDinas::find($id) -> update([
                 'id_perjalanan' => $request->id_perjalanan,
-                'id_staff_penandatangan' => $request->id_staff_penandatangan,
+                'nip_staff_penandatangan' => $request->nip_staff_penandatangan,
                 'nomor_nota_dinas' => $request->nomor_nota_dinas,
                 'yth' => $request->yth,
                 'dari' => $request->dari,

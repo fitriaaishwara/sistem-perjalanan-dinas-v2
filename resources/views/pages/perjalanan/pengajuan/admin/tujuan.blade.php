@@ -99,14 +99,14 @@
                     <input type="hidden" name="id_edit" id="id_edit">
 
                     <div class="row mb-4">
-                        <label for="id_staff" class="col-sm-3 col-form-label">Staff<span
+                        <label for="nip_staff" class="col-sm-3 col-form-label">Staff<span
                                 style="color:red;">*</span></label>
                         <div class="col-sm-9 validate">
-                            <select name="id_staff" class="form-control select2" required id="id_staff">
+                            <select name="nip_staff" class="form-control select2" required id="nip_staff">
                                 <option value="">Pilih Staff</option>
                                 @foreach ($staff as $item)
                                     @if ($item->status === 1)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    <option value="{{ $item->nip }}">{{ $item->name }}</option>
                                     @endif
                                 @endforeach
                             </select>

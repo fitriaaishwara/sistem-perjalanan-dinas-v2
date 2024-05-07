@@ -261,18 +261,11 @@
                     "data": "id",
                     "width": '15%',
                     render: function(data, type, row) {
-                        var btnEdit = "";
-                        var btnStatus = "";
-                        var btnDelete = "";
-                        btnEdit += '<a href="/pengajuan/edit/' + data +
-                            '" name="btnEdit" data-id="' + data +
-                            '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
-                        btnStatus += '<button name="btnStatus" data-id="' + data +
+                        var btnDetail = "";
+                        btnDetail += '<button name="btnStatus" data-id="' + data +
                             '" type="button" class="btn btn-primary btn-sm btnStatus m-1" data-toggle="tooltip" data-placement="top" title="Change Status"><i class="fa fa-bookmark"></i></button>';
-                        btnDelete += '<button name="btnDelete" data-id="' + data +
-                            '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
 
-                        return btnEdit + btnStatus + btnDelete;
+                        return btnDetail;
                     },
                 },
             ]

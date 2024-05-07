@@ -82,7 +82,7 @@ class PengajuanController extends Controller
 
     function save_staff(Request $request, $id_perjalanan) {
 
-        $id_staff = $request->id_staff;
+        $nip_staff = $request->nip_staff;
         $id_tujuan_perjalanan = $request->id_tujuan_perjalanan;
 
         $staff = new DataStaffPerjalanan;
@@ -96,7 +96,7 @@ class PengajuanController extends Controller
             $staff = DataStaffPerjalanan::findOrFail($request->id_edit);
         }
 
-        $staff->id_staff = $id_staff;
+        $staff->nip_staff = $nip_staff;
         $staff->id_tujuan_perjalanan = $id_tujuan_perjalanan;
         $staff->save();
 

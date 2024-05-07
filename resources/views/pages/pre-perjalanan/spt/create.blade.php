@@ -76,7 +76,7 @@
                                     <div id="myModal" class="card-body">
                                         <div class="col-lg-12">
                                             <input type="hidden" name="id_tujuan" id="id_tujuan" value="{{ $tujuan->id }}">
-                                            <input type="hidden" name="id_staff" id="id_staff" value="{{ $tujuan->staff[0]->id }}">
+                                            <input type="hidden" name="nip_staff" id="nip_staff" value="{{ $tujuan->staff[0]->nip_staff }}">
                                             <div class="form-group">
                                                 <label for="nomor_spt">Nomor SPT</label>
                                                 <select name="nomor_spt" id="nomor_spt" class="form-control select2" validate>
@@ -90,8 +90,8 @@
                                                 <input type="text" name="dikeluarkan_tanggal" id="dikeluarkan_tanggal" class="form-control date"  placeholder="Pilih Tanggal SPT terbit" validate>
                                             </div>
                                             <div class="form-group">
-                                                <label for="id_staff_penandatangan">Penandatangan SPT</label>
-                                                <select name="id_staff_penandatangan" id="id_staff_penandatangan" class="form-control select2" validate>
+                                                <label for="nip_staff_penandatangan">Penandatangan SPT</label>
+                                                <select name="nip_staff_penandatangan" id="nip_staff_penandatangan" class="form-control select2" validate>
                                                     <option value="">Pilih Penandatangan</option>
                                                     @foreach ($staff as $item)
                                                         <option value="{{ $item->id }}">{{ $item->name }}</option>

@@ -436,7 +436,7 @@
             $('#myModal').modal('show');
             isUpdate = true;
             var id = $(this).attr('data-id');
-            var url = "{{ route('staff/show', ['id' => ':id']) }}";
+            var url = "{{ route('staff/show', ['nip' => ':nip']) }}";
             url = url.replace(':id', id);
             $.ajax({
                 type: 'GET',
@@ -490,7 +490,7 @@
                 cancelButtonText: 'No'
             }).then(function(result) {
                 if (result.value) {
-                    var url = "{{ route('staff/delete', ['id' => ':id']) }}";
+                    var url = "{{ route('staff/delete', ['nip' => ':nip']) }}";
                     url = url.replace(':id', id);
                     $.ajax({
                         headers: {
@@ -518,6 +518,45 @@
                 }
             })
         });
+
+        $('#staffTable').on("click", ".btnCreate", function(event) {
+            event.preventDefault();
+
+            var id = $(this).data('id');
+            var url = "{{ route('user.create', ['nip' => ':nip']) }}";
+            url = url.replace(':nip', id);
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: {_token: '{{ csrf_token() }}'},
+                success: function(response) {
+                    if (response.status) {
+                        Swal.fire(
+                            'Success',
+                            response.message,
+                            'success'
+                        );
+                        reloadTable(); // Assuming you have a function to reload the table
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            response.message,
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire(
+                        'Error',
+                        'A system error has occurred. Please try again later.',
+                        'error'
+                    );
+                }
+            });
+        });
+
+
 
         $('#staffForm').validate({
             rules: {

@@ -28,9 +28,9 @@ class PerjalananController extends Controller
         return response()->json(['staff' => $staff]);
     }
 
-    public function staff_by_id($id)
+    public function staff_by_id($nip)
     {
-        $staff = \App\Models\Staff::where('id', $id)->first();
+        $staff = \App\Models\Staff::where('nip', $nip)->first();
 
         return response()->json(['staff' => $staff]);
     }

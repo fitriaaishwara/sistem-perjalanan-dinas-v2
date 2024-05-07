@@ -15,22 +15,22 @@ class CreateDataStaffPerjalananTable extends Migration
     {
         Schema::create('data_staff_perjalanan', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('id_staff');
+            $table->string('nip_staff');
             $table->foreignUuid('id_perjalanan');
             $table->foreignUuid('id_tujuan_perjalanan');
             $table->integer('total_biaya')->default(0);
-            $table->boolean('status')->default (1);
+            $table->boolean('status')->default(1);
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->string('deleted_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('id_staff')->references('id')->on('staff');
             $table->foreign('id_perjalanan')->references('id')->on('perjalanan');
             $table->foreign('id_tujuan_perjalanan')->references('id')->on('data_tujuan_perjalanan');
 
-
+            // Assuming 'nip_staff' is a foreign key referencing 'nip' in 'staff'
+            $table->foreign('nip_staff')->references('nip')->on('staff');
         });
     }
 

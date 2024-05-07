@@ -36,7 +36,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/user/password', [App\Http\Controllers\Web\UserController::class, 'changePassword'])->name('user/password');
     Route::post('/user/updateActive', [App\Http\Controllers\Web\UserController::class, 'updateActive'])->name('user/updateActive');
     Route::post('/user/delete/{id}', [App\Http\Controllers\Web\UserController::class, 'destroy'])->name('user/delete');
-    Route::any('/user/{id}/createUser', [App\Http\Controllers\Web\UserController::class, 'createUser'])->name('user/buttonCreateUser');
+    Route::post('/user/{nip}/createUser', [App\Http\Controllers\Web\UserController::class, 'createUser'])->name('user.create');
     Route::post('user/status/{id}', [App\Http\Controllers\Web\UserController::class, 'status'])->name('user/status');
 
     Route::get('/assignRole', function () {
@@ -81,8 +81,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/staff/getData', [App\Http\Controllers\Web\StaffController::class, 'getData'])->name('staff/getData');
     Route::post('/staff/store', [App\Http\Controllers\Web\StaffController::class, 'store'])->name('staff/store');
     Route::post('/staff/update', [App\Http\Controllers\Web\StaffController::class, 'update'])->name('staff/update');
-    Route::get('/staff/{id}', [App\Http\Controllers\Web\StaffController::class, 'show'])->name('staff/show');
-    Route::post('/staff/delete/{id}', [App\Http\Controllers\Web\StaffController::class, 'destroy'])->name('staff/delete');
+    Route::get('/staff/{nip}', [App\Http\Controllers\Web\StaffController::class, 'show'])->name('staff/show');
+    Route::post('/staff/delete/{nip}', [App\Http\Controllers\Web\StaffController::class, 'destroy'])->name('staff/delete');
 
     //Data Perjalanan
     Route::get('/data-perjalanan', [App\Http\Controllers\Web\PerjalananController::class, 'index'])->name('dataPerjalanan');
@@ -144,7 +144,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/pengajuan/stores', [App\Http\Controllers\Web\PengajuanController::class, 'stores'])->name('pengajuan/stores');
     Route::post('/pengajuan/store', [App\Http\Controllers\Web\PengajuanController::class, 'store'])->name('pengajuan/store');
     Route::get('/pengajuan/staff', [App\Http\Controllers\Web\PerjalananController::class, 'staff'])->name('pengajuan/staff');
-    Route::get('/pengajuan/staff/{id}/by_id', [App\Http\Controllers\Web\PerjalananController::class, 'staff_by_id'])->name('pengajuan/staff/by_id');
+    Route::get('/pengajuan/staff/{nip}/by_nip', [App\Http\Controllers\Web\PerjalananController::class, 'staff_by_nip'])->name('pengajuan/staff/by_nip');
 
     Route::get('/pengajuan/edit/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'edit'])->name('pengajuan/edit');
     Route::post('/pengajuan/edit/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'update'])->name('pengajuan/edit');

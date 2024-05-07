@@ -5,15 +5,11 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Staff;
 use App\Models\User;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
-use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
@@ -24,255 +20,252 @@ class UserController extends Controller
 
     public function getData(Request $request)
     {
-        $keyword = $request['searchkey'];
+        $keyword = $request->input('searchkey');
 
-        $users = User::select()
-            ->with(['roles'])
-            ->offset($request['start'])
-            ->limit(($request['length'] == -1) ? User::count() : $request['length'])
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('name', 'like', '%' . $keyword . '%');
-            })
-            ->oldest('name')
-            ->get();
+        $usersQuery = User::with('roles')->orderBy('name');
 
-        $usersCounter = User::select()
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('name', 'like', '%' . $keyword . '%');
-            })
-            ->count();
+        if ($keyword) {
+            $usersQuery->where('name', 'like', '%' . $keyword . '%');
+        }
 
-            // $roles = "";
-            // foreach($users as $users) {
-            //     foreach($users->roles as $role) {
-            //         $roles .= $role->name;
+        $users = $usersQuery->paginate($request->input('length', User::count()));
 
-            //         if($role != $users->roles->last()) {
-            //             $roles .= ", ";
-            //         }
-            //     }
-
-            //     $users->roles_concated = $roles;
-            // }
-
-        $response = [
+        return [
             'status'          => true,
             'code'            => '',
             'message'         => '',
-            'draw'            => $request['draw'],
+            'draw'            => $request->input('draw'),
             'recordsTotal'    => User::count(),
-            'recordsFiltered' => $usersCounter,
-            'data'            => $users,
+            'recordsFiltered' => $users->total(),
+            'data'            => $users->items(),
         ];
-        return $response;
     }
+
     public function show($id)
     {
         try {
-            $data = ['status' => false, 'message' => 'User failed to be found'];
-            $user = User::with(['roles'])->where('id', $id)->first();
+            $user = User::with('roles')->find($id);
             if ($user) {
-                $data = ['status' => true, 'message' => 'User was successfully found', 'data' => $user];
+                return ['status' => true, 'message' => 'User was successfully found', 'data' => $user];
+            } else {
+                return ['status' => false, 'message' => 'User not found'];
             }
         } catch (\Exception $ex) {
-            $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
+            return ['status' => false, 'message' => 'A system error has occurred. Please try again later.', 'error' => $ex->getMessage()];
         }
-        return $data;
     }
+
     public function store(Request $request)
     {
-        //     dd($request->all());
-        $fileName = Str::random(20);
-        $path = 'images/user/';
+        $validator = Validator::make($request->all(), [
+            'photo' => 'image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'message' => 'Files cannot be larger than 2MB, in the format of jpg, jpeg, png']);
+        }
+
         try {
             DB::beginTransaction();
-            $data = ['status' => false, 'message' => 'User failed to create'];
+
             if (User::where('email', $request['email'])->exists()) {
-                return $data = ['status' => false, 'message' => 'Email already exists'];
+                return ['status' => false, 'message' => 'Email already exists'];
             }
+
             if (User::where('username', $request['username'])->exists()) {
-                return $data = ['status' => false, 'message' => 'Username already exists'];
+                return ['status' => false, 'message' => 'Username already exists'];
             }
-            $validator = Validator::make($request->all(), [
-                'photo' => 'image|mimes:jpg,jpeg,png|max:2048',
+
+            $fileName = Str::random(20);
+            $path = 'images/user/';
+            $photoName = null;
+
+            if ($request->hasFile('photo')) {
+                $photoName = $fileName . '.' . $request->file('photo')->extension();
+                $request->file('photo')->storeAs($path, $photoName, 'public');
+            }
+
+            $user = User::create([
+                'username' => $request['username'],
+                'name' => ucwords($request['name']),
+                'email' => $request['email'],
+                'photo' => $photoName,
+                'password' => Hash::make($request['password']),
             ]);
-            if ($validator->fails()) {
-                return response()->json(['status' => false, 'message' => 'Files cannot be larger than 2MB, in the format of jpg, jpeg, png']);
-            }
-            if ($request->file('photo') != null) {
-                $extension = $request->file('photo')->extension();
-                $photoName = $fileName . '.' . $extension;
-                Storage::disk('public')->putFileAs($path, $request->file('photo'), $fileName . "." . $extension);
-            } else {
-                $photoName = null;
-            }
-            $user                = new User;
-            $user->username      = $request['username'];
-            $user->name          = ucwords($request['name']);
-            $user->email         = $request['email'];
-            $user->photo         = $photoName;
-            $user->password      = Hash::make($request['password']);
-            $user->save();
 
             $user->assignRole($request->role_id);
 
-            if ($user) {
-                DB::commit();
-                $data = ['status' => true, 'message' => 'User successfully created'];
-            }
+            DB::commit();
+
+            return ['status' => true, 'message' => 'User successfully created'];
         } catch (\Exception $ex) {
             DB::rollback();
-            $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
+            return ['status' => false, 'message' => 'A system error has occurred. Please try again later.', 'error' => $ex->getMessage()];
         }
-        return $data;
     }
+
     public function update(Request $request)
     {
-        // dd($request->all());
-        $fileName = Str::random(20);
-        $path = 'images/user/';
+        $validator = Validator::make($request->all(), [
+            'photo' => 'image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'message' => 'Files cannot be larger than 2MB, in the format of jpg, jpeg, png']);
+        }
+
         $user = User::find($request->id);
+
+        if (!$user) {
+            return ['status' => false, 'message' => 'User not found'];
+        }
+
         try {
             DB::beginTransaction();
-            $data = ['status' => false, 'message' => 'User failed to update'];
-            if ($user->email != $request['email']) {
-                if (User::where('email', $request['email'])->exists()) {
-                    return $data = ['status' => false, 'code' => 'EC002', 'message' => 'Email already exists'];
-                }
+
+            if ($user->email != $request['email'] && User::where('email', $request['email'])->exists()) {
+                return ['status' => false, 'message' => 'Email already exists'];
             }
-            if ($user->username != $request['username']) {
-                if (User::where('username', $request['username'])->exists()) {
-                    return $data = ['status' => false, 'message' => 'Username already exists'];
-                }
+
+            if ($user->username != $request['username'] && User::where('username', $request['username'])->exists()) {
+                return ['status' => false, 'message' => 'Username already exists'];
             }
-            $validator = Validator::make($request->all(), [
-                'photo' => 'image|mimes:jpg,jpeg,png|max:2048',
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['status' => false, 'message' => 'Files cannot be larger than 2MB, in the format of jpg, jpeg, png']);
+
+            $fileName = Str::random(20);
+            $path = 'images/user/';
+            $photoName = null;
+
+            if ($request->hasFile('photo')) {
+                $photoName = $fileName . '.' . $request->file('photo')->extension();
+                $request->file('photo')->storeAs($path, $photoName, 'public');
             }
-            if ($request->file('photo') != null) {
-                $extension = $request->file('photo')->extension();
-                $photoName = $fileName . '.' . $extension;
-                Storage::disk('public')->putFileAs($path, $request->file('photo'), $fileName . "." . $extension);
-            } else {
-                $photoName = null;
-            }
-            $user->username      = $request['username'];
-            $user->name          = ucwords($request['name']);
-            $user->email         = $request['email'];
-            $user->photo         = $photoName;
+
+            $user->username = $request['username'];
+            $user->name = ucwords($request['name']);
+            $user->email = $request['email'];
+            $user->photo = $photoName;
             $user->save();
 
-            if ($user) {
-                DB::commit();
-                $data = ['status' => true, 'code' => 'SC001', 'message' => 'User updated successfully'];
-            }
+            DB::commit();
+
+            return ['status' => true, 'message' => 'User updated successfully'];
         } catch (\Exception $ex) {
             DB::rollback();
-            $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
+            return ['status' => false, 'message' => 'A system error has occurred. Please try again later.', 'error' => $ex->getMessage()];
         }
-        return $data;
     }
+
     public function changePassword(Request $request)
     {
         try {
-            $data = ['status' => false, 'message' => 'Password failed to update'];
+            $user = User::find($request['id']);
 
-            $update = User::where('id', $request['id'])->update([
-                'password' => Hash::make($request['password']),
-            ]);
-            if ($update) {
-                $data = ['status' => true, 'message' => 'Password successfully updated'];
+            if (!$user) {
+                return ['status' => false, 'message' => 'User not found'];
             }
+
+            $user->password = Hash::make($request['password']);
+            $user->save();
+
+            return ['status' => true, 'message' => 'Password successfully updated'];
         } catch (\Exception $ex) {
-            $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
+            return ['status' => false, 'message' => 'A system error has occurred. Please try again later.', 'error' => $ex->getMessage()];
         }
-        return $data;
     }
+
     public function updateActive(Request $request)
     {
         try {
-            $data = ['status' => false, 'code' => 'EC001', 'message' => 'User failed to update'];
-            $is_active = ($request['is_active'] == "true") ? 1 : 0;
+            $user = User::find($request['id']);
 
-            $update = User::where('id', $request['id'])->update([
-                'is_active'        => $is_active,
-            ]);
-            if ($update) {
-                $data = ['status' => true, 'code' => 'SC001', 'message' => 'User successfully updated'];
+            if (!$user) {
+                return ['status' => false, 'message' => 'User not found'];
             }
+
+            $user->is_active = !$user->is_active;
+            $user->save();
+
+            return ['status' => true, 'message' => 'User updated successfully'];
         } catch (\Exception $ex) {
-            $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
+            return ['status' => false, 'message' => 'A system error has occurred. Please try again later.', 'error' => $ex->getMessage()];
         }
-        return $data;
     }
+
     public function destroy($id)
     {
         try {
-            DB::beginTransaction();
-            $data = ['status' => false, 'message' => 'User failed to delete'];
-
             $user = User::find($id);
+
+            if (!$user) {
+                return ['status' => false, 'message' => 'User not found'];
+            }
+
+            DB::beginTransaction();
+
             $user->removeRole($user->roles->first());
             $user->delete();
-            if ($user) {
-                DB::commit();
-                $data = ['status' => true, 'code' => 'SC001', 'message' => 'User deleted successfully'];
-            }
+
+            DB::commit();
+
+            return ['status' => true, 'message' => 'User deleted successfully'];
         } catch (\Exception $ex) {
-            $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
+            DB::rollback();
+            return ['status' => false, 'message' => 'A system error has occurred. Please try again later.', 'error' => $ex->getMessage()];
         }
-        return $data;
     }
 
-    public function createUser(Request $request, $id)
-    {
-        $jumlah = "1";
-        $staff = Staff::find($id);
-        try {
-            $data = ['status' => false, 'code' => 'EC001', 'message' => 'User failed to create'];
-            $create = User::create([
-                'name' => $staff->name,
-                'username' => 'adi',
-                'email' => $request['email'],
-                'password' => bcrypt('12345678'),
-                'is_active' => 0,
-            ]);
-            if ($create) {
-                $update = Staff::where('id', $id)->update([
-                    'id_user' => $create->id,
-                ]);
-            }
-            if($update) {
-                $data = ['status' => true, 'code' => 'SC001', 'message' => 'User successfully created'];
-            }
+    public function createUser(Request $request, $nip)
+{
+    try {
+        $staff = Staff::find($nip);
 
-        } catch (\Exception $ex) {
-            $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
+        if (!$staff) {
+            return response()->json(['status' => false, 'code' => 'EC002', 'message' => 'Staff not found']);
         }
-         if ($data['status'] == true) {
-            Alert::success('Success', $data['message']);
-            return redirect()->route('staff');
-            Alert::error('Error', $data['message']);
-            return redirect()->back();
+
+        $existingUser = User::where('username', $staff->nip)->first();
+
+        if ($existingUser) {
+            return response()->json(['status' => false, 'code' => 'EC003', 'message' => 'User with this username already exists']);
         }
+
+        $user = User::create([
+            'name' => $staff->name,
+            'username' => $staff->nip,
+            'email' => $staff->email,
+            'password' => Hash::make('12345678'),
+            'is_active' => false,
+        ]);
+
+        if ($user) {
+            // Assigning role with id 4
+            $user->assignRole(4);
+
+            $staff->update(['id_user' => $user->id]);
+            return response()->json(['status' => true, 'code' => 'SC001', 'message' => 'User successfully created']);
+        } else {
+            return response()->json(['status' => false, 'code' => 'EC001', 'message' => 'User failed to create']);
+        }
+    } catch (\Exception $ex) {
+        return response()->json(['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. Please try again later.', 'error' => $ex->getMessage()]);
     }
+}
 
     public function status(Request $request, $id)
     {
-        $user = User::find($id);
         try {
-            $data = ['status' => false, 'code' => 'EC001', 'message' => 'User failed to update'];
-            $user->is_active = !$user->is_active;
-            $update = $user->save();
+            $user = User::find($id);
 
-            // if ($update) {
-            //     Alert::success('Success', 'User successfully updated');
-            // }
+            if (!$user) {
+                return ['status' => false, 'message' => 'User not found'];
+            }
+
+            $user->is_active = !$user->is_active;
+            $user->save();
+
+            return redirect()->back()->with('success', 'User successfully updated');
         } catch (\Exception $ex) {
-            Alert::error('Error', 'A system error has occurred. please try again later. ' . $ex);
+            return redirect()->back()->with('error', 'A system error has occurred. Please try again later. ' . $ex->getMessage());
         }
-        return redirect()->back();
     }
 }

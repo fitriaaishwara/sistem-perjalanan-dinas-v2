@@ -87,11 +87,11 @@ class StaffController extends Controller
         }
         return $data;
     }
-    public function show($id)
+    public function show($nip)
     {
         try {
             $data = ['status' => false, 'message' => 'Staff failed to be found'];
-            $data = Staff::with(['golongans', 'jabatans', 'instansis','kwitansiBendahara','kwitansiPejabat','dataStaffPerjalanan'])->where('id', $id)->first();
+            $data = Staff::with(['golongans', 'jabatans', 'instansis','kwitansiBendahara','kwitansiPejabat','dataStaffPerjalanan'])->where('nip', $nip)->first();
 
             switch ($data->jenis) {
                 case '0':
@@ -144,7 +144,7 @@ class StaffController extends Controller
                 $instansiID = $request->instansi_id;
             }
 
-            $update = Staff::where('id', $request['id'])->update([
+            $update = Staff::where('nip', $request['nip'])->update([
                 'nip' => $request['nip'],
                 'name'        => ucwords($request['name']),
                 'id_golongan' => $request['id_golongan'],
@@ -160,11 +160,11 @@ class StaffController extends Controller
         }
         return $data;
     }
-    public function destroy($id)
+    public function destroy($nip)
     {
         try {
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Staff failed to delete'];
-            $delete = Staff::where('id', $id)->update([
+            $delete = Staff::where('nip', $nip)->update([
                 'status' => false
             ]);
             if ($delete) {

@@ -16,8 +16,8 @@ class CreateKwitansiTable extends Migration
         Schema::create('kwitansi', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('id_staff_perjalanan');
-            $table->foreignUuid('id_bendahara');
-            $table->foreignUuid('id_pejabat_pembuat_komitmen');
+            $table->string('nip_bendahara');
+            $table->string('nip_pejabat_pembuat_komitmen');
             $table->string('bukti_kas_nomor')->nullable();
             $table->string('tahun_anggaran')->nullable();
             $table->string('sudah_diterima_dari')->nullable();
@@ -30,8 +30,8 @@ class CreateKwitansiTable extends Migration
             $table->softDeletes();
 
             $table->foreign('id_staff_perjalanan')->references('id')->on('data_staff_perjalanan');
-            $table->foreign('id_bendahara')->references('id')->on('staff');
-            $table->foreign('id_pejabat_pembuat_komitmen')->references('id')->on('staff');
+            $table->foreign('nip_bendahara')->references('nip')->on('staff');
+            $table->foreign('nip_pejabat_pembuat_komitmen')->references('nip')->on('staff');
         });
     }
 

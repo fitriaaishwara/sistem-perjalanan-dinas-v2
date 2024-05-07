@@ -66,10 +66,9 @@ class SptController extends Controller
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'SPT failed to create'];
             $create = Spt::create([
                 'id_tujuan' => $request->id_tujuan,
-                'id_staff_penandatangan' => $request->id_staff_penandatangan,
+                'nip_staff_penandatangan' => $request->nip_staff_penandatangan,
                 'nomor_spt' => $request->nomor_spt,
                 'dikeluarkan_tanggal' => $request->dikeluarkan_tanggal,
-                // 'id_staff' => $request->toArray(['id_staff']),
             ]);
             if ($create) {
                 $data = ['status' => true, 'code' => 'SC001', 'message' => 'Jabatan successfully created'];

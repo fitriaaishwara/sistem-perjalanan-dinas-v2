@@ -16,8 +16,8 @@ class CreateSptTable extends Migration
         Schema::create('spt', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('id_tujuan')->nullable();
-            $table->foreignUuid('id_staff')->nullable();
-            $table->foreignUuid('id_staff_penandatangan')->nullable();
+            $table->string('nip_staff');
+            $table->string('nip_staff_penandatangan')->nullable();
             $table->string('nomor_spt');
             $table->date('dikeluarkan_tanggal');
             $table->boolean('status')->default (1);
@@ -28,8 +28,8 @@ class CreateSptTable extends Migration
             $table->softDeletes();
 
             $table->foreign('id_tujuan')->references('id')->on('data_tujuan_perjalanan');
-            $table->foreign('id_staff')->references('id')->on('data_staff_perjalanan');
-            $table->foreign('id_staff_penandatangan')->references('id')->on('staff');
+            $table->foreign('nip_staff')->references('nip')->on('staff')->onDelete('cascade');
+            $table->foreign('nip_staff_penandatangan')->references('nip')->on('staff');
         });
     }
 

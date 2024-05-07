@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('photo')->nullable();
             $table->rememberToken();
-            $table->boolean('is_active')->default(1);
+            $table->boolean('is_active')->default(0);
             $table->integer('login_failed_count')->default(0);
             $table->boolean('status')->default(1);
             $table->string('created_by')->nullable();

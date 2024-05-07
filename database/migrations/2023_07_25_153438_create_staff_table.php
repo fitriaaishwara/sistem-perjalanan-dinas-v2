@@ -14,12 +14,12 @@ class CreateStaffTable extends Migration
     public function up()
     {
         Schema::create('staff', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->uuid('id');
             $table->foreignUuid('id_user')->nullable();
             $table->foreignUuid('id_jabatan')->nullable();
             $table->unsignedInteger('id_golongan')->nullable();
             $table->unsignedInteger('id_instansi')->nullable();
-            $table->string('nip')->unique();
+            $table->string('nip')->primary();
             $table->string('jenis');
             $table->string('name');
             $table->boolean('status')->default(1);

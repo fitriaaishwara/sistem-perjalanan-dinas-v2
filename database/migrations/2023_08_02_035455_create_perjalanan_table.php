@@ -16,10 +16,7 @@ class CreatePerjalananTable extends Migration
         Schema::create('perjalanan', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('id_mak');
-            $table->string('perihal_perjalanan');
-            // $table->string('estimasi_biaya');
             $table->integer('total_biaya')->default(0);
-            $table->string('description')->nullable();
             $table->boolean('status')->default (1);
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

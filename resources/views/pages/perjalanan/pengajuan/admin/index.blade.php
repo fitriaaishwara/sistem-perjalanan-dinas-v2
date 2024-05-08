@@ -173,12 +173,14 @@
                         },
                         "Content-Type": "application/json",
                         "data": function(data) {
-                            request.draw = data.draw;
-                            request.start = data.start;
-                            request.length = data.length;
-                            request.searchkey = data.search.value || "";
+                            var request = {
+                                draw: data.draw,
+                                start: data.start,
+                                length: data.length,
+                                searchkey: data.search.value || ""
+                            };
 
-                            return (request);
+                            return request;
                         },
                     },
                     "columns": [
@@ -195,12 +197,21 @@
                             }
                         },
                         {
-                            "data": "perihal_perjalanan",
+                            "data": "kegiatan",
                             "width": '10%',
                             "defaultContent": "-",
-                            render: function(data, type, row) {
-                                return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
-                            },
+                            "render": function(data, type, row) {
+                                console.log(data);
+                                var kegiatan = "";
+                                var angka = 1;
+                                for (var i = 0; i < data.length; i++) {
+                                    if (data[i].status === 1) {
+                                        kegiatan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + data[i].kegiatan + "</div>";
+                                        angka++;
+                                    }
+                                }
+                                return kegiatan || "-";
+                            }
                         },
                         {
                             "data": "tujuan",

@@ -16,15 +16,17 @@
                     <i class="flaticon-right-arrow"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="#">Master Data</a>
+                    <a href="#">Pengajuan</a>
                 </li>
                 <li class="separator">
                     <i class="flaticon-right-arrow"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="#">Pengajuan</a>
+                    <a href="#">Form Pengajuan</a>
                 </li>
             </ul>
+            <button type="submit" class="btn btn-primary btn-round ml-auto" id="saveBtn" name="saveBtn" form="pengajuanForm">Simpan</button>
+            {{-- <button type="submit" class="btn btn-primary btn-sm" id="saveBtn" name="saveBtn" form="pengajuanForm">Save</button> --}}
         </div>
         <div class="row" id="myForm">
             <div class="col-md-12">
@@ -44,29 +46,11 @@
                                     name="id_mak">
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="perihal_perjalanan" class="form-label">Perihal Perjalanan</span
-                                        style="color:red;">*</span>
-                                </label>
-                                    <input type="text" class="form-control" id="perihal_perjalanan" name="perihal_perjalanan" placeholder="Input Perihal Perjalanan" validate>
-                                </div>
-                                {{-- <div class="form-group">
-                                    <label for="estimasi_biaya" class="form-label">Estimasi Biaya</span
-                                        style="color:red;">*</span>
-                                </label>
-                                    <input type="text" class="form-control" id="estimasi_biaya" name="estimasi_biaya" placeholder="Input Estimasi Biaya" validate>
-                                </div> --}}
-                                <div class="form-group">
-                                    <label for="description" class="form-label">Description</span
-                                        style="color:red;">*</span>
-                                    </label>
-                                    <textarea class="form-control" id="description" name="description" placeholder="Input Description" validate></textarea>
-                                </div>
                             </div>
                         </div>
-                        <div class="card-footer">
+                        {{-- <div class="card-footer">
                             <button type="submit" class="btn btn-primary btn-sm" id="saveBtn" name="saveBtn" form="pengajuanForm">Save</button>
-                        </div>
+                        </div> --}}
                     </div>
                 </form>
             </div>

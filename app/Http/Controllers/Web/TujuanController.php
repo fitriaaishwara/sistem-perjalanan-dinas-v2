@@ -83,10 +83,10 @@ class TujuanController extends Controller
     public function showStaff($id)
     {
         try {
-            $data = ['status' => false, 'message' => 'Tujuan failed to be found'];
+            $data = ['status' => false, 'message' => 'Staff failed to be found'];
             $data = DataStaffPerjalanan::with('staff.golongans', 'staff.jabatans', 'staff.instansis')->findOrFail($id);
             if ($data) {
-                $data = ['status' => true, 'message' => 'Tujuan was successfully found', 'data' => $data];
+                $data = ['status' => true, 'message' => 'Staff was successfully found', 'data' => $data];
             }
         } catch (\Exception $ex) {
             $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
@@ -98,12 +98,12 @@ class TujuanController extends Controller
     public function destroy($id)
     {
         try {
-            $data = ['status' => false, 'code' => 'EC001', 'message' => 'Jabatan failed to delete'];
+            $data = ['status' => false, 'code' => 'EC001', 'message' => 'Tujuan failed to delete'];
             $delete = Tujuan::where('id', $id)->update([
                 'status' => false
             ]);
             if ($delete) {
-                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Jabatan deleted successfully'];
+                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Tujuan deleted successfully'];
             }
         } catch (\Exception $ex) {
             $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
@@ -141,15 +141,19 @@ class TujuanController extends Controller
     {
         try {
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Tujuan failed to be updated'];
+            // Menampilkan seluruh data yang diterima dari permintaan POST
+            dd($request->all());
+
             $update = Tujuan::where('id', $request['id'])->update([
-                'tempat_berangkat_id' => $request['tempat_berangkat_id'], // $request['name'
-                'tempat_tujuan_id' => $request['tempat_tujuan_id'], // $request['description
-                'tanggal_berangkat' => $request['tanggal_berangkat'], // $request['status'
-                'tanggal_pulang' => $request['tanggal_pulang'], // $request['status'
-                'tanggal_tiba' => $request['tanggal_tiba'], // $request['status'
-                'lama_perjalanan' => $request['lama_perjalanan'], // $request['status'
+                'tempat_berangkat_id' => $request['tempat_berangkat_id'],
+                'tempat_tujuan_id' => $request['tempat_tujuan_id'],
+                'tanggal_berangkat' => $request['tanggal_berangkat'],
+                'tanggal_pulang' => $request['tanggal_pulang'],
+                'tanggal_tiba' => $request['tanggal_tiba'],
+                'lama_perjalanan' => $request['lama_perjalanan'],
                 'created_by' => Auth::user()->id,
             ]);
+
             if ($update) {
                 $data = ['status' => true, 'code' => 'SC001', 'message' => 'Tujuan successfully updated'];
             }

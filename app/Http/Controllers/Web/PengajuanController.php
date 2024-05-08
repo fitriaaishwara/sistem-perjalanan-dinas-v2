@@ -38,9 +38,6 @@ class PengajuanController extends Controller
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Perjalanan failed to create'];
             $create = Perjalanan::create([
                 'id_mak' => $request['id_mak'],
-                'perihal_perjalanan' => $request['perihal_perjalanan'],
-                // 'estimasi_biaya' => $request['estimasi_biaya'],
-                'description' => $request['description']
             ]);
 
                 if ($create) {
@@ -140,32 +137,48 @@ class PengajuanController extends Controller
         $keyword = $request['searchkey'];
 
         $data = Perjalanan::select()
-            ->with(['mak', 'tujuan', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'log_status_perjalanan' => function ($query) {
-                $query->latest()->limit(1); // Retrieve only the latest log_status_perjalanan entry
-            }])
+            ->with(['mak', 'tujuan', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'log_status_perjalanan', 'kegiatan'])
             ->whereDoesntHave('log_status_perjalanan', function ($query) {
                 $query->where('status_perjalanan', 'Disetujui');
             })
-            ->offset($request['start'])
-            ->limit(($request['length'] == -1) ? Perjalanan::where('status', true)->count() : $request['length'])
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('perihal_perjalanan', 'like', '%' . $keyword . '%')
+            ->where(function ($query) use ($keyword) {
+                $query->where('id', 'like', '%' . $keyword . '%')
                     ->orWhereHas('mak', function ($query) use ($keyword) {
-                        return $query->where('kode_mak', 'like', '%' . $keyword . '%');
+                        $query->where('kode_mak', 'like', '%' . $keyword . '%');
                     })
                     ->orWhereHas('tujuan', function ($query) use ($keyword) {
-                        return $query->where('tempat_tujuan', 'like', '%' . $keyword . '%');
+                        $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
+                            $query->where('name', 'like', '%' . $keyword . '%');
+                        });
+                    })
+                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
+                        $query->where('tanggal_berangkat', 'like', '%' . $keyword . '%');
+                    })
+                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
+                        $query->where('tanggal_pulang', 'like', '%' . $keyword . '%');
+                    })
+                    ->orWhereHas('kegiatan', function ($query) use ($keyword) {
+                        $query->where('kegiatan', 'like', '%' . $keyword . '%');
                     });
             })
             ->where('status', 1)
+            ->offset($request['start'])
+            ->limit(($request['length'] == -1) ? Perjalanan::where('status', true)->count() : $request['length'])
             ->get();
 
-        $dataCounter = Perjalanan::select()
-            ->whereDoesntHave('log_status_perjalanan', function ($query) {
-                $query->where('status_perjalanan', 'Disetujui');
-            })
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('perihal_perjalanan', 'like', '%' . $keyword . '%');
+        $dataCounter = Perjalanan::whereDoesntHave('log_status_perjalanan', function ($query) {
+            $query->where('status_perjalanan', 'Disetujui');
+        })
+            ->where(function ($query) use ($keyword) {
+                $query->where('id', 'like', '%' . $keyword . '%')
+                    ->orWhereHas('mak', function ($query) use ($keyword) {
+                        $query->where('kode_mak', 'like', '%' . $keyword . '%');
+                    })
+                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
+                        $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
+                            $query->where('name', 'like', '%' . $keyword . '%');
+                        });
+                    });
             })
             ->where('status', true)
             ->count();

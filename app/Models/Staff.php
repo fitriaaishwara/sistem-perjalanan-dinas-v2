@@ -11,7 +11,7 @@ class Staff extends Model
 {
     use HasFactory, Uuid, SoftDeletes;
     protected $table = 'staff';
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'nip';
     protected $fillable = [
         'id_user','id_jabatan','id_golongan','id_instansi','nip', 'jenis', 'name', 'description', 'status'
     ];

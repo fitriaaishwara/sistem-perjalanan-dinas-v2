@@ -230,7 +230,7 @@
                     },
                 },
                 {
-                    "data": "id",
+                    "data": "nip",
                     "width": '15%',
                     render: function(data, type, row) {
                         var btnEdit = "";
@@ -435,9 +435,10 @@
         $('#staffTable').on("click", ".btnEdit", function() {
             $('#myModal').modal('show');
             isUpdate = true;
-            var id = $(this).attr('data-id');
-            var url = "{{ route('staff/show', ['nip' => ':nip']) }}";
-            url = url.replace(':id', id);
+            // var id = $(this).attr('data-id');
+            var nip = $(this).attr('data-id');
+            var url = "{{ route('staff/show', ['nip' => 'nip']) }}";
+            url = url.replace('nip', nip);
             $.ajax({
                 type: 'GET',
                 url: url,
@@ -478,7 +479,7 @@
         });
 
         $('#staffTable').on("click", ".btnDelete", function() {
-            var id = $(this).attr('data-id');
+            var nip = $(this).attr('data-id');
             Swal.fire({
                 title: 'Confirmation',
                 text: "You will delete this staff. Are you sure you want to continue?",
@@ -490,8 +491,8 @@
                 cancelButtonText: 'No'
             }).then(function(result) {
                 if (result.value) {
-                    var url = "{{ route('staff/delete', ['nip' => ':nip']) }}";
-                    url = url.replace(':id', id);
+                var url = "{{ route('staff/delete', ['nip' => 'nip']) }}";
+                url = url.replace('nip', nip);
                     $.ajax({
                         headers: {
                             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
@@ -522,9 +523,9 @@
         $('#staffTable').on("click", ".btnCreate", function(event) {
             event.preventDefault();
 
-            var id = $(this).data('id');
-            var url = "{{ route('user.create', ['nip' => ':nip']) }}";
-            url = url.replace(':nip', id);
+            var nip = $(this).data('data-id');
+            var url = "{{ route('user.create', ['nip' => 'nip']) }}";
+            url = url.replace('nip', nip);
 
             $.ajax({
                 url: url,

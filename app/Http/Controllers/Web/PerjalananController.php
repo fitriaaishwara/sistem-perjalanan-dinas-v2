@@ -40,7 +40,7 @@ class PerjalananController extends Controller
         $keyword = $request['searchkey'];
 
         $data = Perjalanan::select()
-            ->with('mak', 'tujuan.tempatTujuan', 'log_status_perjalanan')
+            ->with('mak', 'tujuan.tempatTujuan', 'log_status_perjalanan', 'kegiatan')
             ->where('status', true)
             ->whereHas('log_status_perjalanan', function ($query) {
                 $query->where('status_perjalanan', 'Disetujui');
@@ -65,7 +65,7 @@ class PerjalananController extends Controller
 
 
             $data = Perjalanan::select()
-                ->with('mak', 'tujuan.tempatTujuan')
+                ->with('mak', 'tujuan.tempatTujuan', 'kegiatan')
                 ->where('status', true)
                 ->when($keyword, function ($query, $keyword) {
                     return $query->where(function ($query) use ($keyword) {

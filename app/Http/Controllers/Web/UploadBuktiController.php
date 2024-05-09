@@ -22,7 +22,7 @@ class UploadBuktiController extends Controller
         $keyword = $request['searchkey'];
 
         $data = DataStaffPerjalanan::select()
-            ->with(['perjalanan.mak', 'staff.instansis', 'penandatangan', 'tujuan_perjalanan.tempatTujuan', 'spd'])
+            ->with(['perjalanan.mak', 'perjalanan.kegiatan', 'staff.instansis', 'penandatangan', 'tujuan_perjalanan.tempatTujuan', 'spd'])
             ->offset($request['start'])
             ->limit(($request['length'] == -1) ? DataStaffPerjalanan::where('status', true)->count() : $request['length'])
             ->when($keyword, function ($query, $keyword) {

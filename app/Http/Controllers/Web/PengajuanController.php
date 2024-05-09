@@ -140,7 +140,7 @@ class PengajuanController extends Controller
         $keyword = $request['searchkey'];
 
         $data = Perjalanan::select()
-            ->with(['mak', 'tujuan', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'log_status_perjalanan' => function ($query) {
+            ->with(['mak', 'tujuan', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'log_status_perjalanan', 'kegiatan' => function ($query) {
                 $query->latest()->limit(1); // Retrieve only the latest log_status_perjalanan entry
             }])
             ->whereDoesntHave('log_status_perjalanan', function ($query) {

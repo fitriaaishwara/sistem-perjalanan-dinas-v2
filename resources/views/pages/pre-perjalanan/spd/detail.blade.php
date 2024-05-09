@@ -54,15 +54,24 @@
                                         <td>1</td>
                                         <td>Depan</td>
                                         <td>
-                                            <a href="{{ route('spd/pdf', $spd->id) }}" class="btn btn-primary btn-sm">Download</a>
+                                            <a href="{{ route('spd/pdf', $spd->id) }}" class="btn btn-primary btn-sm">PDF</a>
+                                            <a href="{{ route('export', $spd->id) }}" class="btn btn-success btn-sm">Excel</a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>2</td>
                                         <td>Belakang</td>
                                         <td>
-                                            <a href="{{ route('spd/pdf2', $spd->id) }}" class="btn btn-primary btn-sm">Download</a>
+                                            <a href="{{ route('spd/pdf2', $spd->id) }}" class="btn btn-primary btn-sm">PDF</a>
                                         </td>
+                                    </tr>
+                                    {{-- <tr>
+                                        <td>3</td>
+                                        <td>Depan Xlsx</td>
+                                        <td>
+                                            <a href="{{ route('export', $spd->id) }}" class="btn btn-primary btn-sm">Download</a>
+                                        </td>
+                                    </tr> --}}
                                 </tbody>
                             </table>
                         </div>

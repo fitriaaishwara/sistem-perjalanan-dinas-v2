@@ -332,7 +332,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/profile/{id}', [App\Http\Controllers\Web\ProfileController::class, 'index'])->name('profile');
     Route::post('/profile/update/{id}', [App\Http\Controllers\Web\ProfileController::class, 'update'])->name('profile/update');
 
-
+    Route::get('/export/{id}', [App\Http\Controllers\Web\ExportSpdController::class, 'exportToExcel'])->name('export');
 });
 
 require __DIR__.'/auth.php';

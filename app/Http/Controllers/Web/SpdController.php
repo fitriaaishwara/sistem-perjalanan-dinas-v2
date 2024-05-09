@@ -108,7 +108,7 @@ class SpdController extends Controller
 
     public function spdPDF($id)
     {
-        $spd = DataStaffPerjalanan::with(['perjalanan.mak', 'staff.instansis', 'penandatangan', 'tujuan_perjalanan.tempatBerangkat', 'spd', 'staff.jabatans', 'staff.golongans'])->find($id);
+        $spd = DataStaffPerjalanan::with(['perjalanan.mak', 'staff.instansis', 'penandatangan', 'tujuan_perjalanan.tempatBerangkat', 'spd', 'staff.jabatans', 'staff.golongans', 'perjalanan.kegiatan'])->find($id);
 
         // Load view dengan konfigurasi ukuran kertas A5
         $pdf = \PDF::loadView('pages.pre-perjalanan.spd.pdf', compact('spd'))->setPaper('a5');

@@ -107,7 +107,7 @@
                 <tr>
                     <td class="text-center p-sm-2" style="width: 20%">4.</td>
                     <td class="p-sm-2">Maksud Perjalanan Dinas</td>
-                    <td colspan="2" class="p-sm-2">{{$spd->perjalanan[0]->perihal_perjalanan}}</td>
+                    <td colspan="2" class="p-sm-2">{{$spd->perjalanan[0]->kegiatan[0]->kegiatan}} </td>
                 </tr>
                 <tr>
                     <td class="text-center p-sm-2" style="width: 20%">5.</td>
@@ -232,7 +232,7 @@
                 <td>
                     <div class="text-center p-sm-2">Pejabat Pembuat Komitmen <br> {{ $spd->staff->jabatans->name }}</div>
 
-                    {!!( Str::repeat('<br>', 4) )!!}
+                    {!!( Str::repeat('<br>', 3) )!!}
 
                     <div class="text-center p-sm-2" style="text-transform: uppercase;">{{ $spd->staff->name }}<br>NIP {{ $spd->staff->nip }}</div>
                 </td>

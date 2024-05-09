@@ -94,7 +94,7 @@
                                                 <select name="nip_staff_penandatangan" id="nip_staff_penandatangan" class="form-control select2" validate>
                                                     <option value="">Pilih Penandatangan</option>
                                                     @foreach ($staff as $item)
-                                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                        <option value="{{ $item->nip }}">{{ $item->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -112,28 +112,6 @@
 @push('js')
 
 <script type="text/javascript">
-	// selingkuhnya programmer? yaa di vs code
-    // chuaksss XD
-
-	// apa bedanya kamu sama benda benda lama?
-    // kalo benda lama itu antik tapi kamu cantik
-
-	// mandi apa yang engga basah?
-	// mandirikan rumah tangga sama kamu
-
-	// apa bedanya kamu sama lukisan?
-	// kalo lukisan makin lama makin antik
-	// tapi kalo kamu makin cantik
-
-	// perangkat apa yang romantis?
-	// gagal :(
-
-	// panda apa yang bikin seneng?
-	// pandangin kamu
-
-	// berangkat pagi pagi
-	// mencari rezeki
-	// demi si fitri
 
     $(function () {
         $('#dikeluarkan_tanggal').flatpickr({

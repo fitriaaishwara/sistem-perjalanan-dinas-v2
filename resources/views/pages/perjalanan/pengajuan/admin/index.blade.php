@@ -100,7 +100,7 @@
                     <div class="card-header">
                         <div class="d-flex align-items-center">
                             {{-- <h4 class="card-title">Data Jabatan</h4> --}}
-                            <a href="{{ route('pengajuan/create') }}" class="btn btn-primary btn-round ml-auto"><i class="fa fa-plus"></i> Add Data</a>
+                            <a href="{{ route('pengajuan/create') }}" class="btn btn-primary btn-round ml-auto"><i class="fa fa-plus"></i> Ajukan Perjalanan</a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -109,7 +109,7 @@
                                 <thead>
                                     <tr>
                                         <th>MAK</th>
-                                        <th>Perihal</th>
+                                        <th>Kegiatan</th>
                                         <th>Tujuan</th>
                                         <th>Tanggal Berangkat</th>
                                         <th>Tanggal Kembali</th>

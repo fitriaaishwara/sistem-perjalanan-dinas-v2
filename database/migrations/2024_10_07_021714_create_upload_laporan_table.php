@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUploadGalleryTable extends Migration
+class CreateUploadLaporanTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateUploadGalleryTable extends Migration
      */
     public function up()
     {
-        Schema::create('upload_gallery', function (Blueprint $table) {
+        Schema::create('upload_laporan', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('id_tujuan_perjalanan');
+            $table->foreignUuid('id_kegiatan');
             $table->string('name_file');
             $table->string('path_file');
 
@@ -26,7 +26,7 @@ class CreateUploadGalleryTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('id_tujuan_perjalanan')->references('id')->on('data_tujuan_perjalanan');
+            $table->foreign('id_kegiatan')->references('id')->on('kegiatan');
         });
     }
 
@@ -37,6 +37,6 @@ class CreateUploadGalleryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('upload_gallery');
+        Schema::dropIfExists('upload_laporan');
     }
 }

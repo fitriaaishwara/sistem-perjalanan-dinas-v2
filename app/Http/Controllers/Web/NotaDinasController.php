@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataStaffPerjalanan;
+use App\Models\Kegiatan;
 use App\Models\nd_tembusan;
 use App\Models\NotaDinas;
 use App\Models\Perjalanan;
@@ -11,6 +12,7 @@ use App\Models\Staff;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Auth;
 
 class NotaDinasController extends Controller
 {
@@ -27,24 +29,28 @@ class NotaDinasController extends Controller
     public function getData(Request $request)
     {
         $keyword = $request['searchkey'];
+        $userRole = Auth::user()->roles->pluck('name')[0];
 
-        $data = Perjalanan::select()
-            ->with('mak', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'tujuan.staff', 'nota_dinas')
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('name', 'like', '%' . $keyword . '%');
-            })
-            ->where('status', true)
-            ->get();
+        $query = Perjalanan::select()
+            ->with('mak', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'tujuan.staff', 'nota_dinas', 'kegiatan', 'data_staff_perjalanan.staff')
+            ->where('status', true);
 
-        $dataCounter = Perjalanan::select()
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('name', 'like', '%' . $keyword . '%');
-            })
-            ->where('status', true)
-            ->count();
+        // If the user is not a super admin, filter data based on user's ID
+        if ($userRole != 'Super Admin') {
+            $query->whereHas('data_staff_perjalanan.staff', function ($query) {
+                $query->where('id_user', Auth::id());
+            });
+        }
 
-        return DataTables::of($data)
-                    ->make(true);
+        if ($keyword) {
+            $query->where(function ($query) use ($keyword) {
+                $query->where('name', 'like', '%' . $keyword . '%');
+            });
+        }
+
+        $data = $query->get();
+
+        return DataTables::of($data)->make(true);
     }
 
     public function create($id)

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUploadLaporanTable extends Migration
+class CreateUploadGalleryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateUploadLaporanTable extends Migration
      */
     public function up()
     {
-        Schema::create('upload_laporan', function (Blueprint $table) {
+        Schema::create('upload_gallery', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('id_tujuan_perjalanan');
+            $table->foreignUuid('id_data_kegiatan');
             $table->string('name_file');
             $table->string('path_file');
-
             $table->boolean('status')->default (1);
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
@@ -27,6 +27,7 @@ class CreateUploadLaporanTable extends Migration
             $table->softDeletes();
 
             $table->foreign('id_tujuan_perjalanan')->references('id')->on('data_tujuan_perjalanan');
+            $table->foreign('id_data_kegiatan')->references('id')->on('data_kegiatan_perjalanan');
         });
     }
 
@@ -37,6 +38,6 @@ class CreateUploadLaporanTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('upload_laporan');
+        Schema::dropIfExists('upload_gallery');
     }
 }

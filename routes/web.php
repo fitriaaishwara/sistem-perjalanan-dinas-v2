@@ -320,14 +320,18 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('webcam', [App\Http\Controllers\Web\GeoTaggingController::class, 'store'])->name('webcam.capture');
     Route::get('/geo-tagging/view/{id}', [App\Http\Controllers\Web\GeoTaggingController::class, 'show'])->name('geo-tagging/show');
 
-     //kkp
-     Route::get('/kkp', [App\Http\Controllers\Web\KkpController::class, 'index'])->name('kkp');
-     Route::post('/kkp/getData', [App\Http\Controllers\Web\KkpController::class, 'getData'])->name('kkp/getData');
-     Route::get('/kkp/{id}', [App\Http\Controllers\Web\KkpController::class, 'create'])->name('kkp/create');
-     Route::get('/kkp/pdf/{id}', [App\Http\Controllers\Web\KkpController::class, 'kkpPDF'])->name('kkp/pdf');
+    //kkp
+    Route::get('/kkp', [App\Http\Controllers\Web\KkpController::class, 'index'])->name('kkp');
+    Route::post('/kkp/getData', [App\Http\Controllers\Web\KkpController::class, 'getData'])->name('kkp/getData');
+    Route::get('/kkp/{id}', [App\Http\Controllers\Web\KkpController::class, 'create'])->name('kkp/create');
+    Route::get('/kkp/pdf/{id}', [App\Http\Controllers\Web\KkpController::class, 'kkpPDF'])->name('kkp/pdf');
+    Route::get('/kkp-detail/{id}', [App\Http\Controllers\Web\KkpController::class, 'detail'])->name('kkp-detail');
+    Route::post('/kkp-detail/getData/{id}', [App\Http\Controllers\Web\KkpController::class, 'getData'])->name('kkp-detail/getData');
 
-     Route::get('/kkp-detail/{id}', [App\Http\Controllers\Web\KkpController::class, 'detail'])->name('kkp-detail');
-     Route::post('/kkp-detail/getData/{id}', [App\Http\Controllers\Web\KkpController::class, 'getData'])->name('kkp-detail/getData');
+    //profile
+    Route::get('/profile/{id}', [App\Http\Controllers\Web\ProfileController::class, 'index'])->name('profile');
+    Route::post('/profile/update/{id}', [App\Http\Controllers\Web\ProfileController::class, 'update'])->name('profile/update');
+
 
 });
 

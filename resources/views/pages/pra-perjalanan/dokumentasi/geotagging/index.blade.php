@@ -107,7 +107,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>Perihal Perjalanan</th>
+                                                    <th>Kegiatan</th>
                                                     <th>Nama</th>
                                                     <th>Tujuan</th>
                                                     <th>Tanggal</th>
@@ -192,15 +192,12 @@
                     "data": "perjalanan",
                     "width": '15%',
                     "defaultContent": "-",
-                    render: function(data, type, row) {
-                        var result = "<div class='text-wrap' style='font-size: 12px;'>";
-                        $.each (data, function (key, val) {
-                            // console.log(val);
-                            result += val.perihal_perjalanan + "<br>";
-                        });
-
-                        result += "</div>";
-                        return result;
+                    "render": function(data, type, row) {
+                        if (data && data[0] && data[0].kegiatan) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data[0].kegiatan[0].kegiatan + "</div>";
+                        } else {
+                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
+                        }
                     }
                 },
                 {

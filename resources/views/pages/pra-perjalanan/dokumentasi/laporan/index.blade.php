@@ -33,7 +33,7 @@
             <div class="modal-body">
                 <form method="POST" action="{{ route('laporan/store') }}" id="laporanForm" name="laporanForm">
                     @csrf
-                    <input id="id" type="hidden" class="form-control" name="id_tujuan_perjalanan">
+                    <input id="id" type="text" class="form-control" name="id_kegiatan">
                     <div class="row mb-4">
                         <label for="name_file" class="col-sm-3 col-form-label">Nama File<span
                                 style="color:red;">*</span></label>
@@ -78,7 +78,7 @@
             <div class="modal-body">
                 <form method="POST" action="{{ route('laporan/store') }}" id="laporanForm" name="laporanForm">
                     @csrf
-                    <input id="id" type="hidden" class="form-control" name="id_tujuan_perjalanan">
+                    <input id="id" type="hidden" class="form-control" name="id_kegiatan">
                     <div class="row mb-4">
                         <label for="name_file" class="col-sm-3 col-form-label">Nama File<span
                                 style="color:red;">*</span></label>
@@ -149,7 +149,7 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Perihal Perjalanan</th>
+                                        <th>Kegiatan</th>
                                         <th>Staff</th>
                                         <th>Tujuan</th>
                                         <th>Tgl Berangkat</th>
@@ -222,7 +222,7 @@
                     }
                 },
                 {
-                    "data": "perjalanan.perihal_perjalanan",
+                    "data": "kegiatan",
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
@@ -251,36 +251,36 @@
                     }
                 },
                 {
-                    "data": "tempat_tujuan",
-                    "width": '15%',
+                "data": "perjalanan.tujuan",
+                "width": '15%',
+                "defaultContent": "-",
+                render: function(data, type, row) {
+                    if (data && data.length > 0) {
+                        return "<div class='text-wrap' style='font-size: 12px;'>" + data[0].tempat_tujuan.name + "</div>";
+                    } else {
+                        return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
+                    }
+                }
+            },
+                {
+                    "data": "perjalanan.tujuan",
+                    "width": '10%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.name + "</div>";
+                        if (data && data.length > 0) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + formatIndonesianDate(data[0].tanggal_berangkat) + "</div>";
                         } else {
-                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'> - </div>";
                         }
                     }
                 },
                 {
-                    "data": "tanggal_berangkat",
+                    "data": "perjalanan.tujuan",
                     "width": '10%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + formatIndonesianDate(data) + "</div>";
-                        } else {
-                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
-                        }
-                    }
-                },
-                {
-                    "data": "tanggal_pulang",
-                    "width": '10%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + formatIndonesianDate(data) + "</div>";
+                        if (data && data.length > 0) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + formatIndonesianDate(data[0].tanggal_pulang) + "</div>";
                         } else {
                             return "<div class='text-wrap' style='font-size: 12px;'> - </div>";
                         }
@@ -295,8 +295,7 @@
                         if (row.upload_laporan == "" || row.upload_laporan == null) {
                             return "<div class='text-wrap badge badge-danger' style='font-size: 12px;'> Belum Upload </div>";
                         } else {
-
-                            return "<a href='/laporan/pdf/" + row.upload_laporan.id + "' target='_blank' class='fas fa-file-download text-center' style='font-size: 12px;'> " + row.upload_laporan.name_file + " .pdf </a>"
+                            return "<div class='text-wrap badge badge-success' style='font-size: 12px;'> Sudah Upload </div>";
                         }
                     }
                 },
@@ -306,6 +305,7 @@
                     render: function(data, type, row) {
                         var btnTambah = "";
                         var btnEdit = "";
+                        var btnDownload = "";
 
                         if (row.upload_laporan == "" || row.upload_laporan == null) {
                             btnTambah += '<button name="btnTambah" data-id="' + data +
@@ -313,8 +313,12 @@
                         } else {
                             btnEdit += '<button name="btnEdit" data-id="' + data +
                                 '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
+
+                              // Since `data` is just an ID, you need to directly access `row.upload_laporan.id` instead of `data[0].uploadLaporan.id`
+                            btnDownload += '<a href="/laporan/pdf/' + row.upload_laporan[0].id +
+                                '" type="button" class="btn btn-success btn-sm m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
                         }
-                        return btnTambah + btnEdit;
+                        return btnTambah + btnEdit + btnDownload;
                     },
                 },
             ]

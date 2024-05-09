@@ -135,9 +135,10 @@ class PengajuanController extends Controller
     public function getData(Request $request)
     {
         $keyword = $request['searchkey'];
+        $userRole = Auth::user()->roles->pluck('name')[0];
 
         $data = Perjalanan::select()
-            ->with(['mak', 'tujuan', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'log_status_perjalanan', 'kegiatan'])
+            ->with(['mak', 'tujuan', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'log_status_perjalanan', 'kegiatan', 'data_staff_perjalanan.staff'])
             ->whereDoesntHave('log_status_perjalanan', function ($query) {
                 $query->where('status_perjalanan', 'Disetujui');
             })
@@ -161,10 +162,18 @@ class PengajuanController extends Controller
                         $query->where('kegiatan', 'like', '%' . $keyword . '%');
                     });
             })
-            ->where('status', 1)
-            ->offset($request['start'])
-            ->limit(($request['length'] == -1) ? Perjalanan::where('status', true)->count() : $request['length'])
-            ->get();
+            ->where('status', 1);
+
+        // If the user is not a super admin, filter data based on user's ID
+        if ($userRole != 'Super Admin') {
+            $data->whereHas('data_staff_perjalanan.staff', function ($query) {
+                $query->where('id_user', Auth::id());
+            });
+        }
+
+        $data = $data->offset($request['start'])
+                    ->limit(($request['length'] == -1) ? Perjalanan::where('status', true)->count() : $request['length'])
+                    ->get();
 
         $dataCounter = Perjalanan::whereDoesntHave('log_status_perjalanan', function ($query) {
             $query->where('status_perjalanan', 'Disetujui');

@@ -1,6 +1,6 @@
 @extends('pages.layouts.master')
 @section('content')
-@section('title', 'Rekaptulasi Perjalanan')
+@section('title', 'Data Perjalanan')
 <style>
     .container {
       overflow-x: auto;
@@ -86,7 +86,7 @@
                     <div class="card-header">
                         <div class="d-flex align-items-center">
                             {{-- <h4 class="card-title">Data Perjalanan</h4> --}}
-                            <a href="{{ route('pengajuan') }}" class="btn btn-primary btn-round ml-auto"><i class="fa fa-plus"></i> Ajukan Perjalanan</a>
+                            {{-- <a href="{{ route('pengajuan') }}" class="btn btn-primary btn-round ml-auto"><i class="fa fa-plus"></i> Ajukan Perjalanan</a> --}}
                         </div>
                     </div>
                     <div class="card-body">
@@ -95,7 +95,7 @@
                                 <thead>
                                     <tr>
                                         <th>MAK</th>
-                                        <th>Perihal</th>
+                                        <th>Kegiatan</th>
                                         <th>Tujuan</th>
                                         <th>Tanggal Berangkat</th>
                                         <th>Tanggal Kembali</th>
@@ -180,13 +180,22 @@
                         }
                     },
                     {
-                        "data": "perihal_perjalanan",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                            "data": "kegiatan",
+                            "width": '10%',
+                            "defaultContent": "-",
+                            "render": function(data, type, row) {
+                                console.log(data);
+                                var kegiatan = "";
+                                var angka = 1;
+                                for (var i = 0; i < data.length; i++) {
+                                    if (data[i].status === 1) {
+                                        kegiatan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + data[i].kegiatan + "</div>";
+                                        angka++;
+                                    }
+                                }
+                                return kegiatan || "-";
+                            }
                         },
-                    },
                     {
                         "data": "tujuan",
                         "width": '10%',
@@ -275,16 +284,13 @@
                     render: function(data, type, row) {
                         var btnEdit = "";
                         var btnStatus = "";
-                        var btnDelete = "";
                         btnEdit += '<a href="/pengajuan/edit/' + data +
                             '" name="btnEdit" data-id="' + data +
                             '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
                         btnStatus += '<button name="btnStatus" data-id="' + data +
                             '" type="button" class="btn btn-primary btn-sm btnStatus m-1" data-toggle="tooltip" data-placement="top" title="Change Status"><i class="fa fa-bookmark"></i></button>';
-                        btnDelete += '<button name="btnDelete" data-id="' + data +
-                            '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
 
-                        return btnEdit + btnStatus + btnDelete;
+                        return btnEdit + btnStatus;
                     },
                 },
             ]

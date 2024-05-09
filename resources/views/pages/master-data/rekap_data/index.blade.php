@@ -89,7 +89,7 @@
                                 <thead>
                                     <tr>
                                         <th>MAK</th>
-                                        <th>Perihal</th>
+                                        <th>Kegiatan</th>
                                         <th>Tujuan</th>
                                         <th>Tanggal Berangkat</th>
                                         <th>Tanggal Kembali</th>
@@ -174,13 +174,22 @@
                         }
                     },
                     {
-                        "data": "perihal_perjalanan",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                            "data": "kegiatan",
+                            "width": '10%',
+                            "defaultContent": "-",
+                            "render": function(data, type, row) {
+                                console.log(data);
+                                var kegiatan = "";
+                                var angka = 1;
+                                for (var i = 0; i < data.length; i++) {
+                                    if (data[i].status === 1) {
+                                        kegiatan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + data[i].kegiatan + "</div>";
+                                        angka++;
+                                    }
+                                }
+                                return kegiatan || "-";
+                            }
                         },
-                    },
                     {
                         "data": "tujuan",
                         "width": '10%',

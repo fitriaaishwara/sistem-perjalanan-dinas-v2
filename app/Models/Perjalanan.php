@@ -51,5 +51,10 @@ class Perjalanan extends Model
         return $this->hasMany(Kegiatan::class, 'id_perjalanan', 'id');
     }
 
+    public function DataKegiatan()
+    {
+        return $this->hasMany(DataKegiatan::class, 'id_perjalanan', 'id');
+    }
+
 
 }

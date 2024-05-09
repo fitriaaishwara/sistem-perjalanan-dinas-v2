@@ -7,6 +7,7 @@ use App\Models\DataStaffPerjalanan;
 use App\Models\Geotaging;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class GeoTaggingController extends Controller
 {
@@ -18,24 +19,32 @@ class GeoTaggingController extends Controller
     public function getData(Request $request)
     {
         $keyword = $request['searchkey'];
+        $userRole = Auth::user()->roles->pluck('name')[0];
 
-        $data = DataStaffPerjalanan::select()
-            ->with('staff', 'perjalanan', 'perjalanan.mak', 'tujuan_perjalanan.tempatTujuan', 'spd', 'kwitansi', 'geotaging')
-            ->offset($request['start'])
-            ->limit(($request['length'] == -1) ? Geotaging::where('status', true)->count() : $request['length'])
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('name', 'like', '%' . $keyword . '%');
-            })
-            ->where('status', true)
+        $query = DataStaffPerjalanan::with(['staff', 'perjalanan', 'perjalanan.mak', 'tujuan_perjalanan.tempatTujuan', 'spd', 'kwitansi', 'geotaging', 'perjalanan.kegiatan'])
+            ->where('status', true);
+
+        // If the user is not a super admin, filter data based on user's ID
+        if ($userRole != 'Super Admin') {
+            $query->whereHas('staff', function ($query) {
+                $query->where('id_user', Auth::id());
+            });
+        }
+
+        if ($keyword) {
+            $query->where(function ($query) use ($keyword) {
+                $query->whereHas('staff', function ($query) use ($keyword) {
+                    $query->where('name', 'like', '%' . $keyword . '%');
+                });
+            });
+        }
+
+        $data = $query->offset($request['start'])
+            ->limit(($request['length'] == -1) ? DataStaffPerjalanan::where('status', true)->count() : $request['length'])
             ->get();
 
-        $dataCounter = DataStaffPerjalanan::select()
-            ->with('staff', 'perjalanan', 'perjalanan.mak', 'tujuan_perjalanan', 'spd', 'kwitansi', 'geotaging')
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('name', 'like', '%' . $keyword . '%');
-            })
-            ->where('status', true)
-            ->count();
+        $dataCounter = $query->count();
+
         $response = [
             'status'          => true,
             'draw'            => $request['draw'],
@@ -43,6 +52,7 @@ class GeoTaggingController extends Controller
             'recordsFiltered' => $dataCounter,
             'data'            => $data,
         ];
+
         return $response;
     }
 

@@ -8,6 +8,7 @@ use App\Models\Kwitansi;
 use App\Models\Staff;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Auth;
 
 class KwitansiController extends Controller
 {
@@ -22,35 +23,42 @@ class KwitansiController extends Controller
     }
 
     public function getData(Request $request)
-    {
-        $keyword = $request['searchkey'];
+{
+    $keyword = $request['searchkey'];
+    $userRole = Auth::user()->roles->pluck('name')[0];
 
-        $data = DataStaffPerjalanan::select()
-            ->with('staff', 'perjalanan', 'perjalanan.mak', 'tujuan_perjalanan.tempatTujuan', 'tujuan_perjalanan.uangHarian', 'spd', 'kwitansi', 'transportasi_berangkat', 'transportasi_pulang', 'akomodasi_hotel')
-            ->offset($request['start'])
-            ->limit(($request['length'] == -1) ? Kwitansi::where('status', true)->count() : $request['length'])
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('name', 'like', '%' . $keyword . '%');
-            })
-            ->where('status', true)
-            ->get();
+    $query = DataStaffPerjalanan::query()
+        ->with('staff', 'perjalanan', 'perjalanan.mak', 'tujuan_perjalanan.tempatTujuan', 'tujuan_perjalanan.uangHarian', 'spd', 'kwitansi', 'transportasi_berangkat', 'transportasi_pulang', 'akomodasi_hotel', 'perjalanan.kegiatan')
+        ->where('status', true);
 
-        $dataCounter = DataStaffPerjalanan::select()
-            ->with('staff', 'perjalanan', 'perjalanan.mak', 'tujuan_perjalanan', 'spd', 'kwitansi')
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('name', 'like', '%' . $keyword . '%');
-            })
-            ->where('status', true)
-            ->count();
-        $response = [
-            'status'          => true,
-            'draw'            => $request['draw'],
-            'recordsTotal'    => DataStaffPerjalanan::where('status', true)->count(),
-            'recordsFiltered' => $dataCounter,
-            'data'            => $data,
-        ];
-        return $response;
+    // Check if user is not a super admin
+    if ($userRole != 'Super Admin') {
+        // If not a super admin, restrict data based on user's id
+        $query->whereHas('staff', function ($query) {
+            $query->where('id_user', Auth::id());
+        });
     }
+
+    if ($keyword) {
+        $query->where('name', 'like', '%' . $keyword . '%');
+    }
+
+    $data = $query->offset($request['start'])
+        ->limit(($request['length'] == -1) ? DataStaffPerjalanan::where('status', true)->count() : $request['length'])
+        ->get();
+
+    $dataCounter = $query->count();
+
+    $response = [
+        'status'          => true,
+        'draw'            => $request['draw'],
+        'recordsTotal'    => DataStaffPerjalanan::where('status', true)->count(),
+        'recordsFiltered' => $dataCounter,
+        'data'            => $data,
+    ];
+
+    return $response;
+}
 
 
     public function detail($id)

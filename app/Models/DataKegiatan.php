@@ -26,4 +26,19 @@ class DataKegiatan extends Model
         'deleted_by'
     ];
 
+    public function perjalanan()
+    {
+        return $this->belongsTo(Perjalanan::class, 'id_perjalanan', 'id');
+    }
+
+    public function tujuan()
+    {
+        return $this->belongsTo(Tujuan::class, 'id_tujuan', 'id');
+    }
+
+    public function kegiatan()
+    {
+        return $this->belongsTo(Kegiatan::class, 'id_kegiatan', 'id');
+    }
+
 }

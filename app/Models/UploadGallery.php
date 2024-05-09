@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\Uuid;
+use CreateDataTujuanPerjalananTable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,13 +15,13 @@ class UploadGallery extends Model
     protected $table = 'upload_gallery';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id_tujuan_perjalanan', 'name_file', 'path_file'
+        'id_tujuan_perjalanan', 'id_data_kegiatan', 'name_file', 'path_file'
     ];
 
 
     public function tujuanPerjalanan()
     {
-        return $this->belongsTo(DataTujuanPerjalanan::class, 'id_tujuan_perjalanan', 'id');
+        return $this->belongsTo(CreateDataTujuanPerjalananTable::class, 'id_tujuan_perjalanan', 'id');
     }
 
 }

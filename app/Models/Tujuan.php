@@ -56,5 +56,10 @@ class Tujuan extends Model
         return $this->belongsTo(UangHarian::class, 'id_uang_harian', 'province_id');
     }
 
+    public function DataKegiatan()
+    {
+        return $this->hasMany(DataKegiatan::class, 'id_tujuan', 'id');
+    }
+
 
 }

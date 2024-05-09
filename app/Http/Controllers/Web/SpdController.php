@@ -7,6 +7,7 @@ use App\Models\DataStaffPerjalanan;
 use App\Models\Spd;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Auth;
 
 class SpdController extends Controller
 {
@@ -23,19 +24,30 @@ class SpdController extends Controller
     public function getData(Request $request)
     {
         $keyword = $request['searchkey'];
+        $userRole = Auth::user()->roles->pluck('name')[0];
 
-        $data = DataStaffPerjalanan::select()
-            ->with(['perjalanan.mak', 'staff.instansis', 'penandatangan', 'tujuan_perjalanan.tempatTujuan', 'spd'])
-            ->offset($request['start'])
-            ->limit(($request['length'] == -1) ? DataStaffPerjalanan::where('status', true)->count() : $request['length'])
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('nomor_spt', 'like', '%' . $keyword . '%');
-            })
-            ->where('status', true)
-            ->get();
+        $query = DataStaffPerjalanan::select()
+            ->with(['perjalanan.mak', 'staff.instansis', 'penandatangan', 'tujuan_perjalanan.tempatTujuan', 'spd', 'perjalanan.kegiatan'])
+            ->where('status', true);
 
-        $dataCounter = DataStaffPerjalanan::select()
-            ->when($keyword, function ($query, $keyword) {
+        // If the user is not a super admin, filter data based on user's ID
+        if ($userRole != 'Super Admin') {
+            $query->whereHas('staff', function ($query) {
+                $query->where('id_user', Auth::id());
+            });
+        }
+
+        if ($keyword) {
+            $query->where(function ($query) use ($keyword) {
+                $query->where('nomor_spt', 'like', '%' . $keyword . '%');
+            });
+        }
+
+        $data = $query->offset($request['start'])
+                    ->limit(($request['length'] == -1) ? DataStaffPerjalanan::where('status', true)->count() : $request['length'])
+                    ->get();
+
+        $dataCounter = DataStaffPerjalanan::when($keyword, function ($query, $keyword) {
                 return $query->where('nomor_spt', 'like', '%' . $keyword . '%');
             })
             ->where('status', true)
@@ -48,6 +60,7 @@ class SpdController extends Controller
             'recordsFiltered' => $dataCounter,
             'data'            => $data,
         ];
+
         return $response;
     }
 

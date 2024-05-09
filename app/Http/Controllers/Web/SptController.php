@@ -9,6 +9,7 @@ use App\Models\Staff;
 use App\Models\Tujuan;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Auth;
 
 class SptController extends Controller
 {
@@ -25,23 +26,35 @@ class SptController extends Controller
     public function getData(Request $request)
     {
         $keyword = $request['searchkey'];
+        $userRole = Auth::user()->roles->pluck('name')[0];
 
-        $data = Tujuan::select()
-            ->with(['perjalanan', 'spt', 'staff', 'staff.staff', 'tempatTujuan'])
-            ->offset($request['start'])
-            ->limit(($request['length'] == -1) ? Tujuan::where('status', true)->count() : $request['length'])
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('nomor_spt', 'like', '%' . $keyword . '%');
-            })
-            ->where('status', true)
-            ->get();
+        $query = Tujuan::select()
+            ->with(['perjalanan', 'spt', 'staff', 'staff.staff', 'tempatTujuan', 'perjalanan.kegiatan', 'perjalanan.data_staff_perjalanan.staff'])
+            ->where('status', true);
 
-        $dataCounter = Tujuan::select()
-            ->when($keyword, function ($query, $keyword) {
+        // If the user is not a super admin, filter data based on user's ID
+        if ($userRole != 'Super Admin') {
+            $query->whereHas('staff.staff', function ($query) {
+                $query->where('id_user', Auth::id());
+            });
+        }
+
+        if ($keyword) {
+            $query->where(function ($query) use ($keyword) {
+                $query->where('nomor_spt', 'like', '%' . $keyword . '%');
+            });
+        }
+
+        $data = $query->offset($request['start'])
+                    ->limit(($request['length'] == -1) ? Tujuan::where('status', true)->count() : $request['length'])
+                    ->get();
+
+        $dataCounter = Tujuan::when($keyword, function ($query, $keyword) {
                 return $query->where('nomor_spt', 'like', '%' . $keyword . '%');
             })
             ->where('status', true)
             ->count();
+
         $response = [
             'status'          => true,
             'draw'            => $request['draw'],
@@ -49,6 +62,7 @@ class SptController extends Controller
             'recordsFiltered' => $dataCounter,
             'data'            => $data,
         ];
+
         return $response;
     }
 

@@ -54,7 +54,7 @@
                                     <tr>
                                         <th>Nomor SPT</th>
                                         <th>Diperintahkan Kepada</th>
-                                        <th>Maksud Perjalanan</th>
+                                        <th>Maksud Perjalanan / Kegiatan</th>
                                         <th>Tujuan</th>
                                         <th>Jangka Waktu</th>
                                         <th>Dikeluarkan</th>
@@ -149,12 +149,12 @@
                     }
                 },
                 {
-                    "data": "perjalanan",
-                    "width": '10%',
+                    "data": "perjalanan.kegiatan",
+                    "width": '15%',
                     "defaultContent": "-",
-                    render: function(data, type, row) {
-                        if (data.perihal_perjalanan) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.perihal_perjalanan + "</div>";
+                    "render": function(data, type, row) {
+                        if (data && data[0]) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + (data[0].kegiatan || '-') + "</div>";
                         } else {
                             return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
                         }

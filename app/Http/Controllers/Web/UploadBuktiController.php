@@ -36,29 +36,48 @@ class UploadBuktiController extends Controller
 
         if ($keyword) {
             $query->where(function ($query) use ($keyword) {
-                $query->where('nomor_spt', 'like', '%' . $keyword . '%');
+                $query->whereHas('staff', function ($query) use ($keyword) {
+                    $query->where('name', 'like', '%' . $keyword . '%');
+                })
+                ->orWhereHas('staff', function ($query) use ($keyword) {
+                    $query->where('nip', 'like', '%' . $keyword . '%');
+                })
+                ->orWhereHas('perjalanan', function ($query) use ($keyword) {
+                    $query->whereHas('mak', function ($query) use ($keyword) {
+                        $query->where('kode_mak', 'like', '%' . $keyword . '%');
+                    });
+                })
+                ->orWhereHas('perjalanan', function ($query) use ($keyword) {
+                    $query->whereHas('kegiatan', function ($query) use ($keyword) {
+                        $query->where('kegiatan', 'like', '%' . $keyword . '%');
+                    });
+                })
+                ->orWhereHas('tujuan_perjalanan', function ($query) use ($keyword) {
+                    $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
+                        $query->where('name', 'like', '%' . $keyword . '%');
+                    });
+                })
+                ->orWhereHas('tujuan_perjalanan', function ($query) use ($keyword) {
+                    $query->where('tanggal_berangkat', 'like', '%' . $keyword . '%')
+                          ->orWhere('tanggal_pulang', 'like', '%' . $keyword . '%');
+                });
             });
         }
 
         $data = $query->offset($request['start'])
                       ->limit(($request['length'] == -1) ? DataStaffPerjalanan::where('status', true)->count() : $request['length'])
                       ->get();
+                      $dataCounter = $query->count();
 
-        $dataCounter = DataStaffPerjalanan::when($keyword, function ($query, $keyword) {
-                return $query->where('nomor_spt', 'like', '%' . $keyword . '%');
-            })
-            ->where('status', true)
-            ->count();
+                      $response = [
+                          'status'          => true,
+                          'draw'            => $request->input('draw'),
+                          'recordsTotal'    => DataStaffPerjalanan::where('status', true)->count(),
+                          'recordsFiltered' => $dataCounter,
+                          'data'            => $data,
+                      ];
 
-        $response = [
-            'status'          => true,
-            'draw'            => $request['draw'],
-            'recordsTotal'    => DataStaffPerjalanan::where('status', true)->count(),
-            'recordsFiltered' => $dataCounter,
-            'data'            => $data,
-        ];
-
-        return $response;
+                      return $response;
     }
 
     public function create($id)

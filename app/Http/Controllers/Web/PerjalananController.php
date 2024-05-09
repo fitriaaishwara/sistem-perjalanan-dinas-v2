@@ -41,32 +41,69 @@ class PerjalananController extends Controller
         $keyword = $request['searchkey'];
         $userRole = Auth::user()->roles->pluck('name')[0];
 
-        $query = Perjalanan::select()
+        $data = Perjalanan::select()
             ->with('mak', 'tujuan.tempatTujuan', 'log_status_perjalanan', 'kegiatan', 'data_staff_perjalanan.staff')
-            ->where('status', true)
             ->whereHas('log_status_perjalanan', function ($query) {
                 $query->where('status_perjalanan', 'Disetujui');
-            });
+            })
+            ->where(function ($query) use ($keyword) {
+                $query->where('id', 'like', '%' . $keyword . '%')
+                    ->orWhereHas('mak', function ($query) use ($keyword) {
+                        $query->where('kode_mak', 'like', '%' . $keyword . '%');
+                    })
+                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
+                        $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
+                            $query->where('name', 'like', '%' . $keyword . '%');
+                        });
+                    })
+                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
+                        $query->where('tanggal_berangkat', 'like', '%' . $keyword . '%');
+                    })
+                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
+                        $query->where('tanggal_pulang', 'like', '%' . $keyword . '%');
+                    })
+                    ->orWhereHas('kegiatan', function ($query) use ($keyword) {
+                        $query->where('kegiatan', 'like', '%' . $keyword . '%');
+                    });
+            })
+            ->where('status', true);
 
         // If the user is not a super admin, filter data based on user's ID
         if ($userRole != 'Super Admin') {
-            $query->whereHas('data_staff_perjalanan.staff', function ($query) {
+            $data->whereHas('data_staff_perjalanan.staff', function ($query) {
                 $query->where('id_user', Auth::id());
             });
         }
 
-        if ($keyword) {
-            $query->where(function ($query) use ($keyword) {
-                $query->where('perihal_perjalanan', 'like', '%' . $keyword . '%')
-                    ->orWhereHas('mak', function ($query) use ($keyword) {
-                        $query->where('kode_mak', 'like', '%' . $keyword . '%');
-                    });
-            });
-        }
+        $data = $data->offset($request['start'])
+                    ->limit(($request['length'] == -1) ? Perjalanan::where('status', true)->count() : $request['length'])
+                    ->get();
 
-        $data = $query->get();
+                    $dataCounter = Perjalanan::whereDoesntHave('log_status_perjalanan', function ($query) {
+                        $query->where('status_perjalanan', 'Disetujui');
+                    })
+                        ->where(function ($query) use ($keyword) {
+                            $query->where('id', 'like', '%' . $keyword . '%')
+                                ->orWhereHas('mak', function ($query) use ($keyword) {
+                                    $query->where('kode_mak', 'like', '%' . $keyword . '%');
+                                })
+                                ->orWhereHas('tujuan', function ($query) use ($keyword) {
+                                    $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
+                                        $query->where('name', 'like', '%' . $keyword . '%');
+                                    });
+                                });
+                        })
+                        ->where('status', true)
+                        ->count();
 
-        return DataTables::of($data)->make(true);
+                    $response = [
+                        'status'         => true,
+                        'draw'           => $request['draw'],
+                        'recordsTotal'   => Perjalanan::where('status', true)->count(),
+                        'recordsFiltered' => $dataCounter,
+                        'data'           => $data,
+                    ];
+                    return $response;
     }
 
     public function getDataRekap(Request $request)
@@ -74,30 +111,66 @@ class PerjalananController extends Controller
         $keyword = $request['searchkey'];
         $userRole = Auth::user()->roles->pluck('name')[0];
 
-        $query = Perjalanan::select()
+        $data = Perjalanan::select()
             ->with('mak', 'tujuan.tempatTujuan', 'kegiatan', 'data_staff_perjalanan.staff')
-            ->where('status', true);
-
-        if ($keyword) {
-            $query->where(function ($query) use ($keyword) {
-                $query
-                    ->whereHas('mak', function ($query) use ($keyword) {
-                        $query->where('mak.kode_mak', 'like', '%' . $keyword . '%');
+            ->where(function ($query) use ($keyword) {
+                $query->where('id', 'like', '%' . $keyword . '%')
+                    ->orWhereHas('mak', function ($query) use ($keyword) {
+                        $query->where('kode_mak', 'like', '%' . $keyword . '%');
                     })
-                    ->orWhere('perihal_perjalanan', 'like', '%' . $keyword . '%');
-            });
-        }
+                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
+                        $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
+                            $query->where('name', 'like', '%' . $keyword . '%');
+                        });
+                    })
+                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
+                        $query->where('tanggal_berangkat', 'like', '%' . $keyword . '%');
+                    })
+                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
+                        $query->where('tanggal_pulang', 'like', '%' . $keyword . '%');
+                    })
+                    ->orWhereHas('kegiatan', function ($query) use ($keyword) {
+                        $query->where('kegiatan', 'like', '%' . $keyword . '%');
+                    });
+            })
+            ->where('status', true);
 
         // If the user is not a super admin, filter data based on user's ID
         if ($userRole != 'Super Admin') {
-            $query->whereHas('data_staff_perjalanan.staff', function ($query) {
+            $data->whereHas('data_staff_perjalanan.staff', function ($query) {
                 $query->where('id_user', Auth::id());
             });
         }
 
-        $data = $query->get();
+        $data = $data->offset($request['start'])
+                    ->limit(($request['length'] == -1) ? Perjalanan::where('status', true)->count() : $request['length'])
+                    ->get();
 
-        return DataTables::of($data)->make(true);
+                    $dataCounter = Perjalanan::whereDoesntHave('log_status_perjalanan', function ($query) {
+                        $query->where('status_perjalanan', 'Disetujui');
+                    })
+                        ->where(function ($query) use ($keyword) {
+                            $query->where('id', 'like', '%' . $keyword . '%')
+                                ->orWhereHas('mak', function ($query) use ($keyword) {
+                                    $query->where('kode_mak', 'like', '%' . $keyword . '%');
+                                })
+                                ->orWhereHas('tujuan', function ($query) use ($keyword) {
+                                    $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
+                                        $query->where('name', 'like', '%' . $keyword . '%');
+                                    });
+                                });
+                        })
+                        ->where('status', true)
+                        ->count();
+
+                    $response = [
+                        'status'         => true,
+                        'draw'           => $request['draw'],
+                        'recordsTotal'   => Perjalanan::where('status', true)->count(),
+                        'recordsFiltered' => $dataCounter,
+                        'data'           => $data,
+                    ];
+                    return $response;
     }
 
     public function getDataProvinsi(Request $request)

@@ -44,7 +44,24 @@ class NotaDinasController extends Controller
 
         if ($keyword) {
             $query->where(function ($query) use ($keyword) {
-                $query->where('name', 'like', '%' . $keyword . '%');
+                $query->whereHas('mak', function ($query) use ($keyword) {
+                    $query->where('kode_mak', 'like', '%' . $keyword . '%');
+                })
+                ->orWhereHas('mak', function ($query) use ($keyword) {
+                    $query->where('kode_mak', 'like', '%' . $keyword . '%');
+                })
+                ->orWhereHas('kegiatan', function ($query) use ($keyword) {
+                    $query->where('kegiatan', 'like', '%' . $keyword . '%');
+                })
+                ->orWhereHas('tujuan', function ($query) use ($keyword) {
+                    $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
+                        $query->where('name', 'like', '%' . $keyword . '%');
+                    });
+                })
+                ->orWhereHas('tujuan', function ($query) use ($keyword) {
+                    $query->where('tanggal_berangkat', 'like', '%' . $keyword . '%')
+                          ->orWhere('tanggal_pulang', 'like', '%' . $keyword . '%');
+                });
             });
         }
 

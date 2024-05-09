@@ -35,6 +35,31 @@ class GeoTaggingController extends Controller
             $query->where(function ($query) use ($keyword) {
                 $query->whereHas('staff', function ($query) use ($keyword) {
                     $query->where('name', 'like', '%' . $keyword . '%');
+                })
+                ->orWhereHas('staff', function ($query) use ($keyword) {
+                    $query->where('nip', 'like', '%' . $keyword . '%');
+                })
+                ->orWhereHas('perjalanan', function ($query) use ($keyword) {
+                    $query->whereHas('mak', function ($query) use ($keyword) {
+                        $query->where('kode_mak', 'like', '%' . $keyword . '%');
+                    });
+                })
+                ->orWhereHas('perjalanan', function ($query) use ($keyword) {
+                    $query->whereHas('kegiatan', function ($query) use ($keyword) {
+                        $query->where('kegiatan', 'like', '%' . $keyword . '%');
+                    });
+                })
+                ->orWhereHas('tujuan_perjalanan', function ($query) use ($keyword) {
+                    $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
+                        $query->where('name', 'like', '%' . $keyword . '%');
+                    });
+                })
+                ->orWhereHas('spd', function ($query) use ($keyword) {
+                    $query->where('nomor_spd', 'like', '%' . $keyword . '%');
+                })
+                ->orWhereHas('tujuan_perjalanan', function ($query) use ($keyword) {
+                    $query->where('tanggal_berangkat', 'like', '%' . $keyword . '%')
+                          ->orWhere('tanggal_pulang', 'like', '%' . $keyword . '%');
                 });
             });
         }

@@ -41,23 +41,49 @@ class SptController extends Controller
 
         if ($keyword) {
             $query->where(function ($query) use ($keyword) {
-                $query->where('nomor_spt', 'like', '%' . $keyword . '%');
+                $query->whereHas('perjalanan', function ($query) use ($keyword) {
+                    $query->whereHas('data_staff_perjalanan', function ($query) use ($keyword) {
+                        $query->whereHas('staff', function ($query) use ($keyword) {
+                            $query->where('name', 'like', '%' . $keyword . '%');
+                        });
+                    });
+                })
+                ->orWhereHas('perjalanan', function ($query) use ($keyword) {
+                    $query->whereHas('data_staff_perjalanan', function ($query) use ($keyword) {
+                        $query->whereHas('staff', function ($query) use ($keyword) {
+                            $query->where('nip', 'like', '%' . $keyword . '%');
+                        });
+                    });
+                })
+                ->orWhereHas('perjalanan', function ($query) use ($keyword) {
+                    $query->whereHas('mak', function ($query) use ($keyword) {
+                        $query->where('kode_mak', 'like', '%' . $keyword . '%');
+                    });
+                })
+                ->orWhereHas('perjalanan', function ($query) use ($keyword) {
+                    $query->whereHas('kegiatan', function ($query) use ($keyword) {
+                        $query->where('kegiatan', 'like', '%' . $keyword . '%');
+                    });
+                })
+                ->orWhereHas('tempatTujuan', function ($query) use ($keyword) {
+                    $query->where('name', 'like', '%' . $keyword . '%');
+                })
+                ->orWhereHas('spt', function ($query) use ($keyword) {
+                    $query->where('nomor_spt', 'like', '%' . $keyword . '%');
+                });
+
             });
         }
 
-        $data = $query->offset($request['start'])
-                    ->limit(($request['length'] == -1) ? Tujuan::where('status', true)->count() : $request['length'])
-                    ->get();
+        $data = $query->offset($request->input('start'))
+            ->limit(($request->input('length') == -1) ? Tujuan::where('status', true)->count() : $request->input('length'))
+            ->get();
 
-        $dataCounter = Tujuan::when($keyword, function ($query, $keyword) {
-                return $query->where('nomor_spt', 'like', '%' . $keyword . '%');
-            })
-            ->where('status', true)
-            ->count();
+        $dataCounter = $query->count();
 
         $response = [
             'status'          => true,
-            'draw'            => $request['draw'],
+            'draw'            => $request->input('draw'),
             'recordsTotal'    => Tujuan::where('status', true)->count(),
             'recordsFiltered' => $dataCounter,
             'data'            => $data,

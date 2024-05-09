@@ -23,42 +23,72 @@ class KwitansiController extends Controller
     }
 
     public function getData(Request $request)
-{
-    $keyword = $request['searchkey'];
-    $userRole = Auth::user()->roles->pluck('name')[0];
+    {
+        $user = Auth::user();
+        $keyword = $request->has('searchkey') ? $request->input('searchkey') : null;
+        $userRole = $user->roles->pluck('name')->first();
 
-    $query = DataStaffPerjalanan::query()
-        ->with('staff', 'perjalanan', 'perjalanan.mak', 'tujuan_perjalanan.tempatTujuan', 'tujuan_perjalanan.uangHarian', 'spd', 'kwitansi', 'transportasi_berangkat', 'transportasi_pulang', 'akomodasi_hotel', 'perjalanan.kegiatan')
-        ->where('status', true);
+        $query = DataStaffPerjalanan::query()
+            ->with('staff', 'perjalanan', 'perjalanan.mak', 'tujuan_perjalanan.tempatTujuan', 'tujuan_perjalanan.uangHarian', 'spd', 'kwitansi', 'transportasi_berangkat', 'transportasi_pulang', 'akomodasi_hotel', 'perjalanan.kegiatan')
+            ->where('status', true);
 
-    // Check if user is not a super admin
-    if ($userRole != 'Super Admin') {
-        // If not a super admin, restrict data based on user's id
-        $query->whereHas('staff', function ($query) {
-            $query->where('id_user', Auth::id());
-        });
+        // Check if user is not a super admin
+        if ($userRole !== 'Super Admin') {
+            // If not a super admin, restrict data based on user's id
+            $query->whereHas('staff', function ($query) use ($user) {
+                $query->where('id_user', $user->id);
+            });
+        }
+
+        if ($keyword) {
+            $query->where(function ($query) use ($keyword) {
+                $query->whereHas('staff', function ($query) use ($keyword) {
+                    $query->where('name', 'like', '%' . $keyword . '%');
+                })
+                ->orWhereHas('staff', function ($query) use ($keyword) {
+                    $query->where('nip', 'like', '%' . $keyword . '%');
+                })
+                ->orWhereHas('perjalanan', function ($query) use ($keyword) {
+                    $query->whereHas('mak', function ($query) use ($keyword) {
+                        $query->where('kode_mak', 'like', '%' . $keyword . '%');
+                    });
+                })
+                ->orWhereHas('perjalanan', function ($query) use ($keyword) {
+                    $query->whereHas('kegiatan', function ($query) use ($keyword) {
+                        $query->where('kegiatan', 'like', '%' . $keyword . '%');
+                    });
+                })
+                ->orWhereHas('tujuan_perjalanan', function ($query) use ($keyword) {
+                    $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
+                        $query->where('name', 'like', '%' . $keyword . '%');
+                    });
+                })
+                ->orWhereHas('spd', function ($query) use ($keyword) {
+                    $query->where('nomor_spd', 'like', '%' . $keyword . '%');
+                })
+                ->orWhereHas('tujuan_perjalanan', function ($query) use ($keyword) {
+                    $query->where('tanggal_berangkat', 'like', '%' . $keyword . '%')
+                          ->orWhere('tanggal_pulang', 'like', '%' . $keyword . '%');
+                });
+            });
+        }
+
+        $data = $query->offset($request->input('start'))
+            ->limit(($request->input('length') == -1) ? DataStaffPerjalanan::where('status', true)->count() : $request->input('length'))
+            ->get();
+
+        $dataCounter = $query->count();
+
+        $response = [
+            'status'          => true,
+            'draw'            => $request->input('draw'),
+            'recordsTotal'    => DataStaffPerjalanan::where('status', true)->count(),
+            'recordsFiltered' => $dataCounter,
+            'data'            => $data,
+        ];
+
+        return $response;
     }
-
-    if ($keyword) {
-        $query->where('name', 'like', '%' . $keyword . '%');
-    }
-
-    $data = $query->offset($request['start'])
-        ->limit(($request['length'] == -1) ? DataStaffPerjalanan::where('status', true)->count() : $request['length'])
-        ->get();
-
-    $dataCounter = $query->count();
-
-    $response = [
-        'status'          => true,
-        'draw'            => $request['draw'],
-        'recordsTotal'    => DataStaffPerjalanan::where('status', true)->count(),
-        'recordsFiltered' => $dataCounter,
-        'data'            => $data,
-    ];
-
-    return $response;
-}
 
 
     public function detail($id)

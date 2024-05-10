@@ -89,7 +89,7 @@
                                 <thead>
                                     <tr>
                                         <th>MAK</th>
-                                        <th>Perihal</th>
+                                        <th>Kegiatan</th>
                                         <th>Tujuan</th>
                                         <th>Tanggal Berangkat</th>
                                         <th>Tanggal Kembali</th>
@@ -174,24 +174,21 @@
                         }
                     },
                     {
-                        "data": "kegiatan",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            console.log(data);
-                            var tujuan = "";
-                            var angka = 1;
-                            for (var i = 0; i < data.length; i++) {
-                                tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + data[i].kegiatan + "</div>";
-                                angka++;
+                            "data": "kegiatan",
+                            "width": '10%',
+                            "defaultContent": "-",
+                            "render": function(data, type, row) {
+                                console.log(data);
+                                var kegiatan = "";
+                                var angka = 1;
+                                for (var i = 0; i < data.length; i++) {
+                                    if (data[i].status === 1) {
+                                        kegiatan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + data[i].kegiatan + "</div>";
+                                        angka++;
+                                    }
+                                }
+                                return kegiatan || "-";
                             }
-                            return tujuan;
-                            // if (data) {
-                            //     return "<div class='text-wrap'>" + data.tempat_tujuan + "</div>";
-                            // } else {
-                            //     return "<div class='text-wrap'>-</div>";
-                            // }
-                        }
                     },
                     {
                         "data": "tujuan",

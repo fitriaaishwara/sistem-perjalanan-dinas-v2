@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\DataKegiatan;
+use App\Models\Kegiatan;
 use App\Models\Tujuan;
 use App\Models\UploadGallery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class UploadGalleryController extends Controller
 {
@@ -20,41 +23,77 @@ class UploadGalleryController extends Controller
     public function getData(Request $request)
     {
         $keyword = $request['searchkey'];
+        $userRole = Auth::user()->roles->pluck('name')[0];
 
-        $data = Tujuan::select()
-            ->with('perjalanan', 'perjalanan.data_staff_perjalanan.staff', 'uploadLaporan', 'uploadGallery', 'TempatTujuan')
-            ->offset($request['start'])
-            ->limit(($request['length'] == -1) ? Tujuan::where('status', true)->count() : $request['length'])
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('nomor_spt', 'like', '%' . $keyword . '%');
-            })
-            ->where('status', true)
+        $query = Kegiatan::with(['perjalanan', 'perjalanan.data_staff_perjalanan.staff', 'perjalanan.tujuan.uploadGallery', 'perjalanan.tujuan.tempatTujuan', 'perjalanan.tujuan.tempatBerangkat', 'DataKegiatan'])
+            ->where('status', true);
+
+        // If the user is not a super admin, filter data based on user's ID
+        if ($userRole != 'Super Admin') {
+            $query->whereHas('perjalanan.data_staff_perjalanan.staff', function ($query) {
+                $query->where('id_user', Auth::id());
+            });
+        }
+
+        if ($keyword) {
+            $query->where(function ($query) use ($keyword) {
+                $query->where('kegiatan', 'like', '%' . $keyword . '%')
+                    ->orWhereHas('perjalanan', function ($query) use ($keyword) {
+                        $query->whereHas('data_staff_perjalanan', function ($query) use ($keyword) {
+                            $query->whereHas('staff', function ($query) use ($keyword) {
+                                $query->where('name', 'like', '%' . $keyword . '%');
+                            });
+                        });
+                    })
+                    ->orWhereHas('perjalanan', function ($query) use ($keyword) {
+                        $query->whereHas('tujuan', function ($query) use ($keyword) {
+                            $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
+                                $query->where('name', 'like', '%' . $keyword . '%');
+                            });
+                        });
+                    })
+                    ->orWhereHas('perjalanan', function ($query) use ($keyword) {
+                        $query->whereHas('tujuan', function ($query) use ($keyword) {
+                            $query->where('tanggal_berangkat', 'like', '%' . $keyword . '%');
+                        });
+                    })
+                    ->orWhereHas('perjalanan', function ($query) use ($keyword) {
+                        $query->whereHas('tujuan', function ($query) use ($keyword) {
+                            $query->where('tanggal_pulang', 'like', '%' . $keyword . '%');
+                        });
+                    })
+                    ->orWhereHas('perjalanan', function ($query) use ($keyword) {
+                        $query->whereHas('data_staff_perjalanan', function ($query) use ($keyword) {
+                            $query->whereHas('staff', function ($query) use ($keyword) {
+                                $query->where('name', 'like', '%' . $keyword . '%');
+                            });
+                        });
+                    });
+            });
+        }
+
+        $data = $query->offset($request['start'])
+            ->limit(($request['length'] == -1) ? Kegiatan::where('status', true)->count() : $request['length'])
             ->get();
 
-        $dataCounter = Tujuan::select()
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('nomor_spt', 'like', '%' . $keyword . '%');
-            })
-            ->where('status', true)
-            ->count();
+        $dataCounter = $query->count();
 
         $response = [
             'status'          => true,
             'draw'            => $request['draw'],
-            'recordsTotal'    => Tujuan::where('status', true)->count(),
+            'recordsTotal'    => Kegiatan::where('status', true)->count(),
             'recordsFiltered' => $dataCounter,
             'data'            => $data,
         ];
 
         return $response;
-
     }
 
     public function create($id)
     {
-        $tujuan = Tujuan::with('perjalanan', 'perjalanan.data_staff_perjalanan.staff', 'uploadLaporan', 'uploadGallery')->findOrFail($id);
+        $kegiatan = Kegiatan::with(['perjalanan', 'perjalanan.data_staff_perjalanan.staff', 'perjalanan.tujuan.uploadGallery', 'perjalanan.tujuan.tempatTujuan','perjalanan.tujuan.tempatBerangkat'])->findOrFail($id);
 
-        return view('pages.pra-perjalanan.dokumentasi.gallery.create', compact('tujuan'));
+        return view('pages.pra-perjalanan.dokumentasi.gallery.create', compact('kegiatan'));
     }
 
     public function store (Request $request)
@@ -82,12 +121,13 @@ class UploadGalleryController extends Controller
             // Create the record in the database
             $create = UploadGallery::create([
                 'id_tujuan_perjalanan' => $request->input('id_tujuan_perjalanan'),
+                'id_data_kegiatan'     => $request->input('id_data_kegiatan'),
                 'name_file'      => $request->input('name_file'),
                 'path_file'           => $fileName,
             ]);
 
             if ($create) {
-                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Jabatan successfully created'];
+                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Photo successfully created'];
             }
 
         } catch (\Exception $ex) {
@@ -100,10 +140,10 @@ class UploadGalleryController extends Controller
     public function show($id)
     {
         try {
-            $data = ['status' => false, 'message' => 'Jabatan failed to be found'];
+            $data = ['status' => false, 'message' => 'Photo failed to be found'];
             $data = Tujuan::findOrFail($id);
             if ($data) {
-                $data = ['status' => true, 'message' => 'Jabatan was successfully found', 'data' => $data];
+                $data = ['status' => true, 'message' => 'Photo was successfully found', 'data' => $data];
             }
         } catch (\Exception $ex) {
             $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];

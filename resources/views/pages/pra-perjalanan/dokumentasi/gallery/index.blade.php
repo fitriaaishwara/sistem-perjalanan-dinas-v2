@@ -59,7 +59,7 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Perihal Perjalanan</th>
+                                        <th>Kegiatan</th>
                                         <th>Staff</th>
                                         <th>Tujuan</th>
                                         <th>Tgl Berangkat</th>
@@ -132,7 +132,7 @@
                     }
                 },
                 {
-                    "data": "perjalanan.perihal_perjalanan",
+                    "data": "kegiatan",
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
@@ -161,36 +161,36 @@
                     }
                 },
                 {
-                    "data": "tempat_tujuan",
-                    "width": '15%',
+                "data": "perjalanan.tujuan",
+                "width": '15%',
+                "defaultContent": "-",
+                render: function(data, type, row) {
+                    if (data && data.length > 0) {
+                        return "<div class='text-wrap' style='font-size: 12px;'>" + data[0].tempat_tujuan.name + "</div>";
+                    } else {
+                        return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
+                    }
+                }
+            },
+                {
+                    "data": "perjalanan.tujuan",
+                    "width": '10%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.name + "</div>";
+                        if (data && data.length > 0) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + formatIndonesianDate(data[0].tanggal_berangkat) + "</div>";
                         } else {
-                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'> - </div>";
                         }
                     }
                 },
                 {
-                    "data": "tanggal_berangkat",
+                    "data": "perjalanan.tujuan",
                     "width": '10%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + formatIndonesianDate(data) + "</div>";
-                        } else {
-                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
-                        }
-                    }
-                },
-                {
-                    "data": "tanggal_pulang",
-                    "width": '10%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + formatIndonesianDate(data) + "</div>";
+                        if (data && data.length > 0) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + formatIndonesianDate(data[0].tanggal_pulang) + "</div>";
                         } else {
                             return "<div class='text-wrap' style='font-size: 12px;'> - </div>";
                         }

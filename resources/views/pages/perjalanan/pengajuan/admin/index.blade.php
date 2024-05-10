@@ -101,8 +101,7 @@
                     <div class="card-header">
                         <div class="d-flex align-items-center">
                             {{-- <h4 class="card-title">Data Jabatan</h4> --}}
-                            <a href="{{ route('pengajuan/create') }}" class="btn btn-primary btn-round ml-auto"><i
-                                    class="fa fa-plus"></i> Add Data</a>
+                            <a href="{{ route('pengajuan/create') }}" class="btn btn-primary btn-round ml-auto"><i class="fa fa-plus"></i> Ajukan Perjalanan</a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -111,7 +110,7 @@
                                 <thead>
                                     <tr>
                                         <th>MAK</th>
-                                        <th>Perihal</th>
+                                        <th>Kegiatan</th>
                                         <th>Tujuan</th>
                                         <th>Tanggal Berangkat</th>
                                         <th>Tanggal Kembali</th>
@@ -147,155 +146,137 @@
         };
         var isUpdate = false;
 
-        var pengajuanTable = $('#pengajuanTable').DataTable({
-            "language": {
-                "paginate": {
-                    "next": '<i class="fas fa-arrow-right"></i>',
-                    "previous": '<i class="fas fa-arrow-left"></i>'
-                }
-            },
-            "aaSorting": [],
-            "autoWidth": false,
-            "ordering": false,
-            "serverSide": true,
-            "responsive": true,
-            "lengthMenu": [
-                [10, 15, 25, 50, -1],
-                [10, 15, 25, 50, "All"]
-            ],
-            "ajax": {
-                "url": "{{ route('pengajuan/getData') }}",
-                "type": "POST",
-                "headers": {
-                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
-                },
-                "beforeSend": function(xhr) {
-                    xhr.setRequestHeader("Authorization", "Bearer " + $('#secret').val());
-                },
-                "Content-Type": "application/json",
-                "data": function(data) {
-                    request.draw = data.draw;
-                    request.start = data.start;
-                    request.length = data.length;
-                    request.searchkey = data.search.value || "";
+                var pengajuanTable = $('#pengajuanTable').DataTable({
+                    "language": {
+                        "paginate": {
+                            "next": '<i class="fas fa-arrow-right"></i>',
+                            "previous": '<i class="fas fa-arrow-left"></i>'
+                        }
+                    },
+                    "aaSorting": [],
+                    "autoWidth": false,
+                    "ordering": false,
+                    "serverSide": true,
+                    "responsive": true,
+                    "lengthMenu": [
+                        [10, 15, 25, 50, -1],
+                        [10, 15, 25, 50, "All"]
+                    ],
+                    "ajax": {
+                        "url": "{{ route('pengajuan/getData') }}",
+                        "type": "POST",
+                        "headers": {
+                            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
+                        },
+                        "beforeSend": function(xhr) {
+                            xhr.setRequestHeader("Authorization", "Bearer " + $('#secret').val());
+                        },
+                        "Content-Type": "application/json",
+                        "data": function(data) {
+                            request.draw = data.draw;
+                            request.start = data.start;
+                            request.length = data.length;
+                            request.searchkey = data.search.value || "";
 
-                    return (request);
-                },
-            },
-            "columns": [{
-                    "data": "mak",
-                    "width": '10%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        if (data && data.kode_mak) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data
-                                .kode_mak + "</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
-                        }
-                    }
-                },
-                {
-                    "data": "kegiatan",
-                    "width": '10%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        console.log(data);
-                        var tujuan = "";
-                        var angka = 1;
-                        for (var i = 0; i < data.length; i++) {
-                            tujuan += "<div class='text-wrap' style='font-size: 12px;'>" +
-                                angka + ". " + data[i].kegiatan + "</div>";
-                            angka++;
-                        }
-                        return tujuan;
-                        // if (data) {
-                        //     return "<div class='text-wrap'>" + data.tempat_tujuan + "</div>";
-                        // } else {
-                        //     return "<div class='text-wrap'>-</div>";
-                        // }
-                    }
-                },
-                {
-                    "data": "tujuan",
-                    "width": '10%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        console.log(data);
-                        var tujuan = "";
-                        var angka = 1;
-                        for (var i = 0; i < data.length; i++) {
-                            if (data[i].status === 1) {
-                                tujuan += "<div class='text-wrap' style='font-size: 12px;'>" +
-                                    angka + ". " + data[i].tempat_tujuan.name + "</div>";
-                                angka++;
+                            return (request);
+                        },
+                    },
+                    "columns": [
+                        {
+                            "data": "mak",
+                            "width": '10%',
+                            "defaultContent": "-",
+                            render: function(data, type, row) {
+                                if (data && data.kode_mak) {
+                                    return "<div class='text-wrap' style='font-size: 12px;'>" + data.kode_mak + "</div>";
+                                } else {
+                                    return "<div class='text-wrap'>-</div>";
+                                }
                             }
-                        }
-                        return tujuan || "-";
-                    }
-                },
-                {
-                    "data": "tujuan",
-                    "width": '10%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        var tujuan = "";
-                        var angka = 1;
-                        for (var i = 0; i < data.length; i++) {
-                            if (data[i].status === 1) {
-                                tujuan += "<div class='text-wrap' style='font-size: 12px;'>" +
-                                    angka + ". " + formatIndonesianDate(data[i]
-                                        .tanggal_berangkat) + "</div>";
-                                angka++;
+                        },
+                        {
+                            "data": "perihal_perjalanan",
+                            "width": '10%',
+                            "defaultContent": "-",
+                            render: function(data, type, row) {
+                                return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                            },
+                        },
+                        {
+                            "data": "tujuan",
+                            "width": '10%',
+                            "defaultContent": "-",
+                            render: function(data, type, row) {
+                                console.log(data);
+                                var tujuan = "";
+                                var angka = 1;
+                                for (var i = 0; i < data.length; i++) {
+                                    if (data[i].status === 1) {
+                                        tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + data[i].tempat_tujuan.name + "</div>";
+                                        angka++;
+                                    }
+                                }
+                                return tujuan || "-";
                             }
-                        }
-                        return tujuan;
-                        // if (data && data.tanggal_berangkat) {
-                        //     return "<div class='text-wrap'>" + data.tanggal_berangkat + "</div>";
-                        // } else {
-                        //     return "<div class='text-wrap'>-</div>";
-                        // }
-                    }
-                },
-                {
-                    "data": "tujuan",
-                    "width": '10%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        var tujuan = "";
-                        var angka = 1;
-                        for (var i = 0; i < data.length; i++) {
-                            if (data[i].status === 1) {
-                                tujuan += "<div class='text-wrap' style='font-size: 12px;'>" +
-                                    angka + ". " + formatIndonesianDate(data[i]
-                                    .tanggal_pulang) + "</div>";
-                                angka++;
+                        },
+                        {
+                            "data": "tujuan",
+                            "width": '10%',
+                            "defaultContent": "-",
+                            render: function(data, type, row) {
+                                var tujuan = "";
+                                var angka = 1;
+                                for (var i = 0; i < data.length; i++) {
+                                    if (data[i].status === 1) {
+                                        tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + formatIndonesianDate(data[i].tanggal_berangkat) + "</div>";
+                                        angka++;
+                                    }
+                                }
+                                return tujuan;
+                                // if (data && data.tanggal_berangkat) {
+                                //     return "<div class='text-wrap'>" + data.tanggal_berangkat + "</div>";
+                                // } else {
+                                //     return "<div class='text-wrap'>-</div>";
+                                // }
                             }
-                        }
-                        return tujuan;
-                        // if (data && data.tanggal_pulang) {
-                        //     return "<div class='text-wrap'>" + data.tanggal_pulang + "</div>";
-                        // } else {
-                        //     return "<div class='text-wrap'>-</div>";
-                        // }
-                    }
-                },
-                // {
-                //     "data": "estimasi_biaya",
-                //     "width": '10%',
-                //     "defaultContent": "-",
-                //     render: function(data, type, row) {
-                //     //format_rupiah
-                //     return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data) + "</div>";
-                //     },
-                // },
-                {
-                    "data": "id",
-                    "width": '10%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        var btnStatusPerjalanan = "";
-                        var btnDetailStatus = "";
+                        },
+                        {
+                            "data": "tujuan",
+                            "width": '10%',
+                            "defaultContent": "-",
+                            render: function(data, type, row) {
+                                var tujuan = "";
+                                var angka = 1;
+                                for (var i = 0; i < data.length; i++) {
+                                    if (data[i].status === 1) {
+                                    tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + formatIndonesianDate(data[i].tanggal_pulang) + "</div>";
+                                    angka++;
+                                    }
+                                }
+                                return tujuan;
+                                // if (data && data.tanggal_pulang) {
+                                //     return "<div class='text-wrap'>" + data.tanggal_pulang + "</div>";
+                                // } else {
+                                //     return "<div class='text-wrap'>-</div>";
+                                // }
+                            }
+                        },
+                        // {
+                        //     "data": "estimasi_biaya",
+                        //     "width": '10%',
+                        //     "defaultContent": "-",
+                        //     render: function(data, type, row) {
+                        //     //format_rupiah
+                        //     return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data) + "</div>";
+                        //     },
+                        // },
+                        {
+                            "data": "id",
+                            "width": '10%',
+                            "defaultContent": "-",
+                            render: function(data, type, row) {
+                                var btnStatusPerjalanan = "";
+                                var btnDetailStatus = "";
 
                         @if (auth()->user()->can('asdep', 'kabid'))
                             btnStatusPerjalanan +=

@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\Tujuan;
+use App\Models\Kegiatan;
 use App\Models\UploadLaporan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class UploadLaporanController extends Controller
 {
@@ -20,34 +21,53 @@ class UploadLaporanController extends Controller
     public function getData(Request $request)
     {
         $keyword = $request['searchkey'];
+        $userRole = Auth::user()->roles->pluck('name')[0];
 
-        $data = Tujuan::select()
-            ->with('perjalanan.kegiatan', 'perjalanan.data_staff_perjalanan.staff', 'uploadLaporan', 'tempatTujuan')
-            ->offset($request['start'])
-            ->limit(($request['length'] == -1) ? Tujuan::where('status', true)->count() : $request['length'])
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('nomor_spt', 'like', '%' . $keyword . '%');
-            })
-            ->where('status', true)
+        $query = Kegiatan::with(['perjalanan', 'perjalanan.data_staff_perjalanan.staff', 'uploadLaporan', 'perjalanan.tujuan.tempatTujuan', 'perjalanan.tujuan.tempatBerangkat', 'DataKegiatan'])
+            ->where('status', true);
+
+        // If the user is not a super admin, filter data based on user's ID
+        if ($userRole != 'Super Admin') {
+            $query->whereHas('perjalanan.data_staff_perjalanan.staff', function ($query) {
+                $query->where('id_user', Auth::id());
+            });
+        }
+
+        if ($keyword) {
+            $query->where(function ($query) use ($keyword) {
+                $query->where('kegiatan', 'like', '%' . $keyword . '%')
+                    ->orWhereHas('perjalanan', function ($query) use ($keyword) {
+                        $query->whereHas('data_staff_perjalanan.staff', function ($query) use ($keyword) {
+                            $query->where('name', 'like', '%' . $keyword . '%');
+                        });
+                    })
+                    ->orWhereHas('perjalanan.tujuan.tempatTujuan', function ($query) use ($keyword) {
+                        $query->where('name', 'like', '%' . $keyword . '%');
+                    })
+                    ->orWhereHas('perjalanan.tujuan.tempatBerangkat', function ($query) use ($keyword) {
+                        $query->where('tanggal_berangkat', 'like', '%' . $keyword . '%');
+                    })
+                    ->orWhereHas('perjalanan.tujuan.tempatBerangkat', function ($query) use ($keyword) {
+                        $query->where('tanggal_pulang', 'like', '%' . $keyword . '%');
+                    });
+            });
+        }
+
+        $data = $query->offset($request['start'])
+            ->limit(($request['length'] == -1) ? Kegiatan::where('status', true)->count() : $request['length'])
             ->get();
 
-        $dataCounter = Tujuan::select()
-            ->when($keyword, function ($query, $keyword) {
-                return $query->where('nomor_spt', 'like', '%' . $keyword . '%');
-            })
-            ->where('status', true)
-            ->count();
+        $dataCounter = $query->count();
 
         $response = [
             'status'          => true,
             'draw'            => $request['draw'],
-            'recordsTotal'    => Tujuan::where('status', true)->count(),
+            'recordsTotal'    => Kegiatan::where('status', true)->count(),
             'recordsFiltered' => $dataCounter,
             'data'            => $data,
         ];
 
         return $response;
-
     }
 
     public function store (Request $request)
@@ -56,7 +76,7 @@ class UploadLaporanController extends Controller
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Data failed to update'];
             $filePath = $request->file('path_file');
             $fileName = time() . '_' . Str::random(10) . '.' . $filePath->getClientOriginalExtension();
-            $path     = 'laporan/' . $request->input('id_tujuan_perjalanan');
+            $path     = 'laporan/' . $request->input('id_kegiatan');
 
             $validator = Validator::make($request->all(), [
                 'path_file' => 'required|mimes:pdf|max:200240',
@@ -74,13 +94,13 @@ class UploadLaporanController extends Controller
 
             // Create the record in the database
             $create = UploadLaporan::create([
-                'id_tujuan_perjalanan' => $request->input('id_tujuan_perjalanan'),
+                'id_kegiatan' => $request->input('id_kegiatan'),
                 'name_file'      => $request->input('name_file'),
                 'path_file'           => $fileName,
             ]);
 
             if ($create) {
-                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Jabatan successfully created'];
+                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Laporan successfully created'];
             }
 
         } catch (\Exception $ex) {
@@ -93,10 +113,10 @@ class UploadLaporanController extends Controller
     public function show($id)
     {
         try {
-            $data = ['status' => false, 'message' => 'Jabatan failed to be found'];
-            $data = Tujuan::findOrFail($id);
+            $data = ['status' => false, 'message' => 'Laporan failed to be found'];
+            $data = Kegiatan::findOrFail($id);
             if ($data) {
-                $data = ['status' => true, 'message' => 'Jabatan was successfully found', 'data' => $data];
+                $data = ['status' => true, 'message' => 'Laporan was successfully found', 'data' => $data];
             }
         } catch (\Exception $ex) {
             $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
@@ -107,10 +127,10 @@ class UploadLaporanController extends Controller
     public function showing($id)
     {
         try {
-            $data = ['status' => false, 'message' => 'Jabatan failed to be found'];
+            $data = ['status' => false, 'message' => 'Laporan failed to be found'];
             $data = UploadLaporan::findOrFail($id);
             if ($data) {
-                $data = ['status' => true, 'message' => 'Jabatan was successfully found', 'data' => $data];
+                $data = ['status' => true, 'message' => 'Laporan was successfully found', 'data' => $data];
             }
         } catch (\Exception $ex) {
             $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
@@ -118,21 +138,21 @@ class UploadLaporanController extends Controller
         return $data;
     }
 
-     //download file
-     public function downloadFile($id)
-     {
-         $data = UploadLaporan::findOrFail($id);
-         $path = 'laporan' . DIRECTORY_SEPARATOR . $data->id_tujuan_perjalanan . DIRECTORY_SEPARATOR;
-         $fileName = $data->path_file;
-         $filePath = 'app' . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . $path . $fileName;
+   //download file
+   public function downloadFile($id)
+   {
+       $data = UploadLaporan::findOrFail($id);
+       $path = 'laporan' . DIRECTORY_SEPARATOR . $data->id_kegiatan . DIRECTORY_SEPARATOR;
+       $fileName = $data->path_file;
+       $filePath = 'app' . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . $path . $fileName;
 
-         $path = storage_path($filePath);
+       $path = storage_path($filePath);
 
-         return \Response::make(file_get_contents($path), 200, [
-             'Content-Type' => 'application/pdf',
-             'Content-Disposition' => 'inline; filename="'.$fileName.'"'
-         ]);
-     }
+       return \Response::make(file_get_contents($path), 200, [
+           'Content-Type' => 'application/pdf',
+           'Content-Disposition' => 'inline; filename="'.$fileName.'"'
+       ]);
+   }
 
 
 }

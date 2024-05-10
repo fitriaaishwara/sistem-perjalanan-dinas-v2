@@ -2,6 +2,63 @@
 @section('content')
 @section('title', 'Data Pengajuan')
 <!-- Modal -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<style>
+    .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.breadcrumbs {
+    flex: 1;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#selesaiBtn {
+    margin-left: 10px; /* Margin agar ada jarak antara tombol dan breadcrumb */
+}
+</style>
+
+<div id="myModalKegiatan" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalKegiatanLabel" aria-hidden="true">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header border-0" id="myModalKegiatanLabel">
+                <h5 class="modal-title">
+                    <span class="fw-mediumbold">
+                    Kegiatan
+                    </span>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{ route('kegiatan/store') }}" id="kegiatanForm" name="kegiatanForm">
+                    @csrf
+                    <input type="hidden" name="id" id="id_kegiatan">
+                    <input id="id_perjalanan" type="hidden" class="form-control" name="id_perjalanan" value="{{ $perjalanan->id }}">
+                    <div class="row mb-4">
+                        <label for="kegiatan" class="col-sm-3 col-form-label">Kegiatan<span
+                                style="color:red;">*</span></label>
+                        <div class="col-sm-9 validate">
+                            <input id="kegiatan" type="text" class="form-control" name="kegiatan">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark waves-effect waves-light btn-sm" id="saveBtnKegiatan"
+                    name="saveBtnKegiatan">Save changes</button>
+                <button type="button" class="btn btn-secondary waves-effect btn-sm"
+                    data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="myModalTujuan" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalTujuanLabel" aria-hidden="true">
     <div class="modal-dialog" >
         <div class="modal-content">
@@ -20,8 +77,8 @@
             <div class="modal-body">
                 <form method="POST" action="{{ route('tujuan/store') }}" id="tujuanForm" name="tujuanForm">
                     @csrf
-                    <input type="hidden" name="id" id="id">
-                    <input id="id_perjalanan" type="hidden" class="form-control" name="id_perjalanan" value="{{ $perjalanan->id }}">
+                    <input id="id_tujuan" type="text" class="form-control" name="id">
+                    <input id="id_perjalanan" type="text" class="form-control" name="id_perjalanan" value="{{ $perjalanan->id }}">
                     <div class="row mb-4">
                         <label for="tempat_berangkat_id" class="col-sm-3 col-form-label">Tempat Berangkat<span
                                 style="color:red;">*</span></label>
@@ -80,7 +137,7 @@
         </div>
     </div>
 </div>
-<div id="myModalStaff" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalTujuanLabel" aria-hidden="true">
+<div id="myModalStaff" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalStaffLabel" aria-hidden="true">
     <div class="modal-dialog" >
         <div class="modal-content">
             <div class="modal-header border-0">
@@ -96,7 +153,7 @@
             <div class="modal-body">
                 <form method="POST" action="{{route('pengajuan/edit/save_staff', $perjalanan->id)}}" id="formStaffPilih">
                     @csrf
-                    <input type="hidden" name="id_edit" id="id_edit">
+                    <input id="id_staff" type="text" class="form-control" name="id">
 
                     <div class="row mb-4">
                         <label for="nip_staff" class="col-sm-3 col-form-label">Staff<span
@@ -128,6 +185,21 @@
                         </div>
                     </div>
 
+                    <div class="row mb-4">
+                        <label for="jenis" class="col-sm-3 col-form-label">Kegiatan<span
+                                style="color:red;">*</span></label>
+                        <div class="col-sm-9 validate">
+                            <select name="id_kegiatan" class="form-control select2" required id="id_kegiatan">
+                                <option value="">Pilih Kegiatan</option>
+                                @foreach ($perjalanan->kegiatan as $item)
+                                    @if ($item->status === 1)
+                                        <option value="{{ $item->id }}">{{ $item->kegiatan }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
                 </form>
             </div>
             <div class="modal-footer">
@@ -141,27 +213,31 @@
 <div class="container">
 	<div class="page-inner">
 		<div class="page-header">
-			<h4 class="page-title">Form Pengajuan</h4>
-			<ul class="breadcrumbs">
-				<li class="nav-home">
-					<a href="#">
-						<i class="flaticon-home"></i>
-					</a>
-				</li>
-				<li class="separator">
-					<i class="flaticon-right-arrow"></i>
-				</li>
-				<li class="nav-item">
-					<a href="#">Pengajuan</a>
-				</li>
-				<li class="separator">
-					<i class="flaticon-right-arrow"></i>
-				</li>
-				<li class="nav-item">
-					<a href="#">Form Pengajuan</a>
-				</li>
-			</ul>
-		</div>
+            <h4 class="page-title">Form Pengajuan</h4>
+            <ul class="breadcrumbs">
+                <li class="nav-home">
+                    <a href="#">
+                        <i class="flaticon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">Pengajuan</a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">Form Pengajuan</a>
+                </li>
+            </ul>
+            <form id="pengajuanForm" action="{{ route('pengajuan') }}" method="POST">
+                <!-- Isi formulir pengajuan di sini -->
+                <button type="submit" class="btn btn-primary btn-round ml-auto" id="saveBtn" name="saveBtn">Simpan Update</button>
+            </form>
+        </div>
         <div class="row" id="myForm">
             <div class="col-md-12">
                 <form action="{{ route('pengajuan/store') }}" method="POST" id="pengajuanForm" name="pengajuanForm">
@@ -181,31 +257,41 @@
                                         <option value="{{ $perjalanan->id_mak }}">{{ $perjalanan->mak->kode_mak }}</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="perihal_perjalanan" class="form-label">Perihal Perjalanan</span
-                                        style="color:red;">*</span>
-                                </label>
-                                    <input type="text" class="form-control" id="perihal_perjalanan" name="perihal_perjalanan" placeholder="Input Perihal Perjalanan" validate value="{{ $perjalanan->perihal_perjalanan }}">
-                                </div>
-                                {{-- <div class="form-group">
-                                    <label for="estimasi_biaya" class="form-label">Estimasi Biaya</span
-                                        style="color:red;">*</span>
-                                </label>
-                                    <input type="text" class="form-control" id="estimasi_biaya" name="estimasi_biaya" placeholder="Input Estimasi Biaya" validate value="{{ $perjalanan->estimasi_biaya }}">
-                                </div> --}}
-                                <div class="form-group">
-                                    <label for="description" class="form-label">Description</span
-                                        style="color:red;">*</span>
-                                    </label>
-                                    <textarea class="form-control" id="description" name="description" placeholder="Input Description" validate>{{ $perjalanan->perihal_perjalanan }}</textarea>
-                                </div>
                             </div>
                         </div>
-                        <div class="card-footer">
+                        {{-- <div class="card-footer">
                             <button type="submit" class="btn btn-primary btn-sm" id="saveBtn" name="saveBtn" form="pengajuanForm">Save</button>
-                        </div>
+                        </div> --}}
                     </div>
                 </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <h4 class="card-title">Kegiatan</h4>
+                            <a href="javascript:void(0)" class="btn btn-primary btn-round ml-auto"
+                                data-toggle="modal" data-target="#myModalKegiatan" id="addNewKegiatan" name="addNewKegiatan"><i class="fa fa-plus"></i> Tambah Kegiatan</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="kegiatanTable" class="display table table-striped table-hover" >
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Kegiatan</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -216,9 +302,6 @@
                             <h4 class="card-title">Informasi Tujuan</h4>
                             <a href="javascript:void(0)" class="btn btn-primary btn-round ml-auto"
                                 data-toggle="modal" data-target="#myModalTujuan" id="addNewTujuan" name="addNewTujuan"><i class="fa fa-plus"></i> Tambah</a>
-                                {{-- <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal">
-                                <i class="fa fa-plus"></i>Create
-                                </button> --}}
                         </div>
                     </div>
                     <div class="card-body">
@@ -253,9 +336,6 @@
                             <h4 class="card-title">Staff Yang Ditugaskan</h4>
                             <a href="javascript:void(0)" class="btn btn-primary btn-round ml-auto"
                                 data-toggle="modal" data-target="#myModalStaff" id="addNewStaff" name="addNewTujuan"><i class="fa fa-plus"></i> Tambah</a>
-                                {{-- <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal">
-                                <i class="fa fa-plus"></i>Create
-                                </button> --}}
                         </div>
                     </div>
                     <div class="card-body">
@@ -287,6 +367,15 @@
 @endsection
 
 @push('js')
+<script>
+    document.getElementById('pengajuanForm').addEventListener('submit', function(event) {
+        // Prevent form submission
+        event.preventDefault();
+
+        // Direct ke halaman pengajuan
+        window.location.href = "{{ route('pengajuan') }}";
+    });
+</script>
 
 <script type="text/javascript">
     $(function () {
@@ -295,7 +384,219 @@
             length: 10
         };
         var isUpdate = false;
-        var jabatanTable = $('#tujuanTable').DataTable({
+        var kegiatanTable = $('#kegiatanTable').DataTable({
+            "language": {
+                "paginate": {
+                    "next": '<i class="fas fa-arrow-right"></i>',
+                    "previous": '<i class="fas fa-arrow-left"></i>'
+                }
+            },
+            "aaSorting": [],
+            "autoWidth": false,
+            "ordering": false,
+            "serverSide": true,
+            "responsive": true,
+            "lengthMenu": [
+                [10, 15, 25, 50, -1],
+                [10, 15, 25, 50, "All"]
+            ],
+            "ajax": {
+                "url": "{{ route('kegiatanById/getData' , ['id_perjalanan' => $perjalanan->id]) }}",
+                "type": "POST",
+                "headers": {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
+                },
+                "beforeSend": function(xhr) {
+                    xhr.setRequestHeader("Authorization", "Bearer " + $('#secret').val());
+                },
+                "Content-Type": "application/json",
+                "data": function(data) {
+                    request.draw = data.draw;
+                    request.start = data.start;
+                    request.length = data.length;
+                    request.searchkey = data.search.value || "";
+                    return (request);
+                },
+            },
+            "columns": [{
+                    "data": null,
+                    "width": '5%',
+                    render: function(data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                {
+                    "data": "kegiatan",
+                    "width": '15%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        return "<div class='text-wrap'>" + data + "</div>";
+                    },
+                },
+                {
+                    "data": "id",
+                    "width": '10%',
+                    render: function(data, type, row) {
+                        var btnTujuanEdit = "";
+                        // var btnTujuanDelete = "";
+                        btnTujuanEdit += '<button name="btnTujuanEdit" data-id="' + data +
+                            '" type="button" class="btn btn-warning btn-sm btnTujuanEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
+                        // btnTujuanDelete += '<button name="btnTujuanDelete" data-id="' + data +
+                        //     '" type="button" class="btn btn-danger btn-sm btnTujuanDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
+                        return btnTujuanEdit;
+                    },
+                },
+            ]
+        });
+        function reloadTable(){
+            kegiatanTable.ajax.reload(null, false); // Reload datatable ajaxSSSS
+        }
+
+        $('#saveBtnKegiatan').click(function(e) {
+            e.preventDefault();
+            var isValid = $("#kegiatanForm").valid();
+            if (isValid) {
+                $('#saveBtnKegiatan').text('Save...');
+                $('#saveBtnKegiatan').attr('disabled', true);
+                if (!isUpdate) {
+                    var url = "{{ route('kegiatan/store') }}";
+                } else {
+                    var url = "{{ route('kegiatan/update') }}";
+                }
+                var formData = new FormData($('#kegiatanForm')[0]);
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    dataType: "JSON",
+                    success: function(data) {
+                        Swal.fire(
+                            (data.status) ? 'Success' : 'Error',
+                            data.message,
+                            (data.status) ? 'success' : 'error'
+                        )
+                        $('#saveBtnKegiatan').text('Save');
+                        $('#saveBtnKegiatan').attr('disabled', false);
+                        reloadTable();
+                        $('#myModal').modal('hide');
+                        //if success close modal and reload ajax table
+                        $('#myModalKegiatan').modal('hide');
+                        window.location.reload(); // Reload the page
+                    },
+                    error: function(data) {
+                        Swal.fire(
+                            'Error',
+                            'A system error has occurred. please try again later.',
+                            'error'
+                        )
+                        $('#saveBtnKegiatan').text('Save');
+                        $('#saveBtnKegiatan').attr('disabled', false);
+                    }
+                });
+            }
+        });
+
+        $('#kegiatanTable').on("click", ".btnKegiatanEdit", function() {
+            $('#myModalKegiatan').modal('show');
+            isUpdate = true;
+            var id = $(this).attr('data-id');
+            var url = "{{ route('kegiatan/show', ['id' => ':id']) }}";
+            url = url.replace(':id', id);
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function(response) {
+                    $('#kegiatan').val(response.data.kegiatan);
+                    $('#id_kegiatan').val(response.data.id);
+                },
+                error: function() {
+                    Swal.fire(
+                        'Error',
+                        'A system error has occurred. please try again later.',
+                        'error'
+                    )
+                },
+            });
+        });
+        $('#kegiatanTable').on("click", ".btnKegiatanDelete", function() {
+            var id = $(this).attr('data-id');
+            Swal.fire({
+                title: 'Confirmation',
+                text: "Kamu akan menghapus tujuan. Apakah kamu ingin melanjutkan?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: "Yes, I'm sure",
+                cancelButtonText: 'No'
+            }).then(function(result) {
+                if (result.value) {
+                    var url = "{{ route('kegiatan/delete', ['id' => ':id']) }}";
+                    url = url.replace(':id', id);
+                    $.ajax({
+                        headers: {
+                            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                                'content'),
+                        },
+                        url: url,
+                        type: "POST",
+                        success: function(data) {
+                            Swal.fire(
+                                (data.status) ? 'Success' : 'Error',
+                                data.message,
+                                (data.status) ? 'success' : 'error'
+                            )
+                            reloadTable();
+                            //if success close modal and reload ajax table
+                            $('#myModalTujuan').modal('hide');
+                            window.location.reload(); // Reload the page
+
+                        },
+                        error: function(response) {
+                            Swal.fire(
+                                'Error',
+                                'A system error has occurred. please try again later.',
+                                'error'
+                            )
+                        }
+                    });
+                }
+            })
+        });
+
+        $('#kegiatanForm').validate({
+            rules: {
+                kegiatan: {
+                    required: true,
+                },
+            },
+            errorElement: 'em',
+            errorPlacement: function(error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.validate').append(error);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+
+    });
+
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        let request = {
+            start: 0,
+            length: 10
+        };
+        var isUpdate = false;
+        var tujuanTable = $('#tujuanTable').DataTable({
             "language": {
                 "paginate": {
                     "next": '<i class="fas fa-arrow-right"></i>',
@@ -500,50 +801,47 @@
         });
 
         $('#saveBtnTujuan').click(function(e) {
-            e.preventDefault();
-            var isValid = $("#tujuanForm").valid();
-            if (isValid) {
-                $('#saveBtnTujuan').text('Save...');
-                $('#saveBtnTujuan').attr('disabled', true);
-                if (!isUpdate) {
-                    var url = "{{ route('tujuan/store') }}";
-                } else {
-                    var url = "{{ route('tujuan/update') }}";
-                }
-                var formData = new FormData($('#tujuanForm')[0]);
-                $.ajax({
-                    url: url,
-                    type: "POST",
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    dataType: "JSON",
-                    success: function(data) {
-                        Swal.fire(
-                            (data.status) ? 'Success' : 'Error',
-                            data.message,
-                            (data.status) ? 'success' : 'error'
-                        )
-                        $('#saveBtnTujuan').text('Save');
-                        $('#saveBtnTujuan').attr('disabled', false);
-                        reloadTable();
-                        $('#myModal').modal('hide');
-                        //if success close modal and reload ajax table
-                        $('#myModalTujuan').modal('hide');
-                        window.location.reload(); // Reload the page
-                    },
-                    error: function(data) {
-                        Swal.fire(
-                            'Error',
-                            'A system error has occurred. please try again later.',
-                            'error'
-                        )
-                        $('#saveBtnTujuan').text('Save');
-                        $('#saveBtnTujuan').attr('disabled', false);
-                    }
-                });
+    e.preventDefault();
+    var isValid = $("#tujuanForm").valid();
+    if (isValid) {
+        $('#saveBtnTujuan').text('Save...');
+        $('#saveBtnTujuan').attr('disabled', true);
+        var url = isUpdate ? "{{ route('tujuan/update') }}" : "{{ route('tujuan/store') }}";
+        var formData = new FormData($('#tujuanForm')[0]);
+        formData.append('_token', '{{ csrf_token() }}'); // Add CSRF token
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            dataType: "JSON",
+            success: function(data) {
+                Swal.fire(
+                    (data.status) ? 'Success' : 'Error',
+                    data.message,
+                    (data.status) ? 'success' : 'error'
+                );
+                $('#saveBtnTujuan').text('Save');
+                $('#saveBtnTujuan').attr('disabled', false);
+                reloadTable();
+                $('#myModal').modal('hide');
+                //if success close modal and reload ajax table
+                $('#myModalTujuan').modal('hide');
+                window.location.reload(); // Reload the page
+            },
+            error: function(data) {
+                Swal.fire(
+                    'Error',
+                    'A system error has occurred. please try again later.',
+                    'error'
+                );
+                $('#saveBtnTujuan').text('Save');
+                $('#saveBtnTujuan').attr('disabled', false);
             }
         });
+    }
+});
 
         $('#tujuanTable').on("click", ".btnTujuanEdit", function() {
             $('#myModalTujuan').modal('show');
@@ -561,7 +859,7 @@
                     $('#tanggal_pulang').val(response.data.tanggal_pulang);
                     $('#tanggal_tiba').val(response.data.tanggal_tiba);
                     $('#lama_perjalanan').val(response.data.lama_perjalanan);
-                    $('#id').val(response.data.id);
+                    $('#id_tujuan').val(response.data.id);
 
                     if (response.data.tempat_berangkat) {
                         var berangkat = new Option(response.data.tempat_berangkat.name, response.data.tempat_berangkat.id, true, true);
@@ -669,7 +967,6 @@
         });
 
         $('#addNewTujuan').on('click', function() {
-            $('#name').val("");
             $('#tempat_berangkat_id').val("").trigger('change');
             $('#tempat_tujuan_id').val("").trigger('change');
             isUpdate = false;
@@ -850,13 +1147,13 @@
                     "data": "id",
                     "width": '10%',
                     render: function(data, type, row) {
-                        var btnTujuanEdit = "";
-                        var btnTujuanDelete = "";
-                        btnTujuanEdit += '<button name="btnTujuanEdit" data-id="' + data +
-                            '" type="button" class="btn btn-warning btn-sm btnTujuanEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
+                        var btnStaffEdit = "";
+                        var btnStaffDelete = "";
+                        btnStaffEdit += '<button name="btnStaffEdit" data-id="' + data +
+                            '" type="button" class="btn btn-warning btn-sm btnStaffEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
                         // btnTujuanDelete += '<button name="btnTujuanDelete" data-id="' + data +
                         //     '" type="button" class="btn btn-danger btn-sm btnTujuanDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
-                        return btnTujuanEdit + btnTujuanDelete;
+                        return btnStaffEdit + btnStaffDelete;
                     },
                 },
             ]

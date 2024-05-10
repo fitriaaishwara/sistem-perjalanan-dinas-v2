@@ -2,6 +2,24 @@
 @section('content')
 @section('title', 'Data Pengajuan')
 <!-- Modal -->
+<style>
+    .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.breadcrumbs {
+    flex: 1;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#selesaiBtn {
+    margin-left: 10px; /* Margin agar ada jarak antara tombol dan breadcrumb */
+}
+</style>
 
 <div id="myModalKegiatan" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalKegiatanLabel" aria-hidden="true">
     <div class="modal-dialog" >
@@ -58,7 +76,7 @@
             <div class="modal-body">
                 <form method="POST" action="{{ route('tujuan/store') }}" id="tujuanForm" name="tujuanForm">
                     @csrf
-                    <input type="hidden" name="id" id="id">
+                    <input type="text" name="id" id="id">
                     <input id="id_perjalanan" type="hidden" class="form-control" name="id_perjalanan" value="{{ $perjalanan->id }}">
                     <div class="row mb-4">
                         <label for="tempat_berangkat_id" class="col-sm-3 col-form-label">Tempat Berangkat<span
@@ -194,27 +212,59 @@
 <div class="container">
 	<div class="page-inner">
 		<div class="page-header">
-			<h4 class="page-title">Form Pengajuan</h4>
-			<ul class="breadcrumbs">
-				<li class="nav-home">
-					<a href="#">
-						<i class="flaticon-home"></i>
-					</a>
-				</li>
-				<li class="separator">
-					<i class="flaticon-right-arrow"></i>
-				</li>
-				<li class="nav-item">
-					<a href="#">Pengajuan</a>
-				</li>
-				<li class="separator">
-					<i class="flaticon-right-arrow"></i>
-				</li>
-				<li class="nav-item">
-					<a href="#">Form Pengajuan</a>
-				</li>
-			</ul>
-		</div>
+            <h4 class="page-title">Form Pengajuan</h4>
+            <ul class="breadcrumbs">
+                <li class="nav-home">
+                    <a href="#">
+                        <i class="flaticon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">Pengajuan</a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">Form Pengajuan</a>
+                </li>
+            </ul>
+            <form id="pengajuanForm" action="{{ route('pengajuan') }}" method="POST">
+                <!-- Isi formulir pengajuan di sini -->
+                <button type="submit" class="btn btn-primary btn-round ml-auto" id="saveBtn" name="saveBtn">Simpan</button>
+            </form>
+        </div>
+        <div class="row" id="myForm">
+            <div class="col-md-12">
+                <form action="{{ route('pengajuan/store') }}" method="POST" id="pengajuanForm" name="pengajuanForm">
+                @csrf
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Informasi Perjalanan</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="id_mak" class="form-label">Kode Akun / Mata Anggaran Kegiatan<span
+                                            style="color:red;">*</span>
+                                    </label>
+                                    <select id="id_mak" type="text" class="form-control col-12 id_mak"
+                                    name="id_mak">
+                                        <option value="{{ $perjalanan->id_mak }}">{{ $perjalanan->mak->kode_mak }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- <div class="card-footer">
+                            <button type="submit" class="btn btn-primary btn-sm" id="saveBtn" name="saveBtn" form="pengajuanForm">Save</button>
+                        </div> --}}
+                    </div>
+                </form>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -250,10 +300,7 @@
                         <div class="d-flex align-items-center">
                             <h4 class="card-title">Informasi Tujuan</h4>
                             <a href="javascript:void(0)" class="btn btn-primary btn-round ml-auto"
-                                data-toggle="modal" data-target="#myModalTujuan" id="addNewTujuan" name="addNewTujuan"><i class="fa fa-plus"></i> Tambah Tujuan</a>
-                                {{-- <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal">
-                                <i class="fa fa-plus"></i>Create
-                                </button> --}}
+                                data-toggle="modal" data-target="#myModalTujuan" id="addNewTujuan" name="addNewTujuan"><i class="fa fa-plus"></i> Tambah</a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -287,10 +334,7 @@
                         <div class="d-flex align-items-center">
                             <h4 class="card-title">Staff Yang Ditugaskan</h4>
                             <a href="javascript:void(0)" class="btn btn-primary btn-round ml-auto"
-                                data-toggle="modal" data-target="#myModalStaff" id="addNewStaff" name="addNewTujuan"><i class="fa fa-plus"></i> Tambah Staff</a>
-                                {{-- <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal">
-                                <i class="fa fa-plus"></i>Create
-                                </button> --}}
+                                data-toggle="modal" data-target="#myModalStaff" id="addNewStaff" name="addNewTujuan"><i class="fa fa-plus"></i> Tambah</a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -322,6 +366,15 @@
 @endsection
 
 @push('js')
+<script>
+    document.getElementById('pengajuanForm').addEventListener('submit', function(event) {
+        // Prevent form submission
+        event.preventDefault();
+
+        // Direct ke halaman pengajuan
+        // window.location.href = "{{ route('pengajuan') }}";
+    });
+</script>
 
 <script type="text/javascript">
     $(function () {
@@ -383,13 +436,13 @@
                     "data": "id",
                     "width": '10%',
                     render: function(data, type, row) {
-                        var btnTujuanEdit = "";
+                        var btnKegiatanEdit = "";
                         // var btnTujuanDelete = "";
-                        btnTujuanEdit += '<button name="btnTujuanEdit" data-id="' + data +
-                            '" type="button" class="btn btn-warning btn-sm btnTujuanEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
+                        btnKegiatanEdit += '<button name="btnKegiatanEdit" data-id="' + data +
+                            '" type="button" class="btn btn-warning btn-sm btnKegiatanEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
                         // btnTujuanDelete += '<button name="btnTujuanDelete" data-id="' + data +
                         //     '" type="button" class="btn btn-danger btn-sm btnTujuanDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
-                        return btnTujuanEdit;
+                        return btnKegiatanEdit;
                     },
                 },
             ]
@@ -429,7 +482,7 @@
                         $('#myModal').modal('hide');
                         //if success close modal and reload ajax table
                         $('#myModalKegiatan').modal('hide');
-                        window.location.reload(); // Reload the page
+                        // window.location.reload(); // Reload the page
                     },
                     error: function(data) {
                         Swal.fire(
@@ -444,7 +497,7 @@
             }
         });
 
-        $('#kegiatanTable').on("click", ".btnTujuanEdit", function() {
+        $('#kegiatanTable').on("click", ".btnKegiatanEdit", function() {
             $('#myModalKegiatan').modal('show');
             isUpdate = true;
             var id = $(this).attr('data-id');
@@ -454,7 +507,7 @@
                 type: 'GET',
                 url: url,
                 success: function(response) {
-                    $('#name').val(response.data.name);
+                    $('#kegiatan').val(response.data.kegiatan);
                     $('#id').val(response.data.id);
                 },
                 error: function() {
@@ -497,7 +550,7 @@
                             reloadTable();
                             //if success close modal and reload ajax table
                             $('#myModalTujuan').modal('hide');
-                            window.location.reload(); // Reload the page
+                            // window.location.reload(); // Reload the page
 
                         },
                         error: function(response) {
@@ -542,7 +595,7 @@
             length: 10
         };
         var isUpdate = false;
-        var jabatanTable = $('#tujuanTable').DataTable({
+        var tujuanTable = $('#tujuanTable').DataTable({
             "language": {
                 "paginate": {
                     "next": '<i class="fas fa-arrow-right"></i>',
@@ -657,7 +710,7 @@
         });
         function reloadTable(){
             tujuanTable.ajax.reload(null, false); // Reload datatable ajax
-            window.location.reload(); // Reload the page
+            // window.location.reload(); // Reload the page
         }
 
         $("#tempat_berangkat_id").select2({
@@ -777,7 +830,7 @@
                         $('#myModal').modal('hide');
                         //if success close modal and reload ajax table
                         $('#myModalTujuan').modal('hide');
-                        window.location.reload(); // Reload the page
+                        // window.location.reload(); // Reload the page
                     },
                     error: function(data) {
                         Swal.fire(
@@ -996,19 +1049,6 @@
             },
         });
 
-
-
-    });
-
-</script>
-
-<script type="text/javascript">
-     $(function () {
-        let request = {
-            start: 0,
-            length: 10
-        };
-        var isUpdate = false;
         var staffTable = $('#staffTable').DataTable({
             "language": {
                 "paginate": {
@@ -1110,24 +1150,26 @@
                     "data": "id",
                     "width": '10%',
                     render: function(data, type, row) {
-                        var btnTujuanEdit = "";
-                        var btnTujuanDelete = "";
-                        btnTujuanEdit += '<button name="btnTujuanEdit" data-id="' + data +
-                            '" type="button" class="btn btn-warning btn-sm btnTujuanEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
+                        var btnStaffEdit = "";
+                        var btnStaffDelete = "";
+                        btnStaffEdit += '<button name="btnStaffEdit" data-id="' + data +
+                            '" type="button" class="btn btn-warning btn-sm btnStaffEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
                         // btnTujuanDelete += '<button name="btnTujuanDelete" data-id="' + data +
                         //     '" type="button" class="btn btn-danger btn-sm btnTujuanDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
-                        return btnTujuanEdit + btnTujuanDelete;
+                        return btnStaffEdit + btnStaffDelete;
                     },
                 },
             ]
         });
-        function reloadTable(){
+
+        function reloadTable() {
             staffTable.ajax.reload(null, false); // Reload datatable ajax
-            window.location.reload(); // Reload the page
         }
+
+
+
+
     });
-
-
 
 </script>
 

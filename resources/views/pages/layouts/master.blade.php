@@ -6,7 +6,7 @@
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-	<link rel="icon" href="{{ url('assets/img/logoera.png') }}" type="image/x-icon"/>
+	<link rel="icon" href="{{ url('assets/img/kemenkop/kemenkop1.png') }}" type="image/x-icon"/>
 
 	<!-- Fonts and icons -->
 	<script src="{{ url('assets/js/plugin/webfont/webfont.min.js') }}"></script>
@@ -67,23 +67,23 @@
 						<li class="nav-item dropdown hidden-caret">
 							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
 								<div class="avatar-sm">
-									<img src="../assets/img/profile.jpg" alt="..." class="avatar-img rounded-circle">
+									<img src="{{ Auth::user()->photo != '' ? asset('storage/images/profile/' . Auth::user()->photo) : asset('assets/img/profile/kemenkop.png') }}" alt="..." class="avatar-img rounded-circle">
 								</div>
 							</a>
 							<ul class="dropdown-menu dropdown-user animated fadeIn">
 								<div class="dropdown-user-scroll scrollbar-outer">
 									<li>
 										<div class="user-box">
-											<div class="avatar-lg"><img src="../assets/img/profile.jpg" alt="image profile" class="avatar-img rounded"></div>
+											<div class="avatar-lg"><img src="{{ Auth::user()->photo != '' ? asset('storage/images/profile/' . Auth::user()->photo) : asset('assets/img/profile/kemenkop.png') }}" alt="image profile" class="avatar-img rounded"></div>
 											<div class="u-text">
 												<h4>{{ Auth::user()->name }}</h4>
-												<p class="text-muted">hello@example.com</p>
+												<p class="text-muted">{{ Auth::user()->roles->first()->name }}</p>
 											</div>
 										</div>
 									</li>
 									<li>
 										<div class="dropdown-divider"></div>
-										<a class="dropdown-item" href="{{ url('admin/profile/'.auth()->user()->id) }}">My Profile</a>
+										<a class="dropdown-item" href="{{ url('profile/'.auth()->user()->id) }}">My Profile</a>
 										<div class="dropdown-divider"></div>
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf
@@ -268,7 +268,6 @@
                             </a>
                         </li>
                         @endif
-                        @if (auth()->user()->can('Laporan' || 'Gallery Foto'))
                         <li class="nav-item {{ request()->is('laporan') || request()->is('laporan/*') || request()->is('gallery') || request()->is('gallery/*') || request()->is('geo-tagging') || request()->is('geo-tagging/*') ? 'active' : '' }}">
 							<a data-toggle="collapse" href="#upload_laporan">
 								<i class="fas fa-hand-holding-usd"></i>
@@ -277,25 +276,30 @@
 							</a>
 							<div class="{{ request()->is('laporan') || request()->is('laporan/*') || request()->is('gallery') || request()->is('gallery/*') || request()->is('geo-tagging') || request()->is('geo-tagging/*') ? 'collapse show' : 'collapse' }}" id="upload_laporan">
 								<ul class="nav nav-collapse">
+                                    @if (auth()->user()->can('Laporan'))
 									<li class="nav-item {{ request()->is('laporan') || request()->is('laporan/*') ? 'active' : '' }}">
 										<a href="{{ route('laporan') }}">
 											<span class="sub-item">Laporan</span>
 										</a>
 									</li>
+                                    @endif
+                                    @if (auth()->user()->can('Gallery Foto'))
 									<li class="nav-item {{ request()->is('gallery') || request()->is('gallery/*') ? 'active' : '' }}">
 										<a href="{{ route('gallery') }}">
 											<span class="sub-item">Gallery Foto</span>
 										</a>
 									</li>
+                                    @endif
+                                    @if (auth()->user()->can('Geo Tagging'))
                                     <li class="nav-item {{ request()->is('geo-tagging') || request()->is('geo-tagging/*') ? 'active' : '' }}">
 										<a href="{{ route('geo-tagging') }}">
 											<span class="sub-item">Geo Tagging</span>
 										</a>
 									</li>
+                                    @endif
 								</ul>
 							</div>
 						</li>
-                        @endif
                         @if (auth()->user()->can('Kwitansi'))
                         <li class="nav-item {{ request()->is('kwitansi') || request()->is('kwitansi/*') ? 'active' : '' }}">
 							<a href="{{ route('kwitansi' )}}">

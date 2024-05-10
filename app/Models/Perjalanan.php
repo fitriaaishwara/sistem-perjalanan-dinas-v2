@@ -13,7 +13,7 @@ class Perjalanan extends Model
     protected $table = 'perjalanan';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id_mak', 'perihal_perjalanan', 'estimasi_biaya', 'description', 'status', 'created_by', 'updated_by', 'deleted_by',
+        'id_mak', 'status', 'created_by', 'updated_by', 'deleted_by',
     ];
 
     public function mak()
@@ -49,6 +49,11 @@ class Perjalanan extends Model
     public function kegiatan()
     {
         return $this->hasMany(Kegiatan::class, 'id_perjalanan', 'id');
+    }
+
+    public function DataKegiatan()
+    {
+        return $this->hasMany(DataKegiatan::class, 'id_perjalanan', 'id');
     }
 
 

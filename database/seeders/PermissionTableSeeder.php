@@ -123,6 +123,12 @@ class PermissionTableSeeder extends Seeder
                     'guard_name' => 'web',
                 ],
 
+                18 => [
+                    'id' => '19',
+                    'name' => 'Geo Tagging',
+                    'guard_name' => 'web',
+                ],
+
             ];
 
             \DB::table('permissions')->insert($data);

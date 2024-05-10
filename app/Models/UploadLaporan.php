@@ -14,13 +14,13 @@ class UploadLaporan extends Model
     protected $table = 'upload_laporan';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id_tujuan_perjalanan', 'name_file', 'path_file'
+        'id_kegiatan', 'name_file', 'path_file'
     ];
 
 
-    public function tujuanPerjalanan()
+    public function kegiatan()
     {
-        return $this->belongsTo(DataTujuanPerjalanan::class, 'id_tujuan_perjalanan', 'id');
+        return $this->belongsTo(Kegiatan::class, 'id_kegiatan', 'id');
     }
 
 }

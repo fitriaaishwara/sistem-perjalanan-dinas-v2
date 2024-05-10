@@ -55,7 +55,7 @@
                                         <th>Nomor SPD</th>
                                         <th>Pejabat Pembuat Komitmen</th>
                                         <th>Nama/NIP Pegawai</th>
-                                        <th>Maksud Perjalanan Dinas</th>
+                                        <th>Maksud Perjalanan / Kegiatan</th>
                                         <th>Tempat Tujuan</th>
                                         <th>Lama Perjalanan Dinas</th>
                                         <th>Instansi</th>
@@ -160,19 +160,15 @@
                     }
                 },
                 {
-
                     "data": "perjalanan",
-                    "width": '10%',
+                    "width": '15%',
                     "defaultContent": "-",
-                    render: function(data, type, row) {
-                        var result = "<div class='text-wrap' style='font-size: 12px;'>";
-                        $.each (data, function (key, val) {
-                            // console.log(val);
-                            result += val.perihal_perjalanan + "<br>";
-                        });
-
-                        result += "</div>";
-                        return result;
+                    "render": function(data, type, row) {
+                        if (data && data[0] && data[0].kegiatan) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data[0].kegiatan[0].kegiatan + "</div>";
+                        } else {
+                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
+                        }
                     }
                 },
                 {

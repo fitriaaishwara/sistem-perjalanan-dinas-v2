@@ -118,7 +118,7 @@
 									<div class="d-flex align-items-center">
 										{{-- <h4 class="card-title">Staff</h4> --}}
                                         <a href="javascript:void(0)" class="btn btn-primary btn-round ml-auto"
-                                            data-toggle="modal" data-target="#myModal" id="addNew" name="addNew"><i class="fa fa-plus"></i> Tambah</a>
+                                            data-toggle="modal" data-target="#myModal" id="addNew" name="addNew"><i class="fa fa-plus"></i> Tambah Staff</a>
 									</div>
 								</div>
 								<div class="card-body">

@@ -57,7 +57,7 @@
                                         <th>Tujuan</th>
                                         <th>Tanggal Berangkat</th>
                                         <th>Tanggal Kembali</th>
-                                        <th>Perihal</th>
+                                        <th>Maksud Perjalanan/Kegiatan</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -209,16 +209,24 @@
                         }
                 },
                 {
-                    "data": "perihal_perjalanan",
-                    "width": '15%',
+                "data": "kegiatan",
+                    "width": '10%',
                     "defaultContent": "-",
-                     //render date format
                     render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap'>" + data + "</div>";
-                        } else {
-                            return "<div class='text-wrap'>-</div>";
+                        var kegiatan = "";
+                        var angka = 1;
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].status === 1) {
+                            kegiatan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + data[i].kegiatan + "</div>";
+                            angka++;
+                            }
                         }
+                        return kegiatan;
+                        // if (data && data.tanggal_pulang) {
+                        //     return "<div class='text-wrap'>" + data.tanggal_pulang + "</div>";
+                        // } else {
+                        //     return "<div class='text-wrap'>-</div>";
+                        // }
                     }
                 },
                 {

@@ -54,7 +54,7 @@
                                     <tr>
                                         <th>NIP/NIK
                                         <th>Nama</th>
-                                        <th>Maksud Perjalanan Dinas</th>
+                                        <th>Kegiatan</th>
                                         <th>Tempat Tujuan</th>
                                         <th>Lama Perjalanan Dinas</th>
                                         <th>Instansi</th>

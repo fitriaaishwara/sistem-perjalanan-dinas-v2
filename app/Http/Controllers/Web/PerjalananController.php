@@ -7,6 +7,7 @@ use App\Models\Perjalanan;
 use App\Models\Province;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Auth;
 
 class PerjalananController extends Controller
 {
@@ -38,82 +39,65 @@ class PerjalananController extends Controller
     public function getData(Request $request)
     {
         $keyword = $request['searchkey'];
+        $userRole = Auth::user()->roles->pluck('name')[0];
 
-        $data = Perjalanan::select()
-            ->with('mak', 'tujuan.tempatTujuan', 'log_status_perjalanan', 'kegiatan')
+        $query = Perjalanan::select()
+            ->with('mak', 'tujuan.tempatTujuan', 'log_status_perjalanan', 'kegiatan', 'data_staff_perjalanan.staff')
             ->where('status', true)
             ->whereHas('log_status_perjalanan', function ($query) {
                 $query->where('status_perjalanan', 'Disetujui');
             });
 
-        if ($keyword) {
-            $data->where('perihal_perjalanan', 'like', '%' . $keyword . '%')
-                 ->orWhereHas('mak', function ($query) use ($keyword) {
-                     $query->where('kode_mak', 'like', '%' . $keyword . '%');
-                 });
+        // If the user is not a super admin, filter data based on user's ID
+        if ($userRole != 'Super Admin') {
+            $query->whereHas('data_staff_perjalanan.staff', function ($query) {
+                $query->where('id_user', Auth::id());
+            });
         }
 
-        $data = $data->get();
+        if ($keyword) {
+            $query->where(function ($query) use ($keyword) {
+                $query->where('perihal_perjalanan', 'like', '%' . $keyword . '%')
+                    ->orWhereHas('mak', function ($query) use ($keyword) {
+                        $query->where('kode_mak', 'like', '%' . $keyword . '%');
+                    });
+            });
+        }
 
-        return DataTables::of($data)
-                    ->make(true);
+        $data = $query->get();
+
+        return DataTables::of($data)->make(true);
     }
 
     public function getDataRekap(Request $request)
     {
         $keyword = $request['searchkey'];
+        $userRole = Auth::user()->roles->pluck('name')[0];
 
-
-            $data = Perjalanan::select()
-                ->with('mak', 'tujuan.tempatTujuan', 'kegiatan')
-                ->where('status', true)
-                ->when($keyword, function ($query, $keyword) {
-                    return $query->where(function ($query) use ($keyword) {
-                        $query
-                            ->whereHas('mak', function ($query) use ($keyword) {
-                                $query->where('mak.kode_mak', 'like', '%' . $keyword . '%');
-                            })
-                            ->orWhere('perihal_perjalanan', 'like', '%' . $keyword . '%');
-                    });
-                })
-                ->get();
-            // return response()->json($data);
-            // $dataCounter = Perjalanan::select()
-            //     ->when($keyword, function ($query, $keyword) {
-            //         return $query->where('name', 'like', '%' . $keyword . '%');
-            //     })
-            //     ->where('status', true)
-            //     ->count();
-
-            return DataTables::of($data)
-                        ->make(true);
-
-        $data = Perjalanan::select()
-            ->with('mak', 'tujuan.tempatTujuan', 'log_status_perjalanan')
+        $query = Perjalanan::select()
+            ->with('mak', 'tujuan.tempatTujuan', 'kegiatan', 'data_staff_perjalanan.staff')
             ->where('status', true);
 
         if ($keyword) {
-            $data->where('name', 'like', '%' . $keyword . '%');
-
+            $query->where(function ($query) use ($keyword) {
+                $query
+                    ->whereHas('mak', function ($query) use ($keyword) {
+                        $query->where('mak.kode_mak', 'like', '%' . $keyword . '%');
+                    })
+                    ->orWhere('perihal_perjalanan', 'like', '%' . $keyword . '%');
+            });
         }
 
-        $data->whereHas('log_status_perjalanan', function ($query) {
-            $query->where('status_perjalanan', 'Disetujui');
-        });
+        // If the user is not a super admin, filter data based on user's ID
+        if ($userRole != 'Super Admin') {
+            $query->whereHas('data_staff_perjalanan.staff', function ($query) {
+                $query->where('id_user', Auth::id());
+            });
+        }
 
-        $data = $data->get();
+        $data = $query->get();
 
-        $dataCounter = Perjalanan::when($keyword, function ($query, $keyword) {
-                return $query->where('name', 'like', '%' . $keyword . '%');
-            })
-            ->where('status', true)
-            ->whereHas('log_status_perjalanan', function ($query) {
-                $query->where('status_perjalanan', 'Disetujui');
-            })
-            ->count();
-
-        return DataTables::of($data)
-                    ->make(true);
+        return DataTables::of($data)->make(true);
     }
 
     public function getDataProvinsi(Request $request)

@@ -21,7 +21,7 @@ class StaffTableSeeder extends Seeder
                 'id_jabatan' => '1',
                 'id_golongan' => '4',
                 'id_instansi' => '1',
-                'nip' => '19671112 199503 1 001',
+                'nip' => '196711121995031001',
                 'jenis' => '0',
                 'name' => 'Adi Trisnojuwono',
 

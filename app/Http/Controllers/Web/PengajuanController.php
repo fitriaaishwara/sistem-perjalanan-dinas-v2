@@ -11,6 +11,7 @@ use App\Models\Perjalanan;
 use App\Models\PerjalananDinas;
 use App\Models\Staff;
 use App\Models\Tujuan;
+use App\Models\UangHarian;
 use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,21 +30,22 @@ class PengajuanController extends Controller
         return view('pages.perjalanan.pengajuan.admin.create');
     }
 
-    public function stores(Request $request) {
+    public function stores(Request $request)
+    {
         dd($request->all());
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         try {
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Perjalanan failed to create'];
             $create = Perjalanan::create([
                 'id_mak' => $request['id_mak'],
             ]);
 
-                if ($create) {
-                    $data = ['status' => true, 'code' => 'SC001', 'message' => 'Perjalanan successfully created'];
-                }
-
+            if ($create) {
+                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Perjalanan successfully created'];
+            }
         } catch (\Exception $ex) {
             $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }
@@ -67,19 +69,58 @@ class PengajuanController extends Controller
 
         try {
             $data = ['status' => false, 'message' => 'Status failed to be found'];
-            $data = Perjalanan::findOrFail($id);
+            $data = Perjalanan::with(['data_staff_perjalanan', 'mak'])->findOrFail($id);
             if ($data) {
                 $data = ['status' => true, 'message' => 'Status was successfully found', 'data' => $data];
+            }
+
+            $value = Perjalanan::with(['data_staff_perjalanan', 'mak'])->findOrFail($id);
+
+            $dataStaff = DataStaffPerjalanan::with([
+                'staff.golongans', 'tujuan_perjalanan.uangHarian',
+                'tujuan_perjalanan.tempatTujuan.hotel',
+                'tujuan_perjalanan.tempatTujuan.tiket',
+                'tujuan_perjalanan.tempatTujuan.translok'
+            ])->where('id_perjalanan', $value->id)->get();
+
+            $totalHotel = 0;
+            $totalTiket = 0;
+            $totalTranslok = 0;
+            $uangHarian = 0;
+            foreach ($dataStaff as $valueStaff) {
+                $hotel = $valueStaff->tujuan_perjalanan[0]->tempatTujuan->hotel->first(function ($item) use ($valueStaff) {
+                    return $item['id_golongan'] === $valueStaff->staff->golongans->id;
+                });
+
+                $tiket = $valueStaff->tujuan_perjalanan[0]->tempatTujuan->tiket->first(function ($item) use ($valueStaff) {
+                    return $item['id_golongan'] === $valueStaff->staff->golongans->id;
+                });
+
+                $translok = $valueStaff->tujuan_perjalanan[0]->tempatTujuan->translok->first(function ($item) use ($valueStaff) {
+                    return $item['id_golongan'] === $valueStaff->staff->golongans->id;
+                });
+                $uangHarian += $valueStaff->tujuan_perjalanan[0]->uangHarian->nominal * $valueStaff->tujuan_perjalanan[0]->lama_perjalanan;
+                $totalHotel += $hotel->nominal;
+                $totalTiket += $tiket->nominal;
+                $totalTranslok += $translok->nominal;
+            }
+            $total = $totalHotel + $totalTiket + $totalTranslok + $uangHarian;
+
+            $saldo = $value->mak->saldo_pagu - $total;
+            if ($saldo > 0) {
+                Alert::success('Saldo Terpenuhi', 'Success');
+            } else {
+                Alert::error('Saldo Mata Anggaran Kegiatan Tidak Mencukupi', 'Fail');
             }
         } catch (\Exception $ex) {
             $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }
 
-        return view('pages.perjalanan.pengajuan.admin.edit', compact('data','perjalanan', 'staff'));
+        return view('pages.perjalanan.pengajuan.admin.edit', compact('data', 'perjalanan', 'staff'));
     }
 
-    function save_staff(Request $request, $id_perjalanan) {
-
+    function save_staff(Request $request, $id_perjalanan)
+    {
         $nip_staff = $request->nip_staff;
         $id_tujuan_perjalanan = $request->id_tujuan_perjalanan;
 
@@ -103,7 +144,7 @@ class PengajuanController extends Controller
         $kegiatan->id_perjalanan = $id_perjalanan;
         $kegiatan->id_tujuan = $id_tujuan_perjalanan;
         $kegiatan->nip_staff = $nip_staff;
-        $kegiatan->id_kegiatan = $request->id_kegiatan; // Assuming this field is coming from the request
+        $kegiatan->id_kegiatan = $request->id_kegiatan_tujuan; // Assuming this field is coming from the request
         $kegiatan->status = 1;
         $kegiatan->created_by = Auth::id();
         $kegiatan->updated_by = Auth::id();
@@ -129,7 +170,7 @@ class PengajuanController extends Controller
             $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }
 
-        return view('pages.perjalanan.pengajuan.admin.tujuan', compact('data','perjalanan', 'staff'));
+        return view('pages.perjalanan.pengajuan.admin.tujuan', compact('data', 'perjalanan', 'staff'));
     }
 
     public function getData(Request $request)
@@ -172,8 +213,8 @@ class PengajuanController extends Controller
         }
 
         $data = $data->offset($request['start'])
-                    ->limit(($request['length'] == -1) ? Perjalanan::where('status', true)->count() : $request['length'])
-                    ->get();
+            ->limit(($request['length'] == -1) ? Perjalanan::where('status', true)->count() : $request['length'])
+            ->get();
 
         $dataCounter = Perjalanan::whereDoesntHave('log_status_perjalanan', function ($query) {
             $query->where('status_perjalanan', 'Disetujui');
@@ -217,7 +258,6 @@ class PengajuanController extends Controller
             if ($create) {
                 $data = ['status' => true, 'code' => 'SC001', 'message' => 'Perjalanan successfully created'];
             }
-
         } catch (\Exception $ex) {
             $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }
@@ -239,7 +279,7 @@ class PengajuanController extends Controller
         return $data;
     }
 
-     public function update_status(Request $request, $id)
+    public function update_status(Request $request, $id)
     {
         try {
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Status failed to update'];
@@ -251,6 +291,22 @@ class PengajuanController extends Controller
             ]);
             if ($update) {
                 $data = ['status' => true, 'code' => 'SC001', 'message' => 'Status successfully updated'];
+            }
+        } catch (\Exception $ex) {
+            $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
+        }
+        return $data;
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $data = ['status' => false, 'code' => 'EC001', 'message' => 'Perjalanan failed to delete'];
+            $delete = Perjalanan::where('id', $id)->update([
+                'status' => false
+            ]);
+            if ($delete) {
+                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Perjalanan deleted successfully'];
             }
         } catch (\Exception $ex) {
             $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];

@@ -83,8 +83,20 @@ class TujuanController extends Controller
     public function showStaff($id)
     {
         try {
+            $perjalanan = DataStaffPerjalanan::findOrFail($id);
             $data = ['status' => false, 'message' => 'Staff failed to be found'];
-            $data = DataStaffPerjalanan::with('staff.golongans', 'staff.jabatans', 'staff.instansis', 'perjalanan.kegiatan')->findOrFail($id);
+            // return response()->json([
+            //     'data' => $perjalanan->id
+            // ]);
+            $data = DataStaffPerjalanan::with([
+                'staff.golongans',
+                'staff.jabatans',
+                'staff.instansis',
+                'perjalanan.DataKegiatan' => function ($query) use ($perjalanan) {
+                    $query->where('id_perjalanan', $perjalanan->id_perjalanan)
+                          ->where('nip_staff', $perjalanan->nip_staff);
+                }
+            ])->findOrFail($id);
             if ($data) {
                 $data = ['status' => true, 'message' => 'Staff was successfully found', 'data' => $data];
             }

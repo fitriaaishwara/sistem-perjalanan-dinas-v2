@@ -139,6 +139,7 @@ Route::group(['middleware' => ['auth']], function () {
     //Pengajuan
     Route::get('/pengajuan', [App\Http\Controllers\Web\PengajuanController::class, 'index'])->name('pengajuan');
     Route::any('/pengajuan/getData', [App\Http\Controllers\Web\PengajuanController::class, 'getData'])->name('pengajuan/getData');
+    Route::any('/pengajuan/getDataAll/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'getDataAll'])->name('pengajuan/getDataAll');
     Route::get('/pengajuan/create', [App\Http\Controllers\Web\PengajuanController::class, 'create'])->name('pengajuan/create');
     Route::get('/pengajuan/create/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'createId'])->name('pengajuan/createId');
     Route::get('/pengajuan/stores', [App\Http\Controllers\Web\PengajuanController::class, 'stores'])->name('pengajuan/stores');

@@ -145,17 +145,25 @@
                     }
                 },
                 {
-                    "data": "perjalanan",
-                    "width": '15%',
-                    "defaultContent": "-",
-                    "render": function(data, type, row) {
-                        if (data && data[0] && data[0].kegiatan) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data[0].kegiatan[0].kegiatan + "</div>";
-                        } else {
-                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
+                        "data": "perjalanan",
+                        "width": '10%',
+                        "defaultContent": "-",
+                        render: function(data, type, row) {
+                            var arr = data[0].kegiatan;
+                            var tujuan = "";
+                            var angka = 1;
+                            for (var i = 0; i < arr.length; i++) {
+                                tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + arr[i].kegiatan + "</div>";
+                                angka++;
+                            }
+                            return tujuan;
+                            // if (data) {
+                            //     return "<div class='text-wrap'>" + data.tempat_tujuan + "</div>";
+                            // } else {
+                            //     return "<div class='text-wrap'>-</div>";
+                            // }
                         }
-                    }
-                },
+                    },
                 {
 
                 "data": "tujuan_perjalanan",

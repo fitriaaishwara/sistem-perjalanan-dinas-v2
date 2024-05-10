@@ -87,12 +87,11 @@ class StaffController extends Controller
         }
         return $data;
     }
-    public function show($nip)
+    public function show(Request $request, $nip)
     {
         try {
             $data = ['status' => false, 'message' => 'Staff failed to be found'];
-            $data = Staff::with(['golongans', 'jabatans', 'instansis','kwitansiBendahara','kwitansiPejabat','dataStaffPerjalanan'])->where('nip', $nip)->first();
-
+            $data = Staff::with(['golongans', 'jabatans', 'instansis'])->where('nip', $nip)->first();
             switch ($data->jenis) {
                 case '0':
                     $data->jenis_name = "PNS";
@@ -110,7 +109,7 @@ class StaffController extends Controller
                     $data->jenis_name = "-";
                     break;
             };
-
+            
             if ($data) {
                 $data = ['status' => true, 'message' => 'Staff was successfully found', 'data' => $data];
             }

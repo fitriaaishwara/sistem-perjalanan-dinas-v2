@@ -38,7 +38,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="bukti_kas_nomor">Bukti Kas No</label>
-                                                <input type="text" class="form-control" id="bukti_kas_nomor" name="bukti_kas_nomor" validate>
+                                                <input type="text" class="form-control" id="bukti_kas_nomor" name="bukti_kas_nomor">
                                             </div>
                                             <div class="form-group">
                                                 <label for="tahun_anggaran">Tahun Anggaran</label>

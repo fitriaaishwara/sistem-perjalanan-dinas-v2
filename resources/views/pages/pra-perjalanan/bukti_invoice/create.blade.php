@@ -47,6 +47,7 @@
                                 <label for="nominal" class="col-sm-3 col-form-label">Nominal</label>
                                 <div class="col-sm-9 validate">
                                     <input class="form-control" id="nominal" name="nominal">
+                                    <small id="formatted_nominal" class="form-text text-muted"></small>
                                 </div>
                             </div>
                         </form>
@@ -105,7 +106,8 @@
                             <div class="row mb-4">
                                 <label for="nominal" class="col-sm-3 col-form-label">Nominal</label>
                                 <div class="col-sm-9 validate">
-                                    <input class="form-control" id="nominal" name="nominal">
+                                    <input class="form-control" id="nominal1" name="nominal">
+                                    <small id="formatted_nominal1" class="form-text text-muted"></small>
                                 </div>
                             </div>
                         </form>
@@ -176,7 +178,8 @@
                             <div class="row mb-4">
                                 <label for="nominal" class="col-sm-3 col-form-label">Nominal</label>
                                 <div class="col-sm-9 validate">
-                                    <input class="form-control" id="nominal" name="nominal">
+                                    <input class="form-control" id="nominal2" name="nominal">
+                                    <small id="formatted_nominal2" class="form-text text-muted"></small>
                                 </div>
                             </div>
                         </form>
@@ -325,6 +328,168 @@
         </div>
 @endsection
 @push('js')
+<script>
+    document.getElementById('nominal').addEventListener('input', function (e) {
+        let nominal = e.target.value;
+
+        // Remove non-numeric characters
+        nominal = nominal.replace(/\D/g, '');
+
+        // Limit the length of nominal
+        if (nominal.length > 9) {
+            nominal = nominal.substring(0, 9);
+        }
+
+        // Format the nominal
+        const formattedNominal = formatCurrency(nominal);
+
+        // Set the formatted nominal below the form
+        document.getElementById('formatted_nominal').textContent = formattedNominal;
+
+        // Set the value in the input field
+        e.target.value = nominal;
+
+        // Update the validation message
+        updateValidationMessage(nominal);
+    });
+
+    function formatCurrency(amount) {
+        if (!amount) return '';
+
+        // Convert to currency format Rp 300.000
+        return 'Rp ' + Number(amount).toLocaleString('id-ID');
+    }
+
+    // Validate only numbers
+    document.getElementById('nominal').addEventListener('keypress', function (e) {
+        const keyCode = e.keyCode;
+        if (keyCode < 48 || keyCode > 57) {
+            e.preventDefault();
+        }
+    });
+
+    // Update the validation message
+    function updateValidationMessage(nominal) {
+        const notification = document.getElementById('notification');
+        if (nominal !== '') {
+            if (!/^\d+$/.test(nominal)) {
+                notification.textContent = 'Nominal harus berupa angka';
+            } else {
+                notification.textContent = '';
+            }
+        } else {
+            notification.textContent = '';
+        }
+    }
+</script>
+<script>
+    document.getElementById('nominal1').addEventListener('input', function (e) {
+        let nominal1 = e.target.value;
+
+        // Remove non-numeric characters
+        nominal1 = nominal1.replace(/\D/g, '');
+
+        // Limit the length of nominal
+        if (nominal1.length > 9) {
+            nominal1 = nominal1.substring(0, 9);
+        }
+
+        // Format the nominal
+        const formattedNominal1 = formatCurrency(nominal1);
+
+        // Set the formatted nominal below the form
+        document.getElementById('formatted_nominal1').textContent = formattedNominal1;
+
+        // Set the value in the input field
+        e.target.value = nominal1;
+
+        // Update the validation message
+        updateValidationMessage(nominal1);
+    });
+
+    function formatCurrency(amount) {
+        if (!amount) return '';
+
+        // Convert to currency format Rp 300.000
+        return 'Rp ' + Number(amount).toLocaleString('id-ID');
+    }
+
+    // Validate only numbers
+    document.getElementById('nominal1').addEventListener('keypress', function (e) {
+        const keyCode = e.keyCode;
+        if (keyCode < 48 || keyCode > 57) {
+            e.preventDefault();
+        }
+    });
+
+    // Update the validation message
+    function updateValidationMessage(nominal1) {
+        const notification = document.getElementById('notification');
+        if (nominal1 !== '') {
+            if (!/^\d+$/.test(nominal1)) {
+                notification.textContent = 'Nominal harus berupa angka';
+            } else {
+                notification.textContent = '';
+            }
+        } else {
+            notification.textContent = '';
+        }
+    }
+</script>
+<script>
+    document.getElementById('nominal2').addEventListener('input', function (e) {
+        let nominal2 = e.target.value;
+
+        // Remove non-numeric characters
+        nominal2 = nominal2.replace(/\D/g, '');
+
+        // Limit the length of nominal
+        if (nominal2.length > 9) {
+            nominal2 = nominal2.substring(0, 9);
+        }
+
+        // Format the nominal
+        const formattedNominal2 = formatCurrency(nominal2);
+
+        // Set the formatted nominal below the form
+        document.getElementById('formatted_nominal2').textContent = formattedNominal2;
+
+        // Set the value in the input field
+        e.target.value = nominal2;
+
+        // Update the validation message
+        updateValidationMessage(nominal2);
+    });
+
+    function formatCurrency(amount) {
+        if (!amount) return '';
+
+        // Convert to currency format Rp 300.000
+        return 'Rp ' + Number(amount).toLocaleString('id-ID');
+    }
+
+    // Validate only numbers
+    document.getElementById('nominal2').addEventListener('keypress', function (e) {
+        const keyCode = e.keyCode;
+        if (keyCode < 48 || keyCode > 57) {
+            e.preventDefault();
+        }
+    });
+
+    // Update the validation message
+    function updateValidationMessage(nominal2) {
+        const notification = document.getElementById('notification');
+        if (nominal2 !== '') {
+            if (!/^\d+$/.test(nominal2)) {
+                notification.textContent = 'Nominal harus berupa angka';
+            } else {
+                notification.textContent = '';
+            }
+        } else {
+            notification.textContent = '';
+        }
+    }
+</script>
 <script type="text/javascript">
 
     function rupiah($angka){

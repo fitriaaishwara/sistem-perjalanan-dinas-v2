@@ -106,6 +106,7 @@ class SptController extends Controller
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'SPT failed to create'];
             $create = Spt::create([
                 'id_tujuan' => $request->id_tujuan,
+                'nip_staff' => $request->nip_staff,
                 'nip_staff_penandatangan' => $request->nip_staff_penandatangan,
                 'nomor_spt' => $request->nomor_spt,
                 'dikeluarkan_tanggal' => $request->dikeluarkan_tanggal,

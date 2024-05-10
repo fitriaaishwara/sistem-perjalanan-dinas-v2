@@ -47,21 +47,21 @@ class NotaDinasController extends Controller
                 $query->whereHas('mak', function ($query) use ($keyword) {
                     $query->where('kode_mak', 'like', '%' . $keyword . '%');
                 })
-                ->orWhereHas('mak', function ($query) use ($keyword) {
-                    $query->where('kode_mak', 'like', '%' . $keyword . '%');
-                })
-                ->orWhereHas('kegiatan', function ($query) use ($keyword) {
-                    $query->where('kegiatan', 'like', '%' . $keyword . '%');
-                })
-                ->orWhereHas('tujuan', function ($query) use ($keyword) {
-                    $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
-                        $query->where('name', 'like', '%' . $keyword . '%');
+                    ->orWhereHas('mak', function ($query) use ($keyword) {
+                        $query->where('kode_mak', 'like', '%' . $keyword . '%');
+                    })
+                    ->orWhereHas('kegiatan', function ($query) use ($keyword) {
+                        $query->where('kegiatan', 'like', '%' . $keyword . '%');
+                    })
+                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
+                        $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
+                            $query->where('name', 'like', '%' . $keyword . '%');
+                        });
+                    })
+                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
+                        $query->where('tanggal_berangkat', 'like', '%' . $keyword . '%')
+                            ->orWhere('tanggal_pulang', 'like', '%' . $keyword . '%');
                     });
-                })
-                ->orWhereHas('tujuan', function ($query) use ($keyword) {
-                    $query->where('tanggal_berangkat', 'like', '%' . $keyword . '%')
-                          ->orWhere('tanggal_pulang', 'like', '%' . $keyword . '%');
-                });
             });
         }
 
@@ -79,8 +79,8 @@ class NotaDinasController extends Controller
 
     public function edit($id)
     {
-        $perjalanan = Perjalanan::with(['nota_dinas']) -> find($id);
-        $notadinas = NotaDinas::with(['perjalanan', 'staff']) -> where('id_perjalanan', $id) -> first();
+        $perjalanan = Perjalanan::with(['nota_dinas'])->find($id);
+        $notadinas = NotaDinas::with(['perjalanan', 'staff'])->where('id_perjalanan', $id)->first();
         $staff = Staff::where('status', true)->get();
         return view('pages.pre-perjalanan.nota_dinas.edit', compact('perjalanan', 'staff', 'notadinas'));
     }
@@ -105,53 +105,59 @@ class NotaDinasController extends Controller
 
     public function store(Request $request)
     {
-        // Validate the request data
-        $validatedData = $request->validate([
-            'nomor_nota_dinas' => 'required|string',
-            'yth' => 'required|string',
-            'dari' => 'required|string',
-            'perihal' => 'required|string',
-            'lampiran' => 'required|string',
-            'tanggal_nota_dinas' => 'required|date',
-            'isi_nota_dinas' => 'required|string',
-            'nip_staff_penandatangan' => 'required|exists:staff,nip',
-            'id_perjalanan' => 'required|exists:perjalanan,id',
-            'status_nota_dinas_hidden' => 'required|boolean', // Ensure it's a boolean value
-        ]);
+        try {
+            // Validate the request data
+            $validatedData = $request->validate([
+                'id_perjalanan' => 'required',
+                'nomor_nota_dinas' => 'required|string',
+                'yth' => 'required|string',
+                'dari' => 'required|string',
+                'perihal' => 'required|string',
+                'lampiran' => 'required|string',
+                'tanggal_nota_dinas' => 'required',
+                'isi_nota_dinas' => 'required|string',
+                'nip_staff_penandatangan' => 'required',
+                'status_nota_dinas_hidden' => 'required|boolean', // Ensure it's a boolean value
+            ]);
 
-        // Create a new NotaDinas instance
-        $notaDinas = new NotaDinas();
-        $notaDinas->nomor_nota_dinas = $validatedData['nomor_nota_dinas'];
-        $notaDinas->yth = $validatedData['yth'];
-        $notaDinas->dari = $validatedData['dari'];
-        $notaDinas->perihal = $validatedData['perihal'];
-        $notaDinas->lampiran = $validatedData['lampiran'];
-        $notaDinas->tanggal_nota_dinas = $validatedData['tanggal_nota_dinas'];
-        $notaDinas->isi_nota_dinas = $validatedData['isi_nota_dinas'];
-        $notaDinas->nip_staff_penandatangan = $validatedData['nip_staff_penandatangan'];
-        $notaDinas->id_perjalanan = $validatedData['id_perjalanan'];
-        $notaDinas->status_nota_dinas = $validatedData['status_nota_dinas_hidden']; // Use the hidden field value
+            // Create a new NotaDinas instance
+            $notaDinas = new NotaDinas();
+            $notaDinas->nomor_nota_dinas = $validatedData['nomor_nota_dinas'];
+            $notaDinas->yth = $validatedData['yth'];
+            $notaDinas->dari = $validatedData['dari'];
+            $notaDinas->perihal = $validatedData['perihal'];
+            $notaDinas->lampiran = $validatedData['lampiran'];
+            $notaDinas->tanggal_nota_dinas = $validatedData['tanggal_nota_dinas'];
+            $notaDinas->isi_nota_dinas = $validatedData['isi_nota_dinas'];
+            $notaDinas->nip_staff_penandatangan = $validatedData['nip_staff_penandatangan'];
+            $notaDinas->id_perjalanan = $validatedData['id_perjalanan'];
+            $notaDinas->status_nota_dinas = $validatedData['status_nota_dinas_hidden']; // Use the hidden field value
 
-        // Save the NotaDinas instance
-        $notaDinas->save();
+            // Save the NotaDinas instance
+            $notaDinas->save();
 
-        // Check if keterangan is provided and save to nd_tembusan
-        if ($request->has('keterangan')) {
-            $ndTembusan = new nd_tembusan();
-            $ndTembusan->keterangan = $request->keterangan;
-            $ndTembusan->id_nota_dinas = $notaDinas->id; // Set the id_nota_dinas
-            $ndTembusan->save();
+            // Check if keterangan is provided and save to nd_tembusan
+            if ($request->keterangan != null) {
+                $ndTembusan = new nd_tembusan();
+                $ndTembusan->keterangan = $request->keterangan;
+                $ndTembusan->id_nota_dinas = $notaDinas->id; // Set the id_nota_dinas
+                $ndTembusan->save();
+                return redirect()->back()->with('success', 'Nota Dinas saved successfully');
+            }
+            return redirect('nota-dinas')->with('success', 'Nota Dinas saved successfully');
+        } catch (\Throwable $e) {
+            return response($e);
         }
 
         // Redirect back with success message
-        return redirect()->back()->with('success', 'Nota Dinas saved successfully');
+
     }
 
     public function update(Request $request, $id)
     {
         try {
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Jabatan failed to create'];
-            $create =  NotaDinas::find($id) -> update([
+            $create =  NotaDinas::find($id)->update([
                 'id_perjalanan' => $request->id_perjalanan,
                 'nip_staff_penandatangan' => $request->nip_staff_penandatangan,
                 'nomor_nota_dinas' => $request->nomor_nota_dinas,
@@ -167,12 +173,13 @@ class NotaDinasController extends Controller
             if ($create) {
                 $data = ['status' => true, 'code' => 'SC001', 'message' => 'Jabatan successfully edited'];
             }
+            
         } catch (\Exception $ex) {
             $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }
 
         // return $data;
-        return redirect() -> back() -> with('success', $data['message']);
+        return redirect()->back()->with('success', $data['message']);
     }
 
     public function updateStatus(Request $request, $id)
@@ -182,7 +189,5 @@ class NotaDinasController extends Controller
         $notaDinas->save();
 
         return redirect()->route('nota-dinas')->with('success', 'Nota Dinas status updated successfully.');
-
     }
-
 }

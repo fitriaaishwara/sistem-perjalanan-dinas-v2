@@ -14,7 +14,7 @@ class Kwitansi extends Model
     protected $table = 'kwitansi';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id_staff_perjalanan', 'id_bendahara', 'id_pejabat_pembuat_komitmen', 'bukti_kas_nomor', 'tahun_anggaran', 'sudah_diterima_dari'
+        'id_staff_perjalanan', 'nip_bendahara', 'nip_pejabat_pembuat_komitmen', 'bukti_kas_nomor', 'tahun_anggaran', 'sudah_diterima_dari'
     ];
 
     public function dataStaffPerjalanan()
@@ -23,11 +23,11 @@ class Kwitansi extends Model
     }
 
     function bendahara() {
-        return $this->belongsTo(Staff::class, 'id_bendahara', 'id');
+        return $this->belongsTo(Staff::class, 'nip_bendahara', 'id');
     }
 
     function pejabatPembuatKomitmen() {
-        return $this->belongsTo(Staff::class, 'id_pejabat_pembuat_komitmen', 'id');
+        return $this->belongsTo(Staff::class, 'nip_pejabat_pembuat_komitmen', 'id');
     }
 
 }

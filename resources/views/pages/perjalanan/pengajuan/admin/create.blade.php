@@ -92,9 +92,10 @@
                     };
                     if (data && data.data) {
                         $.each(data.data, function() {
+                            var saldo = parseFloat(this.saldo_pagu).toLocaleString('id-ID'); // Format saldo_pagu
                             result.results.push({
                                 id: this.id,
-                                text: this.kode_mak + ' - ' + '[' + 'Saldo' + ' ' + '=' + ' ' + 'Rp.' +this.saldo_pagu + '] '
+                                text: this.kode_mak + ' - [Saldo = Rp. ' + saldo + ']'
                             });
                         })
                     }
@@ -102,7 +103,8 @@
                 },
                 cache: false
             },
-        })
+        });
+
 
         $('#pengajuanForm').validate({
                 rules: {

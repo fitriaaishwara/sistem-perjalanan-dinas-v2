@@ -152,6 +152,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/pengajuan/delete/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'destroy'])->name('pengajuan/delete');
 
+    Route::post('/pengajuan/update/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'update'])->name('pengajuan/update');
 
     Route::post('/provinsi/getData', [App\Http\Controllers\Web\PerjalananController::class, 'getDataProvinsi'])->name('provinsi/getData');
 
@@ -332,7 +333,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/profile/{id}', [App\Http\Controllers\Web\ProfileController::class, 'index'])->name('profile');
     Route::post('/profile/update/{id}', [App\Http\Controllers\Web\ProfileController::class, 'update'])->name('profile/update');
 
-    Route::get('/export/{id}', [App\Http\Controllers\Web\ExportSpdController::class, 'exportToExcel'])->name('export');
+    Route::get('/exportSpd/{id}', [App\Http\Controllers\Web\ExportController::class, 'exportToExcelSpd'])->name('exportSpd');
+    Route::get('/exportSpt/{id}', [App\Http\Controllers\Web\ExportController::class, 'exportToExcelSpt'])->name('exportSpt');
+    Route::get('/exportKwitansi1/{id}', [App\Http\Controllers\Web\ExportController::class, 'exportToExcelKwitansi1'])->name('exportKwitansi1');
+    Route::get('/exportKwitansi2/{id}', [App\Http\Controllers\Web\ExportController::class, 'exportToExcelKwitansi2'])->name('exportKwitansi2');
 });
 
 require __DIR__.'/auth.php';

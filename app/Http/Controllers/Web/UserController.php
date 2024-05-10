@@ -215,41 +215,44 @@ class UserController extends Controller
     }
 
     public function createUser(Request $request, $nip)
-{
-    try {
+    {
         $staff = Staff::find($nip);
 
         if (!$staff) {
-            return response()->json(['status' => false, 'code' => 'EC002', 'message' => 'Staff not found']);
+            return response()->json(['status' => false, 'message' => 'Staff tidak ditemukan']);
         }
 
+        // Check if user with the same username already exists
         $existingUser = User::where('username', $staff->nip)->first();
 
         if ($existingUser) {
-            return response()->json(['status' => false, 'code' => 'EC003', 'message' => 'User with this username already exists']);
+            return response()->json(['status' => false, 'message' => 'Pengguna dengan username ini sudah ada']);
         }
 
+        // Create user
         $user = User::create([
             'name' => $staff->name,
             'username' => $staff->nip,
             'email' => $staff->email,
-            'password' => Hash::make('12345678'),
+            'password' => Hash::make('12345678'), // Default password
             'is_active' => false,
         ]);
 
         if ($user) {
-            // Assigning role with id 4
-            $user->assignRole(4);
+            // Assigning role
+            $user->assignRole(4); // 4 is the role id for staff
 
-            $staff->update(['id_user' => $user->id]);
-            return response()->json(['status' => true, 'code' => 'SC001', 'message' => 'User successfully created']);
+            // Update staff with the user id
+            $staff->id_user = $user->id;
+            $staff->save();
+
+            // Berhasil membuat user
+            return response()->json(['status' => true, 'message' => 'Pengguna berhasil dibuat']);
         } else {
-            return response()->json(['status' => false, 'code' => 'EC001', 'message' => 'User failed to create']);
+            // Gagal membuat user
+            return response()->json(['status' => false, 'message' => 'Gagal membuat pengguna']);
         }
-    } catch (\Exception $ex) {
-        return response()->json(['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. Please try again later.', 'error' => $ex->getMessage()]);
     }
-}
 
     public function status(Request $request, $id)
     {

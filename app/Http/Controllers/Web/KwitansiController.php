@@ -113,8 +113,8 @@ class KwitansiController extends Controller
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Kwitansi failed to create'];
             $create = Kwitansi::create([
                 'id_staff_perjalanan' => $request->input('id_staff_perjalanan'),
-                'id_bendahara'        => $request->input('id_bendahara'),
-                'id_pejabat_pembuat_komitmen' => $request->input('id_pejabat_pembuat_komitmen'),
+                'nip_bendahara'        => $request->input('nip_bendahara'),
+                'nip_pejabat_pembuat_komitmen' => $request->input('nip_pejabat_pembuat_komitmen'),
                 'bukti_kas_nomor'        => $request->input('bukti_kas_nomor'),
                 'tahun_anggaran'      => $request->input('tahun_anggaran'),
                 'sudah_diterima_dari' => $request->input('sudah_diterima_dari'),
@@ -161,11 +161,11 @@ class KwitansiController extends Controller
         // $kwitansi = Kwitansi::with(['dataStaffPerjalanan.staff', 'dataStaffPerjalanan.perjalanan.mak', 'dataStaffPerjalanan.tujuan_perjalanan', 'bendahara', 'pejabatPembuatKomitmen', 'dataStaffPerjalanan.spd'])->find($id);
         $kwitansi = DataStaffPerjalanan::with(['staff', 'perjalanan.mak', 'tujuan_perjalanan.uangHarian', 'spd', 'kwitansi', 'transportasi_berangkat', 'transportasi_pulang', 'akomodasi_hotel'])->find($id);
         // return view('pages.pra-perjalanan.kwitansi.pdf', compact('kwitansi'));
-        // $pdf = \PDF::loadView('pages.pra-perjalanan.kwitansi.pdf', compact('kwitansi'));
-        return response()->json([
-            'data' => $kwitansi
-        ]);
-        // return $pdf->stream();
+        $pdf = \PDF::loadView('pages.pra-perjalanan.kwitansi.pdf', compact('kwitansi'));
+        // return response()->json([
+        //     'data' => $kwitansi
+        // ]);
+        return $pdf->stream();
     }
 
     public function kwitansiPDF2($id)

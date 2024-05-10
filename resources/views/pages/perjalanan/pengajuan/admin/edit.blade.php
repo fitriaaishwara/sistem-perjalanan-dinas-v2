@@ -233,39 +233,42 @@
                     <a href="#">Form Pengajuan</a>
                 </li>
             </ul>
-            <form id="pengajuanForm" action="{{ route('pengajuan') }}" method="POST">
+            {{-- <form id="pengajuanForm" action="{{ route('pengajuan') }}" method="POST">
                 <!-- Isi formulir pengajuan di sini -->
                 <button type="submit" class="btn btn-primary btn-round ml-auto" id="saveBtn" name="saveBtn">Simpan Update</button>
-            </form>
+            </form> --}}
+            {{-- <button type="submit" class="btn btn-primary btn-round ml-auto" id="saveBtn" name="saveBtn" form="pengajuanForm">Simpan</button> --}}
+        <form action="{{ url('pengajuan/update/'.$perjalanan->id) }}" method="POST" enctype="multipart/form-data" >
+            @csrf
+            <button type="submit" class="btn btn-primary btn-sm">Simpan Update</button>
         </div>
         <div class="row" id="myForm">
             <div class="col-md-12">
-                <form action="{{ route('pengajuan/store') }}" method="POST" id="pengajuanForm" name="pengajuanForm">
-                @csrf
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">Informasi Perjalanan</div>
-                        </div>
-                        <div class="card-body">
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label for="id_mak" class="form-label">Kode Akun / Mata Anggaran Kegiatan<span
-                                            style="color:red;">*</span>
-                                    </label>
-                                    <select id="id_mak" type="text" class="form-control col-12 id_mak"
-                                    name="id_mak">
-                                        <option value="{{ $perjalanan->id_mak }}">{{ $perjalanan->mak->kode_mak }}</option>
-                                    </select>
-                                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Informasi Perjalanan</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input id="id_perjalanan" type="hidden" class="form-control" name="id_perjalanan" value="{{ $perjalanan->id }}">
+                                <label for="id_mak" class="form-label">Kode Akun / Mata Anggaran Kegiatan<span
+                                        style="color:red;">*</span>
+                                </label>
+                                <select id="id_mak" type="text" class="form-control col-12 id_mak"
+                                name="id_mak">
+                                <option value="{{ $perjalanan->id_mak }}">{{ $perjalanan->mak->kode_mak }} - [Saldo Pagu = Rp.{{ number_format($perjalanan->mak->saldo_pagu, 0, ',', '.') }}]</option>
+                                </select>
                             </div>
                         </div>
-                        {{-- <div class="card-footer">
-                            <button type="submit" class="btn btn-primary btn-sm" id="saveBtn" name="saveBtn" form="pengajuanForm">Save</button>
-                        </div> --}}
                     </div>
-                </form>
+                    {{-- <div class="card-footer">
+                        <button type="submit" class="btn btn-primary btn-sm">Simpan Update</button>
+                    </div> --}}
+                </div>
             </div>
         </div>
+        </form>
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -368,6 +371,32 @@
 
 @push('js')
 <script>
+
+    $('#pengajuanForm').validate({
+        rules: {
+            id_mak: {
+                required: true,
+            },
+            perihal_perjalanan: {
+                required: true,
+            },
+            // estimasi_biaya: {
+            //     required: true,
+            // }
+        },
+        errorElement: 'em',
+        errorPlacement: function(error, element) {
+            error.addClass('invalid-feedback');
+            element.closest('.validate').append(error);
+        },
+        highlight: function(element, errorClass, validClass) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).removeClass('is-invalid');
+        }
+    });
+
     document.getElementById('pengajuanForm').addEventListener('submit', function(event) {
         // Prevent form submission
         event.preventDefault();
@@ -1007,7 +1036,7 @@
             theme: 'bootstrap',
             width: '100%',
             dropdownParent: $('#myForm'),
-            placeholder: "Pilih Kode Akun / Mata Anggaran Kegiatan",
+            placeholder: "Pilih MAK",
             ajax: {
                 url: "{{ route('mak/getData') }}",
                 dataType: 'json',
@@ -1034,9 +1063,10 @@
                     };
                     if (data && data.data) {
                         $.each(data.data, function() {
+                            var saldo = parseFloat(this.saldo_pagu).toLocaleString('id-ID'); // Format saldo_pagu
                             result.results.push({
                                 id: this.id,
-                                text: this.kode_mak
+                                text: this.kode_mak + ' - [Saldo = Rp. ' + saldo + ']'
                             });
                         })
                     }

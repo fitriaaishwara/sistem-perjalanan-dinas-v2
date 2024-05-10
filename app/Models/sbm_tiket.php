@@ -2,9 +2,11 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Uuid;
+use Illuminate\Database\Eloquent\SoftDeletes;
 class sbm_tiket extends Model
 {
-    use HasFactory;
+    use HasFactory, Uuid, SoftDeletes;
     protected $table = 'sbm_tiket';
 
     protected $fillable = [

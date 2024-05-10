@@ -51,10 +51,10 @@ class KegiatanController extends Controller
     public function show($id)
     {
         try {
-            $data = ['status' => false, 'message' => 'Tujuan failed to be found'];
-            $data = Kegiatan::with('perjalanan', 'tempatBerangkat', 'tempatTujuan')->findOrFail($id);
+            $data = ['status' => false, 'message' => 'Kegiatan failed to be found'];
+            $data = Kegiatan::with('perjalanan')->findOrFail($id);
             if ($data) {
-                $data = ['status' => true, 'message' => 'Tujuan was successfully found', 'data' => $data];
+                $data = ['status' => true, 'message' => 'Kegiatan was successfully found', 'data' => $data];
             }
         } catch (\Exception $ex) {
             $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
@@ -66,7 +66,7 @@ class KegiatanController extends Controller
     public function store(Request $request)
     {
         try {
-            $data = ['status' => false, 'code' => 'EC001', 'message' => 'Tujuan failed to be created'];
+            $data = ['status' => false, 'code' => 'EC001', 'message' => 'Kegiatan failed to be created'];
             $create = Kegiatan::create([
                 'id_perjalanan' => $request->id_perjalanan,
                 'kegiatan' => $request->kegiatan,
@@ -74,7 +74,7 @@ class KegiatanController extends Controller
             ]);
 
             if ($create) {
-                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Tujuan successfully created'];
+                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Kegiatan successfully created'];
             }
         } catch (\Exception $ex) {
             $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
@@ -83,15 +83,33 @@ class KegiatanController extends Controller
         return $data;
     }
 
+    public function update(Request $request)
+    {
+        try {
+            $data = ['status' => false, 'code' => 'EC001', 'message' => 'Kegiatan failed to update'];
+
+            $update = Kegiatan::where('id', $request['id'])->update([
+                'id_perjalanan' => $request->id_perjalanan,
+                'kegiatan' => $request->kegiatan,
+            ]);
+            if ($update) {
+                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Kegiatan successfully updated'];
+            }
+        } catch (\Exception $ex) {
+            $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
+        }
+        return $data;
+    }
+
     public function destroy($id)
     {
         try {
-            $data = ['status' => false, 'code' => 'EC001', 'message' => 'Jabatan failed to delete'];
+            $data = ['status' => false, 'code' => 'EC001', 'message' => 'Kegiatan failed to delete'];
             $delete = Kegiatan::where('id', $id)->update([
                 'status' => false
             ]);
             if ($delete) {
-                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Jabatan deleted successfully'];
+                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Kegiatan deleted successfully'];
             }
         } catch (\Exception $ex) {
             $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];

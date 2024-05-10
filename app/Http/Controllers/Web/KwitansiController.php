@@ -112,13 +112,13 @@ class KwitansiController extends Controller
         try {
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Kwitansi failed to create'];
             $create = Kwitansi::create([
-                'id_staff_perjalanan' => $request->input('id_staff_perjalanan'),
-                'id_bendahara'        => $request->input('id_bendahara'),
-                'id_pejabat_pembuat_komitmen' => $request->input('id_pejabat_pembuat_komitmen'),
-                'bukti_kas_nomor'        => $request->input('bukti_kas_nomor'),
-                'tahun_anggaran'      => $request->input('tahun_anggaran'),
-                'sudah_diterima_dari' => $request->input('sudah_diterima_dari'),
-                'status'              => true,
+                'id_staff_perjalanan' => $request->id_staff_perjalanan,
+                'nip_bendahara'        => $request->nip_bendahara,
+                'nip_pejabat_pembuat_komitmen' => $request->nip_pejabat_pembuat_komitmen,
+                'bukti_kas_nomor'        => $request->bukti_kas_nomor,
+                'tahun_anggaran'      => $request->tahun_anggaran,
+                'sudah_diterima_dari' => $request->sudah_diterima_dari,
+                'status'              => 1,
             ]);
 
             // if ($create) {

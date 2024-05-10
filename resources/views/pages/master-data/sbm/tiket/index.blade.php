@@ -30,7 +30,6 @@
             <div class="modal-body">
                 <form method="POST" action="{{ route('sbm-tiket/store') }}" id="tiketForm" name="tiketForm">
                     @csrf
-                    <input id="id" type="text" class="form-control" name="id">
                     <div class="row mb-4">
                         <label for="nominal" class="col-sm-3 col-form-label">Nominal</label>
                         <div class="col-sm-9 validate">

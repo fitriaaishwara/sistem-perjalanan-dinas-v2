@@ -94,20 +94,20 @@
                                 <div class="card">
                                     <div id="myModal" class="card-body">
                                         <div class="form-group">
-                                            <label for="id_pejabat_pembuat_komitmen">Pejabat Pembuat Komitmen</label>
-                                            <select name="id_pejabat_pembuat_komitmen" id="id_pejabat_pembuat_komitmen" class="form-control select2" validate>
+                                            <label for="nip_pejabat_pembuat_komitmen">Pejabat Pembuat Komitmen</label>
+                                            <select name="nip_pejabat_pembuat_komitmen" id="nip_pejabat_pembuat_komitmen" class="form-control select2" validate>
                                                 @foreach ($staff as $item)
                                                     <option value=""></option>
-                                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                    <option value="{{ $item->nip }}">{{ $item->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="id_bendahara">Bendahara</label>
-                                            <select name="id_bendahara" id="id_bendahara" class="form-control select2" validate>
+                                            <label for="nip_bendahara">Bendahara</label>
+                                            <select name="nip_bendahara" id="nip_bendahara" class="form-control select2" validate>
                                                 @foreach ($staff as $item)
                                                     <option value=""></option>
-                                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                    <option value="{{ $item->nip }}">{{ $item->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>

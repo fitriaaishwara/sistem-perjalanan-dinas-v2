@@ -3,23 +3,25 @@
 @section('title', 'Data Pengajuan')
 <style>
     .container {
-      overflow-x: auto;
-      white-space: nowrap;
+        overflow-x: auto;
+        white-space: nowrap;
     }
+
     table {
-      border-collapse: collapse;
-      width: 100%;
+        border-collapse: collapse;
+        width: 100%;
     }
-  </style>
+</style>
 
 
-<div id="myModalStatus" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalStatusLabel" aria-hidden="true">
-    <div class="modal-dialog" >
+<div id="myModalStatus" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalStatusLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header border-0" id="myModalStatusLabel">
                 <h5 class="modal-title">
                     <span class="fw-mediumbold">
-                    Form</span>
+                        Form</span>
                     <span class="fw-light">
                         Ubah Status
                     </span>
@@ -37,7 +39,7 @@
                                 style="color:red;">*</span>
                         </label>
                         <select id="status_perjalanan" type="text" class="form-control col-12 status_perjalanan"
-                        name="status_perjalanan">
+                            name="status_perjalanan">
                             <option value=""></option>
                             <option value="Disetujui">Disetujui</option>
                             <option value="Belum Disetujui">Belum Disetujui</option>
@@ -48,13 +50,13 @@
                         <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                     </div>
                     <div class="mb-3 validate">
-                        <label for="direvisi_oleh" class="form-label">Direvisi Oleh<span
-                                style="color:red;">*</span>
+                        <label for="direvisi_oleh" class="form-label">Direvisi Oleh<span style="color:red;">*</span>
                         </label>
                         <select id="direvisi_oleh" type="text" class="form-control col-12 direvisi_oleh"
-                        name="direvisi_oleh">
+                            name="direvisi_oleh">
                             <option value=""></option>
-                            <option value="Asisten Deputi Pemetaan Data dan Analis Usaha">Asisten Deputi Pemetaan Data dan Analis Usaha</option>
+                            <option value="Asisten Deputi Pemetaan Data dan Analis Usaha">Asisten Deputi Pemetaan Data
+                                dan Analis Usaha</option>
                             <option value="Kepala Bidang Pemetaan Data">Kepala Bidang Pemetaan Data</option>
                         </select>
                     </div>
@@ -63,8 +65,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark waves-effect waves-light btn-sm" id="saveBtnStatus"
                     name="saveBtnStatus">Save changes</button>
-                <button type="button" class="btn btn-secondary waves-effect btn-sm"
-                    data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary waves-effect btn-sm" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -105,7 +106,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="pengajuanTable" class="display table table-striped table-hover" >
+                            <table id="pengajuanTable" class="display table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>MAK</th>
@@ -130,21 +131,20 @@
 </div>
 @endsection
 @push('js')
-    <script type="text/javascript">
+<script type="text/javascript">
+    function rupiah($angka) {
+        var reverse = $angka.toString().split('').reverse().join(''),
+            ribuan = reverse.match(/\d{1,3}/g);
+        ribuan = ribuan.join('.').split('').reverse().join('');
+        return ribuan;
+    }
 
-            function rupiah($angka){
-                var reverse = $angka.toString().split('').reverse().join(''),
-                ribuan = reverse.match(/\d{1,3}/g);
-                ribuan = ribuan.join('.').split('').reverse().join('');
-                return ribuan;
-            }
-
-            $(function() {
-                let request = {
-                    start: 0,
-                    length: 10
-                };
-                var isUpdate = false;
+    $(function() {
+        let request = {
+            start: 0,
+            length: 10
+        };
+        var isUpdate = false;
 
                 var pengajuanTable = $('#pengajuanTable').DataTable({
                     "language": {
@@ -173,14 +173,12 @@
                         },
                         "Content-Type": "application/json",
                         "data": function(data) {
-                            var request = {
-                                draw: data.draw,
-                                start: data.start,
-                                length: data.length,
-                                searchkey: data.search.value || ""
-                            };
+                            request.draw = data.draw;
+                            request.start = data.start;
+                            request.length = data.length;
+                            request.searchkey = data.search.value || "";
 
-                            return request;
+                            return (request);
                         },
                     },
                     "columns": [
@@ -197,21 +195,12 @@
                             }
                         },
                         {
-                            "data": "kegiatan",
+                            "data": "perihal_perjalanan",
                             "width": '10%',
                             "defaultContent": "-",
-                            "render": function(data, type, row) {
-                                console.log(data);
-                                var kegiatan = "";
-                                var angka = 1;
-                                for (var i = 0; i < data.length; i++) {
-                                    if (data[i].status === 1) {
-                                        kegiatan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + data[i].kegiatan + "</div>";
-                                        angka++;
-                                    }
-                                }
-                                return kegiatan || "-";
-                            }
+                            render: function(data, type, row) {
+                                return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                            },
                         },
                         {
                             "data": "tujuan",
@@ -289,185 +278,189 @@
                                 var btnStatusPerjalanan = "";
                                 var btnDetailStatus = "";
 
-                                @if (auth()->user()->can('asdep', 'kabid'))
-                                btnStatusPerjalanan += '<button name="btnStatusPerjalanan" data-id="' + data +
-                                    '" type="button" class="btn btn-dark btn-sm btnStatusPerjalanan m-1" data-toggle="tooltip" data-placement="top" title="Ubah Status"><i class="fa fa-pen"></i></button>';
-                                btnDetailStatus += '<a href="/detail-status/' + data +
-                                    '" name="btnEdit" data-id="' + data +
-                                    '" type="button" class="btn btn-warning btn-sm btnDetailStatus m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-pen"></i></a>';
-                                @endif
-
-                            //    // status terbaru default adalah "-"
-                            //     var latestStatus = "Belum Direview";
-
-                            //     // jika log_status_perjalanan tidak null dan memiliki panjang lebih dari 0, maka ambil status_perjalanan dari indeks terakhir log_status_perjalanan
-                            //     if (row.log_status_perjalanan && row.log_status_perjalanan.length > 0) {
-                            //         var lastStatus = row.log_status_perjalanan[row.log_status_perjalanan.length - 1].status_perjalanan;
-                            //     }
-
-                            //     // Kembalikan latestStatus bersama dengan tombol
-                            //     return "<div class='text-wrap' style='font-size: 12px;'>" + latestStatus + "</div>" + btnStatusPerjalanan + btnDetailStatus;
-
-                            // Inisialisasi objek untuk menyimpan status per ID perjalanan
-                            var latestStatus = "Belum Direview";
-                            var latestStatusId = 0;
-
-                            // Jika log_status_perjalanan tidak null dan memiliki panjang lebih dari 0, maka ambil status_perjalanan dari indeks terakhir log_status_perjalanan
-                            if (row.log_status_perjalanan && row.log_status_perjalanan.length > 0) {
-                                latestStatus = row.log_status_perjalanan[row.log_status_perjalanan.length - 1].status_perjalanan;
-                                latestStatusId = row.log_status_perjalanan[row.log_status_perjalanan.length - 1].id;
-                            }
-
-                            // Kembalikan latestStatus bersama dengan tombol
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + latestStatus + "</div>" + btnStatusPerjalanan + btnDetailStatus;
-
-                            },
-                        },
-                    {
-                        "data": "id",
-                        "width": '15%',
-                        render: function(data, type, row) {
-                            var btnEdit = "";
-                            var btnStatus = "";
-                            var btnDelete = "";
-                            btnEdit += '<a href="/pengajuan/edit/' + data +
+                        @if (auth()->user()->can('asdep', 'kabid'))
+                            btnStatusPerjalanan +=
+                                '<button name="btnStatusPerjalanan" data-id="' + data +
+                                '" type="button" class="btn btn-dark btn-sm btnStatusPerjalanan m-1" data-toggle="tooltip" data-placement="top" title="Ubah Status"><i class="fa fa-pen"></i></button>';
+                            btnDetailStatus += '<a href="/detail-status/' + data +
                                 '" name="btnEdit" data-id="' + data +
-                                '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
-                            btnStatus += '<button name="btnStatus" data-id="' + data +
-                                '" type="button" class="btn btn-primary btn-sm btnStatus m-1" data-toggle="tooltip" data-placement="top" title="Change Status"><i class="fa fa-bookmark"></i></button>';
-                            @if (auth()->user()->can('superadmin'))
+                                '" type="button" class="btn btn-warning btn-sm btnDetailStatus m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-pen"></i></a>';
+                        @endif
+
+                        //    // status terbaru default adalah "-"
+                        //     var latestStatus = "Belum Direview";
+
+                        //     // jika log_status_perjalanan tidak null dan memiliki panjang lebih dari 0, maka ambil status_perjalanan dari indeks terakhir log_status_perjalanan
+                        //     if (row.log_status_perjalanan && row.log_status_perjalanan.length > 0) {
+                        //         var lastStatus = row.log_status_perjalanan[row.log_status_perjalanan.length - 1].status_perjalanan;
+                        //     }
+
+                        //     // Kembalikan latestStatus bersama dengan tombol
+                        //     return "<div class='text-wrap' style='font-size: 12px;'>" + latestStatus + "</div>" + btnStatusPerjalanan + btnDetailStatus;
+
+                        // Inisialisasi objek untuk menyimpan status per ID perjalanan
+                        var latestStatus = "Belum Direview";
+                        var latestStatusId = 0;
+
+                        // Jika log_status_perjalanan tidak null dan memiliki panjang lebih dari 0, maka ambil status_perjalanan dari indeks terakhir log_status_perjalanan
+                        if (row.log_status_perjalanan && row.log_status_perjalanan.length > 0) {
+                            latestStatus = row.log_status_perjalanan[row.log_status_perjalanan
+                                .length - 1].status_perjalanan;
+                            latestStatusId = row.log_status_perjalanan[row.log_status_perjalanan
+                                .length - 1].id;
+                        }
+
+                        // Kembalikan latestStatus bersama dengan tombol
+                        return "<div class='text-wrap' style='font-size: 12px;'>" +
+                            latestStatus + "</div>" + btnStatusPerjalanan + btnDetailStatus;
+
+                    },
+                },
+                {
+                    "data": "id",
+                    "width": '15%',
+                    render: function(data, type, row) {
+                        var btnEdit = "";
+                        var btnStatus = "";
+                        var btnDelete = "";
+                        btnEdit += '<a href="/pengajuan/edit/' + data +
+                            '" name="btnEdit" data-id="' + data +
+                            '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
+                        btnStatus += '<button name="btnStatus" data-id="' + data +
+                            '" type="button" class="btn btn-primary btn-sm btnStatus m-1" data-toggle="tooltip" data-placement="top" title="Change Status"><i class="fa fa-bookmark"></i></button>';
+                        @if (auth()->user()->can('superadmin'))
                             btnDelete += '<button name="btnDelete" data-id="' + data +
                                 '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
-                            @endif
-                            return btnEdit + btnStatus + btnDelete;
-                        },
+                        @endif
+                        return btnEdit + btnStatus + btnDelete;
                     },
-                ]
-            });
+                },
+            ]
+        });
 
-            function reloadTable() {
-                pengajuanTable.ajax.reload(null, false); //reload datatable ajax
-                location.reload(); // Reload the page
+        function reloadTable() {
+            pengajuanTable.ajax.reload(null, false); //reload datatable ajax
+            location.reload(); // Reload the page
+        }
+
+        $("#status_perjalanan").select2({
+            theme: 'bootstrap',
+            width: '100%',
+            dropdownParent: $('#myModalStatus'),
+            placeholder: "Pilih Status",
+        })
+
+        $("#direvisi_oleh").select2({
+            theme: 'bootstrap',
+            width: '100%',
+            dropdownParent: $('#myModalStatus'),
+            placeholder: "Pilih Status",
+        })
+
+        $('#saveBtnStatus').click(function(e) {
+            e.preventDefault();
+            var isValid = $("#statusForm").valid();
+            if (isValid) {
+                $('#saveBtnStatus').text('Save...');
+                $('#saveBtnStatus').attr('disabled', true);
+                var url = "{{ route('statusPerjalanan/store') }}";
+                var formData = new FormData($('#statusForm')[0]);
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    dataType: "JSON",
+                    success: function(data) {
+                        Swal.fire(
+                            (data.status) ? 'Success' : 'Error',
+                            data.message,
+                            (data.status) ? 'success' : 'error'
+                        )
+                        $('#saveBtnStatus').text('Save');
+                        $('#saveBtnStatus').attr('disabled', false);
+                        reloadTable();
+                        $('#myModalStatus').modal('hide');
+                    },
+                    error: function(data) {
+                        Swal.fire(
+                            'Error',
+                            'A system error has occurred. please try again later.',
+                            'error'
+                        )
+                        $('#saveBtnStatus').text('Save');
+                        $('#saveBtnStatus').attr('disabled', false);
+                    }
+                });
             }
+        });
 
-            $("#status_perjalanan").select2({
-            theme: 'bootstrap',
-            width: '100%',
-            dropdownParent: $('#myModalStatus'),
-            placeholder: "Pilih Status",
-            })
+        $('#pengajuanTable').on("click", ".btnStatusPerjalanan", function() {
+            $('#myModalStatus').modal('show');
+            isUpdate = false;
+            var id = $(this).attr('data-id');
+            var url = "{{ route('statusPerjalanan/show', ':id') }}";
+            url = url.replace(':id', id);
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function(response) {
+                    $('#id').val(response.data.id);
+                },
+                error: function() {
+                    Swal.fire(
+                        'Error',
+                        'A system error has occurred. please try again later.',
+                        'error'
+                    )
+                },
+            });
+        });
 
-            $("#direvisi_oleh").select2({
-            theme: 'bootstrap',
-            width: '100%',
-            dropdownParent: $('#myModalStatus'),
-            placeholder: "Pilih Status",
-            })
-
-            $('#saveBtnStatus').click(function(e) {
-                e.preventDefault();
-                var isValid = $("#statusForm").valid();
-                if (isValid) {
-                    $('#saveBtnStatus').text('Save...');
-                    $('#saveBtnStatus').attr('disabled', true);
-                    var url = "{{ route('statusPerjalanan/store') }}";
-                    var formData = new FormData($('#statusForm')[0]);
+        $('#pengajuanTable').on("click", ".btnDelete", function() {
+            var id = $(this).attr('data-id');
+            Swal.fire({
+                title: 'Confirmation',
+                text: "Kamu akan menghapus pengajuan. Apakah kamu ingin melanjutkan?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: "Yes, I'm sure",
+                cancelButtonText: 'No'
+            }).then(function(result) {
+                if (result.value) {
+                    var url = "{{ route('pengajuan/delete', ['id' => ':id']) }}";
+                    url = url.replace(':id', id);
                     $.ajax({
+                        headers: {
+                            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                                'content'),
+                        },
                         url: url,
                         type: "POST",
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        dataType: "JSON",
                         success: function(data) {
                             Swal.fire(
                                 (data.status) ? 'Success' : 'Error',
                                 data.message,
                                 (data.status) ? 'success' : 'error'
                             )
-                            $('#saveBtnStatus').text('Save');
-                            $('#saveBtnStatus').attr('disabled', false);
                             reloadTable();
-                            $('#myModalStatus').modal('hide');
                         },
-                        error: function(data) {
+                        error: function(response) {
                             Swal.fire(
                                 'Error',
                                 'A system error has occurred. please try again later.',
                                 'error'
                             )
-                            $('#saveBtnStatus').text('Save');
-                            $('#saveBtnStatus').attr('disabled', false);
                         }
                     });
                 }
-            });
+            })
+        });
 
-            $('#pengajuanTable').on("click", ".btnStatusPerjalanan", function() {
-                $('#myModalStatus').modal('show');
-                isUpdate = false;
-                var id = $(this).attr('data-id');
-                var url = "{{ route('statusPerjalanan/show', ':id') }}";
-                url = url.replace(':id', id);
-                    $.ajax({
-                        type: 'GET',
-                        url: url,
-                        success: function(response) {
-                            $('#id').val(response.data.id);
-                        },
-                        error: function() {
-                            Swal.fire(
-                                'Error',
-                                'A system error has occurred. please try again later.',
-                                'error'
-                            )
-                        },
-                    });
-            });
-
-            $('#pengajuanTable').on("click", ".btnDelete", function() {
-                var id = $(this).attr('data-id');
-                Swal.fire({
-                    title: 'Confirmation',
-                    text: "Kamu akan menghapus pengajuan. Apakah kamu ingin melanjutkan?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: "Yes, I'm sure",
-                    cancelButtonText: 'No'
-                }).then(function(result) {
-                    if (result.value) {
-                        var url = "{{ route('pengajuan/delete', ['id' => ':id']) }}";
-                        url = url.replace(':id', id);
-                        $.ajax({
-                            headers: {
-                                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                                    'content'),
-                            },
-                            url: url,
-                            type: "POST",
-                            success: function(data) {
-                                Swal.fire(
-                                    (data.status) ? 'Success' : 'Error',
-                                    data.message,
-                                    (data.status) ? 'success' : 'error'
-                                )
-                                reloadTable();
-                            },
-                            error: function(response) {
-                                Swal.fire(
-                                    'Error',
-                                    'A system error has occurred. please try again later.',
-                                    'error'
-                                )
-                            }
-                        });
-                    }
-                })
-            });
-
-            $('#statusForm').validate({
+        $('#statusForm').validate({
             rules: {
                 status_perjalanan: {
                     required: true,
@@ -485,13 +478,6 @@
                 $(element).removeClass('is-invalid');
             }
         });
-        });
-    </script>
+    });
+</script>
 @endpush
-
-
-
-
-
-
-

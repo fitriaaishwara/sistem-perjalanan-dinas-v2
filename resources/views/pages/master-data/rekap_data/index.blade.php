@@ -209,7 +209,7 @@
                             //     return "<div class='text-wrap'>-</div>";
                             // }
                         }
-                        },
+                    },
                     {
                         "data": "tujuan",
                         "width": '10%',

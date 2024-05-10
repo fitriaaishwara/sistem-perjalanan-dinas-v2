@@ -84,7 +84,7 @@ class TujuanController extends Controller
     {
         try {
             $data = ['status' => false, 'message' => 'Staff failed to be found'];
-            $data = DataStaffPerjalanan::with('staff.golongans', 'staff.jabatans', 'staff.instansis')->findOrFail($id);
+            $data = DataStaffPerjalanan::with('staff.golongans', 'staff.jabatans', 'staff.instansis', 'perjalanan.kegiatan')->findOrFail($id);
             if ($data) {
                 $data = ['status' => true, 'message' => 'Staff was successfully found', 'data' => $data];
             }
@@ -142,7 +142,6 @@ class TujuanController extends Controller
         try {
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Tujuan failed to be updated'];
             // Menampilkan seluruh data yang diterima dari permintaan POST
-            dd($request->all());
 
             $update = Tujuan::where('id', $request['id'])->update([
                 'tempat_berangkat_id' => $request['tempat_berangkat_id'],

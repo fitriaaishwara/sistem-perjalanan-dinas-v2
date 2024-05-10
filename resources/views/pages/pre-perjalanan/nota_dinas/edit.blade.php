@@ -27,7 +27,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <form action="{{ route('nota-dinas.update', $notadinas->id) }}" method="POST" id="pengajuanForm">
+                <form action="{{ route('nota-dinas/update', $notadinas->id) }}" method="POST" id="pengajuanForm">
                     @csrf
                     @method('PUT')
                     <div class="card">
@@ -63,11 +63,11 @@
                                     <textarea class="form-control" id="isi_nota_dinas" name="isi_nota_dinas" rows="3" placeholder="Isi Nota Dinas">{{$notadinas->isi_nota_dinas}}</textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label for="nip_staff_penandatangan">Ditandatangani Oleh: </label>
+                                    <label for="nip_staff_penandatangan">Ditandatangani Oleh: s </label>
                                     <select class="form-control select2" id="nip_staff_penandatangan" name="nip_staff_penandatangan">
                                         <option value="">Pilih Penandatangan</option>
                                         @foreach ($staff as $item)
-                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                            <option value="{{ $item->nip }}">{{ $item->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>

@@ -74,7 +74,7 @@
                                     <select class="form-control select2" id="nip_staff_penandatangan" name="nip_staff_penandatangan">
                                         <option value="">Pilih Penandatangan</option>
                                         @foreach ($staff as $item)
-                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                            <option value="{{ $item->nip }}">{{ $item->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>

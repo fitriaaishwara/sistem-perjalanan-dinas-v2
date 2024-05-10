@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\FromView;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class SpdBelakangExport implements FromView
+class Kwitansi2Export implements FromView
 {
     protected $id;
     protected $templatePath;

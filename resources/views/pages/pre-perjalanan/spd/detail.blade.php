@@ -55,7 +55,7 @@
                                         <td>Depan</td>
                                         <td>
                                             <a href="{{ route('spd/pdf', $spd->id) }}" class="btn btn-primary btn-sm">PDF</a>
-                                            <a href="{{ route('export', $spd->id) }}" class="btn btn-success btn-sm">Excel</a>
+                                            <a href="{{ route('exportSpd', $spd->id) }}" class="btn btn-success btn-sm">Excel</a>
                                         </td>
                                     </tr>
                                     <tr>

@@ -161,11 +161,11 @@ class KwitansiController extends Controller
         // $kwitansi = Kwitansi::with(['dataStaffPerjalanan.staff', 'dataStaffPerjalanan.perjalanan.mak', 'dataStaffPerjalanan.tujuan_perjalanan', 'bendahara', 'pejabatPembuatKomitmen', 'dataStaffPerjalanan.spd'])->find($id);
         $kwitansi = DataStaffPerjalanan::with(['staff', 'perjalanan.mak', 'tujuan_perjalanan.uangHarian', 'spd', 'kwitansi', 'transportasi_berangkat', 'transportasi_pulang', 'akomodasi_hotel'])->find($id);
         // return view('pages.pra-perjalanan.kwitansi.pdf', compact('kwitansi'));
-        // $pdf = \PDF::loadView('pages.pra-perjalanan.kwitansi.pdf', compact('kwitansi'));
-        return response()->json([
-            'data' => $kwitansi
-        ]);
-        // return $pdf->stream();
+        $pdf = \PDF::loadView('pages.pra-perjalanan.kwitansi.pdf', compact('kwitansi'));
+        // return response()->json([
+        //     'data' => $kwitansi
+        // ]);
+        return $pdf->stream();
     }
 
     public function kwitansiPDF2($id)

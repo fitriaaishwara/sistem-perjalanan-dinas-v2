@@ -31,6 +31,7 @@
                                 @csrf
                                 <div class="card">
                                     <div id="myModal" class="card-body">
+                                        <input type="hidden" name="id_staff_perjalanan" id="id_staff_perjalanan" value="{{ $dataStaff->id }}">
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label for="nomor_spt">Kode Akun</label>
@@ -85,8 +86,8 @@
                                             <input type="text" class="form-control" value="{{ terbilang($dataStaff->total_biaya) }}" readonly validate>
                                         </div>
                                         <div class="form-group">
-                                            <label for="id_staff_perjalanan">Yang Menerima</label>
-                                            <input type="hidden" name="id_staff_perjalanan" id="id_staff_perjalanan" value="{{ $dataStaff->id }}">
+                                            <label for="sudah_diterima_dari">Yang Menerima</label>
+                                            <input type="hidden" name="sudah_diterima_dari" id="sudah_diterima_dari" value="{{ $dataStaff->id }}">
                                             <input type="text" class="form-control" value="{{ $dataStaff->staff->name }}" readonly>
                                         </div>
                                     </div>

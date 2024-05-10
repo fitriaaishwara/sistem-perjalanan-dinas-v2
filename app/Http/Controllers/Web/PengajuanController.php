@@ -313,4 +313,20 @@ class PengajuanController extends Controller
         }
         return $data;
     }
+
+    public function update(Request $request, $id)
+    {
+        $perjalanan = Perjalanan::find($id);
+        $perjalanan->id_mak = $request->id_mak;
+
+        $perjalanan->save();
+
+        if ($perjalanan->save()) {
+            Alert::success('Success', 'Perjalanan has been updated');
+        } else {
+            Alert::error('Failed', 'Perjalanan failed to update');
+        }
+
+        return redirect()->route('pengajuan');
+    }
 }

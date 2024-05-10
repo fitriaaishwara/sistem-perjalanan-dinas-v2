@@ -23,11 +23,11 @@ class Kwitansi extends Model
     }
 
     function bendahara() {
-        return $this->belongsTo(Staff::class, 'id_bendahara', 'id');
+        return $this->belongsTo(Staff::class, 'nip_bendahara', 'id');
     }
 
     function pejabatPembuatKomitmen() {
-        return $this->belongsTo(Staff::class, 'id_pejabat_pembuat_komitmen', 'id');
+        return $this->belongsTo(Staff::class, 'nip_pejabat_pembuat_komitmen', 'id');
     }
 
 }

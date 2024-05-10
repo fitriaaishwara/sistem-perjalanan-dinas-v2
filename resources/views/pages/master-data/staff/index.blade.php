@@ -520,40 +520,42 @@
             })
         });
 
-        $('#staffTable').on("click", ".btnCreate", function(event) {
-            event.preventDefault();
+        $(document).ready(function() {
+            $('#staffTable').on("click", ".btnCreate", function(event) {
+                event.preventDefault();
 
-            var nip = $(this).data('data-id');
-            var url = "{{ route('user.create', ['nip' => 'nip']) }}";
-            url = url.replace('nip', nip);
+                var nip = $(this).data('id'); // Mengambil data-id dari tombol
+                var url = "{{ route('user.create', ['nip' => ':nip']) }}"; // Menggunakan placeholder :nip
+                url = url.replace(':nip', nip);
 
-            $.ajax({
-                url: url,
-                type: "POST",
-                data: {_token: '{{ csrf_token() }}'},
-                success: function(response) {
-                    if (response.status) {
-                        Swal.fire(
-                            'Success',
-                            response.message,
-                            'success'
-                        );
-                        reloadTable(); // Assuming you have a function to reload the table
-                    } else {
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: {_token: '{{ csrf_token() }}'},
+                    success: function(response) {
+                        if (response.status) {
+                            Swal.fire(
+                                'Berhasil',
+                                response.message,
+                                'success'
+                            );
+                            // reloadTable(); // Jika perlu, panggil fungsi untuk memuat ulang tabel
+                        } else {
+                            Swal.fire(
+                                'Error',
+                                response.message,
+                                'error'
+                            );
+                        }
+                    },
+                    error: function(xhr, status, error) {
                         Swal.fire(
                             'Error',
-                            response.message,
+                            'Terjadi kesalahan sistem. Silakan coba lagi nanti.',
                             'error'
                         );
                     }
-                },
-                error: function(xhr, status, error) {
-                    Swal.fire(
-                        'Error',
-                        'A system error has occurred. Please try again later.',
-                        'error'
-                    );
-                }
+                });
             });
         });
 

@@ -118,21 +118,17 @@
             },
             "columns": [
                 {
-                    "data": "spt",
-                        "width": '20%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-
-                        if (row.spt == "" || row.spt == null) {
-                            return "<div class='text-wrap badge badge-danger'>Belum ada berkas</div>";
-                        } else
-                            if (row.spt.nomor_spt == 1) {
-                                return "<div class='text-wrap badge badge-success'>     /SesDep.4/SPT/IX/2024</div>";
-                            } else {
-                                return "<div class='text-wrap badge badge-success'>    /Dep.4/SPT/IX/2024</div>";
-                            }
-                        }
-                },
+    "data": "spt",
+    "width": '20%',
+    "defaultContent": "-",
+    "render": function(data, type, row) {
+        if (data && data.length > 0) {
+            return "<div class='text-wrap badge badge-success'>" + data[0].nomor_spt + "</div>";
+        } else {
+            return "<div class='text-wrap badge badge-danger'>Belum ada berkas</div>";
+        }
+    }
+},
                 {
                     "data": "staff",
                     "width": '10%',
@@ -205,7 +201,7 @@
                     "width": '15%',
                     render: function(data, type, row) {
                         var btnTambah = "";
-                        var btnDownload = "";
+                        var btnDetail = "";
                         var btnEdit = "";
 
                         if (row.spt == "" || row.spt == null) {
@@ -217,13 +213,16 @@
                                 //     '" name="btnEdit" data-id="' + data +
                                 //     '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
 
-                                btnDownload += '<a href="/surat-perintah-tugas/pdf/' + data +
-                                    '" name="btnDownload" data-id="' + data +
-                                    '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
+                                // btnDownload += '<a href="/surat-perintah-tugas/pdf/' + data +
+                                //     '" name="btnDownload" data-id="' + data +
+                                //     '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
+                                btnDetail += '<a href="/surat-perintah-tugas/' + data +
+                                '" name="btnEdit" data-id="' + data +
+                                '" type="button" class="btn btn-warning btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-bookmark"></i></a>';
                             }
 
                             console.log(row);
-                        return btnTambah + btnEdit + btnDownload;
+                        return btnTambah + btnEdit + btnDetail;
                     },
                 },
             ]

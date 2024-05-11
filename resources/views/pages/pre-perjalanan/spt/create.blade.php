@@ -79,29 +79,29 @@
                         <div id="myModal" class="card-body">
                             <div class="col-lg-12">
                                 <input type="hidden" name="id_tujuan" id="id_tujuan" value="{{ $tujuan->id }}">
-                                <input type="hidden" name="nip_staff" id="nip_staff"
-                                    value="{{ $tujuan->staff[0]->nip_staff }}">
+                                <input type="hidden" name="nip_staff" id="nip_staff" value="{{ $tujuan->staff[0]->nip_staff }}">
                                 <div class="form-group">
                                     <label for="nomor_spt">Nomor SPT</label>
                                     <select name="nomor_spt" id="nomor_spt" class="form-control select2" validate>
                                         <option value="">Pilih Nomor SPT</option>
-                                        <option value="1">Nomor
-                                            :&emsp;&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;&emsp;SesDep.4 /SPT/ IX 2023
-                                        </option>
-                                        <option value="2">Nomor
-                                            :&emsp;&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;&emsp;Dep.4 /SPT/ IX 2023
-                                        </option>
+                                        @php
+                                            $bulan = date('n');
+                                            $tahun = date('Y');
+                                            $bulan_romawi = intToRoman($bulan);
+                                        @endphp
+                                        {{-- <option value="1">Nomor :&emsp;&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;&emsp;/SesDep.4/SPT/ {{ $bulan_romawi }}/{{ $tahun }}</option>
+                                        <option value="2">Nomor :&emsp;&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;&emsp;/Dep.4/SPT/ {{ $bulan_romawi }}/{{ $tahun }}</option> --}}
+                                        <option value="/SesDep.4/SPT/ {{ $bulan_romawi }}/{{ $tahun }}">Nomor :&emsp;&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;&emsp;/SesDep.4/SPT/ {{ $bulan_romawi }}/{{ $tahun }}</option>
+                                        <option value="/SesDep.4/SPT/ {{ $bulan_romawi }}/{{ $tahun }}">Nomor :&emsp;&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;&emsp;/Dep.4/SPT/ {{ $bulan_romawi }}/{{ $tahun }}</option>
                                     </select>
                                 </div>
                                 <div id="showDikeluarkan_tanggal" class="form-group">
                                     <label for="dikeluarkan_tanggal">Dikeluarkan Tanggal</label>
-                                    <input type="text" name="dikeluarkan_tanggal" id="dikeluarkan_tanggal"
-                                        class="form-control date" placeholder="Pilih Tanggal SPT terbit" validate>
+                                    <input type="text" name="dikeluarkan_tanggal" id="dikeluarkan_tanggal" class="form-control date" placeholder="Pilih Tanggal SPT terbit" validate>
                                 </div>
                                 <div class="form-group">
                                     <label for="nip_staff_penandatangan">Penandatangan SPT</label>
-                                    <select name="nip_staff_penandatangan" id="nip_staff_penandatangan"
-                                        class="form-control select2" validate>
+                                    <select name="nip_staff_penandatangan" id="nip_staff_penandatangan" class="form-control select2" validate>
                                         <option value="">Pilih Penandatangan</option>
                                         @foreach ($staff as $item)
                                             <option value="{{ $item->nip }}">{{ $item->name }}</option>

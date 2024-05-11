@@ -221,6 +221,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/surat-perintah-tugas/create/{id}', [App\Http\Controllers\Web\SptController::class, 'create'])->name('spt/create');
     Route::any('/surat-perintah-tugas/store/', [App\Http\Controllers\Web\SptController::class, 'store'])->name('spt/store');
     Route::get('/surat-perintah-tugas/pdf/{id}', [App\Http\Controllers\Web\SptController::class, 'sptPDF'])->name('spt/pdf');
+    Route::get('/surat-perintah-tugas/{id}', [App\Http\Controllers\Web\SptController::class, 'detail'])->name('spt-detail');
 
     //SPD
     Route::get('/surat-perjalanan-dinas', [App\Http\Controllers\Web\SpdController::class, 'index'])->name('spd');

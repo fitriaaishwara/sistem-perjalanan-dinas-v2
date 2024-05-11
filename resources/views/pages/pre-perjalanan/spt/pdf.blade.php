@@ -69,11 +69,7 @@
 <body>
     <div class="text-center font-12">
         <u><h1>SURAT PERINTAH TUGAS</h1></u>
-        @if ($spt->nomor_spt == 1)
-            <p style="font-size: 12px">Nomor :&emsp;&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;&emsp;SesDep.4  /SPT/         IX            2023</p>
-        @else
-            <p style="font-size: 12px">Nomor :&emsp;&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;&emsp;Dep.4  /SPT/         IX            2023</p>
-        @endif
+        <h2>Nomor :&emsp;&emsp;&emsp;{{ $spt->nomor_spt }}</h2>
     </div>
 
     <br>
@@ -132,7 +128,7 @@
                     :
                 </td>
                 <td>
-                    {{ $tujuan->perjalanan->perihal_perjalanan }}
+                    {{ $tujuan->perjalanan->kegiatan[0]->kegiatan }}
                 </td>
             </tr>
             <tr>
@@ -228,7 +224,7 @@
                     <div><div>
                     <div></div>
 
-                    {!!( Str::repeat('<br>', 6) )!!}
+                    {!!( Str::repeat('<br>', 2) )!!}
 
                     <div></div>
                     <div></div>

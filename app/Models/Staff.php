@@ -51,10 +51,9 @@ class Staff extends Model
         return $this->hasMany(NotaDinas::class, 'nip_staff_penandatangan', 'nip');
     }
 
+    public function spt()
+    {
+        return $this->hasMany(Spt::class, 'nip_staff_penandatangan', 'nip');
 
-
-
-
-
-
+    }
 }

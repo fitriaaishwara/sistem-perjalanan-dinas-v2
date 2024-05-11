@@ -125,6 +125,14 @@ class SptController extends Controller
             return redirect()->back();
         }
     }
+    public function detail($id)
+    {
+        $tujuan = Tujuan::with(['perjalanan', 'spt', 'staff', 'staff.staff'])->find($id);
+        $spt = Spt::where('id_tujuan', $id)->first();
+        $dataStaff= DataStaffPerjalanan::with(['staff','perjalanan', 'tujuan_perjalanan'])->where('id_tujuan_perjalanan', $tujuan->id)->get();
+
+        return view('pages.pre-perjalanan.spt.detail', compact('tujuan', 'dataStaff', 'spt'));
+    }
 
     public function sptPDF($id)
     {

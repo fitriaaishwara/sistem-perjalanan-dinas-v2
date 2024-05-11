@@ -31,8 +31,13 @@ class SpdExport implements FromView
 
         // Masukkan data ke dalam template Excel
         $spreadsheet->getActiveSheet()->setCellValue('H14', $data->staff->name); // Cell 'H14'
-        $spreadsheet->getActiveSheet()->setCellValue('H15', $data->staff->golongans->name); // Cell 'H15'
-        $spreadsheet->getActiveSheet()->setCellValue('H16', $data->staff->jabatans->name); // Cell 'H15'
+
+        $golongan = $data->staff->golongans->name ?? 'III'; // Default to empty string if $data->staff->golongans->name is null
+        $spreadsheet->getActiveSheet()->setCellValue('H15', $golongan); // Cell 'H15'
+
+        $jabatan = $data->staff->jabatans->name ?? ''; // Default to empty string if $data->staff->jabatans->name is null
+        $spreadsheet->getActiveSheet()->setCellValue('H16', $jabatan); // Cell 'H16'
+
         $spreadsheet->getActiveSheet()->setCellValue('H17', $data->spd->tingkat_biaya_perjalanan_dinas); // Cell 'H16'
         $spreadsheet->getActiveSheet()->setCellValue('H19', $data->perjalanan[0]->kegiatan[0]->kegiatan); // Cell 'H17'
         $spreadsheet->getActiveSheet()->setCellValue('H20', $this->getTransportationType($data->spd->alat_angkutan)); // Cell 'H20'
@@ -43,6 +48,7 @@ class SpdExport implements FromView
         $spreadsheet->getActiveSheet()->setCellValue('H26', tgl_indo($data->tujuan_perjalanan[0]->tanggal_tiba)); // Cell 'H23'
         $spreadsheet->getActiveSheet()->setCellValue('H34', $data->perjalanan[0]->mak->kode_mak); // Cell 'H24'
         $spreadsheet->getActiveSheet()->setCellValue('H42', tgl_indo($data->spd->pada_tanggal)); // Cell 'H25'
+        $spreadsheet->getActiveSheet()->setCellValue('J8', $data->spd->nomor_spd); // Cell 'H26'
         // $spreadsheet->getActiveSheet()->setCellValue('H49', uppercase($data->penandatangan->name)); // Cell 'H26'
         // $spreadsheet->getActiveSheet()->setCellValue('H50', $data->staff->nip); // Cell 'H26'
 

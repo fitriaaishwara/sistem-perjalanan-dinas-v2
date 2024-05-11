@@ -53,25 +53,30 @@ class StaffController extends Controller
 
         return $response;
     }
+
     public function store(Request $request)
     {
-        // dd($request->all());
         try {
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Staff failed to create'];
-               // Check if NIP already exists
+
+            // Check if NIP already exists
             $existingStaff = Staff::where('nip', $request['nip'])->first();
 
             if ($existingStaff) {
                 // NIP already exists, return an error
                 $data = ['status' => false, 'code' => 'EC002', 'message' => 'NIP already exists'];
             } else {
+                // Set default values for id_jabatan and id_golongan if they are empty
+                $id_jabatan = $request['id_jabatan'] ?? '6';
+                $id_golongan = $request['id_golongan'] ?? '3';
+
                 // NIP does not exist, proceed with creating a new record
                 $create = Staff::create([
                     'nip'         => $request['nip'],
                     'name'        => ucwords($request['name']),
                     'jenis'       => $request['jenis'],
-                    'id_golongan' => $request['id_golongan'],
-                    'id_jabatan'  => $request['id_jabatan'],
+                    'id_golongan' => $id_golongan,
+                    'id_jabatan'  => $id_jabatan,
                     'id_instansi' => $request['id_instansi'],
                     'updated_by'  => auth()->user()->id,
                 ]);
@@ -87,6 +92,7 @@ class StaffController extends Controller
         }
         return $data;
     }
+
     public function show(Request $request, $nip)
     {
         try {
@@ -109,7 +115,7 @@ class StaffController extends Controller
                     $data->jenis_name = "-";
                     break;
             };
-            
+
             if ($data) {
                 $data = ['status' => true, 'message' => 'Staff was successfully found', 'data' => $data];
             }

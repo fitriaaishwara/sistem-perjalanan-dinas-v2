@@ -3,6 +3,8 @@
 namespace App\Exports;
 
 use App\Models\DataStaffPerjalanan;
+use App\Models\Spt;
+use App\Models\Tujuan;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -22,7 +24,9 @@ class SptExport implements FromView
     public function view(): View
     {
         // Ambil data berdasarkan ID
-        $data = DataStaffPerjalanan::with(['perjalanan.mak', 'staff.instansis', 'penandatangan', 'tujuan_perjalanan.tempatBerangkat', 'spd', 'staff.jabatans', 'staff.golongans', 'perjalanan.kegiatan'])->find($this->id);
+        $data = Tujuan::with(['perjalanan', 'spt', 'staff', 'staff.staff'])->find($this->id);
+        $spt = Spt::where('id_tujuan', $this->id)->first();
+        $dataStaff= DataStaffPerjalanan::with(['staff','perjalanan', 'tujuan_perjalanan'])->where('id_tujuan_perjalanan', $data->id)->get();
 
         // dd($data);
 
@@ -30,26 +34,19 @@ class SptExport implements FromView
         $spreadsheet = IOFactory::load($this->templatePath);
 
         // Masukkan data ke dalam template Excel
-        $spreadsheet->getActiveSheet()->setCellValue('H14', $data->staff->name); // Cell 'H14'
-        $spreadsheet->getActiveSheet()->setCellValue('H15', $data->staff->golongans->name); // Cell 'H15'
-        $spreadsheet->getActiveSheet()->setCellValue('H16', $data->staff->jabatans->name); // Cell 'H15'
-        $spreadsheet->getActiveSheet()->setCellValue('H17', $data->spd->tingkat_biaya_perjalanan_dinas); // Cell 'H16'
-        $spreadsheet->getActiveSheet()->setCellValue('H19', $data->perjalanan[0]->kegiatan[0]->kegiatan); // Cell 'H17'
-        $spreadsheet->getActiveSheet()->setCellValue('H20', $this->getTransportationType($data->spd->alat_angkutan)); // Cell 'H20'
-        $spreadsheet->getActiveSheet()->setCellValue('H21', $data->tujuan_perjalanan[0]->tempatBerangkat->name); // Cell 'H19'
-        $spreadsheet->getActiveSheet()->setCellValue('H22', $data->tujuan_perjalanan[0]->tempatTujuan->name); // Cell 'H20'
-        $spreadsheet->getActiveSheet()->setCellValue('H24', $data->tujuan_perjalanan[0]->lama_perjalanan . ' hari'); // Cell 'H21'
-        $spreadsheet->getActiveSheet()->setCellValue('H25',tgl_indo($data->tujuan_perjalanan[0]->tanggal_berangkat)); // Cell 'H22'
-        $spreadsheet->getActiveSheet()->setCellValue('H26', tgl_indo($data->tujuan_perjalanan[0]->tanggal_tiba)); // Cell 'H23'
-        $spreadsheet->getActiveSheet()->setCellValue('H34', $data->perjalanan[0]->mak->kode_mak); // Cell 'H24'
-        $spreadsheet->getActiveSheet()->setCellValue('H42', tgl_indo($data->spd->pada_tanggal)); // Cell 'H25'
-        // $spreadsheet->getActiveSheet()->setCellValue('H49', uppercase($data->penandatangan->name)); // Cell 'H26'
-        // $spreadsheet->getActiveSheet()->setCellValue('H50', $data->staff->nip); // Cell 'H26'
+        $spreadsheet->getActiveSheet()->setCellValue('E8', $data->nomor_spt); // Cell 'H14'
+        $spreadsheet->getActiveSheet()->setCellValue('E24', $data->perjalanan->kegiatan[0]->kegiatan); // Cell 'H15'
+        $spreadsheet->getActiveSheet()->setCellValue('E27', $data->tempatTujuan->name); // Cell 'H15'
+        $spreadsheet->getActiveSheet()->setCellValue('G29', tgl_indo($data->tanggal_berangkat)); // Cell 'H16'
+        $spreadsheet->getActiveSheet()->setCellValue('G30', tgl_indo($data->tanggal_kembali)); // Cell 'H17'
+        $spreadsheet->getActiveSheet()->setCellValue('I39', tgl_indo($spt->dikeluarkan_tanggal)); // Cell 'H20'
+        $spreadsheet->getActiveSheet()->setCellValue('F47', $data->spt[0]->staff_penandatangan->name); // Cell 'H19'
+        $spreadsheet->getActiveSheet()->setCellValue('F48', $data->spt[0]->staff_penandatangan->nip); // Cell 'H19'
 
         // ...
 
         // Create a temporary file to save the spreadsheet
-        $tempFilePath = tempnam(sys_get_temp_dir(), 'spd_export');
+        $tempFilePath = tempnam(sys_get_temp_dir(), 'spt_export');
         $writer = new Xlsx($spreadsheet);
         $writer->save($tempFilePath);
 

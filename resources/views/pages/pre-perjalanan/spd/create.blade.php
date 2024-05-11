@@ -76,8 +76,17 @@
                                         <div class="col-lg-12">
                                             <input type="hidden" name="id_staff_perjalanan" id="id_staff_perjalanan" value="{{ $dataStaff->id }}">
                                             <div class="form-group">
-                                                <label for="nomor_spt">Nomor SPD</label>
-                                                <input type="text" name="nomor_spd" id="nomor_spd" class="form-control"  placeholder="Nomor Surat Perjalanan Dinas" validate>
+                                                <label for="nomor_spd">Nomor SPD</label>
+                                                <select name="nomor_spd" id="nomor_spd" class="form-control select2" validate>
+                                                    <option value="">Pilih Nomor SPD</option>
+                                                    @php
+                                                        $bulan = date('n');
+                                                        $tahun = date('Y');
+                                                        $bulan_romawi = intToRoman($bulan);
+                                                    @endphp
+                                                    <option value="/SPD/Sesdep.4/ {{ $bulan_romawi }}/{{ $tahun }}">Nomor :&emsp;&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;&emsp;/SPD/Sesdep.4/ {{ $bulan_romawi }}/{{ $tahun }}</option>
+                                                    <option value="/SPD/Sesdep.4/ {{ $bulan_romawi }}/{{ $tahun }}">Nomor :&emsp;&emsp;&emsp;&emsp;/&emsp;&emsp;&emsp;&emsp;/SPD/Dep.4/ {{ $bulan_romawi }}/{{ $tahun }}</option>
+                                                </select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="pejabat_pembuat_komitmen">Pejabat Pembuat Komitmen</label>

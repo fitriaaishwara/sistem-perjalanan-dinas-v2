@@ -28,6 +28,6 @@ class Spt extends Model
 
     public function staff_penandatangan()
     {
-        return $this->belongsTo(Staff::class, 'nip_staff_penandatangan', 'id');
+        return $this->belongsTo(Staff::class, 'nip_staff_penandatangan', 'nip');
     }
 }

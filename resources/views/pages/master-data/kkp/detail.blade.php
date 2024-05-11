@@ -139,24 +139,24 @@
                         }
                     },
                     {
-                        "data": "golongan",
+                        "data": "staff.golongans",
                         "width": '10%',
                         "defaultContent": "-",
                         render: function(data, type, row) {
                             if (data) {
-                                return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                                return "<div class='text-wrap' style='font-size: 12px;'>" + data.name + "</div>";
                             } else {
                                 return "<div class='text-wrap'>-</div>";
                             }
                         }
                     },
                     {
-                        "data": "jabatan",
+                        "data": "staff.jabatans",
                         "width": '10%',
                         "defaultContent": "-",
                         render: function(data, type, row) {
                             if (data) {
-                                return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                                return "<div class='text-wrap' style='font-size: 12px;'>" + data.name + "</div>";
                             } else {
                                 return "<div class='text-wrap'>-</div>";
                             }

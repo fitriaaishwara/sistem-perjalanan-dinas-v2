@@ -161,8 +161,7 @@
                 <form method="POST" action="{{ route('pengajuan/edit/save_staff', $perjalanan->id) }}"
                     id="formStaffPilih">
                     @csrf
-                    <input id="id_staff" type="text" class="form-control" name="id">
-                    <input id="nip" type="text" class="form-control" name="nip">
+                    <input id="id_staff" type="text" class="form-control" name="id" hidden>
 
                     <div class="row mb-4">
                         <label for="nip_staff" class="col-sm-3 col-form-label">Staff<span
@@ -195,12 +194,11 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="row mb-4">
                         <label for="jenis" class="col-sm-3 col-form-label">Kegiatan<span
                                 style="color:red;">*</span></label>
                         <div class="col-sm-9 validate">
-                            <select name="id_kegiatan" class="form-control select2" required id="id_kegiatan">
+                            <select name="id_kegiatan_tujuan" class="form-control select2" required id="id_kegiatan_tujuan">
                                 <option value="">Pilih Kegiatan</option>
                                 @foreach ($perjalanan->kegiatan as $item)
                                     @if ($item->status === 1)
@@ -353,7 +351,7 @@
                             <h4 class="card-title">Staff Yang Ditugaskan</h4>
                             <a href="javascript:void(0)" class="btn btn-primary btn-round ml-auto"
                                 data-toggle="modal" data-target="#myModalStaff" id="addNewStaff"
-                                name="addNewTujuan"><i class="fa fa-plus"></i> Tambah</a>
+                                name="addNewStaff"><i class="fa fa-plus"></i> Tambah</a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -1087,10 +1085,9 @@
                 url: url,
                 success: function(response) {
                     $('#id_staff').val(response.data.id);
-                    $('#nip').val(response.data.perjalanan[0].kegiatan[0].id);
                     $('#nip_staff').val(response.data.nip_staff).trigger('change');
                     $('#id_tujuan_perjalanan').val(response.data.id_tujuan_perjalanan).trigger('change');
-                    $('#id_kegiatan').val(response.data.perjalanan[0].kegiatan[0].id).trigger('change');
+                    $('#id_kegiatan_tujuan').val(response.data.perjalanan[0].data_kegiatan[0].id_kegiatan).trigger('change');
                 },
                 error: function() {
                     Swal.fire(

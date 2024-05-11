@@ -94,7 +94,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/data-perjalanan/edit/{id}', [App\Http\Controllers\Web\PerjalananController::class, 'update'])->name('dataPerjalanan/edit');
     Route::post('/data-perjalanan/delete/{id}', [App\Http\Controllers\Web\PerjalananController::class, 'destroy'])->name('dataPerjalanan/delete');
     Route::get('/data-perjalanan/{id}', [App\Http\Controllers\Web\PerjalananController::class, 'show'])->name('dataPerjalanan/show');
-
+    Route::get('/perjalanan/detail/{id}', [App\Http\Controllers\Web\PerjalananController::class, 'detail'])->name('perjalanan/detail');
     //Data Perjalanan
     Route::get('/rekap-data', [App\Http\Controllers\Web\RekapController::class, 'index'])->name('rekap-data');
 

@@ -112,11 +112,13 @@ class PengajuanController extends Controller
             } else {
                 Alert::error('Saldo Mata Anggaran Kegiatan Tidak Mencukupi', 'Fail');
             }
+            // return response()->json(['data' => $data, 'dataStaff' => $dataStaff, 'saldo' => $saldo]);
         } catch (\Exception $ex) {
             $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }
 
         return view('pages.perjalanan.pengajuan.admin.edit', compact('data', 'perjalanan', 'staff'));
+
     }
 
     function save_staff(Request $request, $id_perjalanan)
@@ -144,7 +146,7 @@ class PengajuanController extends Controller
         $kegiatan->id_perjalanan = $id_perjalanan;
         $kegiatan->id_tujuan = $id_tujuan_perjalanan;
         $kegiatan->nip_staff = $nip_staff;
-        $kegiatan->id_kegiatan = $request->id_kegiatan_tujuan; // Assuming this field is coming from the request
+        $kegiatan->id_kegiatan = $request->id_kegiatan; // Assuming this field is coming from the request
         $kegiatan->status = 1;
         $kegiatan->created_by = Auth::id();
         $kegiatan->updated_by = Auth::id();

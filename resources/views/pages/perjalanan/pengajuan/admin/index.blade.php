@@ -330,18 +330,19 @@
                     "width": '15%',
                     render: function(data, type, row) {
                         var btnEdit = "";
-                        var btnStatus = "";
+                        var btnDetail = "";
                         var btnDelete = "";
                         btnEdit += '<a href="/pengajuan/edit/' + data +
                             '" name="btnEdit" data-id="' + data +
                             '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
-                        btnStatus += '<button name="btnStatus" data-id="' + data +
-                            '" type="button" class="btn btn-primary btn-sm btnStatus m-1" data-toggle="tooltip" data-placement="top" title="Change Status"><i class="fa fa-bookmark"></i></button>';
+                        btnDetail += '<a href="/perjalanan/detail/' + data +
+                            '" name="btnDetail" data-id="' + data +
+                            '" type="button" class="btn btn-warning btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail"><i class="fa fa-bookmark"></i></a>';
                         @if (auth()->user()->can('superadmin'))
                             btnDelete += '<button name="btnDelete" data-id="' + data +
                                 '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
                         @endif
-                        return btnEdit + btnStatus + btnDelete;
+                        return btnEdit + btnDetail + btnDelete;
                     },
                 },
             ]

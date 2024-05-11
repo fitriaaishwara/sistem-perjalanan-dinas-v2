@@ -220,23 +220,15 @@
                     }
                 },
                 {
-                    "data": "perjalanan.kegiatan",
-                    "width": '10%',
+                    "data": "kegiatan",
+                    "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        var tujuan = "";
-                        var angka = 1;
-                        for (var i = 0; i < data.length; i++) {
-                            tujuan += "<div class='text-wrap' style='font-size: 12px;'>" +
-                                angka + ". " + data[i].kegiatan + "</div>";
-                            angka++;
+                        if (data) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                        } else {
+                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
                         }
-                        return tujuan;
-                        // if (data) {
-                        //     return "<div class='text-wrap'>" + data.tempat_tujuan + "</div>";
-                        // } else {
-                        //     return "<div class='text-wrap'>-</div>";
-                        // }
                     }
                 },
                 {
@@ -257,12 +249,12 @@
                     }
                 },
                 {
-                    "data": "tempat_tujuan",
+                    "data": "perjalanan.tujuan",
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.name + "</div>";
+                        if (data && data.length > 0) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data[0].tempat_tujuan.name + "</div>";
                         } else {
                             return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
                         }
@@ -273,8 +265,8 @@
                     "width": '10%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + formatIndonesianDate(data) + "</div>";
+                        if (data && data.length > 0) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + formatIndonesianDate(data[0].tanggal_berangkat) + "</div>";
                         } else {
                             return "<div class='text-wrap' style='font-size: 12px;'> - </div>";
                         }
@@ -285,8 +277,8 @@
                     "width": '10%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + formatIndonesianDate(data) + "</div>";
+                        if (data && data.length > 0) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + formatIndonesianDate(data[0].tanggal_pulang) + "</div>";
                         } else {
                             return "<div class='text-wrap' style='font-size: 12px;'> - </div>";
                         }
@@ -302,7 +294,7 @@
                             return "<div class='text-wrap badge badge-danger' style='font-size: 12px;'> Belum Upload </div>";
                         } else {
 
-                            return "<a href='/laporan/pdf/" + row.upload_laporan.id + "' target='_blank' class='fas fa-file-download text-center' style='font-size: 12px;'> " + row.upload_laporan.name_file + " .pdf </a>"
+                            return "<a href='/laporan/pdf/" + row.upload_laporan[0].id + "' target='_blank' class='fas fa-file-download text-center' style='font-size: 12px;'> " + row.upload_laporan[0].name_file + " .pdf </a>"
                         }
                     }
                 },

@@ -161,17 +161,17 @@
                     }
                 },
                 {
-                "data": "perjalanan.tujuan",
-                "width": '15%',
-                "defaultContent": "-",
-                render: function(data, type, row) {
-                    if (data && data.length > 0) {
-                        return "<div class='text-wrap' style='font-size: 12px;'>" + data[0].tempat_tujuan.name + "</div>";
-                    } else {
-                        return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
+                    "data": "perjalanan.tujuan",
+                    "width": '15%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        if (data && data.length > 0) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data[0].tempat_tujuan.name + "</div>";
+                        } else {
+                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
+                        }
                     }
-                }
-            },
+                },
                 {
                     "data": "perjalanan.tujuan",
                     "width": '10%',

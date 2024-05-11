@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Kegiatan;
 use App\Models\Perjalanan;
 use App\Models\Province;
 use Illuminate\Http\Request;
@@ -191,5 +192,16 @@ class PerjalananController extends Controller
 
         return DataTables::of($data)
             ->make(true);
+    }
+
+    public function detail ($id)
+    {
+        $perjalanan = Perjalanan::find($id);
+
+        $kegiatan = Kegiatan::where('id_perjalanan', $id)->with('perjalanan.data_staff_perjalanan.staff', 'perjalanan.tujuan.tempatTujuan')->get();
+
+        // dd($kegiatan);
+
+        return view('pages.perjalanan.perjalanan.detail', compact('perjalanan', 'kegiatan'));
     }
 }

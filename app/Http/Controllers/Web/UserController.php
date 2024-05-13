@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -104,6 +106,8 @@ class UserController extends Controller
         }
     }
 
+
+
     public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -140,11 +144,16 @@ class UserController extends Controller
                 $request->file('photo')->storeAs($path, $photoName, 'public');
             }
 
+            // Update user data
             $user->username = $request['username'];
             $user->name = ucwords($request['name']);
             $user->email = $request['email'];
             $user->photo = $photoName;
             $user->save();
+
+            // Update user role
+            $roles = $request->input('role_id'); // Assuming the input name is 'role_id'
+            $user->syncRoles($roles); // This will sync the user's roles with the provided role IDs
 
             DB::commit();
 

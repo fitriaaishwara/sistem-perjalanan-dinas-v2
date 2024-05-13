@@ -21,6 +21,7 @@ class DetailStatusController extends Controller
         $perjalanan = Perjalanan::findOrFail($id);
 
         $data = LogStatusPerjalanan::where('id_perjalanan', $id)
+            ->with('status_perjalanan', 'user')
             ->where('status', true)
             ->orderBy('created_at', 'desc') // Sort by created_at timestamp in descending order
             ->get();

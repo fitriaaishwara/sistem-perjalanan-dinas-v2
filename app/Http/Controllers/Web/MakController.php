@@ -75,7 +75,7 @@ class MakController extends Controller
     public function update(Request $request)
     {
         try {
-            $data = ['status' => false, 'code' => 'EC001', 'message' => 'Jabatan failed to update'];
+            $data = ['status' => false, 'code' => 'EC001', 'message' => 'MAK failed to update'];
 
             $update = Mak::where('id', $request['id'])->update([
                 'kode_mak'        => ucwords($request['kode_mak']),
@@ -83,7 +83,7 @@ class MakController extends Controller
                 'saldo_awal_pagu' => $request['saldo_pagu']
             ]);
             if ($update) {
-                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Jabatan successfully updated'];
+                $data = ['status' => true, 'code' => 'SC001', 'message' => 'MAK successfully updated'];
             }
         } catch (\Exception $ex) {
             $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];

@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 use RealRashid\SweetAlert\Facades\Alert;
+use Carbon\Carbon;
 
 class PengajuanController extends Controller
 {
@@ -112,7 +113,7 @@ class PengajuanController extends Controller
             } else {
                 Alert::error('Saldo Mata Anggaran Kegiatan Tidak Mencukupi', 'Fail');
             }
-            // return response()->json(['data' => $data, 'dataStaff' => $dataStaff, 'saldo' => $saldo]);
+
         } catch (\Exception $ex) {
             $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }
@@ -125,6 +126,21 @@ class PengajuanController extends Controller
     {
         $nip_staff = $request->nip_staff;
         $id_tujuan_perjalanan = $request->id_tujuan_perjalanan;
+
+        //check when tanggal_berangkat and tanggal_pulang staff have perjalanan. then cant add data staff perjalnanan and showing alert
+        $check = DataStaffPerjalanan::where('nip_staff', $nip_staff)
+            ->whereHas('tujuan_perjalanan', function ($query) use ($id_tujuan_perjalanan) {
+                    $query->where('id', $id_tujuan_perjalanan);
+                })
+                ->whereHas('tujuan_perjalanan', function ($query) use ($id_tujuan_perjalanan) {
+                        $query->where('id', $id_tujuan_perjalanan);
+                    })
+                    ->count();
+
+                    if ($check > 0) {
+                        Alert::error('Error', 'Staff sudah terdaftar pada tujuan perjalanan ini');
+                        return redirect()->back();
+                    }
 
         $staff = new DataStaffPerjalanan;
         $staff->status = 1;
@@ -181,9 +197,9 @@ class PengajuanController extends Controller
         $userRole = Auth::user()->roles->pluck('name')[0];
 
         $data = Perjalanan::select()
-            ->with(['mak', 'tujuan', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'log_status_perjalanan', 'kegiatan', 'data_staff_perjalanan.staff'])
+            ->with(['mak', 'tujuan', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'log_status_perjalanan', 'kegiatan', 'data_staff_perjalanan.staff', 'log_status_perjalanan.status_perjalanan'])
             ->whereDoesntHave('log_status_perjalanan', function ($query) {
-                $query->where('status_perjalanan', 'Disetujui');
+                $query->where('id_status_perjalanan', '5');
             })
             ->where(function ($query) use ($keyword) {
                 $query->where('id', 'like', '%' . $keyword . '%')
@@ -219,7 +235,7 @@ class PengajuanController extends Controller
             ->get();
 
         $dataCounter = Perjalanan::whereDoesntHave('log_status_perjalanan', function ($query) {
-            $query->where('status_perjalanan', 'Disetujui');
+            $query->where('id_status_perjalanan', '5');
         })
             ->where(function ($query) use ($keyword) {
                 $query->where('id', 'like', '%' . $keyword . '%')
@@ -252,9 +268,9 @@ class PengajuanController extends Controller
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Perjalanan failed to create'];
             $create = LogStatusPerjalanan::create([
                 'id_perjalanan' => $request->input('id_perjalanan'),
-                'status_perjalanan' => $request->input('status_perjalanan'),
+                'id_status_perjalanan' => $request->input('id_status_perjalanan'),
                 'description' => $request->input('description'),
-                'direvisi_oleh' => $request->input('direvisi_oleh'),
+                'direvisi_oleh' => Auth::id(),
             ]);
 
             if ($create) {
@@ -287,7 +303,7 @@ class PengajuanController extends Controller
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Status failed to update'];
             $update = Perjalanan::where('id', $id)->update([
                 'id_perjalanan' => $request['id_perjalanan'],
-                'status_perjalanan' => $request['status_perjalanan'],
+                'id_status_perjalanan' => $request['id_status_perjalanan'],
                 'description' => $request['description'],
                 'direvisi_oleh' => $request['direvisi_oleh'],
             ]);

@@ -87,7 +87,7 @@ class NotaDinasController extends Controller
 
     public function pdf($id)
     {
-        $perjalanan = Perjalanan::with(['nota_dinas', 'tujuan', 'mak', 'tujuan.staff', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'tujuan.uploadLaporan', 'tujuan.uploadGallery'])->find($id);
+        $perjalanan = Perjalanan::with(['nota_dinas', 'tujuan', 'mak', 'tujuan.staff', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan'])->find($id);
         $dataStaff = DataStaffPerjalanan::with(['perjalanan', 'staff', 'tujuan_perjalanan.tempatBerangkat', 'tujuan_perjalanan.tempatTujuan'])->where('id_perjalanan', $id)->get();
         $data = NotaDinas::with(['perjalanan', 'staff', 'tembusan'])->where('id_perjalanan', $id)->first();
         $staff = Staff::where('status', true)->get();
@@ -173,7 +173,7 @@ class NotaDinasController extends Controller
             if ($create) {
                 $data = ['status' => true, 'code' => 'SC001', 'message' => 'Jabatan successfully edited'];
             }
-            
+
         } catch (\Exception $ex) {
             $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }

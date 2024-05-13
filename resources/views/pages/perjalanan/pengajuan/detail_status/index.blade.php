@@ -131,7 +131,7 @@
                             "width": '20%',
                             "defaultContent": "-",
                             render: function(data, type, row, meta) {
-                                return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                                return "<div class='text-wrap' style='font-size: 12px;'>" + data.status_perjalanan + "</div>";
                             },
 
                         },
@@ -139,20 +139,27 @@
                             "data": "description",
                             "width": '55%',
                             "defaultContent": "-",
-                            render: function(data, type, row, meta) {
-                                return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
-                            },
-
+                            "render": function(data, type, row, meta) {
+                                if (data === null || data === '') {
+                                    return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
+                                } else {
+                                    return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                                }
+                            }
                         },
 
                         {
-                            "data": ".direvisi_oleh",
-                            "width": '20%',
-                            "defaultContent": "-",
-                            render: function(data, type, row, meta) {
-                                return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
-                            },
-                        },
+                        "data": "user",
+                        "width": '20%',
+                        "defaultContent": "-",
+                        "render": function(data, type, row, meta) {
+                            if (data && data.name) {
+                                return "<div class='text-wrap' style='font-size: 12px;'>" + data.name + "</div>";
+                            } else {
+                                return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
+                            }
+                        }
+                    }
                 ]
             });
 

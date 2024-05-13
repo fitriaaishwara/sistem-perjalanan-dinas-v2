@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\DataKegiatan;
 use App\Models\Kegiatan;
 use App\Models\Perjalanan;
 use App\Models\Province;
@@ -45,7 +46,7 @@ class PerjalananController extends Controller
         $data = Perjalanan::select()
             ->with('mak', 'tujuan.tempatTujuan', 'log_status_perjalanan', 'kegiatan', 'data_staff_perjalanan.staff')
             ->whereHas('log_status_perjalanan', function ($query) {
-                $query->where('status_perjalanan', 'Disetujui');
+                $query->where('id_status_perjalanan', '5');
             })
             ->where(function ($query) use ($keyword) {
                 $query->where('id', 'like', '%' . $keyword . '%')
@@ -81,7 +82,7 @@ class PerjalananController extends Controller
                     ->get();
 
                     $dataCounter = Perjalanan::whereDoesntHave('log_status_perjalanan', function ($query) {
-                        $query->where('status_perjalanan', 'Disetujui');
+                        $query->where('id_status_perjalanan', '5');
                     })
                         ->where(function ($query) use ($keyword) {
                             $query->where('id', 'like', '%' . $keyword . '%')
@@ -148,7 +149,7 @@ class PerjalananController extends Controller
                     ->get();
 
                     $dataCounter = Perjalanan::whereDoesntHave('log_status_perjalanan', function ($query) {
-                        $query->where('status_perjalanan', 'Disetujui');
+                        $query->where('id_status_perjalanan', '5');
                     })
                         ->where(function ($query) use ($keyword) {
                             $query->where('id', 'like', '%' . $keyword . '%')
@@ -194,14 +195,12 @@ class PerjalananController extends Controller
             ->make(true);
     }
 
-    public function detail ($id)
-    {
-        $perjalanan = Perjalanan::find($id);
+    public function detail($id)
+{
+    $perjalanan = Perjalanan::with('mak', 'tujuan.tempatTujuan', 'tujuan.tempatBerangkat', 'log_status_perjalanan', 'kegiatan', 'data_staff_perjalanan.staff', 'DataKegiatan', 'tujuan')->find($id);
 
-        $kegiatan = Kegiatan::where('id_perjalanan', $id)->with('perjalanan.data_staff_perjalanan.staff', 'perjalanan.tujuan.tempatTujuan')->get();
+    $kegiatan = Kegiatan::where('id_perjalanan', $id)->with('perjalanan.kegiatan')->get();
 
-        // dd($kegiatan);
-
-        return view('pages.perjalanan.perjalanan.detail', compact('perjalanan', 'kegiatan'));
-    }
+    return view('pages.perjalanan.perjalanan.detail', compact('perjalanan', 'kegiatan'));
+}
 }

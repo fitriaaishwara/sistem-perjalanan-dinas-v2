@@ -25,7 +25,7 @@ class UploadGalleryController extends Controller
         $keyword = $request['searchkey'];
         $userRole = Auth::user()->roles->pluck('name')[0];
 
-        $query = Kegiatan::with(['perjalanan', 'perjalanan.data_staff_perjalanan.staff', 'perjalanan.tujuan.uploadGallery', 'perjalanan.tujuan.tempatTujuan', 'perjalanan.tujuan.tempatBerangkat', 'DataKegiatan'])
+        $query = Kegiatan::with(['perjalanan', 'perjalanan.data_staff_perjalanan.staff', 'perjalanan.tujuan.uploadGallery', 'perjalanan.tujuan.tempatTujuan', 'perjalanan.tujuan.tempatBerangkat', 'DataKegiatan.staff'])
             ->where('status', true);
 
         // If the user is not a super admin, filter data based on user's ID
@@ -38,13 +38,6 @@ class UploadGalleryController extends Controller
         if ($keyword) {
             $query->where(function ($query) use ($keyword) {
                 $query->where('kegiatan', 'like', '%' . $keyword . '%')
-                    ->orWhereHas('perjalanan', function ($query) use ($keyword) {
-                        $query->whereHas('data_staff_perjalanan', function ($query) use ($keyword) {
-                            $query->whereHas('staff', function ($query) use ($keyword) {
-                                $query->where('name', 'like', '%' . $keyword . '%');
-                            });
-                        });
-                    })
                     ->orWhereHas('perjalanan', function ($query) use ($keyword) {
                         $query->whereHas('tujuan', function ($query) use ($keyword) {
                             $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
@@ -62,11 +55,10 @@ class UploadGalleryController extends Controller
                             $query->where('tanggal_pulang', 'like', '%' . $keyword . '%');
                         });
                     })
-                    ->orWhereHas('perjalanan', function ($query) use ($keyword) {
-                        $query->whereHas('data_staff_perjalanan', function ($query) use ($keyword) {
-                            $query->whereHas('staff', function ($query) use ($keyword) {
+                    ->orWhereHas('DataKegiatan', function ($query) use ($keyword) {
+                        $query->whereHas('staff', function ($query) use ($keyword) {
                                 $query->where('name', 'like', '%' . $keyword . '%');
-                            });
+
                         });
                     });
             });

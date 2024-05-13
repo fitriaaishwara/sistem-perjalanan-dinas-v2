@@ -198,7 +198,7 @@
                         <label for="jenis" class="col-sm-3 col-form-label">Kegiatan<span
                                 style="color:red;">*</span></label>
                         <div class="col-sm-9 validate">
-                            <select name="id_kegiatan_tujuan" class="form-control select2" required id="id_kegiatan_tujuan">
+                            <select name="id_kegiatan" class="form-control select2" required id="id_kegiatan_tujuan">
                                 <option value="">Pilih Kegiatan</option>
                                 @foreach ($perjalanan->kegiatan as $item)
                                     @if ($item->status === 1)

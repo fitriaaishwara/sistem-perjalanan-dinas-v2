@@ -45,7 +45,7 @@ class SpdExport implements FromView
         $spreadsheet->getActiveSheet()->setCellValue('H22', $data->tujuan_perjalanan[0]->tempatTujuan->name); // Cell 'H20'
         $spreadsheet->getActiveSheet()->setCellValue('H24', $data->tujuan_perjalanan[0]->lama_perjalanan . ' hari'); // Cell 'H21'
         $spreadsheet->getActiveSheet()->setCellValue('H25',tgl_indo($data->tujuan_perjalanan[0]->tanggal_berangkat)); // Cell 'H22'
-        $spreadsheet->getActiveSheet()->setCellValue('H26', tgl_indo($data->tujuan_perjalanan[0]->tanggal_tiba)); // Cell 'H23'
+        $spreadsheet->getActiveSheet()->setCellValue('H26', tgl_indo($data->tujuan_perjalanan[0]->tanggal_pulang)); // Cell 'H23'
         $spreadsheet->getActiveSheet()->setCellValue('H34', $data->perjalanan[0]->mak->kode_mak); // Cell 'H24'
         $spreadsheet->getActiveSheet()->setCellValue('H42', tgl_indo($data->spd->pada_tanggal)); // Cell 'H25'
         $spreadsheet->getActiveSheet()->setCellValue('J8', $data->spd->nomor_spd); // Cell 'H26'

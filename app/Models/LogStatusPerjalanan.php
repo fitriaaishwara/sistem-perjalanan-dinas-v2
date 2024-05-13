@@ -13,7 +13,7 @@ class LogStatusPerjalanan extends Model
     protected $table = 'log_status_perjalanan';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id_perjalanan', 'status_perjalanan', 'description', 'direvisi_oleh', 'status', 'created_by', 'updated_by', 'deleted_by',
+        'id_perjalanan', 'id_status_perjalanan', 'description', 'direvisi_oleh', 'status', 'created_by', 'updated_by', 'deleted_by',
     ];
 
     public function status_perjalanan()
@@ -24,5 +24,10 @@ class LogStatusPerjalanan extends Model
     public function perjalanan()
     {
         return $this->belongsTo(Perjalanan::class, 'id_perjalanan', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'direvisi_oleh', 'id');
     }
 }

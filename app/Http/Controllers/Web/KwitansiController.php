@@ -99,10 +99,16 @@ class KwitansiController extends Controller
 
     public function create($id)
     {
+
         $staff  = Staff::where('status', true)->get();
         $dataStaff = DataStaffPerjalanan::with(['staff', 'perjalanan.mak', 'tujuan_perjalanan'])->find($id);
         // dd($dataStaff);
 
+        //if nomor_spd is null, then sowing alert
+        if ($dataStaff->spd == null) {
+            Alert::warning('', 'SPD belum dibuat');
+            return redirect()->back();
+        }
         return view('pages.pra-perjalanan.kwitansi.create', compact('dataStaff', 'staff'));
     }
 

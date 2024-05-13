@@ -118,70 +118,65 @@
             },
             "columns": [
                 {
-    "data": "spt",
-    "width": '20%',
-    "defaultContent": "-",
-    "render": function(data, type, row) {
-        if (data && data.length > 0) {
-            return "<div class='text-wrap badge badge-success'>" + data[0].nomor_spt + "</div>";
-        } else {
-            return "<div class='text-wrap badge badge-danger'>Belum ada berkas</div>";
-        }
-    }
-},
+                    "data": "spt",
+                    "width": '20%',
+                    "defaultContent": "-",
+                    "render": function(data, type, row) {
+                        if (data && data.length > 0) {
+                            return "<div class='text-wrap badge badge-success'>" + data[0].nomor_spt + "</div>";
+                        } else {
+                            return "<div class='text-wrap badge badge-danger'>Belum ada berkas</div>";
+                        }
+                    }
+                },
                 {
-                    "data": "staff",
-                    "width": '10%',
+                    "data": "data_kegiatan",
+                    "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
                         var result = "<div class='text-wrap' style='font-size: 12px;'>";
-                        $.each (data, function (key, val) {
-                            // console.log(val);
-                            result += (key + 1) + ". " + val.staff.name + "<br>";
+                        $.each(data, function(index, value) {
+                            result += (index + 1) + ". " + value.staff.name + "<br>";
                         });
-
                         result += "</div>";
                         return result;
                     }
                 },
                 {
-                    "data": "perjalanan.kegiatan",
+                    "data": "kegiatan",
                     "width": '15%',
                     "defaultContent": "-",
-                    "render": function(data, type, row) {
-                        if (data && data[0]) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + (data[0].kegiatan || '-') + "</div>";
+                    render: function(data, type, row) {
+                        if (data) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
                         } else {
                             return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
                         }
                     }
                 },
                 {
-                    "data": "tempat_tujuan",
+                    "data": "perjalanan.tujuan",
                     "width": '15%',
                     "defaultContent": "-",
-                    //render date format
                     render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data.name + "</div>";
+                        if (data && data.length > 0) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data[0].tempat_tujuan.name + "</div>";
                         } else {
                             return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
                         }
                     }
-
                 },
                 {
-                    "data": "tanggal_berangkat",
-                    "width": '15%',
+                    "data": "perjalanan.tujuan",
+                    "width": '10%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        if (data) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + moment(data).format('DD MMM YYYY') + " s/d " + moment(row.tanggal_pulang).format('DD MMM YYYY') + "</div>";
+                        if (data && data.length > 0) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + formatIndonesianDate(data[0].tanggal_berangkat) + " s/d " + formatIndonesianDate(data[0].tanggal_pulang) + "</div>";
                         } else {
-                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'> - </div>";
                         }
                     }
-
                 },
                 {
                     "data": "id",
@@ -204,25 +199,22 @@
                         var btnDetail = "";
                         var btnEdit = "";
 
-                        if (row.spt == "" || row.spt == null) {
-                                btnTambah += '<a href="/surat-perintah-tugas/create/' + data +
-                                    '" name="btnTambah" data-id="' + data +
-                                    '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
+                        if (row.perjalanan.tujuan.length > 0) {
+                            row.perjalanan.tujuan.forEach(function(tujuan) {
+                                if (!tujuan.spt || tujuan.spt.length === 0) {
+                                    btnTambah += '<a href="/surat-perintah-tugas/create/' + tujuan.id +
+                                        '" name="btnTambah" data-id="' + tujuan.id +
+                                        '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
                                 } else {
-                                // btnEdit += '<a href="/surat-perintah-tugas/edit/' + data +
-                                //     '" name="btnEdit" data-id="' + data +
-                                //     '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
+                                    btnDetail += '<a href="/surat-perintah-tugas/' + tujuan.id +
+                                        '" name="btnDetail" data-id="' + tujuan.id +
+                                        '" type="button" class="btn btn-warning btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-bookmark"></i></a>';
+                                }
+                            });
+                        }
 
-                                // btnDownload += '<a href="/surat-perintah-tugas/pdf/' + data +
-                                //     '" name="btnDownload" data-id="' + data +
-                                //     '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
-                                btnDetail += '<a href="/surat-perintah-tugas/' + data +
-                                '" name="btnEdit" data-id="' + data +
-                                '" type="button" class="btn btn-warning btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-bookmark"></i></a>';
-                            }
-
-                            console.log(row);
-                        return btnTambah + btnEdit + btnDetail;
+                        console.log(row);
+                        return btnTambah + btnDetail;
                     },
                 },
             ]

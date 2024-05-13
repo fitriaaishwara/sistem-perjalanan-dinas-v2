@@ -339,6 +339,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/exportSpt/{id}', [App\Http\Controllers\Web\ExportController::class, 'exportToExcelSpt'])->name('exportSpt');
     Route::get('/exportKwitansi1/{id}', [App\Http\Controllers\Web\ExportController::class, 'exportToExcelKwitansi1'])->name('exportKwitansi1');
     Route::get('/exportKwitansi2/{id}', [App\Http\Controllers\Web\ExportController::class, 'exportToExcelKwitansi2'])->name('exportKwitansi2');
+
+    Route::post('/status_perjalanan/getData', [App\Http\Controllers\Web\StatusPerjalananController::class, 'getData'])->name('status_perjalanan/getData');
 });
 
 require __DIR__.'/auth.php';

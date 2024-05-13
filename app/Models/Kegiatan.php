@@ -22,7 +22,7 @@ class Kegiatan extends Model
         return $this->belongsTo(Perjalanan::class, 'id_perjalanan', 'id');
     }
 
-    public function dataKegiatan()
+    public function datakegiatan()
     {
         return $this->hasMany(DataKegiatan::class, 'id_kegiatan', 'id');
     }

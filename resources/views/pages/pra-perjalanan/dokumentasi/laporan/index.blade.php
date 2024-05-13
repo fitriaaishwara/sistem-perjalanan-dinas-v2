@@ -232,18 +232,14 @@
                     }
                 },
                 {
-                    "data": "perjalanan.data_staff_perjalanan",
+                    "data": "data_kegiatan",
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
                         var result = "<div class='text-wrap' style='font-size: 12px;'>";
-                        $.each(data, function(key, val) {
-                            // console.log(val);
-
-                            //with number
-                            result += (key + 1) + ". " + val.staff.name + "<br>";
+                        $.each(data, function(index, value) {
+                            result += (index + 1) + ". " + value.staff.name + "<br>";
                         });
-
                         result += "</div>";
                         return result;
                     }

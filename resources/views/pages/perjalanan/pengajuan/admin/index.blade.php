@@ -35,30 +35,16 @@
                     @csrf
                     <input id="id" type="hidden" class="form-control" name="id_perjalanan">
                     <div class="mb-3 validate">
-                        <label for="status_perjalanan" class="form-label">Status Perjalanan<span
+                        <label for="id_status_perjalanan" class="form-label">Status Perjalanan<span
                                 style="color:red;">*</span>
                         </label>
-                        <select id="status_perjalanan" type="text" class="form-control col-12 status_perjalanan"
-                            name="status_perjalanan">
-                            <option value=""></option>
-                            <option value="Disetujui">Disetujui</option>
-                            <option value="Belum Disetujui">Belum Disetujui</option>
+                        <select id="id_status_perjalanan" type="text" class="form-control col-12 id_status_perjalanan"
+                            name="id_status_perjalanan">
                         </select>
                     </div>
                     <div class="mb-3 validate">
                         <label for="description" class="form-label">Deskripsi Revisi</label>
                         <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-                    </div>
-                    <div class="mb-3 validate">
-                        <label for="direvisi_oleh" class="form-label">Direvisi Oleh<span style="color:red;">*</span>
-                        </label>
-                        <select id="direvisi_oleh" type="text" class="form-control col-12 direvisi_oleh"
-                            name="direvisi_oleh">
-                            <option value=""></option>
-                            <option value="Asisten Deputi Pemetaan Data dan Analis Usaha">Asisten Deputi Pemetaan Data
-                                dan Analis Usaha</option>
-                            <option value="Kepala Bidang Pemetaan Data">Kepala Bidang Pemetaan Data</option>
-                        </select>
                     </div>
                 </form>
             </div>
@@ -286,15 +272,13 @@
                             render: function(data, type, row) {
                                 var btnStatusPerjalanan = "";
                                 var btnDetailStatus = "";
-
-                        @if (auth()->user()->can('asdep', 'kabid'))
                             btnStatusPerjalanan +=
                                 '<button name="btnStatusPerjalanan" data-id="' + data +
                                 '" type="button" class="btn btn-dark btn-sm btnStatusPerjalanan m-1" data-toggle="tooltip" data-placement="top" title="Ubah Status"><i class="fa fa-pen"></i></button>';
                             btnDetailStatus += '<a href="/detail-status/' + data +
                                 '" name="btnEdit" data-id="' + data +
                                 '" type="button" class="btn btn-warning btn-sm btnDetailStatus m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-pen"></i></a>';
-                        @endif
+
 
                         //    // status terbaru default adalah "-"
                         //     var latestStatus = "Belum Direview";
@@ -314,7 +298,7 @@
                         // Jika log_status_perjalanan tidak null dan memiliki panjang lebih dari 0, maka ambil status_perjalanan dari indeks terakhir log_status_perjalanan
                         if (row.log_status_perjalanan && row.log_status_perjalanan.length > 0) {
                             latestStatus = row.log_status_perjalanan[row.log_status_perjalanan
-                                .length - 1].status_perjalanan;
+                                .length - 1].status_perjalanan.status_perjalanan;
                             latestStatusId = row.log_status_perjalanan[row.log_status_perjalanan
                                 .length - 1].id;
                         }
@@ -338,7 +322,7 @@
                         btnDetail += '<a href="/perjalanan/detail/' + data +
                             '" name="btnDetail" data-id="' + data +
                             '" type="button" class="btn btn-warning btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail"><i class="fa fa-bookmark"></i></a>';
-                        @if (auth()->user()->can('superadmin'))
+                        @if (auth()->user()->can('Super Admin'))
                             btnDelete += '<button name="btnDelete" data-id="' + data +
                                 '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
                         @endif
@@ -353,19 +337,56 @@
             location.reload(); // Reload the page
         }
 
-        $("#status_perjalanan").select2({
+        $("#id_status_perjalanan").select2({
             theme: 'bootstrap',
             width: '100%',
             dropdownParent: $('#myModalStatus'),
             placeholder: "Pilih Status",
-        })
+            ajax: {
+                url: "{{ route('status_perjalanan/getData') }}",
+                dataType: 'json',
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                method: 'POST',
+                delay: 250,
+                destroy: true,
+                data: function(params) {
+                    var query = {
+                        searchkey: params.term || '',
+                        start: 0,
+                        length: 50
+                    }
+                    return JSON.stringify(query);
+                },
+                processResults: function(data) {
+                    console.log(data); // Add this line for debugging
+                    var result = {
+                        results: [],
+                        more: false
+                    };
+                    if (data && data.data) {
+                        $.each(data.data, function() {
+                            result.results.push({
+                                id: this.id,
+                                text: this.status_perjalanan
+                            });
+                        })
+                    }
+                    return result;
+                },
+                cache: false
+            },
+        });
 
-        $("#direvisi_oleh").select2({
-            theme: 'bootstrap',
-            width: '100%',
-            dropdownParent: $('#myModalStatus'),
-            placeholder: "Pilih Status",
-        })
+        // $("#direvisi_oleh").select2({
+        //     theme: 'bootstrap',
+        //     width: '100%',
+        //     dropdownParent: $('#myModalStatus'),
+        //     placeholder: "Pilih Status",
+        // })
 
         $('#saveBtnStatus').click(function(e) {
             e.preventDefault();
@@ -417,6 +438,7 @@
                 url: url,
                 success: function(response) {
                     $('#id').val(response.data.id);
+                    $('#id_status_perjalanan').val(response.data.id_status_perjalanan).trigger('change');
                 },
                 error: function() {
                     Swal.fire(
@@ -472,7 +494,7 @@
 
         $('#statusForm').validate({
             rules: {
-                status_perjalanan: {
+                id_status_perjalanan: {
                     required: true,
                 },
             },

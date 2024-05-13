@@ -56,4 +56,14 @@ class Staff extends Model
         return $this->hasMany(Spt::class, 'nip_staff_penandatangan', 'nip');
 
     }
+
+    public function DataKegiatan()
+    {
+        return $this->hasMany(DataKegiatan::class, 'nip_staff', 'nip');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user', 'id');
+    }
 }

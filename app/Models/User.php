@@ -40,5 +40,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function staff()
+    {
+        return $this->hasOne(Staff::class, 'id_user', 'id');
+    }
+
+    public function log_status_perjalanan()
+    {
+        return $this->hasMany(LogStatusPerjalanan::class, 'direvisi_oleh', 'id');
+    }
 
 }

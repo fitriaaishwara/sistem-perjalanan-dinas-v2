@@ -129,13 +129,13 @@ class StaffController extends Controller
 
         try {
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Staff failed to update'];
-            $lainnya_instansi_id = Instansi::select('id') -> where('name', 'Lainnya') -> first() -> id;
-            // // dd((int) $request->instansi_id == (int) $lainnya_instansi_id);
+            $lainnya_id_instansi = Instansi::select('id') -> where('name', 'Lainnya') -> first() -> id;
+            // // dd((int) $request->id_instansi == (int) $lainnya_id_instansi);
 
-            // jika instansi_id lainnya maka create data
-            if((int) $request->instansi_id == (int) $lainnya_instansi_id) {
+            // jika id_instansi lainnya maka create data
+            if((int) $request->id_instansi == (int) $lainnya_id_instansi) {
 
-                $cek_instansi = Instansi::where('name', $request->instansi_id) -> first();
+                $cek_instansi = Instansi::where('name', $request->id_instansi) -> first();
                 if(!$cek_instansi) {
                     $instansi = new Instansi();
                     $instansi->name = $request->instansi_other_id;
@@ -146,7 +146,7 @@ class StaffController extends Controller
                 }
 
             } else {
-                $instansiID = $request->instansi_id;
+                $instansiID = $request->id_instansi;
             }
 
             $update = Staff::where('nip', $request['nip'])->update([

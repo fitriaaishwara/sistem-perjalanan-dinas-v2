@@ -115,8 +115,8 @@
                         <td class="text-center">{{ $value->staff->golongans ? $value->staff->golongans->name : '-' }}</td>
                         <td class="text-center">{{ $value->staff->jabatans ? $value->staff->jabatans->name : '-' }}</td>
                         <td>{{ $value->staff->instansis ? $value->staff->instansis->name : '-' }}</td>
-                        <td>{{ $value->tujuan_perjalanan->tempatTujuan->name ?? '-' }}</td>
-                        <td>Your Ket data</td>
+                        <td>{{ $value->tujuan_perjalanan[0]->tempatTujuan->name ?? '-' }}</td>
+                        <td>{{ $value->keterangan ?? '-' }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -155,7 +155,7 @@
             </tr>
             @foreach ($data->tembusan as $index => $tembusan)
             <tr>
-                <td style="width: 100px">{{ $index + 1 }}. {{ $tembusan->keterangan }}</td>
+                <td style="width: 100px">{{ $tembusan->keterangan ?? '-' }}</td>
             </tr>
             @endforeach
         </table>

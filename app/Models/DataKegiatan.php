@@ -41,4 +41,9 @@ class DataKegiatan extends Model
         return $this->belongsTo(Kegiatan::class, 'id_kegiatan', 'id');
     }
 
+    public function staff()
+    {
+        return $this->belongsTo(Staff::class, 'nip_staff', 'nip');
+    }
+
 }

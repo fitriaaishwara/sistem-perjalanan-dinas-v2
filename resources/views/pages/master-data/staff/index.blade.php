@@ -62,8 +62,8 @@
                                     </select>
                                 </div>
                                 <div class="mb-3 validate">
-                                    <label for="instansi_id" class="form-label">Instansi<span style="color:red;">*</span></label>
-                                    <select id="instansi_id" type="text" class="form-control col-12 instansi_id required" name="instansi_id" required>
+                                    <label for="id_instansi" class="form-label">Instansi<span style="color:red;">*</span></label>
+                                    <select id="id_instansi" type="text" class="form-control col-12 id_instansi required" name="id_instansi" required>
                                     </select>
                                 </div>
                                 <div class="mb-3 validate other_instance_input">
@@ -260,7 +260,7 @@
             placeholder: "Pilih Jenis",
         })
 
-        $("#instansi_id").select2({
+        $("#id_instansi").select2({
             theme: 'bootstrap',
             width: '100%',
             dropdownParent: $('#myModal'),
@@ -465,7 +465,7 @@
 
                     if(response.data.instansis) {
                         var instansi = new Option(response.data.instansis.name, response.data.instansis.id, true, true);
-                        $('#instansi_id').append(instansi).trigger('change');
+                        $('#id_instansi').append(instansi).trigger('change');
                     }
                 },
                 error: function() {
@@ -581,7 +581,7 @@
                 jenis: {
                     required: true,
                 },
-                instansi_id: {
+                id_instansi: {
                     required: true,
                 },
             },
@@ -618,10 +618,10 @@
             }
         });
 
-        $('select#instansi_id').change(function (e) {
+        $('select#id_instansi').change(function (e) {
             e.preventDefault();
 
-            var instansi_text = $('#instansi_id').select2('data')[0].text;
+            var instansi_text = $('#id_instansi').select2('data')[0].text;
             console.log(instansi_text);
 
             if (instansi_text == 'Lainnya') {

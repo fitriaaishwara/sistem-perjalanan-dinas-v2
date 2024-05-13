@@ -14,8 +14,19 @@ class CreateStatusPerjalananTable extends Migration
     public function up()
     {
         Schema::create('status_perjalanan', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->string('status_perjalanan');
+            $table->foreignUuid('id_status')->nullable();
+            $table->boolean('status')->default (1);
+
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
+            $table->string('deleted_by')->nullable();
+
             $table->timestamps();
+            $table->softDeletes();
+
+            $table->foreign('id_status')->references('id')->on('status');
         });
     }
 

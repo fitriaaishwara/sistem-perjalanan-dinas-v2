@@ -39,29 +39,25 @@ class TujuanController extends Controller
 
     public function getTujuanByIdPerjalanan(Request $request, $id)
     {
-        $perjalanan = Perjalanan::findOrFail($id);
-
-            $data = ['status' => false, 'message' => 'Tujuan failed to be found'];
-            $data = Tujuan::where('id_perjalanan', $id)
-                ->with('tempatBerangkat', 'tempatTujuan')
-                ->where('status', true)
-                ->get();
-
-            return DataTables::of($data)
+        $dataTujuan = Tujuan::where('id_perjalanan', $id)->with('kegiatan', 'tempatBerangkat', 'tempatTujuan')->get();
+        // return response()->json($perjalanan);
+            return DataTables::of($dataTujuan)
                 ->make(true);
     }
 
     public function getStaffByIdPerjalanan(Request $request, $id)
     {
-        $perjalanan = Perjalanan::findOrFail($id);
+        $dataStaff = DataStaffPerjalanan::where('id_perjalanan', $id)->with('staff.golongans', 'staff.jabatans', 'staff.instansis'
+        , 'tujuan_perjalanan.tempatBerangkat', 'tujuan_perjalanan.tempatTujuan', 'tujuan_perjalanan.kegiatan')
+        ->where('status', true)
+        ->get();
 
-            $data = ['status' => false, 'message' => 'Staff failed to be found'];
             $data = DataStaffPerjalanan::where('id_perjalanan', $id)
                 ->with('staff.golongans', 'staff.jabatans', 'staff.instansis', 'tujuan_perjalanan.tempatBerangkat', 'tujuan_perjalanan.tempatTujuan')
                 ->where('status', true)
                 ->get();
 
-            return DataTables::of($data)
+            return DataTables::of($dataStaff)
                 ->make(true);
     }
 
@@ -69,7 +65,7 @@ class TujuanController extends Controller
     {
         try {
             $data = ['status' => false, 'message' => 'Tujuan failed to be found'];
-            $data = Tujuan::with('perjalanan', 'tempatBerangkat', 'tempatTujuan')->findOrFail($id);
+            $data = Tujuan::with('perjalanan', 'tempatBerangkat', 'tempatTujuan', 'kegiatan')->findOrFail($id);
             if ($data) {
                 $data = ['status' => true, 'message' => 'Tujuan was successfully found', 'data' => $data];
             }
@@ -83,19 +79,11 @@ class TujuanController extends Controller
     public function showStaff($id)
     {
         try {
-            $perjalanan = DataStaffPerjalanan::findOrFail($id);
             $data = ['status' => false, 'message' => 'Staff failed to be found'];
-            // return response()->json([
-            //     'data' => $perjalanan->id
-            // ]);
             $data = DataStaffPerjalanan::with([
-                'staff.golongans',
-                'staff.jabatans',
-                'staff.instansis',
-                'perjalanan.DataKegiatan' => function ($query) use ($perjalanan) {
-                    $query->where('id_perjalanan', $perjalanan->id_perjalanan)
-                          ->where('nip_staff', $perjalanan->nip_staff);
-                }
+                'staff',
+                'perjalanan',
+                'tujuan_perjalanan'
             ])->findOrFail($id);
             if ($data) {
                 $data = ['status' => true, 'message' => 'Staff was successfully found', 'data' => $data];
@@ -128,6 +116,7 @@ class TujuanController extends Controller
         try {
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Tujuan failed to be created'];
             $create = Tujuan::create([
+                'id_kegiatan' => $request->id_kegiatan_tujuan,
                 'id_perjalanan' => $request->id_perjalanan,
                 'tempat_berangkat_id' => $request->tempat_berangkat_id,
                 'tempat_tujuan_id' => $request->tempat_tujuan_id,
@@ -152,10 +141,12 @@ class TujuanController extends Controller
     public function update(Request $request)
     {
         try {
+            // return response()->json($request->all());
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Tujuan failed to be updated'];
             // Menampilkan seluruh data yang diterima dari permintaan POST
 
-            $update = Tujuan::where('id', $request['id'])->update([
+            $update = Tujuan::where('id', $request['id_tujuan'])->update([
+                'id_kegiatan' => $request['id_kegiatan_tujuan'],
                 'tempat_berangkat_id' => $request['tempat_berangkat_id'],
                 'tempat_tujuan_id' => $request['tempat_tujuan_id'],
                 'tanggal_berangkat' => $request['tanggal_berangkat'],

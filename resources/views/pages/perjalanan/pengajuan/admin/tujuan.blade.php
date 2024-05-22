@@ -4,30 +4,32 @@
 <!-- Modal -->
 <style>
     .page-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-.breadcrumbs {
-    flex: 1;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+    .breadcrumbs {
+        flex: 1;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
 
-#selesaiBtn {
-    margin-left: 10px; /* Margin agar ada jarak antara tombol dan breadcrumb */
-}
+    #selesaiBtn {
+        margin-left: 10px;
+        /* Margin agar ada jarak antara tombol dan breadcrumb */
+    }
 </style>
-
-<div id="myModalKegiatan" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalKegiatanLabel" aria-hidden="true">
-    <div class="modal-dialog" >
+{{-- Kegiatan Form --}}
+<div id="myModalKegiatan" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalKegiatanLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header border-0" id="myModalKegiatanLabel">
                 <h5 class="modal-title">
                     <span class="fw-mediumbold">
-                    Kegiatan
+                        Kegiatan
                     </span>
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -38,7 +40,8 @@
                 <form method="POST" action="{{ route('kegiatan/store') }}" id="kegiatanForm" name="kegiatanForm">
                     @csrf
                     <input type="hidden" name="id" id="id">
-                    <input id="id_perjalanan" type="hidden" class="form-control" name="id_perjalanan" value="{{ $perjalanan->id }}">
+                    <input id="id_perjalanan" type="hidden" class="form-control" name="id_perjalanan"
+                        value="{{ $perjalanan->id }}">
                     <div class="row mb-4">
                         <label for="kegiatan" class="col-sm-3 col-form-label">Kegiatan<span
                                 style="color:red;">*</span></label>
@@ -51,20 +54,20 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark waves-effect waves-light btn-sm" id="saveBtnKegiatan"
                     name="saveBtnKegiatan">Save changes</button>
-                <button type="button" class="btn btn-secondary waves-effect btn-sm"
-                    data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary waves-effect btn-sm" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
-
-<div id="myModalTujuan" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalTujuanLabel" aria-hidden="true">
-    <div class="modal-dialog" >
+{{-- Tujuan Form --}}
+<div id="myModalTujuan" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalTujuanLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header border-0" id="myModalTujuanLabel">
                 <h5 class="modal-title">
                     <span class="fw-mediumbold">
-                    Tujuan</span>
+                        Tujuan</span>
                     <span class="fw-light">
                         Perjalanan
                     </span>
@@ -76,8 +79,17 @@
             <div class="modal-body">
                 <form method="POST" action="{{ route('tujuan/store') }}" id="tujuanForm" name="tujuanForm">
                     @csrf
-                    <input type="text" name="id" id="id">
-                    <input id="id_perjalanan" type="hidden" class="form-control" name="id_perjalanan" value="{{ $perjalanan->id }}">
+                    <input type="text" name="id_tujuan" id="id_tujuan">
+                    <input type="text" name="id_perjalanan" id="id_perjalanan" value={{ $perjalanan->id }}>
+                    <div class="row mb-4">
+                        <label for="id_kegiatan_tujuan" class="col-sm-3 col-form-label">Kegiatan<span
+                                style="color:red;">*</span></label>
+                        <div class="col-sm-9 validate">
+                            <select id="id_kegiatan_tujuan" type="text" class="form-control id_kegiatan_tujuan"
+                                name="id_kegiatan_tujuan">
+                            </select>
+                        </div>
+                    </div>
                     <div class="row mb-4">
                         <label for="tempat_berangkat_id" class="col-sm-3 col-form-label">Tempat Berangkat<span
                                 style="color:red;">*</span></label>
@@ -101,7 +113,8 @@
                         <label for="tanggal_berangkat" class="col-sm-3 col-form-label">Tanggal Berangkat<span
                                 style="color:red;">*</span></label>
                         <div class="col-sm-9 validate">
-                            <input id="tanggal_berangkat" type="text" class="form-control" name="tanggal_berangkat">
+                            <input id="tanggal_berangkat" type="text" class="form-control"
+                                name="tanggal_berangkat">
                         </div>
                     </div>
                     <div class="row mb-4">
@@ -122,7 +135,8 @@
                         <label for="lama_perjalanan" class="col-sm-3 col-form-label">Lama Perjalanan<span
                                 style="color:red;">*</span></label>
                         <div class="col-sm-9 validate">
-                            <input id="lama_perjalanan" type="text" class="form-control" name="lama_perjalanan" readonly>
+                            <input id="lama_perjalanan" type="text" class="form-control" name="lama_perjalanan"
+                                readonly>
                         </div>
                     </div>
                 </form>
@@ -136,8 +150,10 @@
         </div>
     </div>
 </div>
-<div id="myModalStaff" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalStaffLabel" aria-hidden="true">
-    <div class="modal-dialog" >
+{{-- Staff Form --}}
+<div id="myModalStaff" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalStaffLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header border-0">
                 <h5 class="modal-title">
@@ -150,10 +166,11 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{{route('pengajuan/edit/save_staff', $perjalanan->id)}}" id="formStaffPilih">
+                <form method="POST" action="{{ route('pengajuan/edit/save_staff', $perjalanan->id) }}"
+                    id="formStaffPilih">
                     @csrf
                     <input type="hidden" name="id_edit" id="id_edit">
-
+                    <input type="text" name="id_staff" id="id_staff">
                     <div class="row mb-4">
                         <label for="nip_staff" class="col-sm-3 col-form-label">Staff<span
                                 style="color:red;">*</span></label>
@@ -162,39 +179,23 @@
                                 <option value="">Pilih Staff</option>
                                 @foreach ($staff as $item)
                                     @if ($item->status === 1)
-                                    <option value="{{ $item->nip }}">{{ $item->name }}</option>
+                                        <option value="{{ $item->nip }}">{{ $item->name }}</option>
                                     @endif
                                 @endforeach
                             </select>
 
                         </div>
                     </div>
-
                     <div class="row mb-4">
                         <label for="id_tujuan_perjalanan" class="col-sm-3 col-form-label">Informasi Tujuan<span
                                 style="color:red;">*</span></label>
                         <div class="col-sm-9 validate">
-                            <select name="id_tujuan_perjalanan" class="form-control select2" required id="id_tujuan_perjalanan">
+                            <select name="id_tujuan_perjalanan" class="form-control select2" required
+                                id="id_tujuan_perjalanan">
                                 <option value="">Pilih Tujuan</option>
-                                @foreach ($perjalanan->tujuan as $item)
-                                    @if ($item->status === 1)
-                                        <option value="{{ $item->id }}">{{ $item->tempatBerangkat->name }} - {{ $item->tempatTujuan->name }}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row mb-4">
-                        <label for="jenis" class="col-sm-3 col-form-label">Kegiatan<span
-                                style="color:red;">*</span></label>
-                        <div class="col-sm-9 validate">
-                            <select name="id_kegiatan" class="form-control select2" required id="id_kegiatan">
-                                <option value="">Pilih Kegiatan</option>
-                                @foreach ($perjalanan->kegiatan as $item)
-                                    @if ($item->status === 1)
-                                        <option value="{{ $item->id }}">{{ $item->kegiatan }}</option>
-                                    @endif
+                                @foreach ($dataTujuanAll as $item)
+                                        <option value="{{ $item->id }}">{{ $item->tempatBerangkat->name }} -
+                                            {{ $item->tempatTujuan->name }} - {{ $item->kegiatan->kegiatan }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -203,7 +204,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" onclick="$('form#formStaffPilih').submit()" class="btn btn-dark waves-effect waves-light btn-sm">Save changes</button>
+                <button type="button" onclick="$('form#formStaffPilih').submit()"
+                    class="btn btn-dark waves-effect waves-light btn-sm">Save changes</button>
                 <button type="button" class="btn btn-secondary waves-effect btn-sm"
                     data-dismiss="modal">Close</button>
             </div>
@@ -211,8 +213,8 @@
     </div>
 </div>
 <div class="container">
-	<div class="page-inner">
-		<div class="page-header">
+    <div class="page-inner">
+        <div class="page-header">
             <h4 class="page-title">Form Pengajuan</h4>
             <ul class="breadcrumbs">
                 <li class="nav-home">
@@ -233,37 +235,43 @@
                     <a href="#">Form Pengajuan</a>
                 </li>
             </ul>
-         <form action="{{ url('pengajuan/update/'.$perjalanan->id) }}" method="POST" enctype="multipart/form-data" >
+            <form action="{{ url('pengajuan/update/' . $perjalanan->id) }}" method="POST"
+                enctype="multipart/form-data">
                 @csrf
                 <button type="submit" class="btn btn-primary btn-sm">Simpan Update</button>
-            </div>
-            <div class="row" id="myForm">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">Informasi Perjalanan</div>
-                        </div>
-                        <div class="card-body">
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <input id="id_perjalanan" type="hidden" class="form-control" name="id_perjalanan" value="{{ $perjalanan->id }}">
-                                    <label for="id_mak" class="form-label">Kode Akun / Mata Anggaran Kegiatan<span
-                                            style="color:red;">*</span>
-                                    </label>
-                                    <select id="id_mak" type="text" class="form-control col-12 id_mak"
+        </div>
+        {{-- MAK --}}
+        <div class="row" id="myForm">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Informasi Perjalanan</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <input id="id_perjalanan" type="hidden" class="form-control" name="id_perjalanan"
+                                    value="{{ $perjalanan->id }}">
+                                <label for="id_mak" class="form-label">Kode Akun / Mata Anggaran Kegiatan<span
+                                        style="color:red;">*</span>
+                                </label>
+                                <select id="id_mak" type="text" class="form-control col-12 id_mak"
                                     name="id_mak">
-                                    <option value="{{ $perjalanan->id_mak }}">{{ $perjalanan->mak->kode_mak }} [Saldo Pagu : Rp.{{ number_format($perjalanan->mak->saldo_pagu, 0, ',', '.') }}]</option>
-                                    </select>
-                                </div>
+                                    <option value="{{ $perjalanan->id_mak }}">{{ $perjalanan->mak->kode_mak }} [Saldo
+                                        Pagu : Rp.{{ number_format($perjalanan->mak->saldo_pagu, 0, ',', '.') }}]
+                                    </option>
+                                </select>
                             </div>
                         </div>
-                        {{-- <div class="card-footer">
+                    </div>
+                    {{-- <div class="card-footer">
                             <button type="submit" class="btn btn-primary btn-sm">Simpan Update</button>
                         </div> --}}
-                    </div>
                 </div>
             </div>
+        </div>
         </form>
+        {{-- Kegiatan --}}
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -271,12 +279,13 @@
                         <div class="d-flex align-items-center">
                             <h4 class="card-title">Kegiatan</h4>
                             <a href="javascript:void(0)" class="btn btn-primary btn-round ml-auto"
-                                data-toggle="modal" data-target="#myModalKegiatan" id="addNewKegiatan" name="addNewKegiatan"><i class="fa fa-plus"></i> Tambah Kegiatan</a>
+                                data-toggle="modal" data-target="#myModalKegiatan" id="addNewKegiatan"
+                                name="addNewKegiatan"><i class="fa fa-plus"></i> Tambah Kegiatan</a>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="kegiatanTable" class="display table table-striped table-hover" >
+                            <table id="kegiatanTable" class="display table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -292,6 +301,7 @@
                 </div>
             </div>
         </div>
+        {{-- Tujuan --}}
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -299,17 +309,19 @@
                         <div class="d-flex align-items-center">
                             <h4 class="card-title">Informasi Tujuan</h4>
                             <a href="javascript:void(0)" class="btn btn-primary btn-round ml-auto"
-                                data-toggle="modal" data-target="#myModalTujuan" id="addNewTujuan" name="addNewTujuan"><i class="fa fa-plus"></i> Tambah</a>
+                                data-toggle="modal" data-target="#myModalTujuan" id="addNewTujuan"
+                                name="addNewTujuan"><i class="fa fa-plus"></i> Tambah</a>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="tujuanTable" class="display table table-striped table-hover" >
+                            <table id="tujuanTable" class="display table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>No</th>
                                         <th>Tempat Berangkat</th>
                                         <th>Tempat Tujuan</th>
+                                        <th>Kegiatan</th>
                                         <th>Tanggal Berangkat</th>
                                         <th>Tanggal Kembali</th>
                                         <th>Tanggal Tiba</th>
@@ -326,6 +338,7 @@
                 </div>
             </div>
         </div>
+        {{-- Data Staff --}}
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
@@ -333,12 +346,13 @@
                         <div class="d-flex align-items-center">
                             <h4 class="card-title">Staff Yang Ditugaskan</h4>
                             <a href="javascript:void(0)" class="btn btn-primary btn-round ml-auto"
-                                data-toggle="modal" data-target="#myModalStaff" id="addNewStaff" name="addNewTujuan"><i class="fa fa-plus"></i> Tambah</a>
+                                data-toggle="modal" data-target="#myModalStaff" id="addNewStaff"
+                                name="addNewStaff"><i class="fa fa-plus"></i> Tambah</a>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="staffTable" class="display table table-striped table-hover" >
+                            <table id="staffTable" class="display table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -348,6 +362,7 @@
                                         <th>Golongan</th>
                                         <th>Instansi</th>
                                         <th>Tujuan</th>
+                                        <th>Kegiatan</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -376,7 +391,7 @@
 </script>
 
 <script type="text/javascript">
-    $(function () {
+    $(function() {
         let request = {
             start: 0,
             length: 10
@@ -399,7 +414,7 @@
                 [10, 15, 25, 50, "All"]
             ],
             "ajax": {
-                "url": "{{ route('kegiatanById/getData' , ['id_perjalanan' => $perjalanan->id]) }}",
+                "url": "{{ route('kegiatanById/getData', ['id_perjalanan' => $perjalanan->id]) }}",
                 "type": "POST",
                 "headers": {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
@@ -446,7 +461,8 @@
                 },
             ]
         });
-        function reloadTable(){
+
+        function reloadTable() {
             kegiatanTable.ajax.reload(null, false); // Reload datatable ajaxSSSS
         }
 
@@ -584,11 +600,10 @@
         });
 
     });
-
 </script>
 
 <script type="text/javascript">
-    $(function () {
+    $(function() {
         let request = {
             start: 0,
             length: 10
@@ -611,7 +626,7 @@
                 [10, 15, 25, 50, "All"]
             ],
             "ajax": {
-                "url": "{{ route('tujuanById/getData' , ['id_perjalanan' => $perjalanan->id]) }}",
+                "url": "{{ route('tujuanById/getData', ['id_perjalanan' => $perjalanan->id]) }}",
                 "type": "POST",
                 "headers": {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
@@ -640,7 +655,7 @@
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        if (data && data.name) {
+                        if (data) {
                             return "<div class='text-wrap'>" + data.name + "</div>";
                         } else {
                             return "<div class='text-wrap'>-</div>";
@@ -660,11 +675,24 @@
                     },
                 },
                 {
+                    "data": "kegiatan",
+                    "width": '15%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        if (data && data.kegiatan) {
+                            return "<div class='text-wrap'>" + data.kegiatan + "</div>";
+                        } else {
+                            return "<div class='text-wrap'>-</div>";
+                        }
+                    },
+                },
+                {
                     "data": "tanggal_berangkat",
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + formatIndonesianDate(data) + "</div>";
+                        return "<div class='text-wrap'>" + formatIndonesianDate(data) +
+                        "</div>";
 
                     },
                 },
@@ -673,7 +701,8 @@
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + formatIndonesianDate(data) + "</div>";
+                        return "<div class='text-wrap'>" + formatIndonesianDate(data) +
+                        "</div>";
                     },
                 },
                 {
@@ -681,7 +710,8 @@
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + formatIndonesianDate(data) + "</div>";
+                        return "<div class='text-wrap'>" + formatIndonesianDate(data) +
+                        "</div>";
                     },
                 },
                 {
@@ -707,10 +737,54 @@
                 },
             ]
         });
-        function reloadTable(){
+
+        function reloadTable() {
             tujuanTable.ajax.reload(null, false); // Reload datatable ajax
             // window.location.reload(); // Reload the page
         }
+
+        $("#id_kegiatan_tujuan").select2({
+            theme: 'bootstrap',
+            width: '100%',
+            dropdownParent: $('#myModalTujuan'),
+            placeholder: "Pilih Kegiatan",
+            ajax: {
+                url: "{{ route('kegiatanById/getData', ['id_perjalanan' => $perjalanan->id]) }}",
+                dataType: 'json',
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                method: 'POST',
+                delay: 250,
+                destroy: true,
+                data: function(params) {
+                    var query = {
+                        searchkey: params.term || '',
+                        start: 0,
+                        length: 50
+                    }
+                    return JSON.stringify(query);
+                },
+                processResults: function(data) {
+                    var result = {
+                        results: [],
+                        more: false
+                    };
+                    if (data && data.data) {
+                        $.each(data.data, function() {
+                            result.results.push({
+                                id: this.id,
+                                text: this.kegiatan
+                            });
+                        })
+                    }
+                    return result;
+                },
+                cache: false
+            },
+        });
 
         $("#tempat_berangkat_id").select2({
             theme: 'bootstrap',
@@ -860,15 +934,23 @@
                     $('#tanggal_pulang').val(response.data.tanggal_pulang);
                     $('#tanggal_tiba').val(response.data.tanggal_tiba);
                     $('#lama_perjalanan').val(response.data.lama_perjalanan);
-                    $('#id').val(response.data.id);
+                    $('#id_tujuan').val(response.data.id);
+
+                    if (response.data.kegiatan) {
+                        var kegiatan = new Option(response.data.kegiatan.kegiatan,
+                            response.data.kegiatan.id, true, true);
+                        $('.id_kegiatan_tujuan').append(kegiatan).trigger('change');
+                    }
 
                     if (response.data.tempat_berangkat) {
-                        var berangkat = new Option(response.data.tempat_berangkat.name, response.data.tempat_berangkat.id, true, true);
+                        var berangkat = new Option(response.data.tempat_berangkat.name,
+                            response.data.tempat_berangkat.id, true, true);
                         $('.tempat_berangkat_id').append(berangkat).trigger('change');
                     }
 
                     if (response.data.tempat_tujuan) {
-                        var pulang = new Option(response.data.tempat_tujuan.name, response.data.tempat_tujuan.id, true, true);
+                        var pulang = new Option(response.data.tempat_tujuan.name, response
+                            .data.tempat_tujuan.id, true, true);
                         $('.tempat_tujuan_id').append(pulang).trigger('change');
                     }
                 },
@@ -974,6 +1056,36 @@
             isUpdate = false;
         });
 
+        $('#staffTable').on("click", ".btnStaffEdit", function() {
+            $('#myModalStaff').modal('show');
+            isUpdate = true;
+            var id = $(this).attr('data-id');
+            var url = "{{ route('tujuan/showStaff', ['id' => ':id']) }}";
+            url = url.replace(':id', id);
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function(response) {
+                    $('#id_staff').val(response.data.staff.nip);
+                    $('#nip_staff').val(response.data.staff.nip).trigger('change');
+                    $('#id_tujuan_perjalanan').val(response.data.id_tujuan_perjalanan).trigger('change');
+                    
+                    // if (response.data.staff) {
+                    //     var staff = new Option(response.data.staff.name, response
+                    //         .data.staff.nip, true, true);
+                    //     $('.nip_staff').append(staff).trigger('change');
+                    // }
+                },
+                error: function() {
+                    Swal.fire(
+                        'Error',
+                        'A system error has occurred. please try again later.',
+                        'error'
+                    )
+                },
+            });
+        });
+
         $('#tanggal_berangkat').flatpickr({
             dateFormat: "Y-m-d",
             //disable past date
@@ -991,18 +1103,18 @@
         });
 
         //make tangga_berangkat and tanggal_kembali to be total days without save data hasilnya berupa misal 2 hari
-        $('#tanggal_berangkat , #tanggal_pulang').change(function(){
+        $('#tanggal_berangkat , #tanggal_pulang').change(function() {
             var tanggal_berangkat = $('#tanggal_berangkat').val();
             var tanggal_kembali = $('#tanggal_pulang').val();
-			if(tanggal_berangkat != '' && tanggal_kembali != '') {
-				var date1 = new Date(tanggal_berangkat);
-				var date2 = new Date(tanggal_kembali);
-				var Difference_In_Time = date2.getTime() - date1.getTime();
-				var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24) + 1;
-				$('#lama_perjalanan').val(Difference_In_Days);
-			} else {
-				$('#lama_perjalanan').val('0');
-			}
+            if (tanggal_berangkat != '' && tanggal_kembali != '') {
+                var date1 = new Date(tanggal_berangkat);
+                var date2 = new Date(tanggal_kembali);
+                var Difference_In_Time = date2.getTime() - date1.getTime();
+                var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24) + 1;
+                $('#lama_perjalanan').val(Difference_In_Days);
+            } else {
+                $('#lama_perjalanan').val('0');
+            }
         });
 
         $("#id_mak").select2({
@@ -1036,10 +1148,12 @@
                     };
                     if (data && data.data) {
                         $.each(data.data, function() {
-                            var saldo = parseFloat(this.saldo_pagu).toLocaleString('id-ID'); // Format saldo_pagu
+                            var saldo = parseFloat(this.saldo_pagu).toLocaleString(
+                            'id-ID'); // Format saldo_pagu
                             result.results.push({
                                 id: this.id,
-                                text: this.kode_mak + ' - [Saldo = Rp. ' + saldo + ']'
+                                text: this.kode_mak + ' - [Saldo = Rp. ' + saldo +
+                                    ']'
                             });
                         })
                     }
@@ -1067,7 +1181,7 @@
                 [10, 15, 25, 50, "All"]
             ],
             "ajax": {
-                "url": "{{ route('staffById/getData' , ['id_perjalanan' => $perjalanan->id]) }}",
+                "url": "{{ route('staffById/getData', ['id_perjalanan' => $perjalanan->id]) }}",
                 "type": "POST",
                 "headers": {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
@@ -1104,13 +1218,13 @@
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        if(data == 0){
+                        if (data == 0) {
                             return "<div class='text-wrap'>PNS</div>";
-                        }else if(data == 1){
+                        } else if (data == 1) {
                             return "<div class='text-wrap'>Non PNS (PPPK)</div>";
-                        }else if(data == 2){
+                        } else if (data == 2) {
                             return "<div class='text-wrap'>Honorer</div>";
-                        }else{
+                        } else {
                             return "<div class='text-wrap'>Lainnya</div>";
                         }
                     },
@@ -1144,7 +1258,16 @@
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        return "<div class='text-wrap'>" + data[0].tempat_berangkat.name + " - " + data[0].tempat_tujuan.name + "</div>";
+                        return "<div class='text-wrap'>" + data[0].tempat_berangkat.name +
+                            " - " + data[0].tempat_tujuan.name + "</div>";
+                    },
+                },
+                {
+                    "data": "tujuan_perjalanan",
+                    "width": '15%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        return "<div class='text-wrap'>" + data[0].kegiatan.kegiatan + "</div>";
                     },
                 },
                 {
@@ -1171,12 +1294,5 @@
 
 
     });
-
 </script>
-
 @endpush
-
-
-
-
-

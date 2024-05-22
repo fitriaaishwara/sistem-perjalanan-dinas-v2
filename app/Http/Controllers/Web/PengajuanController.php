@@ -9,6 +9,7 @@ use App\Models\DataUangHarian;
 use App\Models\LogStatusPerjalanan;
 use App\Models\Perjalanan;
 use App\Models\PerjalananDinas;
+use App\Models\Province;
 use App\Models\Staff;
 use App\Models\Tujuan;
 use App\Models\UangHarian;
@@ -71,6 +72,7 @@ class PengajuanController extends Controller
         try {
             $data = ['status' => false, 'message' => 'Status failed to be found'];
             $data = Perjalanan::with(['data_staff_perjalanan', 'mak'])->findOrFail($id);
+            $dataTujuanAll = Tujuan::where('id_perjalanan', $id)->with('kegiatan', 'tempatBerangkat', 'tempatTujuan')->get();
             if ($data) {
                 $data = ['status' => true, 'message' => 'Status was successfully found', 'data' => $data];
             }
@@ -118,7 +120,7 @@ class PengajuanController extends Controller
             $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }
 
-        return view('pages.perjalanan.pengajuan.admin.edit', compact('data', 'perjalanan', 'staff'));
+        return view('pages.perjalanan.pengajuan.admin.edit', compact('data', 'perjalanan', 'staff', 'dataTujuanAll'));
 
     }
 
@@ -158,15 +160,15 @@ class PengajuanController extends Controller
         $staff->save();
 
         // Save data into Data_Kegiatan_Perjalanan table
-        $kegiatan = new DataKegiatan;
-        $kegiatan->id_perjalanan = $id_perjalanan;
-        $kegiatan->id_tujuan = $id_tujuan_perjalanan;
-        $kegiatan->nip_staff = $nip_staff;
-        $kegiatan->id_kegiatan = $request->id_kegiatan; // Assuming this field is coming from the request
-        $kegiatan->status = 1;
-        $kegiatan->created_by = Auth::id();
-        $kegiatan->updated_by = Auth::id();
-        $kegiatan->save();
+        // $kegiatan = new DataKegiatan;
+        // $kegiatan->id_perjalanan = $id_perjalanan;
+        // $kegiatan->id_tujuan = $id_tujuan_perjalanan;
+        // $kegiatan->nip_staff = $nip_staff;
+        // $kegiatan->id_kegiatan = $request->id_kegiatan; // Assuming this field is coming from the request
+        // $kegiatan->status = 1;
+        // $kegiatan->created_by = Auth::id();
+        // $kegiatan->updated_by = Auth::id();
+        // $kegiatan->save();
 
         return redirect()->back()->with('success', 'Data berhasil disimpan');
     }
@@ -174,21 +176,13 @@ class PengajuanController extends Controller
     public function createId($id)
     {
 
-        $perjalanan = Perjalanan::with('tujuan', 'mak', 'data_staff_perjalanan')->findOrFail($id);
-
+        $perjalanan = Perjalanan::with('mak', 'kegiatan.dataTujuan')->findOrFail($id);
+        $dataTujuan = Province::get();
+        $dataTujuanAll = Tujuan::where('id_perjalanan', $id)->with('kegiatan', 'tempatBerangkat', 'tempatTujuan')->get();
         $staff = Staff::where('status', 1)->get();
 
-        try {
-            $data = ['status' => false, 'message' => 'Status failed to be found'];
-            $data = Perjalanan::findOrFail($id);
-            if ($data) {
-                $data = ['status' => true, 'message' => 'Status was successfully found', 'data' => $data];
-            }
-        } catch (\Exception $ex) {
-            $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
-        }
-
-        return view('pages.perjalanan.pengajuan.admin.tujuan', compact('data', 'perjalanan', 'staff'));
+        // return response()->json($perjalanan);
+        return view('pages.perjalanan.pengajuan.admin.tujuan', compact('perjalanan', 'staff', 'dataTujuan', 'dataTujuanAll'));
     }
 
     public function getData(Request $request)
@@ -197,30 +191,31 @@ class PengajuanController extends Controller
         $userRole = Auth::user()->roles->pluck('name')[0];
 
         $data = Perjalanan::select()
-            ->with(['mak', 'tujuan', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'log_status_perjalanan', 'kegiatan', 'data_staff_perjalanan.staff', 'log_status_perjalanan.status_perjalanan'])
+            ->with(['mak','kegiatan.dataTujuan', 'kegiatan.dataTujuan.tempatBerangkat', 'kegiatan.dataTujuan.tempatTujuan', 'log_status_perjalanan',
+                    'kegiatan.dataTujuan.staff.staff', 'log_status_perjalanan.status_perjalanan'])
             ->whereDoesntHave('log_status_perjalanan', function ($query) {
                 $query->where('id_status_perjalanan', '5');
             })
-            ->where(function ($query) use ($keyword) {
-                $query->where('id', 'like', '%' . $keyword . '%')
-                    ->orWhereHas('mak', function ($query) use ($keyword) {
-                        $query->where('kode_mak', 'like', '%' . $keyword . '%');
-                    })
-                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
-                        $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
-                            $query->where('name', 'like', '%' . $keyword . '%');
-                        });
-                    })
-                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
-                        $query->where('tanggal_berangkat', 'like', '%' . $keyword . '%');
-                    })
-                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
-                        $query->where('tanggal_pulang', 'like', '%' . $keyword . '%');
-                    })
-                    ->orWhereHas('kegiatan', function ($query) use ($keyword) {
-                        $query->where('kegiatan', 'like', '%' . $keyword . '%');
-                    });
-            })
+            // ->where(function ($query) use ($keyword) {
+            //     $query->where('id', 'like', '%' . $keyword . '%')
+            //         ->orWhereHas('mak', function ($query) use ($keyword) {
+            //             $query->where('kode_mak', 'like', '%' . $keyword . '%');
+            //         })
+            //         ->orWhereHas('tujuan', function ($query) use ($keyword) {
+            //             $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
+            //                 $query->where('name', 'like', '%' . $keyword . '%');
+            //             });
+            //         })
+            //         ->orWhereHas('tujuan', function ($query) use ($keyword) {
+            //             $query->where('tanggal_berangkat', 'like', '%' . $keyword . '%');
+            //         })
+            //         ->orWhereHas('tujuan', function ($query) use ($keyword) {
+            //             $query->where('tanggal_pulang', 'like', '%' . $keyword . '%');
+            //         })
+            //         ->orWhereHas('kegiatan', function ($query) use ($keyword) {
+            //             $query->where('kegiatan', 'like', '%' . $keyword . '%');
+            //         });
+            // })
             ->where('status', 1);
 
         // If the user is not a super admin, filter data based on user's ID
@@ -242,13 +237,13 @@ class PengajuanController extends Controller
                     ->orWhereHas('mak', function ($query) use ($keyword) {
                         $query->where('kode_mak', 'like', '%' . $keyword . '%');
                     })
-                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
+                    ->orWhereHas('kegiatan.dataTujuan', function ($query) use ($keyword) {
                         $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
                             $query->where('name', 'like', '%' . $keyword . '%');
                         });
                     });
             })
-            ->where('status', true)
+            ->where('status', true) 
             ->count();
 
         $response = [

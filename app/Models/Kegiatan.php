@@ -27,6 +27,11 @@ class Kegiatan extends Model
         return $this->hasMany(DataKegiatan::class, 'id_kegiatan', 'id');
     }
 
+    public function dataTujuan()
+    {
+        return $this->hasMany(Tujuan::class, 'id_kegiatan', 'id');
+    }
+
     public function uploadLaporan()
     {
         return $this->hasMany(UploadLaporan::class, 'id_kegiatan', 'id');

@@ -83,7 +83,7 @@
                                                                             <th>Tanggal</th>
                                                                         </tr>
                                                                     </thead>
-                                                                    <tbody>
+                                                                    {{-- <tbody>
                                                                         @foreach ($value->DataKegiatan as $kegiatan)
                                                                         <tr>
                                                                             <th scope="row">1</th>
@@ -92,7 +92,7 @@
                                                                             <td>{{ tgl_indo($kegiatan->tujuan->tanggal_berangkat) }} - {{ tgl_indo($kegiatan->tujuan->tanggal_kembali) }}</td>
                                                                         </tr>
                                                                         @endforeach
-                                                                    </tbody>
+                                                                    </tbody> --}}
                                                                 </table>
                                                             </div>
                                                         </div>
@@ -113,7 +113,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="v-pills-profile-icons" role="tabpanel" aria-labelledby="v-pills-profile-tab-icons">
+                                    {{-- <div class="tab-pane fade" id="v-pills-profile-icons" role="tabpanel" aria-labelledby="v-pills-profile-tab-icons">
                                         @foreach ($perjalanan->tujuan-> where('id_perjalanan', $perjalanan->id) as $key => $value)
                                             <div class="card">
                                                 <div class="card-header collapsed" id="heading{{ $loop->iteration }}" data-toggle="collapse" data-target="#collapse{{ $loop->iteration }}" aria-expanded="true" aria-controls="collapse{{ $loop->iteration }}" role="button">
@@ -152,7 +152,7 @@
                                                 </div>
                                             </div>
                                             @endforeach
-                                    </div>
+                                    </div> --}}
                                     <div class="tab-pane fade  active show" id="v-pills-buy-icons" role="tabpanel" aria-labelledby="v-pills-buy-tab-icons">
                                         {{-- <h5 class="mt-3">Anggaran</h5> --}}
                                         {{-- <hr /> --}}

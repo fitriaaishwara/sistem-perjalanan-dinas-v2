@@ -3,23 +3,24 @@
 @section('title', 'Data Perjalanan')
 <style>
     .container {
-      overflow-x: auto;
-      white-space: nowrap;
+        overflow-x: auto;
+        white-space: nowrap;
     }
+
     table {
-      border-collapse: collapse;
-      width: 100%;
+        border-collapse: collapse;
+        width: 100%;
     }
-  </style>
+</style>
 
 
-<div id="myModal" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" >
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header border-0" id="myModalLabel">
                 <h5 class="modal-title">
                     <span class="fw-mediumbold">
-                    Form</span>
+                        Form</span>
                     <span class="fw-light">
                         Change Status
                     </span>
@@ -47,10 +48,9 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-dark waves-effect waves-light btn-sm" onclick="$('#myModal form').submit()"
-                    name="saveBtn">Save changes</button>
-                <button type="button" class="btn btn-secondary waves-effect btn-sm"
-                    data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-dark waves-effect waves-light btn-sm"
+                    onclick="$('#myModal form').submit()" name="saveBtn">Save changes</button>
+                <button type="button" class="btn btn-secondary waves-effect btn-sm" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -91,12 +91,11 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="myTable" class="display table table-striped table-hover" >
+                            <table id="myTable" class="display table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>MAK</th>
-                                        <th>Kegiatan</th>
-                                        <th>Tujuan</th>
+                                        <th>Tujuan / Kegiatan</th>
                                         <th>Tanggal Berangkat</th>
                                         <th>Tanggal Kembali</th>
                                         {{-- <th>Estimasi Biaya</th> --}}
@@ -116,11 +115,10 @@
 </div>
 @endsection
 @push('js')
-    <script type="text/javascript">
-
-    function rupiah($angka){
+<script type="text/javascript">
+    function rupiah($angka) {
         var reverse = $angka.toString().split('').reverse().join(''),
-        ribuan = reverse.match(/\d{1,3}/g);
+            ribuan = reverse.match(/\d{1,3}/g);
         ribuan = ribuan.join('.').split('').reverse().join('');
         return ribuan;
     }
@@ -166,118 +164,102 @@
                     return (request);
                 },
             },
-            "columns": [
-                    {
-                        "data": "mak",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            if (data && data.kode_mak) {
-                                return "<div class='text-wrap' style='font-size: 12px;'>" + data.kode_mak + "</div>";
-                            } else {
-                                return "<div class='text-wrap'>-</div>";
+            "columns": [{
+                    "data": "mak",
+                    "width": '10%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        if (data && data.kode_mak) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data
+                                .kode_mak + "</div>";
+                        } else {
+                            return "<div class='text-wrap'>-</div>";
+                        }
+                    }
+                },
+                {
+                    "data": "kegiatan",
+                    "width": '10%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        console.log(data);
+                        var tujuan = "";
+                        var angka = 1;
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].status === 1) {
+                                for (var j = 0; j < data[i].data_tujuan.length; j++) {
+                                    tujuan +=
+                                        "<div class='text-wrap' style='font-size: 12px;'>" +
+                                        angka + ". " + data[i].data_tujuan[j].tempat_tujuan.name + " / " + data[i].kegiatan +"</div>";
+                                    angka++;
+                                }
                             }
                         }
+                        return tujuan || "-";
+                    }
+                },
+                {
+                    "data": "kegiatan",
+                    "width": '10%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        console.log(data);
+                        var tujuan = "";
+                        var angka = 1;
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].status === 1) {
+                                for (var j = 0; j < data[i].data_tujuan.length; j++) {
+                                    tujuan +=
+                                        "<div class='text-wrap' style='font-size: 12px;'>" +
+                                        angka + ". " + formatIndonesianDate(data[i].data_tujuan[
+                                            j].tanggal_berangkat) + "</div>";
+                                    angka++;
+                                }
+                            }
+                        }
+                        return tujuan || "-";
+                    }
+                },
+                {
+                    "data": "kegiatan",
+                    "width": '10%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        console.log(data);
+                        var tujuan = "";
+                        var angka = 1;
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].status === 1) {
+                                for (var j = 0; j < data[i].data_tujuan.length; j++) {
+                                    tujuan +=
+                                        "<div class='text-wrap' style='font-size: 12px;'>" +
+                                        angka + ". " + formatIndonesianDate(data[i].data_tujuan[
+                                            j].tanggal_pulang) + "</div>";
+                                    angka++;
+                                }
+                            }
+                        }
+                        return tujuan || "-";
+                    }
+                },
+                // {
+                //     "data": "estimasi_biaya",
+                //     "width": '10%',
+                //     "defaultContent": "-",
+                //     render: function(data, type, row) {
+                //         //get the function formatRupiah on Helpers.php
+                //         return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data) + "</div>";
+                //     },
+                // },
+                {
+                    "data": "status_perjalanan",
+                    "width": '10%',
+                    "defaultContent": "-",
+                    render: function(data, type, row) {
+                        return "<div class='text-wrap' style='font-size: 12px;'>Active</div>";
                     },
-                    {
-                            "data": "kegiatan",
-                            "width": '10%',
-                            "defaultContent": "-",
-                            "render": function(data, type, row) {
-                                console.log(data);
-                                var kegiatan = "";
-                                var angka = 1;
-                                for (var i = 0; i < data.length; i++) {
-                                    if (data[i].status === 1) {
-                                        kegiatan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + data[i].kegiatan + "</div>";
-                                        angka++;
-                                    }
-                                }
-                                return kegiatan || "-";
-                            }
-                        },
-                    {
-                        "data": "tujuan",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            console.log(data);
-                            var tujuan = "";
-                            var angka = 1;
-                            for (var i = 0; i < data.length; i++) {
-                                if (data[i].status === 1) {
-                                tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + data[i].tempat_tujuan.name + "</div>";
-                                angka++;
-                                }
-                            }
-                            return tujuan;
-                            // if (data) {
-                            //     return "<div class='text-wrap'>" + data.tempat_tujuan + "</div>";
-                            // } else {
-                            //     return "<div class='text-wrap'>-</div>";
-                            // }
-                        }
-                        },
-                    {
-                        "data": "tujuan",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            var tujuan = "";
-                            var angka = 1;
-                            for (var i = 0; i < data.length; i++) {
-                                if (data[i].status === 1) {
-                                tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + formatIndonesianDate(data[i].tanggal_berangkat) + "</div>";
-                                angka++;
-                                }
-                            }
-                            return tujuan;
-                            // if (data && data.tanggal_berangkat) {
-                            //     return "<div class='text-wrap'>" + data.tanggal_berangkat + "</div>";
-                            // } else {
-                            //     return "<div class='text-wrap'>-</div>";
-                            // }
-                        }
-                    },
-                    {
-                        "data": "tujuan",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            var tujuan = "";
-                            var angka = 1;
-                            for (var i = 0; i < data.length; i++) {
-                                if (data[i].status === 1) {
-                                tujuan += "<div class='text-wrap' style='font-size: 12px;'>" + angka + ". " + formatIndonesianDate(data[i].tanggal_pulang) + "</div>";
-                                angka++;
-                                }
-                            }
-                            return tujuan;
-                            // if (data && data.tanggal_pulang) {
-                            //     return "<div class='text-wrap'>" + data.tanggal_pulang + "</div>";
-                            // } else {
-                            //     return "<div class='text-wrap'>-</div>";
-                            // }
-                        }
-                    },
-                    // {
-                    //     "data": "estimasi_biaya",
-                    //     "width": '10%',
-                    //     "defaultContent": "-",
-                    //     render: function(data, type, row) {
-                    //         //get the function formatRupiah on Helpers.php
-                    //         return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data) + "</div>";
-                    //     },
-                    // },
-                    {
-                        "data": "status_perjalanan",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>Active</div>";
-                        },
 
-                    },
+                },
                 {
                     "data": "id",
                     "width": '15%',
@@ -301,26 +283,26 @@
         }
 
         $('#myTable').on("click", ".btnStatus", function() {
-                isUpdate = true;
-                var id = $(this).attr('data-id');
-                var url = "{{ route('statusPerjalanan/show', ['id' => ':id']) }}";
-                url = url.replace(':id', id);
-                $.ajax({
-                    type: 'GET',
-                    url: url,
-                    success: function(response) {
-                        $('#id').val(response.data.id);
-                        $('#status').val(response.data.id_status_perjalanan);
-                        $('#myModal').modal('show');
-                    },
-                    error: function() {
-                        Swal.fire(
-                            'Error',
-                            'A system error has occurred. please try again later.',
-                            'error'
-                        )
-                    },
-                });
+            isUpdate = true;
+            var id = $(this).attr('data-id');
+            var url = "{{ route('statusPerjalanan/show', ['id' => ':id']) }}";
+            url = url.replace(':id', id);
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function(response) {
+                    $('#id').val(response.data.id);
+                    $('#status').val(response.data.id_status_perjalanan);
+                    $('#myModal').modal('show');
+                },
+                error: function() {
+                    Swal.fire(
+                        'Error',
+                        'A system error has occurred. please try again later.',
+                        'error'
+                    )
+                },
+            });
         });
 
         $('#myTable').on("click", ".btnDelete", function() {
@@ -366,12 +348,4 @@
         });
     });
 </script>
-
 @endpush
-
-
-
-
-
-
-

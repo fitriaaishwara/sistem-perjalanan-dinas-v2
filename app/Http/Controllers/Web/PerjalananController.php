@@ -44,31 +44,32 @@ class PerjalananController extends Controller
         $userRole = Auth::user()->roles->pluck('name')[0];
 
         $data = Perjalanan::select()
-            ->with('mak', 'tujuan.tempatTujuan', 'log_status_perjalanan', 'kegiatan', 'data_staff_perjalanan.staff')
-            ->whereHas('log_status_perjalanan', function ($query) {
+            ->with(['mak','kegiatan.dataTujuan', 'kegiatan.dataTujuan.tempatBerangkat', 'kegiatan.dataTujuan.tempatTujuan', 'log_status_perjalanan',
+                    'kegiatan.dataTujuan.staff.staff', 'log_status_perjalanan.status_perjalanan'])
+            ->whereDoesntHave('log_status_perjalanan', function ($query) {
                 $query->where('id_status_perjalanan', '5');
             })
-            ->where(function ($query) use ($keyword) {
-                $query->where('id', 'like', '%' . $keyword . '%')
-                    ->orWhereHas('mak', function ($query) use ($keyword) {
-                        $query->where('kode_mak', 'like', '%' . $keyword . '%');
-                    })
-                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
-                        $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
-                            $query->where('name', 'like', '%' . $keyword . '%');
-                        });
-                    })
-                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
-                        $query->where('tanggal_berangkat', 'like', '%' . $keyword . '%');
-                    })
-                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
-                        $query->where('tanggal_pulang', 'like', '%' . $keyword . '%');
-                    })
-                    ->orWhereHas('kegiatan', function ($query) use ($keyword) {
-                        $query->where('kegiatan', 'like', '%' . $keyword . '%');
-                    });
-            })
-            ->where('status', true);
+            // ->where(function ($query) use ($keyword) {
+            //     $query->where('id', 'like', '%' . $keyword . '%')
+            //         ->orWhereHas('mak', function ($query) use ($keyword) {
+            //             $query->where('kode_mak', 'like', '%' . $keyword . '%');
+            //         })
+            //         ->orWhereHas('tujuan', function ($query) use ($keyword) {
+            //             $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
+            //                 $query->where('name', 'like', '%' . $keyword . '%');
+            //             });
+            //         })
+            //         ->orWhereHas('tujuan', function ($query) use ($keyword) {
+            //             $query->where('tanggal_berangkat', 'like', '%' . $keyword . '%');
+            //         })
+            //         ->orWhereHas('tujuan', function ($query) use ($keyword) {
+            //             $query->where('tanggal_pulang', 'like', '%' . $keyword . '%');
+            //         })
+            //         ->orWhereHas('kegiatan', function ($query) use ($keyword) {
+            //             $query->where('kegiatan', 'like', '%' . $keyword . '%');
+            //         });
+            // })
+            ->where('status', 1);
 
         // If the user is not a super admin, filter data based on user's ID
         if ($userRole != 'Super Admin') {
@@ -78,34 +79,34 @@ class PerjalananController extends Controller
         }
 
         $data = $data->offset($request['start'])
-                    ->limit(($request['length'] == -1) ? Perjalanan::where('status', true)->count() : $request['length'])
-                    ->get();
+            ->limit(($request['length'] == -1) ? Perjalanan::where('status', true)->count() : $request['length'])
+            ->get();
 
-                    $dataCounter = Perjalanan::whereDoesntHave('log_status_perjalanan', function ($query) {
-                        $query->where('id_status_perjalanan', '5');
+        $dataCounter = Perjalanan::whereDoesntHave('log_status_perjalanan', function ($query) {
+            $query->where('id_status_perjalanan', '5');
+        })
+            ->where(function ($query) use ($keyword) {
+                $query->where('id', 'like', '%' . $keyword . '%')
+                    ->orWhereHas('mak', function ($query) use ($keyword) {
+                        $query->where('kode_mak', 'like', '%' . $keyword . '%');
                     })
-                        ->where(function ($query) use ($keyword) {
-                            $query->where('id', 'like', '%' . $keyword . '%')
-                                ->orWhereHas('mak', function ($query) use ($keyword) {
-                                    $query->where('kode_mak', 'like', '%' . $keyword . '%');
-                                })
-                                ->orWhereHas('tujuan', function ($query) use ($keyword) {
-                                    $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
-                                        $query->where('name', 'like', '%' . $keyword . '%');
-                                    });
-                                });
-                        })
-                        ->where('status', true)
-                        ->count();
+                    ->orWhereHas('kegiatan.dataTujuan', function ($query) use ($keyword) {
+                        $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
+                            $query->where('name', 'like', '%' . $keyword . '%');
+                        });
+                    });
+            })
+            ->where('status', true) 
+            ->count();
 
-                    $response = [
-                        'status'         => true,
-                        'draw'           => $request['draw'],
-                        'recordsTotal'   => Perjalanan::where('status', true)->count(),
-                        'recordsFiltered' => $dataCounter,
-                        'data'           => $data,
-                    ];
-                    return $response;
+        $response = [
+            'status'         => true,
+            'draw'           => $request['draw'],
+            'recordsTotal'   => Perjalanan::where('status', true)->count(),
+            'recordsFiltered' => $dataCounter,
+            'data'           => $data,
+        ];
+        return $response;
     }
 
     public function getDataRekap(Request $request)
@@ -145,34 +146,34 @@ class PerjalananController extends Controller
         }
 
         $data = $data->offset($request['start'])
-                    ->limit(($request['length'] == -1) ? Perjalanan::where('status', true)->count() : $request['length'])
-                    ->get();
+            ->limit(($request['length'] == -1) ? Perjalanan::where('status', true)->count() : $request['length'])
+            ->get();
 
-                    $dataCounter = Perjalanan::whereDoesntHave('log_status_perjalanan', function ($query) {
-                        $query->where('id_status_perjalanan', '5');
+        $dataCounter = Perjalanan::whereDoesntHave('log_status_perjalanan', function ($query) {
+            $query->where('id_status_perjalanan', '5');
+        })
+            ->where(function ($query) use ($keyword) {
+                $query->where('id', 'like', '%' . $keyword . '%')
+                    ->orWhereHas('mak', function ($query) use ($keyword) {
+                        $query->where('kode_mak', 'like', '%' . $keyword . '%');
                     })
-                        ->where(function ($query) use ($keyword) {
-                            $query->where('id', 'like', '%' . $keyword . '%')
-                                ->orWhereHas('mak', function ($query) use ($keyword) {
-                                    $query->where('kode_mak', 'like', '%' . $keyword . '%');
-                                })
-                                ->orWhereHas('tujuan', function ($query) use ($keyword) {
-                                    $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
-                                        $query->where('name', 'like', '%' . $keyword . '%');
-                                    });
-                                });
-                        })
-                        ->where('status', true)
-                        ->count();
+                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
+                        $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
+                            $query->where('name', 'like', '%' . $keyword . '%');
+                        });
+                    });
+            })
+            ->where('status', true)
+            ->count();
 
-                    $response = [
-                        'status'         => true,
-                        'draw'           => $request['draw'],
-                        'recordsTotal'   => Perjalanan::where('status', true)->count(),
-                        'recordsFiltered' => $dataCounter,
-                        'data'           => $data,
-                    ];
-                    return $response;
+        $response = [
+            'status'         => true,
+            'draw'           => $request['draw'],
+            'recordsTotal'   => Perjalanan::where('status', true)->count(),
+            'recordsFiltered' => $dataCounter,
+            'data'           => $data,
+        ];
+        return $response;
     }
 
     public function getDataProvinsi(Request $request)
@@ -196,11 +197,8 @@ class PerjalananController extends Controller
     }
 
     public function detail($id)
-{
-    $perjalanan = Perjalanan::with('mak', 'tujuan.tempatTujuan', 'tujuan.tempatBerangkat', 'log_status_perjalanan', 'kegiatan', 'data_staff_perjalanan.staff', 'DataKegiatan', 'tujuan')->find($id);
-
-    $kegiatan = Kegiatan::where('id_perjalanan', $id)->with('perjalanan.kegiatan')->get();
-
-    return view('pages.perjalanan.perjalanan.detail', compact('perjalanan', 'kegiatan'));
-}
+    {
+        $perjalanan = Perjalanan::with('mak', 'kegiatan.dataTujuan.staff')->find($id);
+        return view('pages.perjalanan.perjalanan.detail', compact('perjalanan'));
+    }
 }

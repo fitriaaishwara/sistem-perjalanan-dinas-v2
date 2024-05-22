@@ -13,7 +13,7 @@ class Tujuan extends Model
     protected $table = 'data_tujuan_perjalanan';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id_perjalanan', 'id_uang_harian','tempat_berangkat_id', 'tempat_tujuan_id', 'tanggal_berangkat', 'tanggal_pulang', 'tanggal_tiba', 'lama_perjalanan', 'status'
+        'id_kegiatan', 'id_perjalanan', 'id_uang_harian','tempat_berangkat_id', 'tempat_tujuan_id', 'tanggal_berangkat', 'tanggal_pulang', 'tanggal_tiba', 'lama_perjalanan', 'status'
     ];
 
     public function perjalanan()
@@ -59,6 +59,11 @@ class Tujuan extends Model
     public function DataKegiatan()
     {
         return $this->hasMany(DataKegiatan::class, 'id_tujuan', 'id');
+    }
+
+    public function kegiatan()
+    {
+        return $this->belongsTo(Kegiatan::class, 'id_kegiatan', 'id');
     }
 
 

@@ -58,7 +58,7 @@
                                         <th>Tujuan</th>
                                         <th>Tanggal</th>
                                         <th>Total Diterima</th>
-                                        <th>Total Biaya Perajalanan</th>
+                                        <th>Total Biaya Perjalanan</th>
                                         <th>Total Uang Harian</th>
                                         {{-- <th>Total Diterima</th> --}}
                                         <th>Tahun Anggaran</th>

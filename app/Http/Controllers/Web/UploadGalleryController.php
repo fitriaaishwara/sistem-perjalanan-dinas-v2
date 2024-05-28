@@ -25,55 +25,62 @@ class UploadGalleryController extends Controller
         $keyword = $request['searchkey'];
         $userRole = Auth::user()->roles->pluck('name')[0];
 
-        $query = Kegiatan::with(['perjalanan', 'perjalanan.data_staff_perjalanan.staff', 'perjalanan.tujuan.uploadGallery', 'perjalanan.tujuan.tempatTujuan', 'perjalanan.tujuan.tempatBerangkat', 'DataKegiatan.staff'])
+        $query = Tujuan::select()
+            ->with(['perjalanan', 'spt', 'staff.staff', 'tempatTujuan', 'perjalanan.kegiatan', 'perjalanan.data_staff_perjalanan.staff', 'kegiatan'])
             ->where('status', true);
 
         // If the user is not a super admin, filter data based on user's ID
         if ($userRole != 'Super Admin') {
-            $query->whereHas('perjalanan.data_staff_perjalanan.staff', function ($query) {
+            $query->whereHas('staff.staff', function ($query) {
                 $query->where('id_user', Auth::id());
             });
         }
 
         if ($keyword) {
             $query->where(function ($query) use ($keyword) {
-                $query->where('kegiatan', 'like', '%' . $keyword . '%')
+                $query->whereHas('perjalanan', function ($query) use ($keyword) {
+                    $query->whereHas('data_staff_perjalanan', function ($query) use ($keyword) {
+                        $query->whereHas('staff', function ($query) use ($keyword) {
+                            $query->where('name', 'like', '%' . $keyword . '%');
+                        });
+                    });
+                })
                     ->orWhereHas('perjalanan', function ($query) use ($keyword) {
-                        $query->whereHas('tujuan', function ($query) use ($keyword) {
-                            $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
-                                $query->where('name', 'like', '%' . $keyword . '%');
+                        $query->whereHas('data_staff_perjalanan', function ($query) use ($keyword) {
+                            $query->whereHas('staff', function ($query) use ($keyword) {
+                                $query->where('nip', 'like', '%' . $keyword . '%');
                             });
                         });
                     })
                     ->orWhereHas('perjalanan', function ($query) use ($keyword) {
-                        $query->whereHas('tujuan', function ($query) use ($keyword) {
-                            $query->where('tanggal_berangkat', 'like', '%' . $keyword . '%');
+                        $query->whereHas('mak', function ($query) use ($keyword) {
+                            $query->where('kode_mak', 'like', '%' . $keyword . '%');
                         });
                     })
                     ->orWhereHas('perjalanan', function ($query) use ($keyword) {
-                        $query->whereHas('tujuan', function ($query) use ($keyword) {
-                            $query->where('tanggal_pulang', 'like', '%' . $keyword . '%');
+                        $query->whereHas('kegiatan', function ($query) use ($keyword) {
+                            $query->where('kegiatan', 'like', '%' . $keyword . '%');
                         });
                     })
-                    ->orWhereHas('DataKegiatan', function ($query) use ($keyword) {
-                        $query->whereHas('staff', function ($query) use ($keyword) {
-                                $query->where('name', 'like', '%' . $keyword . '%');
-
-                        });
+                    ->orWhereHas('tempatTujuan', function ($query) use ($keyword) {
+                        $query->where('name', 'like', '%' . $keyword . '%');
+                    })
+                    ->orWhereHas('spt', function ($query) use ($keyword) {
+                        $query->where('nomor_spt', 'like', '%' . $keyword . '%');
                     });
             });
         }
 
-        $data = $query->offset($request['start'])
-            ->limit(($request['length'] == -1) ? Kegiatan::where('status', true)->count() : $request['length'])
+        $data = $query->offset($request->input('start'))
+            ->limit(($request->input('length') == -1) ? Tujuan::where('status', true)->count() : $request->input('length'))
             ->get();
 
         $dataCounter = $query->count();
 
         $response = [
             'status'          => true,
-            'draw'            => $request['draw'],
-            'recordsTotal'    => Kegiatan::where('status', true)->count(),
+            'draw'            => $request->input('draw'),
+            'recordsTotal'    => Tujuan::where('status', true)->count(),
             'recordsFiltered' => $dataCounter,
             'data'            => $data,
         ];

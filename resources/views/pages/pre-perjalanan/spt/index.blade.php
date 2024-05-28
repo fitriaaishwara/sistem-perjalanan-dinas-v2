@@ -4,14 +4,15 @@
 
 <style>
     .container {
-      overflow-x: auto;
-      white-space: nowrap;
+        overflow-x: auto;
+        white-space: nowrap;
     }
+
     table {
-      border-collapse: collapse;
-      width: 100%;
+        border-collapse: collapse;
+        width: 100%;
     }
-  </style>
+</style>
 
 
 <div class="container">
@@ -49,13 +50,13 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="myTable" class="display table table-striped table-hover" >
+                            <table id="myTable" class="display table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>Nomor SPT</th>
                                         <th>Diperintahkan Kepada</th>
-                                        <th>Maksud Perjalanan / Kegiatan</th>
-                                        <th>Tujuan</th>
+                                        <th>Tujuan Perjalanan / Kegiatan</th>
+                                        {{-- <th>Tujuan</th> --}}
                                         <th>Jangka Waktu</th>
                                         <th>Dikeluarkan</th>
                                         <th>Action</th>
@@ -73,8 +74,7 @@
 </div>
 @endsection
 @push('js')
-    <script type="text/javascript">
-
+<script type="text/javascript">
     $(function() {
         let request = {
             start: 0,
@@ -116,63 +116,61 @@
                     return (request);
                 },
             },
-            "columns": [
-                {
+            "columns": [{
                     "data": "spt",
                     "width": '20%',
                     "defaultContent": "-",
                     "render": function(data, type, row) {
                         if (data && data.length > 0) {
-                            return "<div class='text-wrap badge badge-success'>" + data[0].nomor_spt + "</div>";
+                            return "<div class='text-wrap badge badge-success'>" + data[0]
+                                .nomor_spt + "</div>";
                         } else {
                             return "<div class='text-wrap badge badge-danger'>Belum ada berkas</div>";
                         }
                     }
                 },
                 {
-                    "data": "data_kegiatan",
-                    "width": '15%',
+                    "data": "staff",
+                    "width": '10%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        var result = "<div class='text-wrap' style='font-size: 12px;'>";
-                        $.each(data, function(index, value) {
-                            result += (index + 1) + ". " + value.staff.name + "<br>";
-                        });
-                        result += "</div>";
-                        return result;
+                        var staff = "";
+                        var angka = 1;
+                        if (data) {
+                            for (var j = 0; j < data.length; j++) {
+                                staff +=
+                                    "<div class='text-wrap' style='font-size: 12px;'>" +
+                                    angka + ". " + data[j].staff.name + "</div>";
+                                angka++;
+                            }
+                        }
+
+                        return staff || "-";
                     }
                 },
                 {
-                    "data": "kegiatan",
+                    "data": null,
                     "width": '15%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
                         if (data) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data
+                                .tempat_tujuan.name + ' / ' + data.kegiatan.kegiatan + "</div>";
                         } else {
                             return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
                         }
                     }
                 },
+
                 {
-                    "data": "perjalanan.tujuan",
-                    "width": '15%',
-                    "defaultContent": "-",
-                    render: function(data, type, row) {
-                        if (data && data.length > 0) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + data[0].tempat_tujuan.name + "</div>";
-                        } else {
-                            return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
-                        }
-                    }
-                },
-                {
-                    "data": "perjalanan.tujuan",
+                    "data": null,
                     "width": '10%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        if (data && data.length > 0) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + formatIndonesianDate(data[0].tanggal_berangkat) + " s/d " + formatIndonesianDate(data[0].tanggal_pulang) + "</div>";
+                        if (data) {
+                            return "<div class='text-wrap' style='font-size: 12px;'>" +
+                                formatIndonesianDate(data.tanggal_berangkat) + " s/d " +
+                                formatIndonesianDate(data.tanggal_pulang) + "</div>";
                         } else {
                             return "<div class='text-wrap' style='font-size: 12px;'> - </div>";
                         }
@@ -182,35 +180,33 @@
                     "data": "id",
                     "width": '15%',
                     "defaultContent": "-",
-                     //render date format
+                    //render date format
                     render: function(data, type, row) {
                         if (data == "" || data == null) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + moment(data).format('DD MMM YYYY') + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + moment(
+                                data).format('DD MMM YYYY') + "</div>";
                         } else {
                             return "<div class='text-wrap' style='font-size: 12px;'>Belum Diterbitkan</div>";
                         }
                     }
                 },
                 {
-                    "data": "id",
+                    "data": null,
                     "width": '15%',
                     render: function(data, type, row) {
                         var btnTambah = "";
                         var btnDetail = "";
                         var btnEdit = "";
 
-                        if (row.perjalanan.tujuan.length > 0) {
-                            row.perjalanan.tujuan.forEach(function(tujuan) {
-                                if (!tujuan.spt || tujuan.spt.length === 0) {
-                                    btnTambah += '<a href="/surat-perintah-tugas/create/' + tujuan.id +
-                                        '" name="btnTambah" data-id="' + tujuan.id +
-                                        '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
-                                } else {
-                                    btnDetail += '<a href="/surat-perintah-tugas/' + tujuan.id +
-                                        '" name="btnDetail" data-id="' + tujuan.id +
-                                        '" type="button" class="btn btn-warning btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-bookmark"></i></a>';
-                                }
-                            });
+
+                        if (!data.spt || data.spt.length === 0) {
+                            btnTambah += '<a href="/surat-perintah-tugas/create/' + data.id +
+                                '" name="btnTambah" data-id="' + data.id +
+                                '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
+                        } else {
+                            btnDetail += '<a href="/surat-perintah-tugas/' + data.id +
+                                '" name="btnDetail" data-id="' + data.id +
+                                '" type="button" class="btn btn-warning btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-bookmark"></i></a>';
                         }
 
                         console.log(row);
@@ -225,26 +221,26 @@
         }
 
         $('#myTable').on("click", ".btnStatus", function() {
-                isUpdate = true;
-                var id = $(this).attr('data-id');
-                var url = "{{ route('statusPerjalanan/show', ['id' => ':id']) }}";
-                url = url.replace(':id', id);
-                $.ajax({
-                    type: 'GET',
-                    url: url,
-                    success: function(response) {
-                        $('#id').val(response.data.id);
-                        $('#status').val(response.data.id_status_perjalanan);
-                        $('#myModal').modal('show');
-                    },
-                    error: function() {
-                        Swal.fire(
-                            'Error',
-                            'A system error has occurred. please try again later.',
-                            'error'
-                        )
-                    },
-                });
+            isUpdate = true;
+            var id = $(this).attr('data-id');
+            var url = "{{ route('statusPerjalanan/show', ['id' => ':id']) }}";
+            url = url.replace(':id', id);
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function(response) {
+                    $('#id').val(response.data.id);
+                    $('#status').val(response.data.id_status_perjalanan);
+                    $('#myModal').modal('show');
+                },
+                error: function() {
+                    Swal.fire(
+                        'Error',
+                        'A system error has occurred. please try again later.',
+                        'error'
+                    )
+                },
+            });
         });
 
         $('#myTable').on("click", ".btnDelete", function() {
@@ -290,12 +286,4 @@
         });
     });
 </script>
-
 @endpush
-
-
-
-
-
-
-

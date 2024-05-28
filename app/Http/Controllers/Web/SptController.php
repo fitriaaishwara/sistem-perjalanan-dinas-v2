@@ -29,7 +29,7 @@ class SptController extends Controller
         $userRole = Auth::user()->roles->pluck('name')[0];
 
         $query = Tujuan::select()
-            ->with(['perjalanan', 'spt', 'staff', 'staff.staff', 'tempatTujuan', 'perjalanan.kegiatan', 'perjalanan.data_staff_perjalanan.staff'])
+            ->with(['perjalanan', 'spt', 'staff.staff', 'tempatTujuan', 'perjalanan.kegiatan', 'perjalanan.data_staff_perjalanan.staff', 'kegiatan'])
             ->where('status', true);
 
         // If the user is not a super admin, filter data based on user's ID

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Kegiatan;
+use App\Models\Tujuan;
 use App\Models\UploadLaporan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -23,47 +24,62 @@ class UploadLaporanController extends Controller
         $keyword = $request['searchkey'];
         $userRole = Auth::user()->roles->pluck('name')[0];
 
-        $query = Kegiatan::with(['perjalanan', 'perjalanan.data_staff_perjalanan.staff', 'uploadLaporan', 'perjalanan.tujuan.tempatTujuan', 'perjalanan.tujuan.tempatBerangkat', 'DataKegiatan.staff'])
+        $query = Tujuan::select()
+            ->with(['perjalanan', 'spt', 'staff.staff', 'tempatTujuan', 'perjalanan.kegiatan', 'perjalanan.data_staff_perjalanan.staff', 'kegiatan'])
             ->where('status', true);
 
         // If the user is not a super admin, filter data based on user's ID
         if ($userRole != 'Super Admin') {
-            $query->whereHas('perjalanan.data_staff_perjalanan.staff', function ($query) {
+            $query->whereHas('staff.staff', function ($query) {
                 $query->where('id_user', Auth::id());
             });
         }
 
         if ($keyword) {
             $query->where(function ($query) use ($keyword) {
-                $query->where('kegiatan', 'like', '%' . $keyword . '%')
-                    ->orWhereHas('perjalanan.tujuan.tempatTujuan', function ($query) use ($keyword) {
+                $query->whereHas('perjalanan', function ($query) use ($keyword) {
+                    $query->whereHas('data_staff_perjalanan', function ($query) use ($keyword) {
+                        $query->whereHas('staff', function ($query) use ($keyword) {
+                            $query->where('name', 'like', '%' . $keyword . '%');
+                        });
+                    });
+                })
+                    ->orWhereHas('perjalanan', function ($query) use ($keyword) {
+                        $query->whereHas('data_staff_perjalanan', function ($query) use ($keyword) {
+                            $query->whereHas('staff', function ($query) use ($keyword) {
+                                $query->where('nip', 'like', '%' . $keyword . '%');
+                            });
+                        });
+                    })
+                    ->orWhereHas('perjalanan', function ($query) use ($keyword) {
+                        $query->whereHas('mak', function ($query) use ($keyword) {
+                            $query->where('kode_mak', 'like', '%' . $keyword . '%');
+                        });
+                    })
+                    ->orWhereHas('perjalanan', function ($query) use ($keyword) {
+                        $query->whereHas('kegiatan', function ($query) use ($keyword) {
+                            $query->where('kegiatan', 'like', '%' . $keyword . '%');
+                        });
+                    })
+                    ->orWhereHas('tempatTujuan', function ($query) use ($keyword) {
                         $query->where('name', 'like', '%' . $keyword . '%');
                     })
-                    ->orWhereHas('perjalanan.tujuan.tempatBerangkat', function ($query) use ($keyword) {
-                        $query->where('tanggal_berangkat', 'like', '%' . $keyword . '%');
-                    })
-                    ->orWhereHas('perjalanan.tujuan.tempatBerangkat', function ($query) use ($keyword) {
-                        $query->where('tanggal_pulang', 'like', '%' . $keyword . '%');
-                    })
-
-                    ->orWhereHas('DataKegiatan', function ($query) use ($keyword) {
-                        $query->whereHas('staff', function ($query) use ($keyword) {
-                                $query->where('name', 'like', '%' . $keyword . '%');
-                        });
+                    ->orWhereHas('spt', function ($query) use ($keyword) {
+                        $query->where('nomor_spt', 'like', '%' . $keyword . '%');
                     });
             });
         }
 
-        $data = $query->offset($request['start'])
-            ->limit(($request['length'] == -1) ? Kegiatan::where('status', true)->count() : $request['length'])
+        $data = $query->offset($request->input('start'))
+            ->limit(($request->input('length') == -1) ? Tujuan::where('status', true)->count() : $request->input('length'))
             ->get();
 
         $dataCounter = $query->count();
 
         $response = [
             'status'          => true,
-            'draw'            => $request['draw'],
-            'recordsTotal'    => Kegiatan::where('status', true)->count(),
+            'draw'            => $request->input('draw'),
+            'recordsTotal'    => Tujuan::where('status', true)->count(),
             'recordsFiltered' => $dataCounter,
             'data'            => $data,
         ];
@@ -71,7 +87,7 @@ class UploadLaporanController extends Controller
         return $response;
     }
 
-    public function store (Request $request)
+    public function store(Request $request)
     {
         try {
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Data failed to update'];
@@ -103,7 +119,6 @@ class UploadLaporanController extends Controller
             if ($create) {
                 $data = ['status' => true, 'code' => 'SC001', 'message' => 'Laporan successfully created'];
             }
-
         } catch (\Exception $ex) {
             $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. Please try again later. ' . $ex];
         }
@@ -139,21 +154,19 @@ class UploadLaporanController extends Controller
         return $data;
     }
 
-   //download file
-   public function downloadFile($id)
-   {
-       $data = UploadLaporan::findOrFail($id);
-       $path = 'laporan' . DIRECTORY_SEPARATOR . $data->id_kegiatan . DIRECTORY_SEPARATOR;
-       $fileName = $data->path_file;
-       $filePath = 'app' . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . $path . $fileName;
+    //download file
+    public function downloadFile($id)
+    {
+        $data = UploadLaporan::findOrFail($id);
+        $path = 'laporan' . DIRECTORY_SEPARATOR . $data->id_kegiatan . DIRECTORY_SEPARATOR;
+        $fileName = $data->path_file;
+        $filePath = 'app' . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . $path . $fileName;
 
-       $path = storage_path($filePath);
+        $path = storage_path($filePath);
 
-       return \Response::make(file_get_contents($path), 200, [
-           'Content-Type' => 'application/pdf',
-           'Content-Disposition' => 'inline; filename="'.$fileName.'"'
-       ]);
-   }
-
-
+        return \Response::make(file_get_contents($path), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="' . $fileName . '"'
+        ]);
+    }
 }

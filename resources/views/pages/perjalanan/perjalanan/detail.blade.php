@@ -1,67 +1,79 @@
 @extends('pages.layouts.master')
 @section('content')
 @section('title', 'Detail Perjalanan')
-    <div class="container">
-        <div class="page-inner">
-            <div class="page-header">
-                <h4 class="page-title">Detail Perjalanan</h4>
-                <ul class="breadcrumbs">
-                    <li class="nav-home">
-                        <a href="#">
-                            <i class="flaticon-home"></i>
-                        </a>
-                    </li>
-                    <li class="separator">
-                        <i class="flaticon-right-arrow"></i>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#">Perjalanan</a>
-                    </li>
-                    <li class="separator">
-                        <i class="flaticon-right-arrow"></i>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#">Detail Perjalanan</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card card-space">
-                        <div class="card-header">
-                            <h4 class="card-title">FAQ Example</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-12 col-md-3">
-                                    <div class="nav flex-column nav-pills nav-secondary nav-pills-no-bd nav-pills-icons" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                                        <a class="nav-link active show" id="v-pills-buy-tab-icons" data-toggle="pill" href="#v-pills-buy-icons" role="tab" aria-controls="v-pills-buy-icons" aria-selected="false">
-                                            <i class="flaticon-cart"></i>
-                                            Anggaran
-                                        </a>
-                                        <a class="nav-link" id="v-pills-profile-tab-icons" data-toggle="pill" href="#v-pills-profile-icons" role="tab" aria-controls="v-pills-profile-icons" aria-selected="false">
-                                            <i class="flaticon-user-4"></i>
-                                            Tujuan
-                                        </a>
-                                        <a class="nav-link" id="v-pills-home-tab-icons" data-toggle="pill" href="#v-pills-home-icons" role="tab" aria-controls="v-pills-home-icons" aria-selected="true">
-                                            <i class="flaticon-round"></i>
-                                            Kegiatan
-                                        </a>
+<div class="container">
+    <div class="page-inner">
+        <div class="page-header">
+            <h4 class="page-title">Detail Perjalanan</h4>
+            <ul class="breadcrumbs">
+                <li class="nav-home">
+                    <a href="#">
+                        <i class="flaticon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">Perjalanan</a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">Detail Perjalanan</a>
+                </li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-space">
+                    <div class="card-header">
+                        <h4 class="card-title">FAQ Example</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 col-md-3">
+                                <div class="nav flex-column nav-pills nav-secondary nav-pills-no-bd nav-pills-icons"
+                                    id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                    <a class="nav-link active show" id="v-pills-buy-tab-icons" data-toggle="pill"
+                                        href="#v-pills-buy-icons" role="tab" aria-controls="v-pills-buy-icons"
+                                        aria-selected="false">
+                                        <i class="flaticon-cart"></i>
+                                        Anggaran
+                                    </a>
+                                    <a class="nav-link" id="v-pills-profile-tab-icons" data-toggle="pill"
+                                        href="#v-pills-profile-icons" role="tab"
+                                        aria-controls="v-pills-profile-icons" aria-selected="false">
+                                        <i class="flaticon-user-4"></i>
+                                        Tujuan
+                                    </a>
+                                    <a class="nav-link" id="v-pills-home-tab-icons" data-toggle="pill"
+                                        href="#v-pills-home-icons" role="tab" aria-controls="v-pills-home-icons"
+                                        aria-selected="true">
+                                        <i class="flaticon-round"></i>
+                                        Kegiatan
+                                    </a>
 
 
-                                        {{-- <a class="nav-link" id="v-pills-quality-tab-icons" data-toggle="pill" href="#v-pills-quality-icons" role="tab" aria-controls="v-pills-quality-icons" aria-selected="false">
+                                    {{-- <a class="nav-link" id="v-pills-quality-tab-icons" data-toggle="pill" href="#v-pills-quality-icons" role="tab" aria-controls="v-pills-quality-icons" aria-selected="false">
                                             <i class="flaticon-hands"></i>
                                             Quality
                                         </a> --}}
-                                    </div>
                                 </div>
-                                <div class="col-12 col-md-9">
-                                    <div class="tab-content" id="v-pills-tabContent">
-                                        <div class="tab-pane fade" id="v-pills-home-icons" role="tabpanel" aria-labelledby="v-pills-home-tab-icons">
-                                            <div class="accordion accordion-secondary">
-                                                @foreach ($perjalanan->kegiatan-> where('status', '1') as $key => $value)
+                            </div>
+                            <div class="col-12 col-md-9">
+                                <div class="tab-content" id="v-pills-tabContent">
+                                    <div class="tab-pane fade" id="v-pills-home-icons" role="tabpanel"
+                                        aria-labelledby="v-pills-home-tab-icons">
+                                        <div class="accordion accordion-secondary">
+                                            @foreach ($perjalanan->kegiatan->where('status', '1') as $key => $value)
                                                 <div class="card">
-                                                    <div class="card-header collapsed" id="heading{{ $loop->iteration }}" data-toggle="collapse" data-target="#collapse{{ $loop->iteration }}" aria-expanded="true" aria-controls="collapse{{ $loop->iteration }}" role="button">
+                                                    <div class="card-header collapsed"
+                                                        id="heading{{ $loop->iteration }}" data-toggle="collapse"
+                                                        data-target="#collapse{{ $loop->iteration }}"
+                                                        aria-expanded="true"
+                                                        aria-controls="collapse{{ $loop->iteration }}" role="button">
                                                         <div class="span-icon">
                                                             <div class="flaticon-box-1"></div>
                                                         </div>
@@ -71,7 +83,9 @@
                                                         <div class="span-mode"></div>
                                                     </div>
 
-                                                    <div id="collapse{{ $loop->iteration }}" class="collapse" aria-labelledby="heading{{ $loop->iteration }}" data-parent="#accordion">
+                                                    <div id="collapse{{ $loop->iteration }}" class="collapse"
+                                                        aria-labelledby="heading{{ $loop->iteration }}"
+                                                        data-parent="#accordion">
                                                         <div class="card-body">
                                                             <div class="table-responsive">
                                                                 <table class="table table-bordered">
@@ -83,38 +97,49 @@
                                                                             <th>Tanggal</th>
                                                                         </tr>
                                                                     </thead>
-                                                                    {{-- <tbody>
-                                                                        @foreach ($value->DataKegiatan as $kegiatan)
-                                                                        <tr>
-                                                                            <th scope="row">1</th>
-                                                                            <td>{{ $kegiatan->staff->name }}</td>
-                                                                            <td>{{ $kegiatan->tujuan->tempatBerangkat->name }} - {{ $kegiatan->tujuan->tempatTujuan->name }}</td>
-                                                                            <td>{{ tgl_indo($kegiatan->tujuan->tanggal_berangkat) }} - {{ tgl_indo($kegiatan->tujuan->tanggal_kembali) }}</td>
-                                                                        </tr>
+                                                                    <tbody>
+                                                                        @foreach ($value->dataTujuan as $tujuan)
+                                                                            @foreach ($tujuan->staff as $staff)
+                                                                                <tr>
+                                                                                    <th scope="row">1</th>
+                                                                                    <td>{{ $staff->staff->name }}
+                                                                                    </td>
+                                                                                    <td>{{ $tujuan->tempatBerangkat->name }}
+                                                                                        -
+                                                                                        {{ $tujuan->tempatTujuan->name }}
+                                                                                    </td>
+                                                                                    <td>{{ tgl_indo($tujuan->tanggal_berangkat) }}
+                                                                                        -
+                                                                                        {{ tgl_indo($tujuan->tanggal_kembali) }}
+                                                                                    </td>
+                                                                                </tr>
+                                                                            @endforeach
                                                                         @endforeach
-                                                                    </tbody> --}}
+                                                                    </tbody>
                                                                 </table>
                                                             </div>
                                                         </div>
                                                     </div>
 
                                                 </div>
-                                                @endforeach
-                                                <div class="card" type="hidden">
-                                                    <div class="card-header " id="headingTwo"
-                                                    data-toggle="collapse" data-target="#collapse" aria-expanded="false" aria-controls="collapseTwo" role="button">
+                                            @endforeach
+                                            <div class="card" type="hidden">
+                                                <div class="card-header " id="headingTwo" data-toggle="collapse"
+                                                    data-target="#collapse" aria-expanded="false"
+                                                    aria-controls="collapseTwo" role="button">
                                                     <div class="span-title">
                                                     </div>
 
                                                 </div>
-                                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                                                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                                                    data-parent="#accordion">
 
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     {{-- <div class="tab-pane fade" id="v-pills-profile-icons" role="tabpanel" aria-labelledby="v-pills-profile-tab-icons">
-                                        @foreach ($perjalanan->tujuan-> where('id_perjalanan', $perjalanan->id) as $key => $value)
+                                        @foreach ($perjalanan->tujuan->where('id_perjalanan', $perjalanan->id) as $key => $value)
                                             <div class="card">
                                                 <div class="card-header collapsed" id="heading{{ $loop->iteration }}" data-toggle="collapse" data-target="#collapse{{ $loop->iteration }}" aria-expanded="true" aria-controls="collapse{{ $loop->iteration }}" role="button">
                                                     <div class="span-icon">
@@ -153,7 +178,8 @@
                                             </div>
                                             @endforeach
                                     </div> --}}
-                                    <div class="tab-pane fade  active show" id="v-pills-buy-icons" role="tabpanel" aria-labelledby="v-pills-buy-tab-icons">
+                                    <div class="tab-pane fade  active show" id="v-pills-buy-icons" role="tabpanel"
+                                        aria-labelledby="v-pills-buy-tab-icons">
                                         {{-- <h5 class="mt-3">Anggaran</h5> --}}
                                         {{-- <hr /> --}}
                                         <p>Kode Mak :</p>
@@ -224,4 +250,3 @@
         </div>
     </div>
 @endsection
-

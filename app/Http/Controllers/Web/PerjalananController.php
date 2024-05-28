@@ -198,7 +198,8 @@ class PerjalananController extends Controller
 
     public function detail($id)
     {
-        $perjalanan = Perjalanan::with('mak', 'kegiatan.dataTujuan.staff')->find($id);
+        $perjalanan = Perjalanan::with('mak', 'kegiatan.dataTujuan.staff.staff')->find($id);
+        // return response()->json($perjalanan);
         return view('pages.perjalanan.perjalanan.detail', compact('perjalanan'));
     }
 }

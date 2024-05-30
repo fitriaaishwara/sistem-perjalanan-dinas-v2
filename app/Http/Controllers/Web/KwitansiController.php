@@ -30,6 +30,9 @@ class KwitansiController extends Controller
 
         $query = DataStaffPerjalanan::query()
             ->with('staff', 'perjalanan', 'perjalanan.mak', 'tujuan_perjalanan.tempatTujuan', 'tujuan_perjalanan.uangHarian', 'spd', 'kwitansi', 'transportasi_berangkat', 'transportasi_pulang', 'akomodasi_hotel', 'perjalanan.kegiatan')
+            ->whereHas('perjalanan.status_perjalanan', function ($query) {
+                $query->where('id_status', '=', '2');
+            })
             ->where('status', true);
 
         // Check if user is not a super admin
@@ -101,7 +104,7 @@ class KwitansiController extends Controller
     {
 
         $staff  = Staff::where('status', true)->get();
-        $dataStaff = DataStaffPerjalanan::with(['staff', 'perjalanan.mak', 'tujuan_perjalanan'])->find($id);
+        $dataStaff = DataStaffPerjalanan::with(['staff', 'perjalanan.mak', 'tujuan_perjalanan', 'tujuan_perjalanan.uangHarian','tujuan_perjalanan.kegiatan'])->find($id);
         // dd($dataStaff);
 
         //if nomor_spd is null, then sowing alert
@@ -190,7 +193,7 @@ class KwitansiController extends Controller
         // }
 
         // $kwitansi = Kwitansi::with(['dataStaffPerjalanan.staff', 'dataStaffPerjalanan.perjalanan.mak', 'dataStaffPerjalanan.tujuan_perjalanan', 'bendahara', 'pejabatPembuatKomitmen', 'dataStaffPerjalanan.spd'])->find($id);
-        $kwitansi = DataStaffPerjalanan::with(['staff', 'perjalanan.mak', 'tujuan_perjalanan.uangHarian', 'spd', 'kwitansi'])->find($id);
+        $kwitansi = DataStaffPerjalanan::with(['staff', 'perjalanan.mak', 'tujuan_perjalanan.uangHarian', 'spd', 'kwitansi', 'transportasi_berangkat', 'transportasi_pulang', 'akomodasi_hotel'])->find($id);
         $pdf = \PDF::loadView('pages.pra-perjalanan.kwitansi.pdf2', compact('kwitansi'));
         // return response()->json([
         //     'data' => $kwitansi->tujuan_perjalanan[0]->uangHarian->nominal*$kwitansi->tujuan_perjalanan[0]->lama_perjalanan

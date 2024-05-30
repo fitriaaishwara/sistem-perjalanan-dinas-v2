@@ -87,8 +87,11 @@
                     <div class="card-header">
                         <div class="d-flex align-items-center">
                             {{-- <h4 class="card-title">Data Jabatan</h4> --}}
-                            <a href="{{ route('pengajuan/create') }}" class="btn btn-primary btn-round ml-auto"><i
-                                    class="fa fa-plus"></i> Ajukan Perjalanan</a>
+                            @if (auth()->user()->can('Super Admin', 'Admin'))
+                                <a href="{{ route('pengajuan/create') }}" class="btn btn-primary btn-round ml-auto"><i
+                                    class="fa fa-plus"></i> Ajukan Perjalanan
+                                </a>
+                            @endif
                         </div>
                     </div>
                     <div class="card-body">
@@ -299,40 +302,21 @@
                     render: function(data, type, row) {
                         var btnStatusPerjalanan = "";
                         var btnDetailStatus = "";
-                        btnStatusPerjalanan +=
-                            '<button name="btnStatusPerjalanan" data-id="' + data +
-                            '" type="button" class="btn btn-dark btn-sm btnStatusPerjalanan m-1" data-toggle="tooltip" data-placement="top" title="Ubah Status"><i class="fa fa-pen"></i></button>';
-                        btnDetailStatus += '<a href="/detail-status/' + data +
-                            '" name="btnEdit" data-id="' + data +
-                            '" type="button" class="btn btn-warning btn-sm btnDetailStatus m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-pen"></i></a>';
+                        @if (auth()->user()->can('Super Admin','Admin','Asisten Deputi'))
+                            btnStatusPerjalanan +=
+                                '<button name="btnStatusPerjalanan" data-id="' + data +
+                                '" type="button" class="btn btn-dark btn-sm btnStatusPerjalanan m-1" data-toggle="tooltip" data-placement="top" title="Ubah Status"><i class="fa fa-pen"></i></button>';
+                            btnDetailStatus += '<a href="/detail-status/' + data +
+                                '" name="btnEdit" data-id="' + data +
+                                '" type="button" class="btn btn-warning btn-sm btnDetailStatus m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-pen"></i></a>';
+                        @endif
 
 
-                        //    // status terbaru default adalah "-"
-                        //     var latestStatus = "Belum Direview";
+                        // Access the status_perjalanan field in the row object
+                        var statusPerjalanan = row.status_perjalanan ? row.status_perjalanan.status_perjalanan : 'Belum Direvisi';
 
-                        //     // jika log_status_perjalanan tidak null dan memiliki panjang lebih dari 0, maka ambil status_perjalanan dari indeks terakhir log_status_perjalanan
-                        //     if (row.log_status_perjalanan && row.log_status_perjalanan.length > 0) {
-                        //         var lastStatus = row.log_status_perjalanan[row.log_status_perjalanan.length - 1].status_perjalanan;
-                        //     }
-
-                        //     // Kembalikan latestStatus bersama dengan tombol
-                        //     return "<div class='text-wrap' style='font-size: 12px;'>" + latestStatus + "</div>" + btnStatusPerjalanan + btnDetailStatus;
-
-                        // Inisialisasi objek untuk menyimpan status per ID perjalanan
-                        var latestStatus = "Belum Direview";
-                        var latestStatusId = 0;
-
-                        // Jika log_status_perjalanan tidak null dan memiliki panjang lebih dari 0, maka ambil status_perjalanan dari indeks terakhir log_status_perjalanan
-                        if (row.log_status_perjalanan && row.log_status_perjalanan.length > 0) {
-                            latestStatus = row.log_status_perjalanan[row.log_status_perjalanan
-                                .length - 1].status_perjalanan.status_perjalanan;
-                            latestStatusId = row.log_status_perjalanan[row.log_status_perjalanan
-                                .length - 1].id;
-                        }
-
-                        // Kembalikan latestStatus bersama dengan tombol
-                        return "<div class='text-wrap' style='font-size: 12px;'>" +
-                            latestStatus + "</div>" + btnStatusPerjalanan + btnDetailStatus;
+                        // Return the statusPerjalanan along with the buttons
+                        return "<div class='text-wrap' style='font-size: 12px;'>" + statusPerjalanan + "</div>" + btnStatusPerjalanan + btnDetailStatus;
 
                     },
                 },
@@ -343,13 +327,13 @@
                         var btnEdit = "";
                         var btnDetail = "";
                         var btnDelete = "";
-                        btnEdit += '<a href="/pengajuan/edit/' + data +
-                            '" name="btnEdit" data-id="' + data +
-                            '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
                         btnDetail += '<a href="/perjalanan/detail/' + data +
                             '" name="btnDetail" data-id="' + data +
                             '" type="button" class="btn btn-warning btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail"><i class="fa fa-bookmark"></i></a>';
-                        @if (auth()->user()->can('Super Admin'))
+                        @if (auth()->user()->can('Super Admin','Admin'))
+                            btnEdit += '<a href="/pengajuan/edit/' + data +
+                            '" name="btnEdit" data-id="' + data +
+                            '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
                             btnDelete += '<button name="btnDelete" data-id="' + data +
                                 '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
                         @endif

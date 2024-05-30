@@ -7,6 +7,7 @@ use App\Models\DataStaffPerjalanan;
 use App\Models\Perjalanan;
 use App\Models\Staff;
 use App\Models\Tujuan;
+use App\Models\UangHarian;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
@@ -112,31 +113,51 @@ class TujuanController extends Controller
     }
 
     public function store(Request $request)
-    {
-        try {
-            $data = ['status' => false, 'code' => 'EC001', 'message' => 'Tujuan failed to be created'];
-            $create = Tujuan::create([
-                'id_kegiatan' => $request->id_kegiatan_tujuan,
-                'id_perjalanan' => $request->id_perjalanan,
-                'tempat_berangkat_id' => $request->tempat_berangkat_id,
-                'tempat_tujuan_id' => $request->tempat_tujuan_id,
-                'id_uang_harian' => $request->tempat_tujuan_id,
-                'tanggal_berangkat' => $request->tanggal_berangkat,
-                'tanggal_pulang' => $request->tanggal_pulang,
-                'tanggal_tiba' => $request->tanggal_tiba,
-                'lama_perjalanan' => $request->lama_perjalanan,
-                'created_by' => Auth::user()->id,
-            ]);
+{
+    try {
+        // Inisialisasi data respons default
+        $data = ['status' => false, 'code' => 'EC001', 'message' => 'Tujuan failed to be created'];
 
-            if ($create) {
-                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Tujuan successfully created'];
+        // Buat entitas Tujuan
+        $create = Tujuan::create([
+            'id_kegiatan' => $request->id_kegiatan_tujuan,
+            'id_perjalanan' => $request->id_perjalanan,
+            'tempat_berangkat_id' => $request->tempat_berangkat_id,
+            'tempat_tujuan_id' => $request->tempat_tujuan_id,
+            'id_uang_harian' => $request->tempat_tujuan_id,
+            'tanggal_berangkat' => $request->tanggal_berangkat,
+            'tanggal_pulang' => $request->tanggal_pulang,
+            'tanggal_tiba' => $request->tanggal_tiba,
+            'lama_perjalanan' => $request->lama_perjalanan,
+            'created_by' => Auth::user()->id,
+        ]);
+
+        if ($create) {
+            // Ambil data UangHarian
+            $uangHarian = UangHarian::where('province_id', $request->tempat_tujuan_id)->first();
+
+            if ($uangHarian) {
+                // Hitung total biaya berdasarkan nominal uang harian dan lama perjalanan
+                $totalBiayaTambahan = $uangHarian->nominal * $request->lama_perjalanan;
+
+                // Perbarui field total_biaya di tabel Perjalanan
+                $perjalanan = Perjalanan::find($request->id_perjalanan);
+                if ($perjalanan) {
+                    $perjalanan->total_biaya += $totalBiayaTambahan;
+                    $perjalanan->save();
+                }
             }
-        } catch (\Exception $ex) {
-            $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
-        }
 
-        return $data;
+            // Set data respons berhasil
+            $data = ['status' => true, 'code' => 'SC001', 'message' => 'Tujuan successfully created'];
+        }
+    } catch (\Exception $ex) {
+        // Tangani kesalahan
+        $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex->getMessage()];
     }
+
+    return $data;
+}
 
     public function update(Request $request)
     {

@@ -56,11 +56,12 @@ function terbilang($nilai) {
     return $hasil . " rupiah";
 }
 
-function format_rupiah($angka){
-    //tambah Rp.
+function format_rupiah($angka) {
+    // Format the number with thousand separators and no decimal places
+    $rupiah = number_format($angka, 0, ',', '.');
 
-    $rupiah=number_format($angka,0,',','.');
-    return $rupiah;
+    // Prepend the "Rp" currency symbol
+    return 'Rp. ' . $rupiah;
 }
 
 

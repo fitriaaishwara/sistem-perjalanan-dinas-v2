@@ -27,6 +27,9 @@ class UploadGalleryController extends Controller
 
         $query = Tujuan::select()
             ->with(['perjalanan', 'spt', 'staff.staff', 'tempatTujuan', 'perjalanan.kegiatan', 'perjalanan.data_staff_perjalanan.staff', 'kegiatan'])
+            ->whereHas('perjalanan.status_perjalanan', function ($query) {
+                $query->where('id_status', '=', '2');
+            })
             ->where('status', true);
 
         // If the user is not a super admin, filter data based on user's ID
@@ -90,9 +93,22 @@ class UploadGalleryController extends Controller
 
     public function create($id)
     {
-        $kegiatan = Kegiatan::with(['perjalanan', 'perjalanan.data_staff_perjalanan.staff', 'perjalanan.tujuan.uploadGallery', 'perjalanan.tujuan.tempatTujuan','perjalanan.tujuan.tempatBerangkat'])->findOrFail($id);
+        $kegiatan = Tujuan::with(['perjalanan', 'spt', 'staff.staff', 'tempatTujuan', 'perjalanan.kegiatan', 'perjalanan.data_staff_perjalanan.staff', 'kegiatan', 'uploadGallery'])->findOrFail($id);
+
+        // dd($kegiatan);
 
         return view('pages.pra-perjalanan.dokumentasi.gallery.create', compact('kegiatan'));
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $data = UploadGallery::findOrFail($id);
+            $data->delete();
+            return redirect()->back()->with('success', 'Data successfully deleted');
+        } catch (\Exception $ex) {
+            return redirect()->back()->with('error', 'Failed to delete data. Error: ' . $ex->getMessage());
+        }
     }
 
     public function store (Request $request)
@@ -120,7 +136,6 @@ class UploadGalleryController extends Controller
             // Create the record in the database
             $create = UploadGallery::create([
                 'id_tujuan_perjalanan' => $request->input('id_tujuan_perjalanan'),
-                'id_data_kegiatan'     => $request->input('id_data_kegiatan'),
                 'name_file'      => $request->input('name_file'),
                 'path_file'           => $fileName,
             ]);

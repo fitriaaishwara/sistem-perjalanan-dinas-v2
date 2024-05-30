@@ -71,9 +71,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/role', [App\Http\Controllers\Web\RoleController::class, 'index'])->name('role');
     Route::post('/role', [App\Http\Controllers\Web\RoleController::class, 'getData'])->name('role/getData');
     Route::get('/role/create', [App\Http\Controllers\Web\RoleController::class, 'create'])->name('role/create');
-    Route::post('/role/create', [App\Http\Controllers\Web\RoleController::class, 'store'])->name('role/create');
+    Route::post('/role/store', [App\Http\Controllers\Web\RoleController::class, 'store'])->name('role/store');
     Route::get('/role/edit/{id}', [App\Http\Controllers\Web\RoleController::class, 'edit'])->name('role/edit');
-    Route::post('/role/edit/{id}', [App\Http\Controllers\Web\RoleController::class, 'update'])->name('role/edit');
+    Route::post('/role/update/{id}', [App\Http\Controllers\Web\RoleController::class, 'update'])->name('role/update');
     Route::post('/role/delete/{id}', [App\Http\Controllers\Web\RoleController::class, 'destroy'])->name('role/delete');
 
     //Pegawai
@@ -91,7 +91,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/data-perjalanan/create', [App\Http\Controllers\Web\PerjalananController::class, 'create'])->name('dataPerjalanan/create');
     Route::post('/data-perjalanan/store', [App\Http\Controllers\Web\PerjalananController::class, 'store'])->name('dataPerjalanan/store');
     Route::get('/data-perjalanan/edit/{id}', [App\Http\Controllers\Web\PerjalananController::class, 'edit'])->name('dataPerjalanan/edit');
-    Route::post('/data-perjalanan/edit/{id}', [App\Http\Controllers\Web\PerjalananController::class, 'update'])->name('dataPerjalanan/edit');
+    Route::post('/data-perjalanan/update/{id}', [App\Http\Controllers\Web\PerjalananController::class, 'update'])->name('dataPerjalanan/update');
     Route::post('/data-perjalanan/delete/{id}', [App\Http\Controllers\Web\PerjalananController::class, 'destroy'])->name('dataPerjalanan/delete');
     Route::get('/data-perjalanan/{id}', [App\Http\Controllers\Web\PerjalananController::class, 'show'])->name('dataPerjalanan/show');
     Route::get('/perjalanan/detail/{id}', [App\Http\Controllers\Web\PerjalananController::class, 'detail'])->name('perjalanan/detail');
@@ -148,7 +148,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/pengajuan/staff/{nip}/by_nip', [App\Http\Controllers\Web\PerjalananController::class, 'staff_by_nip'])->name('pengajuan/staff/by_nip');
 
     Route::get('/pengajuan/edit/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'edit'])->name('pengajuan/edit');
-    Route::post('/pengajuan/edit/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'update'])->name('pengajuan/edit');
+    Route::post('/pengajuan/update/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'update'])->name('update/edit');
     Route::post('/pengajuan/edit/{id}/save-staff', [App\Http\Controllers\Web\PengajuanController::class, 'save_staff'])->name('pengajuan/edit/save_staff');
 
     Route::post('/pengajuan/delete/{id}', [App\Http\Controllers\Web\PengajuanController::class, 'destroy'])->name('pengajuan/delete');
@@ -311,6 +311,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/gallery/pdf/{id}', [App\Http\Controllers\Web\UploadGalleryController::class, 'downloadFile'])->name('gallery/pdf');
     Route::post('/gallery/update', [App\Http\Controllers\Web\UploadGalleryController::class, 'update'])->name('gallery/update');
     Route::get('/gallery/{id}', [App\Http\Controllers\Web\UploadGalleryController::class, 'show'])->name('gallery/show');
+    Route::any('/gallery/delete/{id}', [App\Http\Controllers\Web\UploadGalleryController::class, 'destroy'])->name('gallery/delete');
 
     Route::get('/gallery/pdf/{id}', [App\Http\Controllers\Web\UploadLaporanController::class, 'downloadFile'])->name('gallery/pdf');
 

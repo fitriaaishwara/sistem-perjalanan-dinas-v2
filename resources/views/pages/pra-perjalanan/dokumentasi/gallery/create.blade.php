@@ -21,8 +21,8 @@
             <div class="modal-body">
                 <form method="POST" action="{{ route('gallery/store') }}" id="galleryForm" name="galleryForm" enctype="multipart/form-data">
                     @csrf
-                    <input id="id" type="hidden" class="form-control" name="id_tujuan_perjalanan" value="{{ $kegiatan->perjalanan->tujuan[0]->id }}">
-                    <input id="id_data_kegiatan" type="hidden" class="form-control" name="id_data_kegiatan" value="{{ $kegiatan->perjalanan->DataKegiatan[0]->id }}">
+                    <input id="id" type="hidden" class="form-control" name="id_tujuan_perjalanan" value="{{ $kegiatan->id }}">
+                    <input id="id_kegiatan" type="hidden" class="form-control" name="id_kegiatan" value="{{ $kegiatan->kegiatan->id }}">
                     <div class="row mb-4">
                         <label for="name_file" class="col-sm-3 col-form-label">Nama File<span
                                 style="color:red;">*</span></label>
@@ -78,15 +78,16 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <b>{{ $kegiatan->kegiatan}}</b>
+                        <b>{{ $kegiatan->kegiatan->kegiatan }}</b>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
                                 <p><b>Yang Ditugaskan</b></p>
-                                @foreach($kegiatan->perjalanan->data_staff_perjalanan as $index => $dataStaff)
-                                    <p>{{ $index + 1 }}. {{ $dataStaff->staff->name }}</p>
+                                @foreach($kegiatan->staff as $item)
+                                    <p>{{ $loop->iteration }}. {{ $item->staff->name }}</p>
                                 @endforeach
+
                                 <p><b>Tujuan</b></p>
                                 <p>{{ $kegiatan->perjalanan->tujuan[0]->tempatBerangkat->name }} - {{ $kegiatan->perjalanan->tujuan[0]->tempatTujuan->name }}</p>
                                 <p><b>Waktu</b></p>
@@ -108,27 +109,33 @@
                     </div>
                     <div class="card-body">
                         <div class="row image-gallery">
-
-                            @if ($kegiatan->perjalanan->tujuan[0]->uploadGallery->count() == 0)
-                                <div class="col-12">
-                                    <center>
-                                        <h4>Belum ada gambar</h4>
-                                    </center>
-                                </div>
-                            @else
-                                @foreach($kegiatan->perjalanan->tujuan[0]->uploadGallery as $item)
-                                    <a href="{{ url('storage/gallery/' . $item->path_file) }}" class="col-6 col-md-3 mb-4">
-                                    <img src="{{ url('storage/gallery/'. $item->path_file) }}" class="img-fluid">
-                                    <center>
-                                        <p class="demo m-2">
-                                            <button type="button" class="btn btn-icon btn-round btn-primary">
-                                                <i class="far fa-eye btn-xs"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-icon btn-round btn-danger">
-                                                <i class="fas fa-trash-alt btn-xs"></i>
-                                            </button>
-                                        </p>
-                                    </center>
+                                @if ($kegiatan->uploadGallery->count() == 0)
+                                    <div class="col-12">
+                                        <center>
+                                            <h4>Belum ada gambar</h4>
+                                        </center>
+                                    </div>
+                                @else
+                                @foreach($kegiatan->uploadGallery as $item)
+                                    <div class="col-6 col-md-3 mb-4">
+                                        <a href="{{ url('storage/gallery/' . $item->path_file) }}">
+                                            <img src="{{ url('storage/gallery/'. $item->path_file) }}" class="img-fluid">
+                                        </a>
+                                        <center>
+                                            <p class="demo m-2">
+                                                {{-- <button type="button" class="btn btn-icon btn-round btn-primary">
+                                                    <i class="far fa-eye btn-xs"></i>
+                                                </button> --}}
+                                                <form method="POST" action="{{ route('gallery/delete', ['id' => $item->id]) }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-icon btn-round btn-danger">
+                                                        <i class="fas fa-trash-alt btn-xs"></i>
+                                                    </button>
+                                                </form>
+                                            </p>
+                                        </center>
+                                    </div>
                                 @endforeach
                             @endif
                             {{-- <a href="../../assets/img/examples/example1.jpeg" class="col-6 col-md-3 mb-4">

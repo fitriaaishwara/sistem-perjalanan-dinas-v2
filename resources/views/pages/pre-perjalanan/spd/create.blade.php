@@ -33,27 +33,27 @@
                                     <div id="myModal" class="card-body">
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label for="nomor_spt">Nama/NIP Pegawai Yang Melaksanakan Perjalanan Dinas</label>
+                                                <label for="nomor_spd">Nama/NIP Pegawai Yang Melaksanakan Perjalanan Dinas</label>
                                                 <input type="text" class="form-control" value="{{ $dataStaff->staff->name }}" readonly validate>
                                             </div>
                                             <div class="form-group">
-                                                <label for="nomor_spt">Maksud Perjalanan Dinas</label>
-                                                <input type="text" class="form-control" value=" {{ $dataStaff->perjalanan[0]->perihal_perjalanan }} " readonly validate>
+                                                <label for="nomor_spd">Maksud Perjalanan Dinas</label>
+                                                <input type="text" class="form-control" value=" {{ $dataStaff->perjalanan[0]->kegiatan[0]->kegiatan }}" readonly validate>
                                             </div>
                                             <div class="form-group">
-                                                <label for="nomor_spt">Tempat Berangkat - Tempat Tujuan</label>
+                                                <label for="nomor_spd">Tempat Berangkat - Tempat Tujuan</label>
                                                 <input type="text" class="form-control"  value="{{ $dataStaff->tujuan_perjalanan[0]->tempatBerangkat->name }} - {{ $dataStaff->tujuan_perjalanan[0]->tempatTujuan->name }}" readonly validate>
                                             </div>
                                             <div class="form-group">
-                                                <label for="nomor_spt">Tanggal Berangkat - Tanggal Tujuan</label>
+                                                <label for="nomor_spd">Tanggal Berangkat - Tanggal Tujuan</label>
                                                 <input type="text" class="form-control"  value="{{ tgl_indo($dataStaff->tujuan_perjalanan[0]->tanggal_berangkat) }} - {{ tgl_indo($dataStaff->tujuan_perjalanan[0]->tanggal_pulang) }}" readonly validate>
                                             </div>
                                             <div class="form-group">
-                                                <label for="nomor_spt">Lama Perjalanan Dinas</label>
+                                                <label for="nomor_spd">Lama Perjalanan Dinas</label>
                                                 <input type="text" class="form-control" value="{{ $dataStaff->tujuan_perjalanan[0]->lama_perjalanan }} Hari" readonly validate>
                                             </div>
                                             <div class="form-group">
-                                                <label for="nomor_spt">Instansi</label>
+                                                <label for="nomor_spd">Instansi</label>
 
                                                 @if($dataStaff->staff->instansis == true)
                                                     <input type="text" class="form-control" value="{{ $dataStaff->staff->instansis->name }}" readonly validate>
@@ -62,7 +62,7 @@
                                                 @endif
                                             </div>
                                             <div class="form-group">
-                                                <label for="nomor_spt">Akun</label>
+                                                <label for="nomor_spd">Akun</label>
                                                 <input type="text" class="form-control"  placeholder="Nomor Surat Perjalanan Dinas" value="{{ $dataStaff->perjalanan[0]->mak->kode_mak }}" readonly validate>
                                             </div>
                                         </div>
@@ -75,6 +75,7 @@
                                     <div id="myModal" class="card-body">
                                         <div class="col-lg-12">
                                             <input type="hidden" name="id_staff_perjalanan" id="id_staff_perjalanan" value="{{ $dataStaff->id }}">
+                                            <input type="hidden" name="id_kegiatan" id="id_kegiatan" value="{{ $dataStaff->perjalanan[0]->kegiatan[0]->id }}">
                                             <div class="form-group">
                                                 <label for="nomor_spd">Nomor SPD</label>
                                                 <select name="nomor_spd" id="nomor_spd" class="form-control select2" validate>
@@ -114,7 +115,7 @@
                                             </div>
                                             <div id="showDikeluarkan_tanggal" class="form-group">
                                                 <label for="dikeluarkan_tanggal">Pada Tanggal</label>
-                                                <input type="text" name="pada_tanggal" id="pada_tanggal" class="form-control date"  placeholder="Pilih Tanggal SPT terbit" validate>
+                                                <input type="text" name="pada_tanggal" id="pada_tanggal" class="form-control date"  placeholder="Pilih Tanggal SPD terbit" validate>
                                             </div>
                                         </div>
                                     </div>

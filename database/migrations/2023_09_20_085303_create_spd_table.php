@@ -16,7 +16,8 @@ class CreateSpdTable extends Migration
         Schema::create('spd', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('id_staff_perjalanan')->nullable();
-            $table->foreignUuid('nomor_spd')->nullable();
+            $table->string('nomor_spd')->nullable();
+            $table->foreignUuid('id_kegiatan');
             $table->string('pejabat_pembuat_komitmen');
             $table->string('tingkat_biaya_perjalanan_dinas')->nullable();
             $table->string('alat_angkutan')->nullable();
@@ -32,6 +33,7 @@ class CreateSpdTable extends Migration
 
 
             $table->foreign('id_staff_perjalanan')->references('id')->on('data_staff_perjalanan')->onDelete('cascade');
+            $table->foreign('id_kegiatan')->references('id')->on('kegiatan')->onDelete('cascade');
         });
     }
 

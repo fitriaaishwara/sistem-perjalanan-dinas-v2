@@ -26,6 +26,7 @@ class IndoRegionSeeder extends Seeder
         $this->call(IndoRegionDistrictSeeder::class);
         $this->call(IndoRegionVillageSeeder::class);
         $this->call(UsersTableSeeder::class);
+        $this->call(JabatanStrukturalSeeder::class);
         $this->call(JabatanTableSeeder::class);
         $this->call(GolonganTableSeeder::class);
         $this->call(InstansiTableSeeder::class);
@@ -41,6 +42,7 @@ class IndoRegionSeeder extends Seeder
         $this->call(sbm_translokTableSeeder::class);
         $this->call(StatusTableSeeder::class);
         $this->call(Status_PerjalananTableSeeder::class);
+
 
     }
 }

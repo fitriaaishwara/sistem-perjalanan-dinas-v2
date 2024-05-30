@@ -93,7 +93,7 @@
                 var isValid = $("#roleForm").valid();
                 if (isValid) {
                     var id = $("#id").val();
-                    var url = "{{ route('role/edit', ['id' => ':id']) }}";
+                    var url = "{{ route('role/update', ['id' => ':id']) }}";
                     url = url.replace(':id', id);
                     $('#updateBtn').text('Save...');
                     $('#updateBtn').attr('disabled', true);

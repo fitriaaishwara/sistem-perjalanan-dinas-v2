@@ -43,7 +43,7 @@
 			<div class="logo-header" data-background-color="blue">
 
 				<a href="{{ route('dashboard') }}" class="logo">
-					<img src="{{ url('assets/img/kemenkop/kemenkop.png') }}" alt="navbar brand" class="navbar-brand" width="150px" height="50px">
+					<img src="{{ url('assets/img/kemenkop/kemenkop_putih.png') }}" alt="navbar brand" class="navbar-brand" width="150px" height="50px">
 				</a>
 				<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon">
@@ -540,9 +540,9 @@
 					</div>
 				</div>
 			</div>
-			<div class="custom-toggle">
+			{{-- <div class="custom-toggle">
 				<i class="flaticon-settings"></i>
-			</div>
+			</div> --}}
 		</div>
 		<!-- End Custom template -->
 	</div>

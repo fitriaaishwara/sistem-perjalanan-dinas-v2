@@ -188,6 +188,7 @@
                         "defaultContent": "-",
                         render: function(data, type, row) {
                             let golongan = row.staff.golongans.id
+                            let lama_perjalanan = row.tujuan_perjalanan[0].lama_perjalanan
                             let hotel = row.tujuan_perjalanan[0].tempat_tujuan.hotel
                             let tiket = row.tujuan_perjalanan[0].tempat_tujuan.tiket
                             let translok = row.tujuan_perjalanan[0].tempat_tujuan.translok
@@ -197,7 +198,7 @@
                             if (data) {
                                 // Tambahkan Data Lain Disini (data hotel, tiket, transportasi)
                                 // return "<div class='text-wrap'>" + filteredTranslok[0].nominal + "</div>";
-                                return "<div class='text-wrap'>" + 'Rp. ' + rupiah((parseInt(filteredHotel[0].nominal) + parseInt(filteredTiket[0].nominal)+ parseInt(filteredTranslok[0].nominal))) + "</div>";
+                                return "<div class='text-wrap'>" + 'Rp. ' + rupiah((parseInt(filteredHotel[0].nominal*(lama_perjalanan-1)) + parseInt(filteredTiket[0].nominal) + parseInt(filteredTranslok[0].nominal))) + "</div>";
                             } else {
                                 return "<div class='text-wrap'>-</div>";
                             }
@@ -233,28 +234,28 @@
             myTable.ajax.reload(null, false); //reload datatable ajax
         }
 
-        $('#myTable').on("click", ".btnStatus", function() {
-                isUpdate = true;
-                var id = $(this).attr('data-id');
-                var url = "{{ route('statusPerjalanan/show', ['id' => ':id']) }}";
-                url = url.replace(':id', id);
-                $.ajax({
-                    type: 'GET',
-                    url: url,
-                    success: function(response) {
-                        $('#id').val(response.data.id);
-                        $('#status').val(response.data.id_status_perjalanan);
-                        $('#myModal').modal('show');
-                    },
-                    error: function() {
-                        Swal.fire(
-                            'Error',
-                            'A system error has occurred. please try again later.',
-                            'error'
-                        )
-                    },
-                });
-        });
+        // $('#myTable').on("click", ".btnStatus", function() {
+        //         isUpdate = true;
+        //         var id = $(this).attr('data-id');
+        //         var url = "{{ route('statusPerjalanan/show', ['id' => ':id']) }}";
+        //         url = url.replace(':id', id);
+        //         $.ajax({
+        //             type: 'GET',
+        //             url: url,
+        //             success: function(response) {
+        //                 $('#id').val(response.data.id);
+        //                 $('#status').val(response.data.id_status_perjalanan);
+        //                 $('#myModal').modal('show');
+        //             },
+        //             error: function() {
+        //                 Swal.fire(
+        //                     'Error',
+        //                     'A system error has occurred. please try again later.',
+        //                     'error'
+        //                 )
+        //             },
+        //         });
+        // });
 
         $('#myTable').on("click", ".btnDelete", function() {
             var id = $(this).attr('data-id');

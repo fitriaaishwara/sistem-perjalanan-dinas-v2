@@ -15,13 +15,13 @@ class UploadGallery extends Model
     protected $table = 'upload_gallery';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id_tujuan_perjalanan', 'id_data_kegiatan', 'name_file', 'path_file'
+        'id_tujuan_perjalanan', 'name_file', 'path_file'
     ];
 
 
-    public function tujuanPerjalanan()
+    public function tujuan()
     {
-        return $this->belongsTo(CreateDataTujuanPerjalananTable::class, 'id_tujuan_perjalanan', 'id');
+        return $this->belongsTo(Tujuan::class, 'id_tujuan_perjalanan', 'id');
     }
 
 }

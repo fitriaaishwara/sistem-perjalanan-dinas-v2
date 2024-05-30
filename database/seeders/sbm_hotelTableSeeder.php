@@ -55,11 +55,12 @@ class sbm_hotelTableSeeder extends Seeder
         $data = [];
 
         foreach ($provinces as $province_id => $province_name) {
-            for ($i = 1; $i <= 8; $i++) {
+            for ($i = 1; $i <= 4; $i++) {
                 $data[] = [
                     'id' => Str::uuid(),
                     'province_id' => $province_id,
                     'id_golongan' => $i,
+                    'id_jabatan_struktural' => $i,
                     'nominal' => $this->generateNominal($i),
                     'status' => '1'
                 ];

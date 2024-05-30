@@ -14,15 +14,16 @@
 </style>
 
 
-<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="myModalStatus" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalStatusLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header border-0" id="myModalLabel">
+            <div class="modal-header border-0" id="myModalStatusLabel">
                 <h5 class="modal-title">
                     <span class="fw-mediumbold">
                         Form</span>
                     <span class="fw-light">
-                        Change Status
+                        Ubah Status
                     </span>
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -30,26 +31,26 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{{ route('statusPerjalanan/update') }}" id="statusForm" name="statusForm">
+                <form method="POST" action="{{ route('statusPerjalanan/store') }}" id="statusForm" name="statusForm">
                     @csrf
-                    <input id="id" type="hidden" class="form-control" name="id">
-                    <div class="row mb-4">
-                        <label for="name" class="col-sm-3 col-form-label">Status<span
-                                style="color:red;">*</span></label>
-                        <div class="col-sm-9 validate">
-                            <select class="form-control" id="status" name="status">
-                                <option value="">-- Pilih Status --</option>
-                                {{-- @foreach ($statusPerjalanan as $status)
-                                    <option value="{{ $status->id }}">{{ $status->name }}</option>
-                                @endforeach --}}
-                            </select>
-                        </div>
+                    <input id="id" type="hidden" class="form-control" name="id_perjalanan">
+                    <div class="mb-3 validate">
+                        <label for="id_status_perjalanan" class="form-label">Status Perjalanan<span
+                                style="color:red;">*</span>
+                        </label>
+                        <select id="id_status_perjalanan" type="text"
+                            class="form-control col-12 id_status_perjalanan" name="id_status_perjalanan">
+                        </select>
+                    </div>
+                    <div class="mb-3 validate">
+                        <label for="description" class="form-label">Deskripsi Revisi</label>
+                        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-dark waves-effect waves-light btn-sm"
-                    onclick="$('#myModal form').submit()" name="saveBtn">Save changes</button>
+                <button type="button" class="btn btn-dark waves-effect waves-light btn-sm" id="saveBtnStatus"
+                    name="saveBtnStatus">Save changes</button>
                 <button type="button" class="btn btn-secondary waves-effect btn-sm" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -76,7 +77,7 @@
                     <i class="flaticon-right-arrow"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="#">Data Perjalanan</a>
+                    <a href="#">Pengajuan Perjalanan</a>
                 </li>
             </ul>
         </div>
@@ -85,16 +86,18 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="d-flex align-items-center">
-                            {{-- <h4 class="card-title">Data Perjalanan</h4> --}}
-                            {{-- <a href="{{ route('pengajuan') }}" class="btn btn-primary btn-round ml-auto"><i class="fa fa-plus"></i> Ajukan Perjalanan</a> --}}
+                            {{-- <h4 class="card-title">Data Jabatan</h4> --}}
+                            {{-- <a href="{{ route('pengajuan/create') }}" class="btn btn-primary btn-round ml-auto"><i
+                                    class="fa fa-plus"></i> Ajukan Perjalanan</a> --}}
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="myTable" class="display table table-striped table-hover">
+                            <table id="pengajuanTable" class="display table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>MAK</th>
+                                        {{-- <th>Kegiatan</th> --}}
                                         <th>Tujuan / Kegiatan</th>
                                         <th>Tanggal Berangkat</th>
                                         <th>Tanggal Kembali</th>
@@ -130,7 +133,7 @@
         };
         var isUpdate = false;
 
-        var myTable = $('#myTable').DataTable({
+        var pengajuanTable = $('#pengajuanTable').DataTable({
             "language": {
                 "paginate": {
                     "next": '<i class="fas fa-arrow-right"></i>',
@@ -138,12 +141,13 @@
                 }
             },
             "aaSorting": [],
+            "autoWidth": false,
             "ordering": false,
-            "responsive": true,
             "serverSide": true,
+            "responsive": true,
             "lengthMenu": [
-                [10, 15, 25, 50, 100, 250, 500],
-                [10, 15, 25, 50, 100, 250, 500]
+                [10, 15, 25, 50, -1],
+                [10, 15, 25, 50, "All"]
             ],
             "ajax": {
                 "url": "{{ route('dataPerjalanan/getData') }}",
@@ -177,6 +181,24 @@
                         }
                     }
                 },
+                // {
+                //     "data": "kegiatan",
+                //     "width": '10%',
+                //     "defaultContent": "-",
+                //     render: function(data, type, row) {
+                //         console.log(data);
+                //         var kegiatan = "";
+                //         var angka = 1;
+                //         for (var i = 0; i < data.length; i++) {
+                //             if (data[i].status === 1) {
+                //                 kegiatan += "<div class='text-wrap' style='font-size: 12px;'>" +
+                //                     angka + ". " + data[i].kegiatan + "</div>";
+                //                 angka++;
+                //             }
+                //         }
+                //         return kegiatan || "-";
+                //     }
+                // },
                 {
                     "data": "kegiatan",
                     "width": '10%',
@@ -198,6 +220,27 @@
                         return tujuan || "-";
                     }
                 },
+                // {
+                //     "data": "tujuan",
+                //     "width": '10%',
+                //     "defaultContent": "-",
+                //     render: function(data, type, row) {
+                //         console.log(data);
+                //         var tujuan = "";
+                //         var angka = 1;
+                //         for (var i = 0; i < data.length; i++) {
+                //             tujuan += "<div class='text-wrap' style='font-size: 12px;'>" +
+                //                 angka + ". " + data[i].tempat_tujuan.name + "</div>";
+                //             angka++;
+                //         }
+                //         return tujuan;
+                //         // if (data) {
+                //         //     return "<div class='text-wrap'>" + data.tempat_tujuan + "</div>";
+                //         // } else {
+                //         //     return "<div class='text-wrap'>-</div>";
+                //         // }
+                //     }
+                // },
                 {
                     "data": "kegiatan",
                     "width": '10%',
@@ -211,8 +254,7 @@
                                 for (var j = 0; j < data[i].data_tujuan.length; j++) {
                                     tujuan +=
                                         "<div class='text-wrap' style='font-size: 12px;'>" +
-                                        angka + ". " + formatIndonesianDate(data[i].data_tujuan[
-                                            j].tanggal_berangkat) + "</div>";
+                                        angka + ". " + formatIndonesianDate(data[i].data_tujuan[j].tanggal_berangkat) +"</div>";
                                     angka++;
                                 }
                             }
@@ -233,8 +275,7 @@
                                 for (var j = 0; j < data[i].data_tujuan.length; j++) {
                                     tujuan +=
                                         "<div class='text-wrap' style='font-size: 12px;'>" +
-                                        angka + ". " + formatIndonesianDate(data[i].data_tujuan[
-                                            j].tanggal_pulang) + "</div>";
+                                        angka + ". " + formatIndonesianDate(data[i].data_tujuan[j].tanggal_pulang) +"</div>";
                                     angka++;
                                 }
                             }
@@ -247,53 +288,157 @@
                 //     "width": '10%',
                 //     "defaultContent": "-",
                 //     render: function(data, type, row) {
-                //         //get the function formatRupiah on Helpers.php
-                //         return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data) + "</div>";
+                //     //format_rupiah
+                //     return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data) + "</div>";
                 //     },
                 // },
                 {
-                    "data": "status_perjalanan",
+                    "data": "id",
                     "width": '10%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        return "<div class='text-wrap' style='font-size: 12px;'>Active</div>";
-                    },
+                        var btnStatusPerjalanan = "";
+                        var btnDetailStatus = "";
+                        @if (auth()->user()->can('Super Admin','Admin','Asisten Deputi'))
+                            btnStatusPerjalanan +=
+                                '<button name="btnStatusPerjalanan" data-id="' + data +
+                                '" type="button" class="btn btn-dark btn-sm btnStatusPerjalanan m-1" data-toggle="tooltip" data-placement="top" title="Ubah Status"><i class="fa fa-pen"></i></button>';
+                            btnDetailStatus += '<a href="/detail-status/' + data +
+                                '" name="btnEdit" data-id="' + data +
+                                '" type="button" class="btn btn-warning btn-sm btnDetailStatus m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-pen"></i></a>';
+                        @endif
 
+
+                        // Access the status_perjalanan field in the row object
+                        var statusPerjalanan = row.status_perjalanan ? row.status_perjalanan.status_perjalanan : 'Belum Direvisi';
+
+                        // Return the statusPerjalanan along with the buttons
+                        return "<div class='text-wrap' style='font-size: 12px;'>" + statusPerjalanan + "</div>" + btnStatusPerjalanan + btnDetailStatus;
+
+                    },
                 },
                 {
                     "data": "id",
                     "width": '15%',
                     render: function(data, type, row) {
-                        var btnEdit = "";
-                        var btnStatus = "";
-                        btnEdit += '<a href="/pengajuan/edit/' + data +
-                            '" name="btnEdit" data-id="' + data +
-                            '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
-                        btnStatus += '<button name="btnStatus" data-id="' + data +
-                            '" type="button" class="btn btn-primary btn-sm btnStatus m-1" data-toggle="tooltip" data-placement="top" title="Change Status"><i class="fa fa-bookmark"></i></button>';
-
-                        return btnEdit + btnStatus;
+                        var btnDetail = "";
+                        btnDetail += '<a href="/perjalanan/detail/' + data +
+                            '" name="btnDetail" data-id="' + data +
+                            '" type="button" class="btn btn-warning btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail"><i class="fa fa-bookmark"></i></a>';
+                        return btnDetail;
                     },
                 },
             ]
         });
 
         function reloadTable() {
-            myTable.ajax.reload(null, false); //reload datatable ajax
+            pengajuanTable.ajax.reload(null, false); //reload datatable ajax
+            location.reload(); // Reload the page
         }
 
-        $('#myTable').on("click", ".btnStatus", function() {
-            isUpdate = true;
+        $("#id_status_perjalanan").select2({
+            theme: 'bootstrap',
+            width: '100%',
+            dropdownParent: $('#myModalStatus'),
+            placeholder: "Pilih Status",
+            ajax: {
+                url: "{{ route('status_perjalanan/getData') }}",
+                dataType: 'json',
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                method: 'POST',
+                delay: 250,
+                destroy: true,
+                data: function(params) {
+                    var query = {
+                        searchkey: params.term || '',
+                        start: 0,
+                        length: 50
+                    }
+                    return JSON.stringify(query);
+                },
+                processResults: function(data) {
+                    console.log(data); // Add this line for debugging
+                    var result = {
+                        results: [],
+                        more: false
+                    };
+                    if (data && data.data) {
+                        $.each(data.data, function() {
+                            result.results.push({
+                                id: this.id,
+                                text: this.status_perjalanan
+                            });
+                        })
+                    }
+                    return result;
+                },
+                cache: false
+            },
+        });
+
+        // $("#direvisi_oleh").select2({
+        //     theme: 'bootstrap',
+        //     width: '100%',
+        //     dropdownParent: $('#myModalStatus'),
+        //     placeholder: "Pilih Status",
+        // })
+
+        $('#saveBtnStatus').click(function(e) {
+            e.preventDefault();
+            var isValid = $("#statusForm").valid();
+            if (isValid) {
+                $('#saveBtnStatus').text('Save...');
+                $('#saveBtnStatus').attr('disabled', true);
+                var url = "{{ route('statusPerjalanan/store') }}";
+                var formData = new FormData($('#statusForm')[0]);
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    dataType: "JSON",
+                    success: function(data) {
+                        Swal.fire(
+                            (data.status) ? 'Success' : 'Error',
+                            data.message,
+                            (data.status) ? 'success' : 'error'
+                        )
+                        $('#saveBtnStatus').text('Save');
+                        $('#saveBtnStatus').attr('disabled', false);
+                        reloadTable();
+                        $('#myModalStatus').modal('hide');
+                    },
+                    error: function(data) {
+                        Swal.fire(
+                            'Error',
+                            'A system error has occurred. please try again later.',
+                            'error'
+                        )
+                        $('#saveBtnStatus').text('Save');
+                        $('#saveBtnStatus').attr('disabled', false);
+                    }
+                });
+            }
+        });
+
+        $('#pengajuanTable').on("click", ".btnStatusPerjalanan", function() {
+            $('#myModalStatus').modal('show');
+            isUpdate = false;
             var id = $(this).attr('data-id');
-            var url = "{{ route('statusPerjalanan/show', ['id' => ':id']) }}";
+            var url = "{{ route('statusPerjalanan/show', ':id') }}";
             url = url.replace(':id', id);
             $.ajax({
                 type: 'GET',
                 url: url,
                 success: function(response) {
                     $('#id').val(response.data.id);
-                    $('#status').val(response.data.id_status_perjalanan);
-                    $('#myModal').modal('show');
+                    $('#id_status_perjalanan').val(response.data.id_status_perjalanan)
+                        .trigger('change');
                 },
                 error: function() {
                     Swal.fire(
@@ -305,11 +450,11 @@
             });
         });
 
-        $('#myTable').on("click", ".btnDelete", function() {
+        $('#pengajuanTable').on("click", ".btnDelete", function() {
             var id = $(this).attr('data-id');
             Swal.fire({
                 title: 'Confirmation',
-                text: "You will delete this pengajuan. Are you sure you want to continue?",
+                text: "Kamu akan menghapus pengajuan. Apakah kamu ingin melanjutkan?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -318,7 +463,7 @@
                 cancelButtonText: 'No'
             }).then(function(result) {
                 if (result.value) {
-                    var url = "{{ route('dataPerjalanan/delete', ['id' => ':id']) }}";
+                    var url = "{{ route('pengajuan/delete', ['id' => ':id']) }}";
                     url = url.replace(':id', id);
                     $.ajax({
                         headers: {
@@ -345,6 +490,25 @@
                     });
                 }
             })
+        });
+
+        $('#statusForm').validate({
+            rules: {
+                id_status_perjalanan: {
+                    required: true,
+                },
+            },
+            errorElement: 'em',
+            errorPlacement: function(error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.validate').append(error);
+            },
+            highlight: function(element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
         });
     });
 </script>

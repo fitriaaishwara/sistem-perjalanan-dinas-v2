@@ -22,4 +22,9 @@ class Status extends Model
         'deleted_by',
     ];
 
+    public function status_perjalanan()
+    {
+        return $this->hasMany(StatusPerjalanan::class, 'id_status', 'id');
+    }
+
 }

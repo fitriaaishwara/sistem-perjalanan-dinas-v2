@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePerjalananTable extends Migration
+class CreateUploadLaporanTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,21 @@ class CreatePerjalananTable extends Migration
      */
     public function up()
     {
-        Schema::create('perjalanan', function (Blueprint $table) {
+        Schema::create('upload_laporan', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('id_mak');
-            $table->integer('total_biaya')->default(0);
+            $table->foreignUuid('id_tujuan_perjalanan');
+            $table->string('name_file');
+            $table->string('path_file');
+
             $table->boolean('status')->default (1);
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->string('deleted_by')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('id_mak')->references('id')->on('mak');
 
-
+            $table->foreign('id_tujuan_perjalanan')->references('id')->on('data_tujuan_perjalanan');
         });
     }
 
@@ -36,6 +38,6 @@ class CreatePerjalananTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('perjalanan');
+        Schema::dropIfExists('upload_laporan');
     }
 }

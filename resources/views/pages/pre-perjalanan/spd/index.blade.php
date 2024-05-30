@@ -241,9 +241,11 @@
                         var btnDetail= "";
 
                         if (row.spd == "" || row.spd == null) {
+                            @if (auth()->user()->can('Super Admin','Admin'))
                             btnTambah += '<a href="/surat-perjalanan-dinas/create/' + data +
                                 '" name="btnTambah" data-id="' + data +
                                 '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
+                            @endif
                         } else {
                             // btnEdit += '<a href="/surat-perjalanan-dinas/edit/' + data +
                             //     '" name="btnEdit" data-id="' + data +

@@ -34,7 +34,8 @@
             <div class="modal-body">
                 <form method="POST" action="{{ route('laporan/store') }}" id="laporanForm" name="laporanForm">
                     @csrf
-                    <input id="id" type="text" class="form-control" name="id_kegiatan">
+                    <input id="id_tujuan_perjalanan" type="text" class="form-control" name="id_tujuan_perjalanan">
+                    {{-- <input id="id_kegiatan" type="text" class="form-control" name="id_kegiatan"> --}}
                     <div class="row mb-4">
                         <label for="name_file" class="col-sm-3 col-form-label">Nama File<span
                                 style="color:red;">*</span></label>
@@ -277,17 +278,16 @@
                         }
                     }
                 },
-                {
+               {
                     "data": "uploadLaporan",
                     "width": '15%',
                     "defaultContent": "-",
 
                     render: function(data, type, row) {
-                        if (row.upload_laporan == "" || row.upload_laporan == null) {
+                        if (!row.upload_laporan || row.upload_laporan === null) {
                             return "<div class='text-wrap badge badge-danger' style='font-size: 12px;'> Belum Upload </div>";
                         } else {
-
-                            return "<a href='/laporan/pdf/" + row.upload_laporan[0].id + "' target='_blank' class='fas fa-file-download text-center' style='font-size: 12px;'> " + row.upload_laporan[0].name_file + " .pdf </a>"
+                            return "<a href='/laporan/pdf/" + row.upload_laporan.id + "' target='_blank' class='fas fa-file-download text-center' style='font-size: 12px;'> " + row.upload_laporan.name_file + " .pdf </a>";
                         }
                     }
                 },
@@ -299,19 +299,18 @@
                         var btnEdit = "";
                         var btnDownload = "";
 
-                        if (row.upload_laporan == "" || row.upload_laporan == null) {
+                        if (!row.upload_laporan || row.upload_laporan === null) {
                             btnTambah += '<button name="btnTambah" data-id="' + data +
                                 '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></button>';
                         } else {
                             btnEdit += '<button name="btnEdit" data-id="' + data +
                                 '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
 
-                              // Since `data` is just an ID, you need to directly access `row.upload_laporan.id` instead of `data[0].uploadLaporan.id`
-                            btnDownload += '<a href="/laporan/pdf/' + row.upload_laporan[0].id +
+                            btnDownload += '<a href="/laporan/pdf/' + row.upload_laporan.id +
                                 '" type="button" class="btn btn-success btn-sm m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
                         }
                         return btnTambah + btnEdit + btnDownload;
-                    },
+                    }
                 },
             ]
         });
@@ -373,7 +372,8 @@
                 type: 'GET',
                 url: url,
                 success: function(response) {
-                    $('#id').val(response.data.id);
+                    // $('#id_kegiatan').val(response.data.id_kegiatan);
+                    $('#id_tujuan_perjalanan').val(response.data.id);
                 },
                 error: function() {
                     Swal.fire(

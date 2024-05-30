@@ -13,11 +13,21 @@ class StatusPerjalanan extends Model
     protected $table = 'status_perjalanan';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'name', 'description', 'status'
+        'status_perjalanan','id_status','created_by','updated_by','deleted_by',
     ];
 
     public function log_status_perjalanan()
     {
         return $this->hasMany(LogStatusPerjalanan::class, 'id_status_perjalanan', 'id');
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(Status::class, 'id_status', 'id');
+    }
+
+    public function perjalanan()
+    {
+        return $this->hasMany(Perjalanan::class, 'id_status_perjalanan', 'id');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateJabatanTable extends Migration
+class CreateUploadGalleryTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,20 @@ class CreateJabatanTable extends Migration
      */
     public function up()
     {
-        Schema::create('jabatan', function (Blueprint $table) {
+        Schema::create('upload_gallery', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name');
-            $table->foreignUuid('id_jabatan_struktural')->nullable();
-            $table->string('description')->nullable();
+            $table->foreignUuid('id_tujuan_perjalanan');
+            $table->string('name_file');
+            $table->string('path_file');
             $table->boolean('status')->default (1);
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->string('deleted_by')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('id_jabatan_struktural')->references('id')->on('jabatan_struktural');
-
-
+            $table->foreign('id_tujuan_perjalanan')->references('id')->on('data_tujuan_perjalanan');
         });
     }
 
@@ -38,6 +37,6 @@ class CreateJabatanTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('jabatan');
+        Schema::dropIfExists('upload_gallery');
     }
 }

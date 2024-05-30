@@ -21,8 +21,11 @@ class GeoTaggingController extends Controller
         $keyword = $request['searchkey'];
         $userRole = Auth::user()->roles->pluck('name')[0];
 
-        $query = DataStaffPerjalanan::with(['staff', 'perjalanan', 'perjalanan.mak', 'tujuan_perjalanan.tempatTujuan', 'spd', 'kwitansi', 'geotaging', 'perjalanan.kegiatan'])
-            ->where('status', true);
+        $query = DataStaffPerjalanan::with(['staff', 'perjalanan', 'perjalanan.mak', 'spd', 'kwitansi', 'geotaging', 'perjalanan.kegiatan', 'tujuan_perjalanan.tempatTujuan'])
+        ->whereHas('perjalanan.status_perjalanan', function ($query) {
+            $query->where('id_status', '=', '2');
+        })
+        ->where('status', true);
 
         // If the user is not a super admin, filter data based on user's ID
         if ($userRole != 'Super Admin') {

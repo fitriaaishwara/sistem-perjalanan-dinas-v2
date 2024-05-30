@@ -197,27 +197,38 @@
                     }
                 },
                 {
-                    "data": "total_biaya",
+                    "data": "tujuan_perjalanan",
                     "width": '15%',
                     "defaultContent": "-",
                     //render date format
                     render: function(data, type, row) {
                         if (data) {
+                            const transportBerangkat = parseInt(row.transportasi_berangkat[0]?.nominal ?? 0);
+                            const transportPulang = parseInt(row.transportasi_pulang[0]?.nominal ?? 0);
+                            const akomodasiHotel = parseInt(row.akomodasi_hotel[0]?.nominal ?? 0) * (row.tujuan_perjalanan[0].lama_perjalanan - 1);
+                            const uangHarian = parseInt(row.tujuan_perjalanan[0].uang_harian.nominal ?? 0) * row.tujuan_perjalanan[0].lama_perjalanan;
+
+                            const total = transportBerangkat + transportPulang + akomodasiHotel + uangHarian;
+
                             return "<div class='text-wrap' style='font-size: 12px;'>Rp. " +
-                                rupiah(data) + "</div>";
+                                rupiah(total) +
+                                "</div>";
                         } else {
-                            return "<div class='text-wrap badge badge-danger' style='font-size: 12px;'>Belum Upload Invoce</div>";
+                            return "<div class='text-wrap badge badge-danger' style='font-size: 12px;'>Belum Upload Invoice</div>";
                         }
                     }
                 },
                 {
-                    "data": null,
+                    "data": "tujuan_perjalanan",
                     "width": '15%',
                     "defaultContent": "-",
                     //render date format
                     render: function(data, type, row) {
                         if (data) {
-                            const total = parseInt(row.transportasi_berangkat[0]?.nominal ?? 0) + parseInt(row.transportasi_pulang[0]?.nominal ?? 0) + parseInt(row.akomodasi_hotel[0]?.nominal ?? 0)
+                            const total =
+                            parseInt(row.transportasi_berangkat[0]?.nominal ?? 0) +
+                            parseInt(row.transportasi_pulang[0]?.nominal ?? 0) +
+                            (parseInt(row.akomodasi_hotel[0]?.nominal ?? 0) * (row.tujuan_perjalanan[0].lama_perjalanan - 1));
                             return "<div class='text-wrap' style='font-size: 12px;'>Rp. " +
                                 rupiah(total)
                                 "</div>";
@@ -293,11 +304,18 @@
                         // var btnDownload = "";
                         // var btnEdit = "";
                         var btnDetail= "";
+                        var btnTambahInvoice="";
 
                         if (row.kwitansi == "" || row.kwitansi == null) {
+                            @if (auth()->user()->can('Super Admin','Admin'))
                             btnTambah += '<a href="/kwitansi/create/' + data +
                                 '" name="btnTambah" data-id="' + data +
                                 '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
+                            @endif
+
+                            btnTambah += '<a href="/bukti-perjalanan/create/' + data +
+                                '" name="btnTambah" data-id="' + data +
+                                '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fas fa-file"></i></a>';
                         } else {
                             // Only show edit button if needed
                             // btnEdit += '<a href="/kwitansi/edit/' + row.kwitansi[0].id +
@@ -317,7 +335,7 @@
                         }
 
                         console.log(row);
-                        return btnTambah + btnDetail; // Returning all buttons
+                        return btnTambah + btnDetail + btnTambahInvoice;
                     },
                 },
             ]

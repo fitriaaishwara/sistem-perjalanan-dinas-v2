@@ -60,21 +60,21 @@ class TransportasiPulangController extends Controller
                 $tujuan->save();
             }
 
-            if ($tujuan->save()) {
-                $sisaSaldo = Mak::where('id', $perjalanan->id_mak)->first();
-                $sisaSaldo->saldo_pagu = $sisaSaldo->saldo_pagu - $request->input('nominal');
-                $sisaSaldo->save();
-            }
+            // if ($tujuan->save()) {
+            //     $sisaSaldo = Mak::where('id', $perjalanan->id_mak)->first();
+            //     $sisaSaldo->saldo_pagu = $sisaSaldo->saldo_pagu - $request->input('nominal');
+            //     $sisaSaldo->save();
+            // }
 
-            if ($sisaSaldo->save()) {
-                $saldoTerealisasi = Mak::where('id', $perjalanan->id_mak)->first();
-                $saldoTerealisasi->terealisasi = $saldoTerealisasi->terealisasi + $request->input('nominal');
-                $saldoTerealisasi->save();
-            }
+            // if ($sisaSaldo->save()) {
+            //     $saldoTerealisasi = Mak::where('id', $perjalanan->id_mak)->first();
+            //     $saldoTerealisasi->terealisasi = $saldoTerealisasi->terealisasi + $request->input('nominal');
+            //     $saldoTerealisasi->save();
+            // }
 
 
             if ($create) {
-                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Jabatan successfully created'];
+                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Data successfully created'];
             }
 
         } catch (\Exception $ex) {

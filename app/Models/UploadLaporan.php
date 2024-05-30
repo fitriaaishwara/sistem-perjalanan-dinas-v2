@@ -14,7 +14,7 @@ class UploadLaporan extends Model
     protected $table = 'upload_laporan';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id_kegiatan', 'name_file', 'path_file'
+        'id_tujuan_perjalanan', 'name_file', 'path_file'
     ];
 
 

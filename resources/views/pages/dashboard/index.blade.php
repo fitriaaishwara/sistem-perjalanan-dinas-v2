@@ -11,8 +11,8 @@
 								{{-- <h5 class="text-white op-7 mb-2">Selamat Datang {{ Auth::user()->name }}</h5> --}}
 							</div>
 							<div class="ml-md-auto py-2 py-md-0">
-								<a href="#" class="btn btn-white btn-border btn-round mr-2">Manage</a>
-								<a href="#" class="btn btn-secondary btn-round">Add Customer</a>
+								{{-- <a href="#" class="btn btn-white btn-border btn-round mr-2">Manage</a>
+								<a href="#" class="btn btn-secondary btn-round">Add Customer</a> --}}
 							</div>
 						</div>
 					</div>
@@ -25,13 +25,14 @@
 									<div class="row">
 										<div class="col-5">
 											<div class="icon-big text-center">
-												<i class="flaticon-chart-pie text-warning"></i>
+												<i class="
+                                                fas fa-file-import text-primary"></i>
 											</div>
 										</div>
 										<div class="col-7 col-stats">
 											<div class="numbers">
 												<p class="card-category">Naskah Masuk</p>
-												<h4 class="card-title">1</h4>
+												<h4 class="card-title">{{ $naskah_masuk }}</h4>
 											</div>
 										</div>
 									</div>
@@ -44,13 +45,14 @@
 									<div class="row">
 										<div class="col-5">
 											<div class="icon-big text-center">
-												<i class="flaticon-coins text-success"></i>
+												<i class="
+                                                fas fa-redo-alt text-warning"></i>
 											</div>
 										</div>
 										<div class="col-7 col-stats">
 											<div class="numbers">
 												<p class="card-category">Naskah Proses</p>
-												<h4 class="card-title">$ 1</h4>
+												<h4 class="card-title">{{ $naskah_proses }}</h4>
 											</div>
 										</div>
 									</div>
@@ -63,13 +65,14 @@
 									<div class="row">
 										<div class="col-5">
 											<div class="icon-big text-center">
-												<i class="flaticon-error text-danger"></i>
+												<i class="
+                                                fas fa-check-square text-success"></i>
 											</div>
 										</div>
 										<div class="col-7 col-stats">
 											<div class="numbers">
 												<p class="card-category">Naskah Selesai</p>
-												<h4 class="card-title">0</h4>
+												<h4 class="card-title">{{ $naskah_selesai }}</h4>
 											</div>
 										</div>
 									</div>
@@ -82,13 +85,14 @@
 									<div class="row">
 										<div class="col-5">
 											<div class="icon-big text-center">
-												<i class="flaticon-twitter text-primary"></i>
+												<i class="
+                                                fas fa-times-circle text-danger"></i>
 											</div>
 										</div>
 										<div class="col-7 col-stats">
 											<div class="numbers">
-												<p class="card-category">Naskah Keluar</p>
-												<h4 class="card-title">0</h4>
+												<p class="card-category">Naskah Ditolak</p>
+												<h4 class="card-title">{{ $naskah_ditolak }}</h4>
 											</div>
 										</div>
 									</div>

@@ -39,7 +39,7 @@ class AkomodasiHotelController extends Controller
             // Create the record in the database
             $create = AkomodasiHotel::create([
                 'id_staff_perjalanan' => $request->input('id_staff_perjalanan'),
-                'id_sbm_hotel'        => $request->input('id_sbm_hotel'), // 'id_sbm_hotel' => 'required|integer',
+                // 'id_sbm_hotel'        => $request->input('id_sbm_hotel'), // 'id_sbm_hotel' => 'required|integer',
                 'nama_hotel'          => $request->input('nama_hotel'),
                 'deskripsi_file'      => $request->input('deskripsi_file'),
                 'tanggal_check_in'    => $request->input('tanggal_check_in'),
@@ -50,7 +50,7 @@ class AkomodasiHotelController extends Controller
 
             $dataStaff = DataStaffPerjalanan::where('id', $request->input('id_staff_perjalanan'))->first();
             $perjalanan = Perjalanan::where('id', $dataStaff->id_perjalanan)->first();
-            $perjalanan->total_biaya = $perjalanan->total_biaya + $request->input('nominal');
+            $perjalanan->total_biaya = $perjalanan->total_biaya + $request->input('nominal')*$dataStaff->tujuan_perjalanan[0]->lama_perjalanan - 1;
             $perjalanan->save();
 
             if ($perjalanan->save()) {
@@ -64,20 +64,20 @@ class AkomodasiHotelController extends Controller
                 $tujuan->save();
             }
 
-            if ($tujuan->save()) {
-                $sisaSaldo = Mak::where('id', $perjalanan->id_mak)->first();
-                $sisaSaldo->saldo_pagu = $sisaSaldo->saldo_pagu - $request->input('nominal');
-                $sisaSaldo->save();
-            }
+            // if ($tujuan->save()) {
+            //     $sisaSaldo = Mak::where('id', $perjalanan->id_mak)->first();
+            //     $sisaSaldo->saldo_pagu = $sisaSaldo->saldo_pagu - $request->input('nominal');
+            //     $sisaSaldo->save();
+            // }
 
-            if ($sisaSaldo->save()) {
-                $saldoTerealisasi = Mak::where('id', $perjalanan->id_mak)->first();
-                $saldoTerealisasi->terealisasi = $saldoTerealisasi->terealisasi + $request->input('nominal');
-                $saldoTerealisasi->save();
-            }
+            // if ($sisaSaldo->save()) {
+            //     $saldoTerealisasi = Mak::where('id', $perjalanan->id_mak)->first();
+            //     $saldoTerealisasi->terealisasi = $saldoTerealisasi->terealisasi + $request->input('nominal');
+            //     $saldoTerealisasi->save();
+            // }
 
             if ($create) {
-                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Jabatan successfully created'];
+                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Data successfully created'];
             }
 
         } catch (\Exception $ex) {

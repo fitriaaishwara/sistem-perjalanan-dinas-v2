@@ -33,6 +33,9 @@ class NotaDinasController extends Controller
 
         $query = Perjalanan::select()
             ->with('mak', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'tujuan.staff', 'nota_dinas', 'kegiatan', 'data_staff_perjalanan.staff')
+            ->whereHas('status_perjalanan', function ($query) {
+                $query->where('id_status', '=' , '2');
+            })
             ->where('status', true);
 
         // If the user is not a super admin, filter data based on user's ID

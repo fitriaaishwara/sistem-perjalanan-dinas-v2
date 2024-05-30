@@ -17,6 +17,7 @@ class CreateSbmTranslok extends Migration
             $table->uuid('id')->primary();
             $table->char('province_id', 2);
             $table->unsignedInteger('id_golongan');
+            $table->foreignUuid('id_jabatan_struktural')->nullable();
             $table->string('nominal', 50);
 
             $table->foreign('province_id')
@@ -33,6 +34,7 @@ class CreateSbmTranslok extends Migration
             $table->softDeletes();
 
             $table->foreign('id_golongan')->references('id')->on('golongan');
+            $table->foreign('id_jabatan_struktural')->references('id')->on('jabatan_struktural');
 
         });
     }

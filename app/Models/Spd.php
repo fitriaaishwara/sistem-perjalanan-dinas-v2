@@ -16,6 +16,7 @@ class Spd extends Model
 
     protected $fillable = [
         'id_staff_perjalanan',
+        'id_kegiatan',
         'nomor_spd',
         'pejabat_pembuat_komitmen',
         'tingkat_biaya_perjalanan_dinas',

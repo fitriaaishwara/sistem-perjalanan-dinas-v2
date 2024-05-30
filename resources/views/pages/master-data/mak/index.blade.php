@@ -90,8 +90,10 @@
 								<div class="card-header">
 									<div class="d-flex align-items-center">
 										{{-- <h4 class="card-title">Data Mata Akun</h4> --}}
+                                        @if (auth()->user()->can('Super Admin','Admin'))
                                         <a href="javascript:void(0)" class="btn btn-primary btn-round ml-auto"
                                             data-toggle="modal" data-target="#myModal" id="addNew" name="addNew"><i class="fa fa-plus"></i> Tambah</a>
+                                        @endif
                                             {{-- <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal">
                                             <i class="fa fa-plus"></i>Create
                                             </button> --}}
@@ -104,10 +106,12 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Kode Mata Anggaran</th>
-                                                    <th>Saldo Awal Pagu</th>
-                                                    <th>Saldo Pagu</th>
-                                                    <th>Terealisasi</th>
+                                                    <th>Pagu Anggaran</th>
+                                                    <th>Realisasi</th>
+                                                    <th>Sisa Pagu Anggaran</th>
+                                                    @if (auth()->user()->can('Super Admin','Admin'))
                                                     <th>Action</th>
+                                                    @endif
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -250,19 +254,7 @@
                         },
                     },
                     {
-                        "data": "saldo_pagu",
-                        "width": '10%',
-                        "defaultContent": "-",
-                        render: function(data, type, row) {
-                            if (data == null) {
-                                return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
-                            } else {
-                                return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data) + "</div>";
-                            }
-                        },
-                    },
-                    {
-                        "data": "keterangan",
+                        "data": "terealisasi",
                         "width": '10%',
                         "defaultContent": "-",
                         render: function(data, type, row) {
@@ -274,19 +266,35 @@
                         },
                     },
                     {
+                        "data": "saldo_pagu",
+                        "width": '10%',
+                        "defaultContent": "-",
+                        render: function(data, type, row) {
+                            if (data == null) {
+                                return "<div class='text-wrap' style='font-size: 12px;'>-</div>";
+                            } else {
+                                return "<div class='text-wrap' style='font-size: 12px;'>Rp. " + rupiah(data) + "</div>";
+                            }
+                        },
+                    },
+                    @if (auth()->user()->can('Super Admin','Admin'))
+                    {
                         "data": "id",
                         "width": '10%',
                         render: function(data, type, row) {
                             var btnEdit = "";
                             var btnDelete = "";
+                            @if (auth()->user()->can('Super Admin','Admin'))
                             btnEdit += '<button name="btnEdit" data-id="' + data +
                                 '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
                             btnDelete += '<button name="btnDelete" data-id="' + data +
                                 '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
+                            @endif
 
                             return btnEdit + btnDelete;
                         },
                     },
+                    @endif
                 ]
             });
 

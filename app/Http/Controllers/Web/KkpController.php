@@ -38,9 +38,13 @@ class KkpController extends Controller
         ->with(['staff.golongans', 'staff.jabatans', 'staff.instansis', 'perjalanan', 'tujuan_perjalanan.uangHarian',
         'tujuan_perjalanan.tempatTujuan.hotel',
         'tujuan_perjalanan.tempatTujuan.tiket',
-        'tujuan_perjalanan.tempatTujuan.translok'
+        'tujuan_perjalanan.tempatTujuan.translok',
+        // 'perjalanan.statusPerjalanan'
         ])
         ->where('id_perjalanan', $id)
+        // ->whereHas('status_perjalanan', function ($query) {
+        //     $query->where('id_status', '=' , '2');
+        // })
         ->when($keyword, function ($query, $keyword) {
             return $query->where('name', 'like', '%' . $keyword . '%');
         })

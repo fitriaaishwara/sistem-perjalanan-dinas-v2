@@ -262,7 +262,7 @@
                         "width": '10%',
                         "defaultContent": "-",
                         render: function(data, type, row) {
-                            return "<div class='text-wrap' style='font-size: 12px;'>Active</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'> " + data.status_perjalanan + "</div>";
                         },
 
                     },
@@ -271,8 +271,9 @@
                     "width": '15%',
                     render: function(data, type, row) {
                         var btnDetail = "";
-                        btnDetail += '<button name="btnStatus" data-id="' + data +
-                            '" type="button" class="btn btn-primary btn-sm btnStatus m-1" data-toggle="tooltip" data-placement="top" title="Change Status"><i class="fa fa-bookmark"></i></button>';
+                        btnDetail += '<a href="/perjalanan/detail/' + data +
+                            '" name="btnDetail" data-id="' + data +
+                            '" type="button" class="btn btn-warning btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail"><i class="fa fa-bookmark"></i></a>';
 
                         return btnDetail;
                     },

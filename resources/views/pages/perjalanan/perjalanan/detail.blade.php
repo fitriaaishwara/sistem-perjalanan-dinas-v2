@@ -42,12 +42,12 @@
                                         <i class="flaticon-cart"></i>
                                         Anggaran
                                     </a>
-                                    <a class="nav-link" id="v-pills-profile-tab-icons" data-toggle="pill"
+                                    {{-- <a class="nav-link" id="v-pills-profile-tab-icons" data-toggle="pill"
                                         href="#v-pills-profile-icons" role="tab"
                                         aria-controls="v-pills-profile-icons" aria-selected="false">
                                         <i class="flaticon-user-4"></i>
                                         Tujuan
-                                    </a>
+                                    </a> --}}
                                     <a class="nav-link" id="v-pills-home-tab-icons" data-toggle="pill"
                                         href="#v-pills-home-icons" role="tab" aria-controls="v-pills-home-icons"
                                         aria-selected="true">
@@ -182,7 +182,7 @@
                                         aria-labelledby="v-pills-buy-tab-icons">
                                         {{-- <h5 class="mt-3">Anggaran</h5> --}}
                                         {{-- <hr /> --}}
-                                        <p>Kode Mak :</p>
+                                        <p>Kode Mak : {{ $perjalanan->mak->kode_mak }}</p>
                                         <p>Total anggaran yang digunakan :</p>
                                     </div>
                                     {{-- <div class="tab-pane fade" id="v-pills-quality-icons" role="tabpanel" aria-labelledby="v-pills-quality-tab-icons">

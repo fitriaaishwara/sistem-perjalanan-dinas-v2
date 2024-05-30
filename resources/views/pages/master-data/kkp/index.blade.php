@@ -267,7 +267,7 @@
                     "width": '10%',
                     "defaultContent": "-",
                     render: function(data, type, row) {
-                        return "<div class='text-wrap' style='font-size: 12px;'>Active</div>";
+                        return "<div class='text-wrap' style='font-size: 12px;'> " + data.status_perjalanan + "</div>";
                     },
 
                 },

@@ -17,6 +17,7 @@ class sbm_hotel extends Model
         'id',
         'province_id',
         'id_golongan',
+        'id_jabatan_struktural',
         'nominal',
         'status',
         'created_by',
@@ -35,5 +36,10 @@ class sbm_hotel extends Model
     public function golongan()
     {
         return $this->belongsTo(Golongan::class, 'id_golongan', 'id');
+    }
+
+    public function jabatan_struktural()
+    {
+        return $this->belongsTo(JabatanStruktural::class, 'id_jabatan_struktural', 'id');
     }
 }

@@ -51,11 +51,11 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="nomor_spt">Uang Sebesar</label>
-                                                <input type="text" class="form-control" value="{{ format_rupiah($dataStaff->total_biaya) }}" readonly validate>
+                                                    <input type="text" class="form-control" value="{{ rupiah($dataStaff->total_biaya + ($dataStaff->tujuan_perjalanan->first()->uangHarian->nominal * $dataStaff->tujuan_perjalanan->first()->lama_perjalanan)) }}" readonly validate>
                                             </div>
                                             <div class="form-group">
                                                 <label for="nomor_spt">Untuk Pembayaran</label>
-                                                <input type="text" class="form-control" value="Biaya Perjalanan Dinas dalam Rangka {{ $dataStaff->perjalanan[0]->perihal_perjalanan }}" readonly validate>
+                                                <input type="text" class="form-control" value="Biaya Perjalanan Dinas dalam Rangka {{ $dataStaff->tujuan_perjalanan->first()->kegiatan->kegiatan }}" readonly validate>
                                             </div>
                                         </div>
                                     </div>
@@ -83,7 +83,7 @@
                                     <div id="myModal" class="card-body">
                                         <div class="form-group">
                                             <label for="nomor_spt">Terbilang</label>
-                                            <input type="text" class="form-control" value="{{ terbilang($dataStaff->total_biaya) }}" readonly validate>
+                                            <input type="text" class="form-control" value="{{ terbilang($dataStaff->total_biaya + ($dataStaff->tujuan_perjalanan->first()->uangHarian->nominal * $dataStaff->tujuan_perjalanan->first()->lama_perjalanan)) }}" readonly validate>
                                         </div>
                                         <div class="form-group">
                                             <label for="sudah_diterima_dari">Yang Menerima</label>

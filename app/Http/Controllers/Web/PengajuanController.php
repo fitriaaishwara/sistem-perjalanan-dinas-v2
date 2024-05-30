@@ -7,6 +7,7 @@ use App\Models\DataKegiatan;
 use App\Models\DataStaffPerjalanan;
 use App\Models\DataUangHarian;
 use App\Models\LogStatusPerjalanan;
+use App\Models\Mak;
 use App\Models\Perjalanan;
 use App\Models\PerjalananDinas;
 use App\Models\Province;
@@ -80,7 +81,7 @@ class PengajuanController extends Controller
             $value = Perjalanan::with(['data_staff_perjalanan', 'mak'])->findOrFail($id);
 
             $dataStaff = DataStaffPerjalanan::with([
-                'staff.golongans', 'tujuan_perjalanan.uangHarian',
+                'staff.golongans', 'tujuan_perjalanan.uangHarian','staff.jabatans',
                 'tujuan_perjalanan.tempatTujuan.hotel',
                 'tujuan_perjalanan.tempatTujuan.tiket',
                 'tujuan_perjalanan.tempatTujuan.translok'
@@ -90,17 +91,45 @@ class PengajuanController extends Controller
             $totalTiket = 0;
             $totalTranslok = 0;
             $uangHarian = 0;
+            // foreach ($dataStaff as $valueStaff) {
+            //     $hotel = $valueStaff->tujuan_perjalanan[0]->tempatTujuan->hotel->first(function ($item) use ($valueStaff) {
+            //         return $item['id_golongan'] === $valueStaff->staff->golongans->id;
+            //     });
+
+            //     $tiket = $valueStaff->tujuan_perjalanan[0]->tempatTujuan->tiket->first(function ($item) use ($valueStaff) {
+            //         return $item['id_golongan'] === $valueStaff->staff->golongans->id;
+            //     });
+
+            //     $translok = $valueStaff->tujuan_perjalanan[0]->tempatTujuan->translok->first(function ($item) use ($valueStaff) {
+            //         return $item['id_golongan'] === $valueStaff->staff->golongans->id;
+            //     });
+            //     $uangHarian += $valueStaff->tujuan_perjalanan[0]->uangHarian->nominal * $valueStaff->tujuan_perjalanan[0]->lama_perjalanan;
+            //     $totalHotel += $hotel->nominal;
+            //     $totalTiket += $tiket->nominal;
+            //     $totalTranslok += $translok->nominal;
+            // }
             foreach ($dataStaff as $valueStaff) {
-                $hotel = $valueStaff->tujuan_perjalanan[0]->tempatTujuan->hotel->first(function ($item) use ($valueStaff) {
-                    return $item['id_golongan'] === $valueStaff->staff->golongans->id;
+                $jabatanId = null;
+                if ($valueStaff->staff->jabatans && $valueStaff->staff->jabatans->id) {
+                    $jabatanId = $valueStaff->staff->jabatans->jabatanStruktural->id;
+                } else {
+                    $jabatanId = $valueStaff->staff->golongans->id;
+                }
+
+                // Gunakan $jabatanId sesuai kebutuhan Anda
+                // Misalnya, untuk debug, Anda bisa mencetaknya:
+                // echo $jabatanId;
+
+                $hotel = $valueStaff->tujuan_perjalanan[0]->tempatTujuan->hotel->first(function ($item) use ($jabatanId) {
+                    return $item['id_golongan'] === $jabatanId;
                 });
 
-                $tiket = $valueStaff->tujuan_perjalanan[0]->tempatTujuan->tiket->first(function ($item) use ($valueStaff) {
-                    return $item['id_golongan'] === $valueStaff->staff->golongans->id;
+                $tiket = $valueStaff->tujuan_perjalanan[0]->tempatTujuan->tiket->first(function ($item) use ($jabatanId) {
+                    return $item['id_golongan'] === $jabatanId;
                 });
 
-                $translok = $valueStaff->tujuan_perjalanan[0]->tempatTujuan->translok->first(function ($item) use ($valueStaff) {
-                    return $item['id_golongan'] === $valueStaff->staff->golongans->id;
+                $translok = $valueStaff->tujuan_perjalanan[0]->tempatTujuan->translok->first(function ($item) use ($jabatanId) {
+                    return $item['id_golongan'] === $jabatanId;
                 });
                 $uangHarian += $valueStaff->tujuan_perjalanan[0]->uangHarian->nominal * $valueStaff->tujuan_perjalanan[0]->lama_perjalanan;
                 $totalHotel += $hotel->nominal;
@@ -109,12 +138,12 @@ class PengajuanController extends Controller
             }
             $total = $totalHotel + $totalTiket + $totalTranslok + $uangHarian;
 
-            $saldo = $value->mak->saldo_pagu - $total;
-            if ($saldo > 0) {
-                Alert::success('Saldo Terpenuhi', 'Success');
-            } else {
-                Alert::error('Saldo Mata Anggaran Kegiatan Tidak Mencukupi', 'Fail');
-            }
+            // $saldo = $value->mak->saldo_pagu - $total;
+            // if ($saldo > 0) {
+            //     Alert::success('Saldo Terpenuhi', 'Success');
+            // } else {
+            //     Alert::error('Saldo Mata Anggaran Kegiatan Tidak Mencukupi', 'Fail');
+            // }
 
         } catch (\Exception $ex) {
             $data = ['status' => false, 'message' => 'A system error has occurred. please try again later. ' . $ex];
@@ -191,11 +220,11 @@ class PengajuanController extends Controller
         $userRole = Auth::user()->roles->pluck('name')[0];
 
         $data = Perjalanan::select()
-            ->with(['mak','kegiatan.dataTujuan', 'kegiatan.dataTujuan.tempatBerangkat', 'kegiatan.dataTujuan.tempatTujuan', 'log_status_perjalanan',
-                    'kegiatan.dataTujuan.staff.staff', 'log_status_perjalanan.status_perjalanan'])
-            ->whereDoesntHave('log_status_perjalanan', function ($query) {
-                $query->where('id_status_perjalanan', '5');
-            })
+            ->with(['mak','kegiatan.dataTujuan', 'kegiatan.dataTujuan.tempatBerangkat', 'kegiatan.dataTujuan.tempatTujuan', 'log_status_perjalanan.status_perjalanan',
+                    'kegiatan.dataTujuan.staff.staff', 'status_perjalanan'])
+                    ->whereHas('status_perjalanan', function ($query) {
+                        $query->where('id_status', '1');
+                    })
             // ->where(function ($query) use ($keyword) {
             //     $query->where('id', 'like', '%' . $keyword . '%')
             //         ->orWhereHas('mak', function ($query) use ($keyword) {
@@ -243,7 +272,7 @@ class PengajuanController extends Controller
                         });
                     });
             })
-            ->where('status', true) 
+            ->where('status', true)
             ->count();
 
         $response = [
@@ -254,28 +283,6 @@ class PengajuanController extends Controller
             'data'           => $data,
         ];
         return $response;
-    }
-
-
-    public function store_status(Request $request)
-    {
-        try {
-            $data = ['status' => false, 'code' => 'EC001', 'message' => 'Perjalanan failed to create'];
-            $create = LogStatusPerjalanan::create([
-                'id_perjalanan' => $request->input('id_perjalanan'),
-                'id_status_perjalanan' => $request->input('id_status_perjalanan'),
-                'description' => $request->input('description'),
-                'direvisi_oleh' => Auth::id(),
-            ]);
-
-            if ($create) {
-                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Perjalanan successfully created'];
-            }
-        } catch (\Exception $ex) {
-            $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
-        }
-
-        return $data;
     }
 
     public function show_status($id)
@@ -291,6 +298,58 @@ class PengajuanController extends Controller
         }
         return $data;
     }
+
+    public function store_status(Request $request)
+{
+    try {
+        response()->json($request->all());
+        $data = ['status' => false, 'code' => 'EC001', 'message' => 'Perjalanan failed to create'];
+
+        // Membuat entri di tabel LogStatusPerjalanan
+        $create = LogStatusPerjalanan::create([
+            'id_perjalanan' => $request->input('id_perjalanan'),
+            'id_status_perjalanan' => $request->input('id_status_perjalanan'),
+            'description' => $request->input('description'),
+            'direvisi_oleh' => Auth::id(),
+        ]);
+
+        if ($create) {
+            // Jika berhasil membuat entri di LogStatusPerjalanan, perbarui id_status_perjalanan di tabel Perjalanan
+            $perjalanan = Perjalanan::find($request->input('id_perjalanan'));
+            if ($perjalanan) {
+                $perjalanan->id_status_perjalanan = $request->input('id_status_perjalanan');
+                $perjalanan->save();
+
+               // Jika id_status_perjalanan adalah 12, kurangi saldo_pagu dengan total_biaya
+                if ($request->input('id_status_perjalanan') == 12) {
+                    $sisaSaldo = Mak::where('id', $perjalanan->id_mak)->first();
+                    if ($sisaSaldo) {
+                        $saldoAwal = $sisaSaldo->saldo_pagu;
+
+                        // Mengupdate mak.terealisasi
+                        $sisaSaldo->terealisasi += $perjalanan->total_biaya;
+
+                        // Mengupdate saldo_pagu
+                        $sisaSaldo->saldo_pagu -= $perjalanan->total_biaya;
+
+                        $sisaSaldo->save();
+
+                        $data['saldo_awal'] = $saldoAwal;
+                        $data['saldo_akhir'] = $sisaSaldo->saldo_pagu;
+                    }
+                }
+
+                $data['status'] = true;
+                $data['code'] = 'SC001';
+                $data['message'] = 'Status successfully created';
+            }
+        }
+    } catch (\Exception $ex) {
+        $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex->getMessage()];
+    }
+
+    return response()->json($data);
+}
 
     public function update_status(Request $request, $id)
     {

@@ -15,7 +15,7 @@ class CreateLogStatusPerjalananTable extends Migration
     {
         Schema::create('log_status_perjalanan', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->foreignUuid('id_perjalanan');
+            $table->foreignUuid('id_perjalanan')->nullable();
             $table->foreignUuid('id_status_perjalanan')->nullable();
             $table->string('description')->nullable();
             $table->foreignUuid('direvisi_oleh')->nullable();

@@ -238,7 +238,7 @@
             <form action="{{ url('pengajuan/update/' . $perjalanan->id) }}" method="POST"
                 enctype="multipart/form-data">
                 @csrf
-                <button type="submit" class="btn btn-primary btn-sm">Simpan Update</button>
+                <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
         </div>
         {{-- MAK --}}
         <div class="row" id="myForm">
@@ -1069,7 +1069,7 @@
                     $('#id_staff').val(response.data.staff.nip);
                     $('#nip_staff').val(response.data.staff.nip).trigger('change');
                     $('#id_tujuan_perjalanan').val(response.data.id_tujuan_perjalanan).trigger('change');
-                    
+
                     // if (response.data.staff) {
                     //     var staff = new Option(response.data.staff.name, response
                     //         .data.staff.nip, true, true);

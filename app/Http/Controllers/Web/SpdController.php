@@ -28,6 +28,9 @@ class SpdController extends Controller
 
         $query = DataStaffPerjalanan::select()
             ->with(['perjalanan.mak', 'staff.instansis', 'penandatangan', 'tujuan_perjalanan.tempatTujuan', 'spd', 'perjalanan.kegiatan'])
+            ->whereHas('perjalanan.status_perjalanan', function ($query) {
+                $query->where('id_status', '=', '2');
+            })
             ->where('status', true);
 
         // If the user is not a super admin, filter data based on user's ID
@@ -97,7 +100,7 @@ class SpdController extends Controller
     public function create($id)
     {
 
-        $dataStaff = DataStaffPerjalanan::with(['staff', 'perjalanan.mak', 'tujuan_perjalanan'])->find($id);
+        $dataStaff = DataStaffPerjalanan::with(['staff', 'perjalanan.mak', 'tujuan_perjalanan', 'perjalanan.kegiatan'])->find($id);
         // dd($dataStaff);
         return view('pages.pre-perjalanan.spd.create', compact('dataStaff'));
     }
@@ -105,9 +108,10 @@ class SpdController extends Controller
     public function store(Request $request)
     {
         try {
-            $data = ['status' => false, 'code' => 'EC001', 'message' => 'Jabatan failed to create'];
+            $data = ['status' => false, 'code' => 'EC001', 'message' => 'SPD failed to create'];
             $create = Spd::create([
                 'id_staff_perjalanan' => $request->id_staff_perjalanan,
+                'id_kegiatan' => $request->id_kegiatan,
                 'nomor_spd' => $request->nomor_spd,
                 'pejabat_pembuat_komitmen' => $request->pejabat_pembuat_komitmen,
                 'tingkat_biaya_perjalanan_dinas' => $request->tingkat_biaya_perjalanan_dinas,
@@ -116,7 +120,7 @@ class SpdController extends Controller
                 'pada_tanggal' => $request->pada_tanggal,
             ]);
             if ($create) {
-                $data = ['status' => true, 'code' => 'SC001', 'message' => 'Jabatan successfully created'];
+                $data = ['status' => true, 'code' => 'SC001', 'message' => 'SPD successfully created'];
             }
         } catch (\Exception $e) {
             $data = ['status' => false, 'code' => 'EC001', 'message' => $e->getMessage()];

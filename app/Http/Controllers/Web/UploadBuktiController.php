@@ -25,6 +25,9 @@ class UploadBuktiController extends Controller
 
         $query = DataStaffPerjalanan::select()
             ->with(['perjalanan.mak', 'staff.instansis', 'penandatangan', 'tujuan_perjalanan.tempatTujuan', 'spd', 'perjalanan.kegiatan', 'staff'])
+            ->whereHas('perjalanan.status_perjalanan', function ($query) {
+                $query->where('id_status', '=', '2');
+            })
             ->where('status', true);
 
         // If the user is not a super admin, filter data based on user's ID

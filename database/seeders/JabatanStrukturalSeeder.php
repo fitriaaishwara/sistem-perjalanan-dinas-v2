@@ -2,10 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Golongan;
+use App\Models\Jabatan;
+use App\Models\JabatanStruktural;
 use Illuminate\Database\Seeder;
 
-class GolonganTableSeeder extends Seeder
+class JabatanStrukturalSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,22 +18,21 @@ class GolonganTableSeeder extends Seeder
         $data = [
             0 => [
                 'id' => 1,
-                'name' => 'I',
+                'name' => 'Eselon I',
             ],
             1 => [
                 'id' => 2,
-                'name' => 'II',
+                'name' => 'Eselon II',
             ],
             2 => [
                 'id' => 3,
-                'name' => 'III',
+                'name' => 'Eselon III',
             ],
             3 => [
                 'id' => 4,
-                'name' => 'IV',
+                'name' => 'Eselon IV',
             ],
         ];
-
-        Golongan::insert($data);
+        JabatanStruktural::insert($data);
     }
 }

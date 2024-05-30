@@ -18,16 +18,20 @@ class TiketController extends Controller
         $keyword = $request['searchkey'];
 
         $query = sbm_tiket::query()
-                ->with('province', 'golongan')
+                ->with('province', 'golongan', 'jabatan_struktural')
                 ->where('status', true)
                 ->orderBy('province_id')
-                ->orderBy('id_golongan');
+                ->orderBy('id_golongan')
+                ->orderBy('id_jabatan_struktural');
 
         if ($keyword) {
             $query->whereHas('province', function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');
             })->orWhereHas('golongan', function ($query) use ($keyword) {
                 $query->where('name', 'like', '%' . $keyword . '%');
+            })->orWhereHas('jabatan_struktural', function ($query) use ($keyword) {
+                $query->where('name', 'like', '%' . $keyword . '%');
+
             })->orWhere('nominal', 'like', '%' . $keyword . '%');
         }
 

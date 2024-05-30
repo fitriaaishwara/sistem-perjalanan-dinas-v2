@@ -25,7 +25,10 @@ class UploadLaporanController extends Controller
         $userRole = Auth::user()->roles->pluck('name')[0];
 
         $query = Tujuan::select()
-            ->with(['perjalanan', 'spt', 'staff.staff', 'tempatTujuan', 'perjalanan.kegiatan', 'perjalanan.data_staff_perjalanan.staff', 'kegiatan'])
+            ->with(['perjalanan', 'spt', 'staff.staff', 'tempatTujuan', 'perjalanan.kegiatan', 'perjalanan.data_staff_perjalanan.staff', 'kegiatan', 'uploadLaporan'])
+            ->whereHas('perjalanan.status_perjalanan', function ($query) {
+                $query->where('id_status', '=', '2');
+            })
             ->where('status', true);
 
         // If the user is not a super admin, filter data based on user's ID
@@ -111,7 +114,8 @@ class UploadLaporanController extends Controller
 
             // Create the record in the database
             $create = UploadLaporan::create([
-                'id_kegiatan' => $request->input('id_kegiatan'),
+                'id_tujuan_perjalanan' => $request->input('id_tujuan_perjalanan'),
+                // 'id_kegiatan' => $request->input('id_kegiatan'),
                 'name_file'      => $request->input('name_file'),
                 'path_file'           => $fileName,
             ]);
@@ -130,7 +134,7 @@ class UploadLaporanController extends Controller
     {
         try {
             $data = ['status' => false, 'message' => 'Laporan failed to be found'];
-            $data = Kegiatan::findOrFail($id);
+            $data = Tujuan::findOrFail($id);
             if ($data) {
                 $data = ['status' => true, 'message' => 'Laporan was successfully found', 'data' => $data];
             }
@@ -144,7 +148,7 @@ class UploadLaporanController extends Controller
     {
         try {
             $data = ['status' => false, 'message' => 'Laporan failed to be found'];
-            $data = UploadLaporan::findOrFail($id);
+            $data = UploadLaporan::with(['kegiatan'])->findOrFail($id);
             if ($data) {
                 $data = ['status' => true, 'message' => 'Laporan was successfully found', 'data' => $data];
             }

@@ -200,9 +200,11 @@
 
 
                         if (!data.spt || data.spt.length === 0) {
+                            @if (auth()->user()->can('Super Admin','Admin'))
                             btnTambah += '<a href="/surat-perintah-tugas/create/' + data.id +
                                 '" name="btnTambah" data-id="' + data.id +
                                 '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
+                            @endif
                         } else {
                             btnDetail += '<a href="/surat-perintah-tugas/' + data.id +
                                 '" name="btnDetail" data-id="' + data.id +

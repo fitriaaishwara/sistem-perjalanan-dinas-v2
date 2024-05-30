@@ -44,10 +44,10 @@ class PerjalananController extends Controller
         $userRole = Auth::user()->roles->pluck('name')[0];
 
         $data = Perjalanan::select()
-            ->with(['mak','kegiatan.dataTujuan', 'kegiatan.dataTujuan.tempatBerangkat', 'kegiatan.dataTujuan.tempatTujuan', 'log_status_perjalanan',
-                    'kegiatan.dataTujuan.staff.staff', 'log_status_perjalanan.status_perjalanan'])
-            ->whereDoesntHave('log_status_perjalanan', function ($query) {
-                $query->where('id_status_perjalanan', '5');
+        ->with(['mak','kegiatan.dataTujuan', 'kegiatan.dataTujuan.tempatBerangkat', 'kegiatan.dataTujuan.tempatTujuan', 'log_status_perjalanan.status_perjalanan',
+            'kegiatan.dataTujuan.staff.staff', 'status_perjalanan','tujuan.uangHarian'])
+            ->whereHas('status_perjalanan', function ($query) {
+                $query->where('id_status', '=' , '2');
             })
             // ->where(function ($query) use ($keyword) {
             //     $query->where('id', 'like', '%' . $keyword . '%')
@@ -96,7 +96,7 @@ class PerjalananController extends Controller
                         });
                     });
             })
-            ->where('status', true) 
+            ->where('status', true)
             ->count();
 
         $response = [
@@ -115,7 +115,7 @@ class PerjalananController extends Controller
         $userRole = Auth::user()->roles->pluck('name')[0];
 
         $data = Perjalanan::select()
-            ->with('mak', 'tujuan.tempatTujuan', 'kegiatan', 'data_staff_perjalanan.staff')
+            ->with('mak', 'tujuan.tempatTujuan', 'kegiatan', 'data_staff_perjalanan.staff', 'status_perjalanan')
             ->where(function ($query) use ($keyword) {
                 $query->where('id', 'like', '%' . $keyword . '%')
                     ->orWhereHas('mak', function ($query) use ($keyword) {

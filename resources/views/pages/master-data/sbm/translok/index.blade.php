@@ -93,8 +93,11 @@
                                                     <th>No</th>
                                                     <th>Provinsi</th>
                                                     <th>Golongan</th>
+                                                    <th>Jabatan Struktural</th>
                                                     <th>Nominal</th>
+                                                    @if (auth()->user()->can('Super Admin','Admin'))
                                                     <th>Action</th>
+                                                    @endif
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -165,6 +168,12 @@
     }
 </script>
     <script type="text/javascript">
+        function rupiah($angka){
+            var reverse = $angka.toString().split('').reverse().join(''),
+            ribuan = reverse.match(/\d{1,3}/g);
+            ribuan = ribuan.join('.').split('').reverse().join('');
+            return ribuan;
+        }
         $(function() {
             let request = {
                 start: 0,
@@ -225,11 +234,20 @@
                     },
                     {
                         "data": "golongan.name",
+                        "width": '15%',
+                        "defaultContent": "-",
+                        render: function(data, type, row) {
+                            let province = (data) ? data : '-';
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
+                        }
+                    },
+                    {
+                        "data": "jabatan_struktural.name",
                         "width": '30%',
                         "defaultContent": "-",
                         render: function(data, type, row) {
                             let province = (data) ? data : '-';
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + province + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + data + "</div>";
                         }
                     },
                     {
@@ -238,24 +256,27 @@
                         "defaultContent": "-",
                         render: function(data, type, row) {
                             let nominal = (data) ? data : '-';
-                            return "<div class='text-wrap' style='font-size: 12px;'>" + nominal + "</div>";
+                            return "<div class='text-wrap' style='font-size: 12px;'>" + formatCurrency(nominal) + "</div>";
                         },
                     },
+                    @if (auth()->user()->can('Super Admin','Admin'))
                     {
                         "data": "id",
                         "width": '10%',
                         render: function(data, type, row) {
                             var btnEdit = "";
                             var btnDelete = "";
+                            @if (auth()->user()->can('Super Admin','Admin'))
                             btnEdit += '<button name="btnEdit" data-id="' + data +
                                 '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
                             // btnDelete += '<button name="btnDelete" data-id="' + data +
                             //     '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
-
+                            @endif
                             // return btnEdit + btnDelete;
                             return btnEdit;
                         },
                     },
+                    @endif
                 ]
             });
 

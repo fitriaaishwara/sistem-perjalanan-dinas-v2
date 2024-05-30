@@ -111,7 +111,7 @@
                 <tr>
                     <td class="font-12" style="width: 55%">Sudah terima dari</td>
                     <td style="width: 10%" class="font-12 text-center">:</td>
-                    <td class="font-12">{{ $kwitansi->kwitansi[0]->sudah_diterima_dari }}</td>
+                    <td class="font-12">{{ $kwitansi->staff->name }}</td>
                 </tr>
                 <tr>
                     <td class="font-12" style="width: 55%">Uang Sebesar</td>
@@ -120,13 +120,13 @@
                         ($kwitansi->tujuan_perjalanan[0]->uangHarian->nominal*$kwitansi->tujuan_perjalanan[0]->lama_perjalanan) +
                         ($kwitansi->transportasi_berangkat[0]->nominal ?? 0) +
                         ($kwitansi->transportasi_pulang[0]->nominal ?? 0) +
-                        ($kwitansi->akomodasi_hotel[0]->nominal ?? 0)
+                        (($kwitansi->akomodasi_hotel->first()->nominal ?? 0) * ($kwitansi->tujuan_perjalanan->first()->lama_perjalanan - 1))
                         ) }}</td>
                 </tr>
                 <tr>
                     <td class="font-12" style="width: 55%">Untuk Pembayaran</td>
                     <td style="width: 10%" class="font-12 text-center">:</td>
-                    <td class="font-12">Biaya Perjalanan Dinas dalam rangka <br>{{ $kwitansi->perjalanan[0]->perihal_perjalanan }}</td>
+                    <td class="font-12">Biaya Perjalanan Dinas dalam rangka <br>{{ $kwitansi->tujuan_perjalanan[0]->kegiatan->kegiatan }}</td>
                 </tr>
                 <tr>
                     <td class="font-12" style="width: 55%">Berdasarkan SPD</td>
@@ -173,7 +173,16 @@
                 <tr>
                     <td class="font-12" style="width: 55%">Terbilang</td>
                     <td style="width: 10%" class="font-12 text-center">:</td>
-                    <td class="font-12" style="font-weight: bold; background-color: #ffffff; border: 2px solid #030607; padding-left: 30px; padding-right: 30px; width:15%">{{ terbilang($kwitansi->tujuan_perjalanan[0]->uangHarian->nominal*$kwitansi->tujuan_perjalanan[0]->lama_perjalanan) }}</td>
+                    <td class="font-12" style="font-weight: bold; background-color: #ffffff; border: 2px solid #030607; padding-left: 30px; padding-right: 30px; width:15%">
+                        {{
+                            terbilang(
+                                ($kwitansi->tujuan_perjalanan->first()->uangHarian->nominal * $kwitansi->tujuan_perjalanan->first()->lama_perjalanan) +
+                                ($kwitansi->transportasi_berangkat->first()->nominal ?? 0) +
+                                ($kwitansi->transportasi_pulang->first()->nominal ?? 0) +
+                                (($kwitansi->akomodasi_hotel->first()->nominal ?? 0) * ($kwitansi->tujuan_perjalanan->first()->lama_perjalanan - 1))
+                            )
+                        }}
+                    </td>
                 </tr>
 
             </tbody>

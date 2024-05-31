@@ -80,7 +80,11 @@
 </div>
 @endsection
 @push('js')
+
     <script type="text/javascript">
+     function getBaseUrl() {
+    return "https://survei.kemenkopukm.go.id/perjadin"; // Ganti dengan base URL Anda
+}
 
     $(function() {
         let request = {
@@ -219,7 +223,9 @@
                     "width": '15%',
                     render: function(data, type, row) {
                         var btnTambah = "";
-                        btnTambah += '<a href="/gallery/create/' + data +
+                        var baseUrl = getBaseUrl();
+
+                        btnTambah += '<a href="' + baseUrl + '/gallery/create/' + data +
                                 '" name="btnTambah" data-id="' + data +
                                 '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fas fa-file-image"></i></a>';
                         return btnTambah;

@@ -73,6 +73,10 @@
 @endsection
 @push('js')
     <script type="text/javascript">
+     function getBaseUrl() {
+    return "https://survei.kemenkopukm.go.id/perjadin"; // Ganti dengan base URL Anda
+}
+
         $(function() {
             let request = {
                 start: 0,
@@ -142,7 +146,8 @@
                             render: function(data, type, row) {
                                 let btnEdit = "";
                                 let btnDelete = "";
-                                    btnEdit += '<a href="/role/edit/' + data +
+                                var baseUrl = getBaseUrl();
+                                    btnEdit += '<a href="' + baseUrl + '/role/edit/' + data +
                                         '" name="btnEdit" data-id="' + data +
                                         '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
                                     btnDelete += '<button name="btnDelete" data-id="' + data +

@@ -111,12 +111,16 @@
 @endsection
 @push('js')
 <script type="text/javascript">
+     function getBaseUrl() {
+        return "https://survei.kemenkopukm.go.id/perjadin"; // Ganti dengan base URL Anda
+    }
     function rupiah($angka) {
         var reverse = $angka.toString().split('').reverse().join(''),
             ribuan = reverse.match(/\d{1,3}/g);
         ribuan = ribuan.join('.').split('').reverse().join('');
         return ribuan;
     }
+
 
     $(function() {
         let request = {
@@ -276,7 +280,9 @@
                     "width": '15%',
                     render: function(data, type, row) {
                         var btnDetail = "";
-                        btnDetail += '<a href="/kkp-detail/' + data +
+                        var baseUrl = getBaseUrl();
+
+                        btnDetail += '<a href="' + baseUrl + '/kkp-detail/' + data +
                             '" name="btnEdit" data-id="' + data +
                             '" type="button" class="btn btn-warning btn-sm btnDetailStatus m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-bookmark"></i></a>';
                         return btnDetail;

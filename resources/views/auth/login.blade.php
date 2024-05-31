@@ -41,7 +41,7 @@
                         </div>
                         <div class="form-group">
                             <label for="password" class="placeholder"><b>Password</b></label>
-                            <a href="#" class="link float-right">Lupa Kata Sandi ?</a>
+                            {{-- <a href="#" class="link float-right">Lupa Kata Sandi ?</a> --}}
                             <div class="position-relative">
                                 <input id="password" name="password" type="password" class="form-control" :value="__('Password')"  required>
                                 <div class="show-password">
@@ -51,66 +51,20 @@
                         </div>
                         <div class="form-group form-action-d-flex mb-3">
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="rememberme">
-                                <label class="custom-control-label m-0" for="rememberme">Ingat Saya</label>
+                                {{-- <input type="checkbox" class="custom-control-input" id="rememberme">
+                                <label class="custom-control-label m-0" for="rememberme">Ingat Saya</label> --}}
                             </div>
                             <button type="submit" class="btn btn-secondary col-md-5 float-right mt-3 mt-sm-0 fw-bold">Sign In</button>
                         </div>
                     </div>
                 </form>
 			</div>
-
-			<div class="container container-signup container-transparent animated fadeIn">
-				<h3 class="text-center">Sign Up</h3>
-				<div class="login-form">
-					<div class="form-group">
-						<label for="fullname" class="placeholder"><b>Fullname</b></label>
-						<input  id="fullname" name="fullname" type="text" class="form-control" required>
-					</div>
-					<div class="form-group">
-						<label for="email" class="placeholder"><b>Email</b></label>
-						<input  id="email" name="email" type="email" class="form-control" required>
-					</div>
-					<div class="form-group">
-						<label for="passwordsignin" class="placeholder"><b>Password</b></label>
-						<div class="position-relative">
-							<input  id="passwordsignin" name="passwordsignin" type="password" class="form-control" required>
-							<div class="show-password">
-								<i class="icon-eye"></i>
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="confirmpassword" class="placeholder"><b>Confirm Password</b></label>
-						<div class="position-relative">
-							<input  id="confirmpassword" name="confirmpassword" type="password" class="form-control" required>
-							<div class="show-password">
-								<i class="icon-eye"></i>
-							</div>
-						</div>
-					</div>
-					<div class="row form-sub m-0">
-						<div class="custom-control custom-checkbox">
-							<input type="checkbox" class="custom-control-input" name="agree" id="agree">
-							<label class="custom-control-label" for="agree">I Agree the terms and conditions.</label>
-						</div>
-					</div>
-					<div class="row form-action">
-						<div class="col-md-6">
-							<a href="#" id="show-signin" class="btn btn-danger btn-link w-100 fw-bold">Cancel</a>
-						</div>
-						<div class="col-md-6">
-							<a href="#" class="btn btn-success w-100 fw-bold">Masuk</a>
-						</div>
-					</div>
-				</div>
-			</div>
 		</div>
 	</div>
-	<script src="../assets/js/core/jquery.3.2.1.min.js"></script>
-	<script src="../assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
-	<script src="../assets/js/core/popper.min.js"></script>
-	<script src="../assets/js/core/bootstrap.min.js"></script>
-	<script src="../assets/js/atlantis.min.js"></script>
+	<script src="{{ url('assets/js/core/jquery.3.2.1.min.js') }}"></script>
+	<script src="{{ url('assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js') }}"></script>
+	<script src="{{ url('assets/js/core/popper.min.js') }}"></script>
+	<script src="{{ url('assets/js/core/bootstrap.min.js') }}"></script>
+	<script src="{{ url('assets/js/atlantis.min.js') }}"></script>
 </body>
 </html>

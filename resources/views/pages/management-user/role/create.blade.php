@@ -33,7 +33,7 @@
 									<div class="card-title">Form Elements</div>
 								</div>
 								<div class="card-body">
-									<form action="{{ route('role/create') }}" method="POST" id="roleForm" name="roleForm">
+									<form action="{{ route('role/store') }}" method="POST" id="roleForm" name="roleForm">
                                         @csrf
                                         <div class="row mb-4">
                                             <label for="name" class="col-md-2 form-control-label text-md-left">Role Name <span
@@ -91,7 +91,7 @@
                 e.preventDefault();
                 var isValid = $("#roleForm").valid();
                 if (isValid) {
-                    var url = "{{ route('role/create') }}";
+                    var url = "{{ route('role/store') }}";
                     $('#saveBtn').text('Save...');
                     $('#saveBtn').attr('disabled', true);
                     var formData = new FormData($('#roleForm')[0]);

@@ -76,6 +76,9 @@
 @endsection
 @push('js')
     <script type="text/javascript">
+     function getBaseUrl() {
+    return "https://survei.kemenkopukm.go.id/perjadin"; // Ganti dengan base URL Anda
+}
 
     $(function() {
         let request = {
@@ -243,9 +246,10 @@
                         var btnTambah = "";
                         var btnDownload = "";
                         var btnEdit = "";
+                        var baseUrl = getBaseUrl();
 
                         if (row.id_spt == "" || row.id_spt == null) {
-                            btnTambah += '<a href="/bukti-perjalanan/create/' + data +
+                            btnTambah += '<a href="' + baseUrl + '/bukti-perjalanan/create/' + data +
                                 '" name="btnTambah" data-id="' + data +
                                 '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fas fa-file"></i></a>';
                         }

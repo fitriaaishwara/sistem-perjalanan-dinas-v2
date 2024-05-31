@@ -221,7 +221,9 @@
                         "width": '15%',
                         render: function(data, type, row) {
                             var btnDetail = "";
-                            btnDetail += '<a href="/kkp/pdf/' + data +
+                            var baseUrl = getBaseUrl();
+
+                            btnDetail += '<a href="' + baseUrl + '/kkp/pdf/' + data +
                                         '" name="btnEdit" data-id="' + data +
                                         '" type="button" class="btn btn-warning btn-sm btnDetailStatus m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-bookmark"></i></a>';
                             return btnDetail;

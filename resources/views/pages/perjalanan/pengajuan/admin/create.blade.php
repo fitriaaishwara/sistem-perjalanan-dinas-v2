@@ -60,6 +60,9 @@
 @endsection
 @push('js')
     <script type="text/javascript">
+     function getBaseUrl() {
+    return "https://survei.kemenkopukm.go.id/perjadin"; // Ganti dengan base URL Anda
+}
     $(function() {
         $("#id_mak").select2({
             theme: 'bootstrap',

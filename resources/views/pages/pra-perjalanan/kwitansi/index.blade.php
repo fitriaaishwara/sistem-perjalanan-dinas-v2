@@ -80,6 +80,9 @@
 @endsection
 @push('js')
 <script type="text/javascript">
+ function getBaseUrl() {
+    return "https://survei.kemenkopukm.go.id/perjadin"; // Ganti dengan base URL Anda
+}
     function rupiah($angka) {
         var reverse = $angka.toString().split('').reverse().join(''),
             ribuan = reverse.match(/\d{1,3}/g);
@@ -305,15 +308,16 @@
                         // var btnEdit = "";
                         var btnDetail= "";
                         var btnTambahInvoice="";
+                        var baseUrl = getBaseUrl();
 
                         if (row.kwitansi == "" || row.kwitansi == null) {
                             @if (auth()->user()->can('Super Admin','Admin'))
-                            btnTambah += '<a href="/kwitansi/create/' + data +
+                            btnTambah += '<a href="' + baseUrl + '/kwitansi/create/' + data +
                                 '" name="btnTambah" data-id="' + data +
                                 '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
                             @endif
 
-                            btnTambah += '<a href="/bukti-perjalanan/create/' + data +
+                            btnTambah += '<a href="' + baseUrl + '/bukti-perjalanan/create/' + data +
                                 '" name="btnTambah" data-id="' + data +
                                 '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fas fa-file"></i></a>';
                         } else {
@@ -329,7 +333,7 @@
                             // btnDownload += '<a href="/kwitansi/pdf/' + data +
                             //     '" name="btnDownload" data-id="' + data +
                             //     '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
-                            btnDetail += '<a href="/kwitansi/' + data +
+                            btnDetail += '<a href=' + baseUrl + '"/kwitansi/' + data +
                                 '" name="btnEdit" data-id="' + data +
                                 '" type="button" class="btn btn-warning btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-bookmark"></i></a>';
                         }

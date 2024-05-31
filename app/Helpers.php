@@ -1,5 +1,9 @@
 <?php
 
+function getBaseUrl() {
+    return "https://survei.kemenkopukm.go.id/perjadin"; // Ganti dengan base URL Anda
+}
+
 function intToRoman($num) {
     switch ($num) {
         case 1: return 'I';

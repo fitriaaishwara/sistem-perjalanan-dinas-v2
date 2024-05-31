@@ -75,7 +75,11 @@
 </div>
 @endsection
 @push('js')
+
     <script type="text/javascript">
+     function getBaseUrl() {
+    return "https://survei.kemenkopukm.go.id/perjadin"; // Ganti dengan base URL Anda
+}
 
     $(function() {
         let request = {
@@ -239,10 +243,11 @@
                         // var btnDownload = "";
                         // var btnEdit = "";
                         var btnDetail= "";
+                        var baseUrl = getBaseUrl();
 
                         if (row.spd == "" || row.spd == null) {
                             @if (auth()->user()->can('Super Admin','Admin'))
-                            btnTambah += '<a href="/surat-perjalanan-dinas/create/' + data +
+                            btnTambah += '<a href="' + baseUrl + '/surat-perjalanan-dinas/create/' + data +
                                 '" name="btnTambah" data-id="' + data +
                                 '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
                             @endif
@@ -255,7 +260,7 @@
                             //     '" name="btnDownload" data-id="' + data +
                             //     '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
 
-                            btnDetail += '<a href="/surat-perjalanan-dinas/' + data +
+                            btnDetail += '<a href="' + baseUrl + '/surat-perjalanan-dinas/' + data +
                                 '" name="btnEdit" data-id="' + data +
                                 '" type="button" class="btn btn-warning btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-bookmark"></i></a>';
                         }

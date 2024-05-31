@@ -130,7 +130,9 @@
 @endsection
 @push('js')
     <script type="text/javascript">
-
+     function getBaseUrl() {
+    return "https://survei.kemenkopukm.go.id/perjadin"; // Ganti dengan base URL Anda
+}
     function rupiah($angka){
         var reverse = $angka.toString().split('').reverse().join(''),
         ribuan = reverse.match(/\d{1,3}/g);
@@ -267,14 +269,15 @@
                     render: function(data, type, row) {
                         var btnTambah = "";
                         var btnView = "";
+                        var baseUrl = getBaseUrl();
 
                         // Check if geotaging data is available
                         if (row.geotaging == "" || row.geotaging == null) {
-                            btnTambah += '<a href="/geo-tagging/' + data +
+                            btnTambah += '<a href="' + baseUrl + '/geo-tagging/' + data +
                                 '" name="btnTambah" data-id="' + data +
                                 '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fas fa-file-image"></i></a>';
                         } else {
-                            btnView += '<a href="/geo-tagging/view/' + row.geotaging[0].id +
+                            btnView += '<a href="' + baseUrl + '/geo-tagging/view/' + row.geotaging[0].id +
                                 '" name="btnView" data-id="' + data +
                                 '" type="button" class="btn btn-success btn-sm btnView m-1" data-toggle="tooltip" data-placement="top" title="View"><i class="fas fa-eye"></i></a>';
                         }

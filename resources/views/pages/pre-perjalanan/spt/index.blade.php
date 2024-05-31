@@ -75,6 +75,9 @@
 @endsection
 @push('js')
 <script type="text/javascript">
+ function getBaseUrl() {
+    return "https://survei.kemenkopukm.go.id/perjadin"; // Ganti dengan base URL Anda
+}
     $(function() {
         let request = {
             start: 0,
@@ -197,16 +200,17 @@
                         var btnTambah = "";
                         var btnDetail = "";
                         var btnEdit = "";
+                        var baseUrl = getBaseUrl();
 
 
                         if (!data.spt || data.spt.length === 0) {
                             @if (auth()->user()->can('Super Admin','Admin'))
-                            btnTambah += '<a href="/surat-perintah-tugas/create/' + data.id +
+                            btnTambah += '<a href="' + baseUrl + '/surat-perintah-tugas/create/' + data.id +
                                 '" name="btnTambah" data-id="' + data.id +
                                 '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
                             @endif
                         } else {
-                            btnDetail += '<a href="/surat-perintah-tugas/' + data.id +
+                            btnDetail += '<a href="' + baseUrl + '/surat-perintah-tugas/' + data.id +
                                 '" name="btnDetail" data-id="' + data.id +
                                 '" type="button" class="btn btn-warning btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-bookmark"></i></a>';
                         }

@@ -119,6 +119,9 @@
 @endsection
 @push('js')
 <script type="text/javascript">
+ function getBaseUrl() {
+    return "https://survei.kemenkopukm.go.id/perjadin"; // Ganti dengan base URL Anda
+}
     function rupiah($angka) {
         var reverse = $angka.toString().split('').reverse().join(''),
             ribuan = reverse.match(/\d{1,3}/g);
@@ -299,11 +302,13 @@
                     render: function(data, type, row) {
                         var btnStatusPerjalanan = "";
                         var btnDetailStatus = "";
+                        var baseUrl = getBaseUrl();
+
                         @if (auth()->user()->can('Super Admin','Admin','Asisten Deputi'))
                             btnStatusPerjalanan +=
                                 '<button name="btnStatusPerjalanan" data-id="' + data +
                                 '" type="button" class="btn btn-dark btn-sm btnStatusPerjalanan m-1" data-toggle="tooltip" data-placement="top" title="Ubah Status"><i class="fa fa-pen"></i></button>';
-                            btnDetailStatus += '<a href="/detail-status/' + data +
+                            btnDetailStatus += '<a href="' + baseUrl + '/detail-status/' + data +
                                 '" name="btnEdit" data-id="' + data +
                                 '" type="button" class="btn btn-warning btn-sm btnDetailStatus m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-pen"></i></a>';
                         @endif
@@ -322,7 +327,9 @@
                     "width": '15%',
                     render: function(data, type, row) {
                         var btnDetail = "";
-                        btnDetail += '<a href="/perjalanan/detail/' + data +
+                        var baseUrl = getBaseUrl();
+
+                        btnDetail += '<a href="' + baseUrl + '/perjalanan/detail/' + data +
                             '" name="btnDetail" data-id="' + data +
                             '" type="button" class="btn btn-warning btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail"><i class="fa fa-bookmark"></i></a>';
                         return btnDetail;

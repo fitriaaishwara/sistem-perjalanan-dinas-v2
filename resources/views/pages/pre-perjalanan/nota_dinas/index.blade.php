@@ -74,6 +74,10 @@
 @endsection
 @push('js')
     <script type="text/javascript">
+     function getBaseUrl() {
+    return "https://survei.kemenkopukm.go.id/perjadin"; // Ganti dengan base URL Anda
+}
+
 
     $(function() {
         let request = {
@@ -237,22 +241,23 @@
                         var btnDownload = "";
                         var btnEdit = "";
                         var btnDelete = "";
+                        var baseUrl = getBaseUrl();
 
                         //if tujuam modal id is empty
                             if (row.nota_dinas == null) {
                                 @if (auth()->user()->can('Super Admin','Admin'))
-                                    btnTambah += '<a href="/nota-dinas/create/' + data +
+                                    btnTambah += '<a href="' + baseUrl + '/nota-dinas/create/' + data +
                                         '" name="btnTambah" data-id="' + data +
                                         '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
                                 @endif
                             } else if (row.nota_dinas != null) {
                                 @if (auth()->user()->can('Super Admin','Admin'))
-                                btnEdit += '<a href="/nota-dinas/edit/' + data +
+                                btnEdit += '<a href="' + baseUrl + '/nota-dinas/edit/' + data +
                                     '" name="btnEdit" data-id="' + data +
                                     '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
                                 @endif
 
-                                btnDownload += '<a href="/nota-dinas/pdf/' + data +
+                                btnDownload += '<a href="' + baseUrl + '/nota-dinas/pdf/' + data +
                                     '" name="btnDownload" data-id="' + data +
                                     '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
                             }

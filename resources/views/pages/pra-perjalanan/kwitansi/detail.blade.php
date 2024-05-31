@@ -54,23 +54,23 @@
                                         <td>1</td>
                                         <td>Lembar 1</td>
                                         <td>
-                                            <a href="{{ route('kwitansi/pdf', $kwitansi->id) }}" class="btn btn-primary btn-sm">PDF</a>
-                                            <a href="{{ route('exportKwitansi1', $kwitansi->id) }}" class="btn btn-success btn-sm">Excel</a>
+                                            <a href="{{ url('kwitansi/pdf', $kwitansi->id) }}" class="btn btn-primary btn-sm">PDF</a>
+                                            <a href="{{ url('exportKwitansi1', $kwitansi->id) }}" class="btn btn-success btn-sm">Excel</a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>2</td>
                                         <td>Lembar 2</td>
                                         <td>
-                                            <a href="{{ route('kwitansi/pdf2', $kwitansi->id) }}" class="btn btn-primary btn-sm">PDF</a>
-                                            <a href="{{ route('exportKwitansi2', $kwitansi->id) }}" class="btn btn-success btn-sm">Excel</a>
+                                            <a href="{{ url('kwitansi/pdf2', $kwitansi->id) }}" class="btn btn-primary btn-sm">PDF</a>
+                                            <a href="{{ url('exportKwitansi2', $kwitansi->id) }}" class="btn btn-success btn-sm">Excel</a>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>2</td>
                                         <td>Lembar 3</td>
                                         <td>
-                                            <a href="{{ route('kwitansi/pdf3', $kwitansi->id) }}" class="btn btn-primary btn-sm">PDF</a>
+                                            <a href="{{ url('kwitansi/pdf3', $kwitansi->id) }}" class="btn btn-primary btn-sm">PDF</a>
                                         </td>
                                     </tr>
                                 </tbody>

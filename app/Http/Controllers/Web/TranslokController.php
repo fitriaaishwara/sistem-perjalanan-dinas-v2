@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Imports\SbmTranslokImport;
+use App\Imports\TranslokImport;
 use App\Models\sbm_translok;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TranslokController extends Controller
 {
@@ -114,5 +117,32 @@ class TranslokController extends Controller
             $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }
         return $data;
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx',
+        ]);
+
+        try {
+            Excel::import(new SbmTranslokImport, $request->file('file'));
+
+            return response()->json([
+                'status'  => true,
+                'message' => 'File imported successfully',
+            ]);
+        } catch (\Exception $ex) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'File import failed. ' . $ex->getMessage(),
+            ]);
+        }
+    }
+
+    public function downloadTemplate()
+    {
+        $filePath = public_path('templates/template.xlsx'); // Path ke file template
+        return response()->download($filePath, 'template_sbm_translok.xlsx');
     }
 }

@@ -126,14 +126,14 @@
                         <li class="nav-item {{ request()->is('staff') || request()->is('staff/*') || request()->is('jabatan') || request()->is('jabatan/*') ? 'active' : '' }}">
 							<a data-toggle="collapse" href="#staff">
 								<i class="fas fa-hand-holding-usd"></i>
-								<p>Data Staff</p>
+								<p>Data Pegawai</p>
 								<span class="caret"></span>
 							</a>
 							<div class="{{ request()->is('staff') || request()->is('staff/*') || request()->is('jabatan') || request()->is('jabatan/*') ? 'collapse show' : 'collapse' }}" id="staff">
 								<ul class="nav nav-collapse">
 									<li class="nav-item {{ request()->is('staff') || request()->is('staff/*') ? 'active' : '' }}">
 										<a href="{{ route('staff') }}">
-											<span class="sub-item">Staff</span>
+											<span class="sub-item">Pegawai</span>
 										</a>
 									</li>
 									<li class="nav-item {{ request()->is('jabatan') || request()->is('jabatan/*') ? 'active' : '' }}">
@@ -341,25 +341,25 @@
 					<nav class="pull-left">
 						<ul class="nav">
 							<li class="nav-item">
-								<a class="nav-link" href="http://www.themekita.com">
+								{{-- <a class="nav-link" href="http://www.themekita.com">
 									ThemeKita
-								</a>
+								</a> --}}
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="#">
+								{{-- <a class="nav-link" href="#">
 									Help
-								</a>
+								</a> --}}
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="#">
+								{{-- <a class="nav-link" href="#">
 									Licenses
-								</a>
+								</a> --}}
 							</li>
 						</ul>
 					</nav>
 					<div class="copyright ml-auto">
-						Kementrian Koperasi dan UMKM &copy; 2023
-					</div>
+                        Kementerian Koperasi dan UMKM &copy; <span id="year"></span>
+                    </div>
 				</div>
 			</footer>
         </div>
@@ -740,3 +740,7 @@
     @stack('js')
 </body>
 </html>
+
+<script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+</script>

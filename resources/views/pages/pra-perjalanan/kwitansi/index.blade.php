@@ -309,34 +309,24 @@
                         var btnDetail= "";
                         var btnTambahInvoice="";
                         var baseUrl = getBaseUrl();
+                        var btnDetail = "";
 
                         if (row.kwitansi == "" || row.kwitansi == null) {
-                            @if (auth()->user()->can('Super Admin','Admin'))
+                            @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
                             btnTambah += '<a href="' + baseUrl + '/kwitansi/create/' + data +
                                 '" name="btnTambah" data-id="' + data +
                                 '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
+                            // btnTambah += '<a href="/kwitansi/create/' + data +
+                            //     '" name="btnTambah" data-id="' + data +
+                            //     '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
                             @endif
-
-                            btnTambah += '<a href="' + baseUrl + '/bukti-perjalanan/create/' + data +
-                                '" name="btnTambah" data-id="' + data +
-                                '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fas fa-file"></i></a>';
-                        } else {
-                            // Only show edit button if needed
-                            // btnEdit += '<a href="/kwitansi/edit/' + row.kwitansi[0].id +
-                            //     '" name="btnEdit" data-id="' + row.kwitansi[0].id +
-                            //     '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
-
-                            // Instead of checking for existence, let's just assume we always have a kwitansi entry
-                            // btnDownload += '<a href="/kwitansi/pdf/' + row.kwitansi[0].id +
-                            //     '" name="btnDownload" data-id="' + row.kwitansi[0].id +
-                            //     '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
-                            // btnDownload += '<a href="/kwitansi/pdf/' + data +
-                            //     '" name="btnDownload" data-id="' + data +
-                            //     '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
-                            btnDetail += '<a href=' + baseUrl + '"/kwitansi/' + data +
-                                '" name="btnEdit" data-id="' + data +
-                                '" type="button" class="btn btn-warning btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-bookmark"></i></a>';
-                        }
+                        } else if (row.kwitansi && row.kwitansi != "") {
+    @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
+    btnDetail += '<a href="' + baseUrl + '/kwitansi/' + row.id +
+        '" name="btnDetail" data-id="' + row.id +
+        '" type="button" class="btn btn-info btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-eye"></i></a>';
+    @endif
+}
 
                         console.log(row);
                         return btnTambah + btnDetail + btnTambahInvoice;

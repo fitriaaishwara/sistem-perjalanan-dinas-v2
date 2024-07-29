@@ -24,7 +24,17 @@ class UsersTableSeeder extends Seeder
                 'email' => 'superadmin@gmail.com',
                 'password' => Hash::make('12345678'),
                 'is_active' => true,
-            ]
+            ],
+
+            1 => [
+                'id' => 'f7a88acd1831-3f31-4e8a-9d72-828fc769',
+                'name' => 'Admin',
+                'username' => 'admin',
+                'email' => 'admin@gmail.com',
+                'password' => Hash::make('12345678'),
+                'is_active' => true,
+
+            ],
 
         ];
 

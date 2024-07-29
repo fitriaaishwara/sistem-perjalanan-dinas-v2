@@ -8,6 +8,7 @@ use App\Models\Spd;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
+use Dotenv\Validator;
 
 class SpdController extends Controller
 {
@@ -34,7 +35,7 @@ class SpdController extends Controller
             ->where('status', true);
 
         // If the user is not a super admin, filter data based on user's ID
-        if ($userRole != 'Super Admin') {
+        if ($userRole != 'Super Admin' && $userRole != 'Admin') {
             $query->whereHas('staff', function ($query) {
                 $query->where('id_user', Auth::id());
             });
@@ -149,5 +150,93 @@ class SpdController extends Controller
         $spd = DataStaffPerjalanan::with(['perjalanan.mak', 'staff.instansis', 'penandatangan', 'tujuan_perjalanan', 'spd'])->find($id);
         $pdf = \PDF::loadView('pages.pre-perjalanan.spd.pdf2', compact('spd'));
         return $pdf->stream();
+    }
+
+    public function upload(Request $request)
+    {
+        \Log::info('Upload method called');
+        $perjalanan = DataStaffPerjalanan::with(['spd'])->find($request->id_staff_perjalanan);
+
+        if (!$perjalanan) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Perjalanan not found'
+            ]);
+        }
+
+        $validator = \Validator::make($request->all(), [
+            'file_spd' => 'required|mimes:pdf|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid file. The maximum file size is 2 MB with the format PDF.'
+            ]);
+        }
+
+        try {
+            $file = $request->file('file_spd');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $path = 'uploads/spd/ttd/' . $fileName;
+
+            $file->move(public_path('uploads/spd/ttd'), $fileName);
+
+            $SpdUpdate = Spd::where('id_staff_perjalanan', $perjalanan->id)->update(['file_spd' => $fileName]);
+
+            if ($SpdUpdate) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Spd successfully updated'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Spd failed to update'
+                ]);
+            }
+
+        } catch (\Exception $ex) {
+            return response()->json([
+                'status' => false,
+                'message' => 'A system error has occurred. Please try again later. ' . $ex->getMessage()
+            ]);
+        }
+    }
+
+
+
+    public function showSpd($id)
+    {
+        $perjalanan = DataStaffPerjalanan::with(['spd'])->find($id);
+
+        if (!$perjalanan) {
+            return response()->json(['status' => false, 'message' => 'Perjalanan not found'], 404);
+        }
+
+        $Spd = $perjalanan->spd;
+
+        if ($Spd) {
+            return response()->json(['status' => true, 'message' => 'Nota Dinas found', 'data' => $Spd]);
+        } else {
+            return response()->json(['status' => false, 'message' => 'Nota Dinas not found']);
+        }
+    }
+
+    public function downloadFile($id)
+    {
+        $Spd = Spd::find($id);
+
+        if (!$Spd) {
+            return response()->json(['status' => false, 'message' => 'Nota Dinas not found'], 404);
+        }
+
+        $file = public_path('uploads/spd/ttd/' . $Spd->file_spd);
+
+        if (file_exists($file)) {
+            return response()->download($file);
+        } else {
+            return response()->json(['status' => false, 'message' => 'File not found'], 404);
+        }
     }
 }

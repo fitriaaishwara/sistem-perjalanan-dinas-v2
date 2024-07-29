@@ -21,7 +21,7 @@
 						<div class="modal-header border-0" id="myModalLabel">
 							<h5 class="modal-title">
 								<span class="fw-mediumbold">
-								Data</span>
+								Import </span>
 								<span class="fw-light">
 									Transportasi Lokal
 								</span>
@@ -35,13 +35,16 @@
                                 @csrf
                                 <input id="id" type="hidden" class="form-control" name="id">
                                 <div class="row mb-4">
-                                    <label for="nominal" class="col-sm-3 col-form-label">Nominal</label>
-                                    <div class="col-sm-9 validate">
-                                        <input class="form-control" id="nominal" name="nominal">
-                                        <small id="formatted_nominal"></small>
-                                        <div id="notification" style="color: red;"></div>
+                                    <label for="nominal" class="col-sm-4 col-form-label">Template</label>
+                                    <div class="col-sm-6 validate">
+                                        <a href="{{ route('sbm-translok.downloadTemplate') }}" class="btn btn-primary btn-sm" id="downloadTemplate">Download Template</a>
+                                    </div>
+                                    <label for="nominal" class="col-sm-4 col-form-label">File</label>
+                                    <div class="col-sm-6 validate">
+                                        <input type="file" class="form-control" name="file" id="file" required>
                                     </div>
                                 </div>
+
                             </form>
                         </div>
                         <div class="modal-footer">
@@ -83,6 +86,12 @@
 							<div class="card">
 								<div class="card-header">
 									<div class="d-flex align-items-center">
+                                        <h4 class="card-title">Data Translok</h4>
+                                        @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
+                                        <button class="btn btn-primary btn-round ml-auto" id="addNew" data-toggle="modal" data-target="#myModal">
+                                            <i class="fa fa-plus
+                                            "></i> Import Data Translok </button>
+                                        @endif
 									</div>
 								</div>
 								<div class="card-body">
@@ -95,7 +104,7 @@
                                                     <th>Golongan</th>
                                                     <th>Jabatan Struktural</th>
                                                     <th>Nominal</th>
-                                                    @if (auth()->user()->can('Super Admin','Admin'))
+                                                    @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
                                                     <th>Action</th>
                                                     @endif
                                                 </tr>
@@ -259,14 +268,14 @@
                             return "<div class='text-wrap' style='font-size: 12px;'>" + formatCurrency(nominal) + "</div>";
                         },
                     },
-                    @if (auth()->user()->can('Super Admin','Admin'))
+                    @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
                     {
                         "data": "id",
                         "width": '10%',
                         render: function(data, type, row) {
                             var btnEdit = "";
                             var btnDelete = "";
-                            @if (auth()->user()->can('Super Admin','Admin'))
+                            @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
                             btnEdit += '<button name="btnEdit" data-id="' + data +
                                 '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
                             // btnDelete += '<button name="btnDelete" data-id="' + data +

@@ -204,19 +204,29 @@
 
 
                         if (!data.spt || data.spt.length === 0) {
-                            @if (auth()->user()->can('Super Admin','Admin'))
+                            @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
                             btnTambah += '<a href="' + baseUrl + '/surat-perintah-tugas/create/' + data.id +
                                 '" name="btnTambah" data-id="' + data.id +
                                 '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
+                                // btnTambah += '<a href="/surat-perintah-tugas/create/' + data.id +
+                                // '" name="btnTambah" data-id="' + data.id +
+                                // '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
                             @endif
-                        } else {
-                            btnDetail += '<a href="' + baseUrl + '/surat-perintah-tugas/' + data.id +
+                        } else if (data.spt && data.spt.length > 0){
+                            @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
+                            btnEdit += '<a href="' + baseUrl + '/surat-perintah-tugas/' + data.id +
+                                '" name="btnEdit" data-id="' + data.id +
+                                '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
+
+                                btnDetail += '<a href="' + baseUrl + '/surat-perintah-tugas/' + data.id +
                                 '" name="btnDetail" data-id="' + data.id +
-                                '" type="button" class="btn btn-warning btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-bookmark"></i></a>';
+                                '" type="button" class="btn btn-info btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-eye"></i></a>';
+                                @endif
+
                         }
 
                         console.log(row);
-                        return btnTambah + btnDetail;
+                        return btnTambah + btnEdit + btnDetail;
                     },
                 },
             ]

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Imports\SbmTranslokImport;
 use App\Models\sbm_tiket;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TiketController extends Controller
 {
@@ -115,6 +117,19 @@ class TiketController extends Controller
             $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex];
         }
         return $data;
+    }
+
+    // Function to handle the import
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls'
+        ]);
+
+        $file = $request->file('file');
+        Excel::import(new SbmTranslokImport, $file);
+
+        return redirect()->route('sbm-tiket.index')->with('success', 'Data imported successfully.');
     }
 
 

@@ -9,6 +9,7 @@ use App\Models\Staff;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
+use Dotenv\Validator;
 
 class KwitansiController extends Controller
 {
@@ -98,6 +99,8 @@ class KwitansiController extends Controller
     {
         $kwitansi = DataStaffPerjalanan::with(['perjalanan.mak', 'staff.instansis', 'penandatangan', 'tujuan_perjalanan', 'spd', 'kwitansi'])->find($id);
         return view('pages.pra-perjalanan.kwitansi.detail', compact('kwitansi'));
+
+        // dd($kwitansi);
     }
 
     public function create($id)
@@ -223,5 +226,93 @@ class KwitansiController extends Controller
         //     'data' => $kwitansi->tujuan_perjalanan[0]->uangHarian->nominal*$kwitansi->tujuan_perjalanan[0]->lama_perjalanan
         // ]);
         return $pdf->stream();
+    }
+
+    public function upload(Request $request)
+    {
+        \Log::info('Upload method called');
+        $dataStaff = DataStaffPerjalanan::with(['kwitansi'])->find($request->id_staff_perjalanan);
+
+        if (!$dataStaff) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Perjalanan not found'
+            ]);
+        }
+
+        $validator = \Validator::make($request->all(), [
+            'file_kwitansi' => 'required|mimes:pdf|max:2048', // Ensure the file is a PDF and not larger than 2MB
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid file. The maximum file size is 2 MB with the format PDF.'
+            ]);
+        }
+
+        try {
+            $file = $request->file('file_kwitansi');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $path = 'uploads/kwitansi/ttd/' . $fileName; // Update path
+
+            // Move the file to the designated path
+            $file->move(public_path('uploads/kwitansi/ttd'), $fileName);
+
+            $KwitansiUpdate = Kwitansi::where('id_staff_perjalanan', $dataStaff->id)->update([
+                'file_kwitansi' => $fileName,
+            ]);
+
+            if ($KwitansiUpdate) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Kwitansi successfully updated'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Kwitansi failed to update'
+                ]);
+            }
+        } catch (\Exception $ex) {
+            return response()->json([
+                'status' => false,
+                'message' => 'A system error has occurred. Please try again later. ' . $ex->getMessage()
+            ]);
+        }
+    }
+
+    public function showKwitansi($id)
+    {
+        $dataStaff = DataStaffPerjalanan::with(['kwitansi'])->find($id);
+
+        if (!$dataStaff) {
+            return response()->json(['status' => false, 'message' => 'Perjalanan not found'], 404);
+        }
+
+        $kwitansi = $dataStaff->kwitansi;
+
+        if ($kwitansi) {
+            return response()->json(['status' => true, 'message' => 'Nota Dinas found', 'data' => $kwitansi]);
+        } else {
+            return response()->json(['status' => false, 'message' => 'Nota Dinas not found']);
+        }
+    }
+
+    public function downloadFile($id)
+    {
+        $kwitansi = Kwitansi::find($id);
+
+        if (!$kwitansi) {
+            return response()->json(['status' => false, 'message' => 'Nota Dinas not found'], 404);
+        }
+
+        $file = public_path('uploads/kwitansi/ttd/' . $kwitansi->file_kwitansi);
+
+        if (file_exists($file)) {
+            return response()->download($file);
+        } else {
+            return response()->json(['status' => false, 'message' => 'File not found'], 404);
+        }
     }
 }

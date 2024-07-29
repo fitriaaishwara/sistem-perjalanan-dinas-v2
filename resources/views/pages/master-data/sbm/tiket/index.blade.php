@@ -11,10 +11,8 @@
       border-collapse: collapse;
       width: 100%;
     }
-  </style>
+</style>
 
-
-            <!-- Modal -->
 <div id="myModal" class="modal fade" tabindex="-1" role="dialog"  aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" >
         <div class="modal-content">
@@ -28,16 +26,16 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{{ route('sbm-tiket/store') }}" id="tiketForm" name="tiketForm">
+                <!-- Form Upload Excel -->
+                <form method="POST" action="{{ route('sbm-tiket/import') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="row mb-4">
-                        <label for="nominal" class="col-sm-3 col-form-label">Nominal</label>
-                        <div class="col-sm-9 validate">
-                            <input class="form-control" id="nominal" name="nominal">
-                            <small id="formatted_nominal" class="form-text text-muted"></small>
-                            <small id="notification" class="text-muted"></small>
+                        <label for="file" class="col-sm-3 col-form-label">Upload Excel</label>
+                        <div class="col-sm-9">
+                            <input type="file" class="form-control" id="file" name="file" accept=".xlsx, .xls">
                         </div>
                     </div>
+                    <button type="submit" class="btn btn-primary">Import Data</button>
                 </form>
             </div>
             <div class="modal-footer">
@@ -48,70 +46,66 @@
     </div>
 </div>
 
-			<div class="container">
-				<div class="page-inner">
-					<div class="page-header">
-						<h4 class="page-title">SBM Tiket</h4>
-						<ul class="breadcrumbs">
-							<li class="nav-home">
-								<a href="#">
-									<i class="flaticon-home"></i>
-								</a>
-							</li>
-							<li class="separator">
-								<i class="flaticon-right-arrow"></i>
-							</li>
-							<li class="nav-item">
-								<a href="#">Master Data</a>
-							</li>
-							<li class="separator">
-								<i class="flaticon-right-arrow"></i>
-							</li>
-							<li class="nav-item">
-								<a href="#">Uang Harian</a>
-							</li>
-						</ul>
-					</div>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="card">
-								<div class="card-header">
-									<div class="d-flex align-items-center">
-										{{-- <h4 class="card-title">Data Jabatan</h4> --}}
-                                        {{-- <a href="javascript:void(0)" class="btn btn-primary btn-round ml-auto"
-                                            data-toggle="modal" data-target="#myModal" id="addNew" name="addNew"><i class="fa fa-plus"></i> Tambah Uang Harian</a> --}}
-                                            {{-- <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal">
-                                            <i class="fa fa-plus"></i>Create
-                                            </button> --}}
-									</div>
-								</div>
-								<div class="card-body">
-									<div class="table-responsive">
-										<table id="tiketTable" class="display table table-striped table-hover" >
-                                            <thead>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>Provinsi</th>
-                                                    <th>Golongan</th>
-                                                    <th>Jabatan Struktural</th>
-                                                    <th>Nominal</th>
-                                                    @if (auth()->user()->can('Super Admin','Admin'))
-                                                    <th>Action</th>
-                                                    @endif
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-
-                                            </tbody>
-                                        </table>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+<div class="container">
+    <div class="page-inner">
+        <div class="page-header">
+            <h4 class="page-title">SBM Tiket</h4>
+            <ul class="breadcrumbs">
+                <li class="nav-home">
+                    <a href="#">
+                        <i class="flaticon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">Master Data</a>
+                </li>
+                <li class="separator">
+                    <i class="flaticon-right-arrow"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="#">Uang Harian</a>
+                </li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <a href="javascript:void(0)" class="btn btn-primary btn-round ml-auto"
+                               data-toggle="modal" data-target="#myModal" id="addNew" name="addNew"><i class="fa fa-plus"></i> Tambah Uang Harian</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="tiketTable" class="display table table-striped table-hover" >
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Provinsi</th>
+                                        <th>Golongan</th>
+                                        <th>Jabatan Struktural</th>
+                                        <th>Nominal</th>
+                                        @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
+                                        <th>Action</th>
+                                        @endif
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
+
 @push('js')
 <script>
     document.getElementById('nominal').addEventListener('input', function (e) {
@@ -259,14 +253,14 @@
                             return "<div class='text-wrap' style='font-size: 12px;'>" + formatCurrency(nominal) + "</div>";
                         },
                     },
-                    @if (auth()->user()->can('Super Admin','Admin'))
+                    @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
                     {
                         "data": "id",
                         "width": '10%',
                         render: function(data, type, row) {
                             var btnEdit = "";
                             var btnDelete = "";
-                            @if (auth()->user()->can('Super Admin','Admin'))
+                            @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
                                 btnEdit += '<button name="btnEdit" data-id="' + data +
                                     '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
                                 // btnDelete += '<button name="btnDelete" data-id="' + data +
@@ -419,5 +413,3 @@
         });
     </script>
 @endpush
-
-

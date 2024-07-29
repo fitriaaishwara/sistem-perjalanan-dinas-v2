@@ -242,24 +242,37 @@
                         var btnEdit = "";
                         var btnDelete = "";
                         var baseUrl = getBaseUrl();
+                        var btnDetail = "";
 
                         //if tujuam modal id is empty
                             if (row.nota_dinas == null) {
-                                @if (auth()->user()->can('Super Admin','Admin'))
+                                @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
                                     btnTambah += '<a href="' + baseUrl + '/nota-dinas/create/' + data +
                                         '" name="btnTambah" data-id="' + data +
                                         '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
+                                    // btnTambah += '<a href="/nota-dinas/create/' + data +
+                                    //     '" name="btnTambah" data-id="' + data +
+                                    //     '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
                                 @endif
                             } else if (row.nota_dinas != null) {
-                                @if (auth()->user()->can('Super Admin','Admin'))
+                                @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
                                 btnEdit += '<a href="' + baseUrl + '/nota-dinas/edit/' + data +
                                     '" name="btnEdit" data-id="' + data +
                                     '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
-                                @endif
+                                    // btnEdit += '<a href="/nota-dinas/edit/' + data +
+                                    //     '" name="btnEdit" data-id="' + data +
+                                    //     '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
+                                      // btnDownload += '<a href="' + baseUrl + '/nota-dinas/pdf/' + data +
+                                //     '" name="btnDownload" data-id="' + data +
+                                //     '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
 
-                                btnDownload += '<a href="' + baseUrl + '/nota-dinas/pdf/' + data +
-                                    '" name="btnDownload" data-id="' + data +
-                                    '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
+                                btnDetail += '<a href="' + baseUrl + '/nota-dinas/' + data +
+                                    '" name="btnDetail" data-id="' + data +
+                                    '" type="button" class="btn btn-info btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail"><i class="fa fa-eye"></i></a>';
+                                // btnDetail += '<a href="/nota-dinas/' + data +
+                                //     '" name="btnDetail" data-id="' + data +
+                                //     '" type="button" class="btn btn-info btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail"><i class="fa fa-eye"></i></a>';
+                                @endif
                             }
 
 
@@ -269,7 +282,7 @@
                             //     '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a>';
 
                             // console.log(row);
-                        return btnTambah + btnEdit + btnDownload + btnDelete;
+                        return btnTambah + btnEdit + btnDownload + btnDelete + btnDetail;
                     },
                 },
             ]

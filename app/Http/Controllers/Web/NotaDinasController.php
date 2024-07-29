@@ -9,10 +9,12 @@ use App\Models\nd_tembusan;
 use App\Models\NotaDinas;
 use App\Models\Perjalanan;
 use App\Models\Staff;
+use Dotenv\Validator;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
+
 
 class NotaDinasController extends Controller
 {
@@ -27,50 +29,60 @@ class NotaDinasController extends Controller
     }
 
     public function getData(Request $request)
-    {
-        $keyword = $request['searchkey'];
-        $userRole = Auth::user()->roles->pluck('name')[0];
+{
+    $keyword = $request->input('searchkey');
+    $userRole = Auth::user()->roles->pluck('name')->first();
 
-        $query = Perjalanan::select()
-            ->with('mak', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'tujuan.staff', 'nota_dinas', 'kegiatan', 'data_staff_perjalanan.staff')
-            ->whereHas('status_perjalanan', function ($query) {
-                $query->where('id_status', '=' , '2');
+    $query = Perjalanan::with([
+            'mak',
+            'tujuan.tempatBerangkat',
+            'tujuan.tempatTujuan',
+            'tujuan.staff',
+            'nota_dinas',
+            'kegiatan',
+            'data_staff_perjalanan.staff'
+        ])
+        ->whereHas('status_perjalanan', function ($query) {
+            $query->where('id_status', 2);
+        })
+        ->where('status', true);
+
+    // If the user is not a super admin or admin, filter data based on the user's ID
+    if ($userRole !== 'Super Admin' && $userRole !== 'Admin') {
+        $query->whereHas('data_staff_perjalanan.staff', function ($query) {
+            $query->where('id_user', Auth::id());
+        });
+    }
+
+    if ($keyword) {
+        $query->where(function ($query) use ($keyword) {
+            $query->whereHas('mak', function ($query) use ($keyword) {
+                $query->where('kode_mak', 'like', '%' . $keyword . '%');
             })
-            ->where('status', true);
-
-        // If the user is not a super admin, filter data based on user's ID
-        if ($userRole != 'Super Admin') {
-            $query->whereHas('data_staff_perjalanan.staff', function ($query) {
-                $query->where('id_user', Auth::id());
+            ->orWhereHas('kegiatan', function ($query) use ($keyword) {
+                $query->where('kegiatan', 'like', '%' . $keyword . '%');
+            })
+            ->orWhereHas('tujuan.tempatTujuan', function ($query) use ($keyword) {
+                $query->where('name', 'like', '%' . $keyword . '%');
+            })
+            ->orWhereHas('tujuan', function ($query) use ($keyword) {
+                $query->where('tanggal_berangkat', 'like', '%' . $keyword . '%')
+                      ->orWhere('tanggal_pulang', 'like', '%' . $keyword . '%');
             });
-        }
+        });
+    }
 
-        if ($keyword) {
-            $query->where(function ($query) use ($keyword) {
-                $query->whereHas('mak', function ($query) use ($keyword) {
-                    $query->where('kode_mak', 'like', '%' . $keyword . '%');
-                })
-                    ->orWhereHas('mak', function ($query) use ($keyword) {
-                        $query->where('kode_mak', 'like', '%' . $keyword . '%');
-                    })
-                    ->orWhereHas('kegiatan', function ($query) use ($keyword) {
-                        $query->where('kegiatan', 'like', '%' . $keyword . '%');
-                    })
-                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
-                        $query->whereHas('tempatTujuan', function ($query) use ($keyword) {
-                            $query->where('name', 'like', '%' . $keyword . '%');
-                        });
-                    })
-                    ->orWhereHas('tujuan', function ($query) use ($keyword) {
-                        $query->where('tanggal_berangkat', 'like', '%' . $keyword . '%')
-                            ->orWhere('tanggal_pulang', 'like', '%' . $keyword . '%');
-                    });
-            });
-        }
+    $data = $query->get();
 
-        $data = $query->get();
+    return DataTables::of($data)->make(true);
+}
 
-        return DataTables::of($data)->make(true);
+    public function detail($id)
+    {
+        $perjalanan = Perjalanan::with(['nota_dinas', 'tujuan', 'mak', 'tujuan.staff', 'tujuan.tempatBerangkat', 'tujuan.tempatTujuan', 'nota_dinas'])->find($id);
+        $dataStaff = DataStaffPerjalanan::with(['perjalanan', 'staff', 'tujuan_perjalanan.tempatBerangkat', 'tujuan_perjalanan.tempatTujuan'])->where('id_perjalanan', $id)->get();
+        $staff = Staff::where('status', true)->get();
+        return view('pages.pre-perjalanan.nota_dinas.detail', compact('perjalanan', 'staff', 'dataStaff'));
     }
 
     public function create($id)
@@ -85,7 +97,7 @@ class NotaDinasController extends Controller
         $perjalanan = Perjalanan::with(['nota_dinas'])->find($id);
         $notadinas = NotaDinas::with(['perjalanan', 'staff'])->where('id_perjalanan', $id)->first();
         $staff = Staff::where('status', true)->get();
-        return view('pages.pre-perjalanan.nota_dinas.edit', compact('perjalanan', 'staff', 'notadinas'));
+        return view('pages.pre-perjalanan.nota_dinas.index', compact('perjalanan', 'staff', 'notadinas'));
     }
 
     public function pdf($id)
@@ -192,5 +204,92 @@ class NotaDinasController extends Controller
         $notaDinas->save();
 
         return redirect()->route('nota-dinas')->with('success', 'Nota Dinas status updated successfully.');
+    }
+
+    public function upload(Request $request)
+{
+    \Log::info('Upload method called');
+    $perjalanan = Perjalanan::with(['nota_dinas'])->find($request->id_perjalanan);
+
+    if (!$perjalanan) {
+        Alert::error('Perjalanan not found');
+        return redirect()->back();
+    }
+
+    $validator = \Validator::make($request->all(), [
+        'file_nota_dinas' => 'required|mimes:pdf|max:2048',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Invalid file. The maximum file size is 2 MB with the format PDF.'
+        ]);
+    }
+
+    try {
+        $file = $request->file('file_nota_dinas');
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $path = 'uploads/nota-dinas/ttd/' . $fileName;
+
+        // Move the file to the designated path
+        $file->move(public_path('uploads/nota-dinas/ttd'), $fileName);
+
+        $notaDinasUpdate = NotaDinas::where('id_perjalanan', $perjalanan->id)->update([
+            'file_nota_dinas' => $fileName,
+        ]);
+
+        if ($notaDinasUpdate) {
+            return response()->json([
+                'status' => true,
+                'message' => 'Nota Dinas successfully updated'
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => 'Nota Dinas failed to update'
+            ]);
+        }
+    } catch (\Exception $ex) {
+        return response()->json([
+            'status' => false,
+            'message' => 'A system error has occurred. Please try again later. ' . $ex->getMessage()
+        ]);
+    }
+
+    return redirect()->back();
+}
+    public function showND($id)
+    {
+        $perjalanan = Perjalanan::with(['nota_dinas'])->find($id);
+
+        if (!$perjalanan) {
+            return response()->json(['status' => false, 'message' => 'Perjalanan not found'], 404);
+        }
+
+        $notaDinas = $perjalanan->nota_dinas;
+
+        if ($notaDinas) {
+            return response()->json(['status' => true, 'message' => 'Nota Dinas found', 'data' => $notaDinas]);
+        } else {
+            return response()->json(['status' => false, 'message' => 'Nota Dinas not found']);
+        }
+    }
+
+    public function downloadFile($id)
+    {
+        $notaDinas = NotaDinas::find($id);
+
+        if (!$notaDinas) {
+            return response()->json(['status' => false, 'message' => 'Nota Dinas not found'], 404);
+        }
+
+        $file = public_path('uploads/nota-dinas/ttd/' . $notaDinas->file_nota_dinas);
+
+        if (file_exists($file)) {
+            return response()->download($file);
+        } else {
+            return response()->json(['status' => false, 'message' => 'File not found'], 404);
+        }
     }
 }

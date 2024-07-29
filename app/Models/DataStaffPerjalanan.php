@@ -65,9 +65,9 @@ class DataStaffPerjalanan extends Model
     }
 
     public function kwitansi()
-    {
-        return $this->hasMany(Kwitansi::class, 'id_staff_perjalanan', 'id');
-    }
+{
+    return $this->hasOne(Kwitansi::class, 'id_staff_perjalanan', 'id');
+}
 
     // public function data_uang_harian()
     // {

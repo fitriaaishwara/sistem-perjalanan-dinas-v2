@@ -20,6 +20,7 @@ class CreateSptTable extends Migration
             $table->string('nip_staff_penandatangan')->nullable();
             $table->string('nomor_spt');
             $table->date('dikeluarkan_tanggal');
+            $table->string('file_spt')->nullable();
             $table->boolean('status')->default (1);
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

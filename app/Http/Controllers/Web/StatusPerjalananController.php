@@ -26,6 +26,7 @@ class StatusPerjalananController extends Controller
                 return $query->where('status_perjalanan', 'like', '%' . $keyword . '%');
             })
             ->where('status', true)
+            ->orderByRaw('CAST(status_perjalanan AS UNSIGNED) ASC')  // Cast the column to an integer for sorting
             ->get();
 
         $dataCounter = StatusPerjalanan::select()
@@ -38,5 +39,6 @@ class StatusPerjalananController extends Controller
         return DataTables::of($data)
                     ->make(true);
     }
+
 
 }

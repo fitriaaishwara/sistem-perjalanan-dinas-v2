@@ -240,35 +240,41 @@
                     "width": '15%',
                     render: function(data, type, row) {
                         var btnTambah = "";
-                        // var btnDownload = "";
-                        // var btnEdit = "";
+                        var btnDownload = "";
+                        var btnEdit = "";
                         var btnDetail= "";
                         var baseUrl = getBaseUrl();
 
                         if (row.spd == "" || row.spd == null) {
-                            @if (auth()->user()->can('Super Admin','Admin'))
+                            @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
                             btnTambah += '<a href="' + baseUrl + '/surat-perjalanan-dinas/create/' + data +
                                 '" name="btnTambah" data-id="' + data +
                                 '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
+                                // btnTambah += '<a href="/surat-perjalanan-dinas/create/' + data +
+                                // '" name="btnTambah" data-id="' + data +
+                                // '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
                             @endif
-                        } else {
-                            // btnEdit += '<a href="/surat-perjalanan-dinas/edit/' + data +
-                            //     '" name="btnEdit" data-id="' + data +
-                            //     '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
+                        } else if (row.spd != "" || row.spd != null){
+                            @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
+                            btnEdit += '<a href="' + baseUrl + '/surat-perjalanan-dinas/edit/' + data +
+                                    '" name="btnEdit" data-id="' + data +
+                                    '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';
 
+                            btnDetail += '<a href="' + baseUrl + '/surat-perjalanan-dinas/' + data +
+                                '" name="btnEdit" data-id="' + data +
+                                '" type="button" class="btn btn-info btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-eye"></i></a>';
+                            @endif
                             // btnDownload += '<a href="/surat-perjalanan-dinas/pdf/' + data +
                             //     '" name="btnDownload" data-id="' + data +
                             //     '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
 
-                            btnDetail += '<a href="' + baseUrl + '/surat-perjalanan-dinas/' + data +
-                                '" name="btnEdit" data-id="' + data +
-                                '" type="button" class="btn btn-warning btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-bookmark"></i></a>';
+
                         }
 
 
 
                         console.log(row);
-                        return btnTambah + btnDetail;
+                        return btnTambah + btnEdit + btnDetail;
 
                     },
                 },

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\TiketController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;
@@ -216,6 +217,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::any('/nota-dinas/update/{id}', [App\Http\Controllers\Web\NotaDinasController::class, 'update'])->name('nota-dinas/update');
     Route::get('/nota-dinas/pdf/{id}', [App\Http\Controllers\Web\NotaDinasController::class, 'pdf'])->name('nota-dinas/pdf');
     Route::put('nota-dinas/{id}', [App\Http\Controllers\Web\NotaDinasController::class, 'updateStatus'])->name('nota-dinas.update');
+    Route::get('/nota-dinas/{id}', [App\Http\Controllers\Web\NotaDinasController::class, 'detail'])->name('nota-dinas-detail');
+    Route::post('/nota-dinas/upload', [App\Http\Controllers\Web\NotaDinasController::class, 'upload'])->name('nota-dinas.upload');
+    Route::post('/nota-dinas/upload/edit', [App\Http\Controllers\Web\NotaDinasController::class, 'upload'])->name('nota-dinas.upload.edit');
+    Route::get('/nota-dinas/show/{id}', [App\Http\Controllers\Web\NotaDinasController::class, 'showND'])->name('nota-dinas.show');
+    Route::get('/nota-dinas/download/{id}', [App\Http\Controllers\Web\NotaDinasController::class, 'downloadFile'])->name('nota-dinas/download');
+
     //SPT
     Route::get('/surat-perintah-tugas', [App\Http\Controllers\Web\SptController::class, 'index'])->name('spt');
     Route::any('/surat-perintah-tugas/getData', [App\Http\Controllers\Web\SptController::class, 'getData'])->name('spt/getData');
@@ -223,6 +230,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::any('/surat-perintah-tugas/store/', [App\Http\Controllers\Web\SptController::class, 'store'])->name('spt/store');
     Route::get('/surat-perintah-tugas/pdf/{id}', [App\Http\Controllers\Web\SptController::class, 'sptPDF'])->name('spt/pdf');
     Route::get('/surat-perintah-tugas/{id}', [App\Http\Controllers\Web\SptController::class, 'detail'])->name('spt-detail');
+    Route::post('/surat-perintah-tugas/upload', [App\Http\Controllers\Web\SptController::class, 'upload'])->name('spt.upload');
+    Route::post('/surat-perintah-tugas/upload/edit', [App\Http\Controllers\Web\SptController::class, 'upload'])->name('spt.upload.edit');
+    Route::get('/surat-perintah-tugas/show/{id}', [App\Http\Controllers\Web\SptController::class, 'showSpt'])->name('spt.show');
+    Route::get('/surat-perintah-tugas/download/{id}', [App\Http\Controllers\Web\SptController::class, 'downloadFile'])->name('spt/download');
 
     //SPD
     Route::get('/surat-perjalanan-dinas', [App\Http\Controllers\Web\SpdController::class, 'index'])->name('spd');
@@ -232,6 +243,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/surat-perjalanan-dinas/pdf/{id}', [App\Http\Controllers\Web\SpdController::class, 'spdPDF'])->name('spd/pdf');
     Route::get('/surat-perjalanan-dinas/pdf2/{id}', [App\Http\Controllers\Web\SpdController::class, 'spdPDF2'])->name('spd/pdf2');
     Route::get('/surat-perjalanan-dinas/{id}', [App\Http\Controllers\Web\SpdController::class, 'detail'])->name('spd-detail');
+    Route::post('/surat-perjalanan-dinas/upload', [App\Http\Controllers\Web\SpdController::class, 'upload'])->name('spd.upload');
+    Route::post('/surat-perjalanan-dinas/upload/edit', [App\Http\Controllers\Web\SpdController::class, 'upload'])->name('spd.upload.edit');
+    Route::get('/surat-perjalanan-dinas/show/{id}', [App\Http\Controllers\Web\SpdController::class, 'showSpt'])->name('spd.show');
+    Route::get('/surat-perjalanan-dinas/download/{id}', [App\Http\Controllers\Web\SpdController::class, 'downloadFile'])->name('spd/download');
 
     Route::get('/bukti-perjalanan', [App\Http\Controllers\Web\UploadBuktiController::class, 'index'])->name('bukti');
     Route::any('/bukti-perjalananBerangkatById/getData/{id_staff_perjalanan} ', [App\Http\Controllers\Web\UploadBuktiController::class, 'getUploadByIdBerangkat'])->name('uploadByIdBerangkat/getData');
@@ -251,7 +266,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/kwitansi/pdf2/{id}', [App\Http\Controllers\Web\KwitansiController::class, 'kwitansiPDF2'])->name('kwitansi/pdf2');
     Route::get('/kwitansi/pdf3/{id}', [App\Http\Controllers\Web\KwitansiController::class, 'kwitansiPDF3'])->name('kwitansi/pdf3');
     Route::get('/kwitansi/{id}', [App\Http\Controllers\Web\KwitansiController::class, 'detail'])->name('kwitansi-detail');
-
+    Route::post('/kwitansi/upload', [App\Http\Controllers\Web\KwitansiController::class, 'upload'])->name('kwitansi.upload');
+    Route::post('/kwitansi/upload/edit', [App\Http\Controllers\Web\KwitansiController::class, 'upload'])->name('kwitansi.upload.edit');
+    Route::get('/kwitansi/show/{id}', [App\Http\Controllers\Web\KwitansiController::class, 'showKwitansi'])->name('kwitansi.show');
+    Route::get('/kwitansi/download/{id}', [App\Http\Controllers\Web\KwitansiController::class, 'downloadFile'])->name('kwitansi/download');
     //Transportasi
     Route::post('/transportasi/getData', [App\Http\Controllers\Web\TransportasiController::class, 'getData'])->name('transportasi/getData');
     Route::get('/transportasi', [App\Http\Controllers\Web\TransportasiController::class, 'index'])->name('transportasi');
@@ -342,6 +360,15 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/exportKwitansi2/{id}', [App\Http\Controllers\Web\ExportController::class, 'exportToExcelKwitansi2'])->name('exportKwitansi2');
 
     Route::post('/status_perjalanan/getData', [App\Http\Controllers\Web\StatusPerjalananController::class, 'getData'])->name('status_perjalanan/getData');
+
+    Route::get('sbm-translok/import', [App\Http\Controllers\Web\TranslokController::class, 'showImportForm'])->name('sbm-translok.import');
+    Route::post('sbm-translok/import', [App\Http\Controllers\Web\TranslokController::class, 'import'])->name('sbm-translok.import.post');
+    Route::get('sbm-translok/getData', [App\Http\Controllers\Web\TranslokController::class, 'getData'])->name('sbm-translok.getData');
+    Route::get('sbm-translok/show/{id}', [App\Http\Controllers\Web\TranslokController::class, 'show'])->name('sbm-translok.show');
+    Route::get('sbm-translok/download-template', [App\Http\Controllers\Web\TranslokController::class, 'downloadTemplate'])->name('sbm-translok.downloadTemplate');
+
+    Route::post('sbm-tiket/import', [TiketController::class, 'import'])->name('sbm-tiket/import');
+
 });
 
 require __DIR__.'/auth.php';

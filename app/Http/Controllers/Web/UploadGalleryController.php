@@ -33,9 +33,11 @@ class UploadGalleryController extends Controller
             ->where('status', true);
 
         // If the user is not a super admin, filter data based on user's ID
-        if ($userRole != 'Super Admin') {
-            $query->whereHas('staff.staff', function ($query) {
-                $query->where('id_user', Auth::id());
+        if ($userRole != 'Super Admin' && $userRole != 'Admin') {
+            $query->whereHas('staff', function ($query) {
+                $query->whereHas('staff', function ($query) {
+                    $query->where('id_user', Auth::id());
+                });
             });
         }
 
@@ -118,6 +120,11 @@ class UploadGalleryController extends Controller
             $filePath = $request->file('path_file');
             $fileName = time() . '_' . Str::random(10) . '.' . $filePath->getClientOriginalExtension();
             $path     = 'gallery/';
+
+            // Save the file to storage/app/public/gallery
+            $storedPath = $filePath->storeAs($path, $fileName, 'public');
+
+
 
             $validator = Validator::make($request->all(), [
                 'path_file' => 'required|mimes:jpg,jpeg,png|max:200240',

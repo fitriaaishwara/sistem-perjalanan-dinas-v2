@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use App\Models\User;
 
 class LoginRequest extends FormRequest
 {
@@ -45,11 +46,30 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        // Check if the user exists
+        $user = User::where('username', $this->input('username'))->first();
+
+        if (!$user) {
+            // User does not exist
+            throw ValidationException::withMessages([
+                'username' => 'Akun tidak ditemukan atau belum terdaftar.',
+            ]);
+        }
+
+        // Attempt to authenticate the user
         if (! Auth::attempt($this->only('username', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'username' => trans('auth.failed'),
+                'username' => 'Kombinasi username dan password salah.',
+            ]);
+        }
+
+        // Check if the authenticated user is active
+        if ($user->is_active == 0) {
+            Auth::logout();
+            throw ValidationException::withMessages([
+                'username' => 'Akunmu belum aktif. Silahkan hubungi admin.',
             ]);
         }
 

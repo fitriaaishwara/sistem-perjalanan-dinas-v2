@@ -21,6 +21,7 @@ class CreateKwitansiTable extends Migration
             $table->string('bukti_kas_nomor')->nullable();
             $table->string('tahun_anggaran')->nullable();
             $table->string('sudah_diterima_dari')->nullable();
+            $table->string('file_kwitansi')->nullable();
 
             $table->boolean('status')->default (1);
             $table->string('created_by')->nullable();

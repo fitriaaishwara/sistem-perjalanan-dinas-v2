@@ -118,9 +118,9 @@
                                 @else
                                 @foreach($kegiatan->uploadGallery as $item)
                                     <div class="col-6 col-md-3 mb-4">
-                                        <a href="{{ url('storage/gallery/' . $item->path_file) }}">
-                                            <img src="{{ url('storage/gallery/'. $item->path_file) }}" class="img-fluid">
-                                        </a>
+                                         <a href="{{ Storage::url('gallery/' . $item->path_file) }}">
+                                            <img src="{{ Storage::url('gallery/' . $item->path_file) }}" class="img-fluid">
+                                        </a>                                 
                                         <center>
                                             <p class="demo m-2">
                                                 {{-- <button type="button" class="btn btn-icon btn-round btn-primary">

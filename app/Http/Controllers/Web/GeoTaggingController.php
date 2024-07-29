@@ -28,7 +28,7 @@ class GeoTaggingController extends Controller
         ->where('status', true);
 
         // If the user is not a super admin, filter data based on user's ID
-        if ($userRole != 'Super Admin') {
+        if ($userRole != 'Super Admin' && $userRole != 'Admin') {
             $query->whereHas('staff', function ($query) {
                 $query->where('id_user', Auth::id());
             });

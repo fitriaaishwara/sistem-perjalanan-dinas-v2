@@ -79,8 +79,8 @@
             <div class="modal-body">
                 <form method="POST" action="{{ route('tujuan/store') }}" id="tujuanForm" name="tujuanForm">
                     @csrf
-                    <input type="text" name="id_tujuan" id="id_tujuan">
-                    <input type="text" name="id_perjalanan" id="id_perjalanan" value={{ $perjalanan->id }}>
+                    <input type="hidden" name="id_tujuan" id="id_tujuan">
+                    <input type="hidden" name="id_perjalanan" id="id_perjalanan" value={{ $perjalanan->id }}>
                     <div class="row mb-4">
                         <label for="id_kegiatan_tujuan" class="col-sm-3 col-form-label">Kegiatan<span
                                 style="color:red;">*</span></label>
@@ -170,7 +170,7 @@
                     id="formStaffPilih">
                     @csrf
                     <input type="hidden" name="id_edit" id="id_edit">
-                    <input type="text" name="id_staff" id="id_staff">
+                    <input type="hidden" name="id_staff" id="id_staff">
                     <div class="row mb-4">
                         <label for="nip_staff" class="col-sm-3 col-form-label">Staff<span
                                 style="color:red;">*</span></label>
@@ -389,6 +389,20 @@
         // window.location.href = "{{ route('pengajuan') }}";
     });
 </script>
+{{-- <script>
+    $(document).ready(function () {
+        var endDate = new Date();
+        var startDate = new Date();
+        startDate.setMonth(startDate.getMonth() - 1);
+
+        $('#tanggal_berangkat').datepicker({
+            format: 'yyyy-mm-dd',
+            startDate: startDate,
+            endDate: endDate,
+            autoclose: true
+        });
+    });
+</script> --}}
 
 <script type="text/javascript">
     $(function() {
@@ -1086,21 +1100,30 @@
             });
         });
 
-        $('#tanggal_berangkat').flatpickr({
-            dateFormat: "Y-m-d",
-            //disable past date
-            minDate: "today",
-        });
+    // Fungsi untuk menghitung tanggal satu bulan sebelum hari ini
+    function getOneMonthBeforeToday() {
+        const today = new Date();
+        const oneMonthBefore = new Date(today.setMonth(today.getMonth() - 1));
+        const year = oneMonthBefore.getFullYear();
+        const month = String(oneMonthBefore.getMonth() + 1).padStart(2, '0');
+        const day = String(oneMonthBefore.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
 
-        $('#tanggal_pulang').flatpickr({
-            dateFormat: "Y-m-d",
-            minDate: "today",
-        });
+    $('#tanggal_berangkat').flatpickr({
+        dateFormat: "Y-m-d",
+        minDate: getOneMonthBeforeToday(),
+    });
 
-        $('#tanggal_tiba').flatpickr({
-            dateFormat: "Y-m-d",
-            minDate: "today",
-        });
+    $('#tanggal_pulang').flatpickr({
+        dateFormat: "Y-m-d",
+        minDate: getOneMonthBeforeToday(),
+    });
+
+    $('#tanggal_tiba').flatpickr({
+        dateFormat: "Y-m-d",
+        minDate: getOneMonthBeforeToday(),
+    });
 
         //make tangga_berangkat and tanggal_kembali to be total days without save data hasilnya berupa misal 2 hari
         $('#tanggal_berangkat , #tanggal_pulang').change(function() {

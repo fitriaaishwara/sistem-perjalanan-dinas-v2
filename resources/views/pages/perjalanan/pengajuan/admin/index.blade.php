@@ -87,9 +87,9 @@
                     <div class="card-header">
                         <div class="d-flex align-items-center">
                             {{-- <h4 class="card-title">Data Jabatan</h4> --}}
-                            @if (auth()->user()->can('Super Admin', 'Admin'))
-                                <a href="{{ route('pengajuan/create') }}" class="btn btn-primary btn-round ml-auto"><i
-                                    class="fa fa-plus"></i> Ajukan Perjalanan
+                            @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
+                                <a href="{{ route('pengajuan/create') }}" class="btn btn-primary btn-round ml-auto">
+                                    <i class="fa fa-plus"></i> Ajukan Perjalanan
                                 </a>
                             @endif
                         </div>
@@ -307,7 +307,7 @@
                         var btnDetailStatus = "";
                         var baseUrl = getBaseUrl();
 
-                        @if (auth()->user()->can('Super Admin','Admin','Asisten Deputi'))
+                        @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin', 'Asisten Deputi', 'Kepala Bidang']))
                             btnStatusPerjalanan +=
                                 '<button name="btnStatusPerjalanan" data-id="' + data +
                                 '" type="button" class="btn btn-dark btn-sm btnStatusPerjalanan m-1" data-toggle="tooltip" data-placement="top" title="Ubah Status"><i class="fa fa-pen"></i></button>';
@@ -337,7 +337,7 @@
                         btnDetail += '<a href="' + baseUrl + '/perjalanan/detail/' + data +
                             '" name="btnDetail" data-id="' + data +
                             '" type="button" class="btn btn-warning btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail"><i class="fa fa-bookmark"></i></a>';
-                        @if (auth()->user()->can('Super Admin','Admin'))
+                            @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
                             btnEdit += '<a href="' + baseUrl + '/pengajuan/edit/' + data +
                             '" name="btnEdit" data-id="' + data +
                             '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></a>';

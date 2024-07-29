@@ -7,6 +7,7 @@ use App\Models\DataStaffPerjalanan;
 use App\Models\Spt;
 use App\Models\Staff;
 use App\Models\Tujuan;
+use Dotenv\Validator;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
@@ -23,78 +24,74 @@ class SptController extends Controller
         return view('pages.pre-perjalanan.spt.index-download');
     }
 
-    public function getData(Request $request)
+   public function getData(Request $request)
     {
-        $keyword = $request['searchkey'];
-        $userRole = Auth::user()->roles->pluck('name')[0];
+        $keyword = $request->input('searchkey');
+        $userRole = Auth::user()->roles->pluck('name')->first();
 
-        $query = Tujuan::select()
-            ->with(['perjalanan', 'spt', 'staff.staff', 'tempatTujuan', 'perjalanan.kegiatan', 'perjalanan.data_staff_perjalanan.staff', 'kegiatan'])
+        $query = Tujuan::with([
+                'perjalanan',
+                'spt',
+                'staff.staff',
+                'tempatTujuan',
+                'perjalanan.kegiatan',
+                'perjalanan.data_staff_perjalanan.staff',
+                'kegiatan'
+            ])
             ->whereHas('perjalanan.status_perjalanan', function ($query) {
-                $query->where('id_status', '=', '2');
+                $query->where('id_status', 2);
             })
             ->where('status', true);
 
-        // If the user is not a super admin, filter data based on user's ID
-        if ($userRole != 'Super Admin') {
-            $query->whereHas('staff.staff', function ($query) {
-                $query->where('id_user', Auth::id());
+        // If the user is not a super admin or admin, filter data based on the user's ID
+        if ($userRole !== 'Super Admin' && $userRole !== 'Admin') {
+            $query->whereHas('staff', function ($query) {
+                $query->whereHas('staff', function ($query) {
+                    $query->where('id_user', Auth::id());
+                });
             });
         }
 
         if ($keyword) {
             $query->where(function ($query) use ($keyword) {
-                $query->whereHas('perjalanan', function ($query) use ($keyword) {
-                    $query->whereHas('data_staff_perjalanan', function ($query) use ($keyword) {
-                        $query->whereHas('staff', function ($query) use ($keyword) {
-                            $query->where('name', 'like', '%' . $keyword . '%');
-                        });
-                    });
-                })
-                ->orWhereHas('perjalanan', function ($query) use ($keyword) {
-                    $query->whereHas('data_staff_perjalanan', function ($query) use ($keyword) {
-                        $query->whereHas('staff', function ($query) use ($keyword) {
-                            $query->where('nip', 'like', '%' . $keyword . '%');
-                        });
-                    });
-                })
-                ->orWhereHas('perjalanan', function ($query) use ($keyword) {
-                    $query->whereHas('mak', function ($query) use ($keyword) {
+                $query->whereHas('perjalanan.data_staff_perjalanan.staff', function ($query) use ($keyword) {
+                        $query->where('name', 'like', '%' . $keyword . '%');
+                    })
+                    ->orWhereHas('perjalanan.data_staff_perjalanan.staff', function ($query) use ($keyword) {
+                        $query->where('nip', 'like', '%' . $keyword . '%');
+                    })
+                    ->orWhereHas('perjalanan.mak', function ($query) use ($keyword) {
                         $query->where('kode_mak', 'like', '%' . $keyword . '%');
-                    });
-                })
-                ->orWhereHas('perjalanan', function ($query) use ($keyword) {
-                    $query->whereHas('kegiatan', function ($query) use ($keyword) {
+                    })
+                    ->orWhereHas('perjalanan.kegiatan', function ($query) use ($keyword) {
                         $query->where('kegiatan', 'like', '%' . $keyword . '%');
+                    })
+                    ->orWhereHas('tempatTujuan', function ($query) use ($keyword) {
+                        $query->where('name', 'like', '%' . $keyword . '%');
+                    })
+                    ->orWhereHas('spt', function ($query) use ($keyword) {
+                        $query->where('nomor_spt', 'like', '%' . $keyword . '%');
                     });
-                })
-                ->orWhereHas('tempatTujuan', function ($query) use ($keyword) {
-                    $query->where('name', 'like', '%' . $keyword . '%');
-                })
-                ->orWhereHas('spt', function ($query) use ($keyword) {
-                    $query->where('nomor_spt', 'like', '%' . $keyword . '%');
-                });
-
             });
         }
 
-        $data = $query->offset($request->input('start'))
-            ->limit(($request->input('length') == -1) ? Tujuan::where('status', true)->count() : $request->input('length'))
-            ->get();
+        $totalRecords = Tujuan::where('status', true)->count();
+        $filteredRecords = $query->count();
 
-        $dataCounter = $query->count();
+        $data = $query->offset($request->input('start'))
+            ->limit(($request->input('length') == -1) ? $filteredRecords : $request->input('length'))
+            ->get();
 
         $response = [
             'status'          => true,
             'draw'            => $request->input('draw'),
-            'recordsTotal'    => Tujuan::where('status', true)->count(),
-            'recordsFiltered' => $dataCounter,
+            'recordsTotal'    => $totalRecords,
+            'recordsFiltered' => $filteredRecords,
             'data'            => $data,
         ];
 
-        return $response;
+        return response()->json($response);
     }
-
     public function create($id)
     {
         $tujuan = Tujuan::with(['perjalanan', 'spt', 'staff', 'staff.staff', 'tempatTujuan'])->find($id);
@@ -152,6 +149,89 @@ class SptController extends Controller
             //css for alert
             Alert::error('SPT Tidak Ditemukan', 'Buat SPT Terlebih Dahulu');
             return redirect()->back();
+        }
+    }
+
+    public function upload(Request $request)
+    {
+        \Log::info('Upload method called');
+        $tujuan = Tujuan::with(['spt'])->find($request->id_tujuan);
+
+        if (!$tujuan) {
+            return response()->json(['status' => false, 'code' => 'EC002', 'message' => 'Perjalanan not found'], 404);
+        }
+
+        $validator = \Validator::make($request->all(), [
+            'file_spt' => 'required|mimes:pdf|max:2048', // Ensure the file is a PDF and not larger than 2MB
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status' => false, 'code' => 'EC003', 'message' => 'Invalid file. The maximum file size is 2 MB with the format PDF.']);
+        }
+
+        try {
+            $file = $request->file('file_spt');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $path = 'uploads/spt/ttd/' . $fileName; // Update path
+
+            // Move the file to the designated path
+            $file->move(public_path('uploads/spt/ttd'), $fileName);
+
+            $SptUpdate = Spt::where('id_tujuan', $tujuan->id)->update([
+                'file_spt' => $fileName,
+            ]);
+
+
+            if ($SptUpdate) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Spt successfully updated'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Spt failed to update'
+                ]);
+            }
+        } catch (\Exception $ex) {
+            return response()->json([
+                'status' => false,
+                'message' => 'A system error has occurred. Please try again later. ' . $ex->getMessage()
+            ]);
+        }
+    }
+
+    public function showSpt($id)
+    {
+        $tujuan = Tujuan::with(['spt'])->find($id);
+
+        if (!$tujuan) {
+            return response()->json(['status' => false, 'message' => 'Perjalanan not found'], 404);
+        }
+
+        $Spt = $tujuan->spt;
+
+        if ($Spt) {
+            return response()->json(['status' => true, 'message' => 'Nota Dinas found', 'data' => $Spt]);
+        } else {
+            return response()->json(['status' => false, 'message' => 'Nota Dinas not found']);
+        }
+    }
+
+    public function downloadFile($id)
+    {
+        $Spt = Spt::find($id);
+
+        if (!$Spt) {
+            return response()->json(['status' => false, 'message' => 'Nota Dinas not found'], 404);
+        }
+
+        $file = public_path('uploads/spt/ttd/' . $Spt->file_spt);
+
+        if (file_exists($file)) {
+            return response()->download($file);
+        } else {
+            return response()->json(['status' => false, 'message' => 'File not found'], 404);
         }
     }
 }

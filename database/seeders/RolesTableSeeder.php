@@ -35,6 +35,11 @@ class RolesTableSeeder extends Seeder
                 'name' => 'Staff',
                 'guard_name' => 'web',
             ],
+            4 => [
+                'id' => '5',
+                'name' => 'Admin',
+                'guard_name' => 'web',
+            ],
         ];
 
         \DB::table('roles')->insert($data);

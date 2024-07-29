@@ -304,7 +304,7 @@
                         var btnDetailStatus = "";
                         var baseUrl = getBaseUrl();
 
-                        @if (auth()->user()->can('Super Admin','Admin','Asisten Deputi'))
+                        @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin', 'Asisten Deputi']))
                             btnStatusPerjalanan +=
                                 '<button name="btnStatusPerjalanan" data-id="' + data +
                                 '" type="button" class="btn btn-dark btn-sm btnStatusPerjalanan m-1" data-toggle="tooltip" data-placement="top" title="Ubah Status"><i class="fa fa-pen"></i></button>';

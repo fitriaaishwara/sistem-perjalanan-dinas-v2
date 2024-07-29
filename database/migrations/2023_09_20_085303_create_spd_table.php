@@ -23,6 +23,7 @@ class CreateSpdTable extends Migration
             $table->string('alat_angkutan')->nullable();
             $table->string('keterangan')->nullable();
             $table->date('pada_tanggal')->nullable();
+            $table->string('file_spd')->nullable();
 
             $table->boolean('status')->default(1);
             $table->string('created_by')->nullable();

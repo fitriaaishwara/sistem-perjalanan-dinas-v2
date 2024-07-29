@@ -91,7 +91,7 @@
                                                     <th>No</th>
                                                     <th>Provinsi</th>
                                                     <th>Nominal</th>
-                                                    @if (auth()->user()->can('Super Admin','Admin'))
+                                                    @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
                                                     <th>Action</th>
                                                     @endif
                                                 </tr>
@@ -237,14 +237,14 @@
                             return "<div class='text-wrap' style='font-size: 12px;'>" + formatCurrency(nominal) + "</div>";
                         },
                     },
-                    @if (auth()->user()->can('Super Admin','Admin'))
+                    @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
                     {
                         "data": "id",
                         "width": '10%',
                         render: function(data, type, row) {
                             var btnEdit = "";
                             var btnDelete = "";
-                            @if (auth()->user()->can('Super Admin','Admin'))
+                            @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
                             btnEdit += '<button name="btnEdit" data-id="' + data +
                                 '" type="button" class="btn btn-warning btn-sm btnEdit m-1" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-pen"></i></button>';
                             // btnDelete += '<button name="btnDelete" data-id="' + data +

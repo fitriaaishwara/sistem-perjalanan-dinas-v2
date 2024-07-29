@@ -79,8 +79,8 @@
             <div class="modal-body">
                 <form method="POST" action="{{ route('tujuan/store') }}" id="tujuanForm" name="tujuanForm">
                     @csrf
-                    <input type="text" name="id_tujuan" id="id_tujuan">
-                    <input type="text" name="id_perjalanan" id="id_perjalanan" value={{ $perjalanan->id }}>
+                    <input type="hidden" name="id_tujuan" id="id_tujuan">
+                    <input type="hidden" name="id_perjalanan" id="id_perjalanan" value={{ $perjalanan->id }}>
                     <div class="row mb-4">
                         <label for="id_kegiatan_tujuan" class="col-sm-3 col-form-label">Kegiatan<span
                                 style="color:red;">*</span></label>
@@ -170,7 +170,7 @@
                     id="formStaffPilih">
                     @csrf
                     <input type="hidden" name="id_edit" id="id_edit">
-                    <input type="text" name="id_staff" id="id_staff">
+                    <input type="hidden" name="id_staff" id="id_staff">
                     <div class="row mb-4">
                         <label for="nip_staff" class="col-sm-3 col-form-label">Staff<span
                                 style="color:red;">*</span></label>
@@ -1069,7 +1069,7 @@
                     $('#id_staff').val(response.data.staff.nip);
                     $('#nip_staff').val(response.data.staff.nip).trigger('change');
                     $('#id_tujuan_perjalanan').val(response.data.id_tujuan_perjalanan).trigger('change');
-                    
+
                     // if (response.data.staff) {
                     //     var staff = new Option(response.data.staff.name, response
                     //         .data.staff.nip, true, true);
@@ -1086,20 +1086,28 @@
             });
         });
 
+        function getOneMonthBeforeToday() {
+        const today = new Date();
+        const oneMonthBefore = new Date(today.setMonth(today.getMonth() - 1));
+        const year = oneMonthBefore.getFullYear();
+        const month = String(oneMonthBefore.getMonth() + 1).padStart(2, '0');
+        const day = String(oneMonthBefore.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+        }
+
         $('#tanggal_berangkat').flatpickr({
             dateFormat: "Y-m-d",
-            //disable past date
-            minDate: "today",
+            minDate: getOneMonthBeforeToday(),
         });
 
         $('#tanggal_pulang').flatpickr({
             dateFormat: "Y-m-d",
-            minDate: "today",
+            minDate: getOneMonthBeforeToday(),
         });
 
         $('#tanggal_tiba').flatpickr({
             dateFormat: "Y-m-d",
-            minDate: "today",
+            minDate: getOneMonthBeforeToday(),
         });
 
         //make tangga_berangkat and tanggal_kembali to be total days without save data hasilnya berupa misal 2 hari

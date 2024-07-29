@@ -31,7 +31,7 @@ class UploadBuktiController extends Controller
             ->where('status', true);
 
         // If the user is not a super admin, filter data based on user's ID
-        if ($userRole != 'Super Admin') {
+        if ($userRole != 'Super Admin' && $userRole != 'Admin') {
             $query->whereHas('staff', function ($query) {
                 $query->where('id_user', Auth::id());
             });
@@ -186,7 +186,7 @@ class UploadBuktiController extends Controller
             $path = 'bukti_berangkat/' . $request['bukti_berangkat'];
 
             $validator = \Validator::make($request->all(), [
-                'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg,pdf|max:2048',
             ]);
             if ($validator->fails()) {
                 return response()->json(['status' => false, 'code' => 'EC001', 'message' => 'The maximum file size is 10 MB with the format PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, CSV, PNG, JPG, JPEG, RAR, ZIP.']);

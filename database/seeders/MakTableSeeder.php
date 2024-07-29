@@ -18,7 +18,7 @@ class MakTableSeeder extends Seeder
         $data = [
             0 => [
                 'id' => Str::uuid(),
-                'kode_mak' => 'ABA',
+                'kode_mak' => '4457.QMA.001.051.A.524111',
                 'saldo_awal_pagu' => '100000000',
                 'saldo_pagu' => '100000000',
                 'terealisasi' => '0',

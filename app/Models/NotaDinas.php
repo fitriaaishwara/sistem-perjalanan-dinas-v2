@@ -13,7 +13,7 @@ class NotaDinas extends Model
     protected $table = 'nota_dinas';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id_perjalanan', 'nip_staff_penandatangan', 'nomor_nota_dinas', 'yth', 'dari', 'perihal', 'lampiran', 'tanggal_nota_dinas', 'isi_nota_dinas', 'status_nota_dinas', 'status_nota_dinas', 'created_by', 'updated_by', 'deleted_by',
+        'id_perjalanan', 'id_staff_penandatangan', 'nomor_nota_dinas', 'yth', 'dari', 'perihal', 'lampiran', 'tanggal_nota_dinas', 'isi_nota_dinas', 'status_nota_dinas', 'status_nota_dinas', 'created_by', 'updated_by', 'deleted_by',
     ];
 
     function perjalanan() {
@@ -21,7 +21,7 @@ class NotaDinas extends Model
     }
 
     function staff() {
-        return $this->belongsTo(Staff::class, 'nip_staff_penandatangan', 'nip');
+        return $this->belongsTo(Staff::class, 'id_staff_penandatangan', 'nip');
     }
 
     function data_staff() {

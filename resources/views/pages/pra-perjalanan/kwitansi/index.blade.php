@@ -304,7 +304,8 @@
                     "width": '15%',
                     render: function(data, type, row) {
                         var btnTambah = "";
-                        // var btnDownload = "";
+                        var btnDownload = "";
+                        var btnDownloadTtd = "";
                         // var btnEdit = "";
                         var btnDetail= "";
                         var btnTambahInvoice="";
@@ -321,15 +322,34 @@
                             //     '" type="button" class="btn btn-primary btn-sm btnTambah m-1" data-toggle="tooltip" data-placement="top" title="Tambah"><i class="fa fa-plus"></i></a>';
                             @endif
                         } else if (row.kwitansi && row.kwitansi != "") {
-    @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
-    btnDetail += '<a href="' + baseUrl + '/kwitansi/' + row.id +
-        '" name="btnDetail" data-id="' + row.id +
-        '" type="button" class="btn btn-info btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-eye"></i></a>';
-    @endif
-}
+                        @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
+                            btnDetail += '<a href="' + baseUrl + '/kwitansi/' + row.id +
+                                '" name="btnDetail" data-id="' + row.id +
+                                '" type="button" class="btn btn-info btn-sm btnDetail m-1" data-toggle="tooltip" data-placement="top" title="Detail Status"><i class="fa fa-eye"></i></a>';
+                            @endif
+                        }
+
+                        @if (auth()->check() && auth()->user()->hasAnyRole(['Staff']))
+                            // Cek apakah data.spd ada dan panjangnya lebih dari 0
+                            if (row.kwitansi && row.kwitansi.length > 0) {
+                                var kwitansiId = row.spd[0].id; // Ambil id dari elemen pertama dalam array spd
+
+                                // Buat tombol unduh untuk TTD
+                                btnDownloadTtd += '<a href="' + baseUrl + '/kwitansi/downloadttd/' + kwitansiId + '" name="btnDownloadTtd" data-id="' + kwitansiId + '" type="button" class="btn btn-primary btn-sm btnDownloadTtd m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
+                            } else {
+
+                                //badge spd belum di tandatangani
+                                btnDownloadTtd += '<span class="badge badge-danger">Kwitansi belum ditandatangani</span><br>';
+
+                                // btnDownload += '<a href="' + baseUrl + '/kwitansi/pdf/' + data +
+                                // '" name="btnDownload" data-id="' + data +
+                                // '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download Draft">Download Draft</a>';
+
+                            }
+                        @endif
 
                         console.log(row);
-                        return btnTambah + btnDetail + btnTambahInvoice;
+                        return btnTambah + btnDetail + btnTambahInvoice  + btnDownloadTtd + btnDownload;
                     },
                 },
             ]

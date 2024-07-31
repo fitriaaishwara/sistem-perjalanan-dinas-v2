@@ -16,7 +16,7 @@ class ViewDataStaffTujuan extends Migration
     {
         //  DB::statement('CREATE VIEW datastafftujuan AS
         //     SELECT data_staff_perjalanan.id AS data_staff_id,
-        //         data_staff_perjalanan.nip_staff,
+        //         data_staff_perjalanan.id_staff,
         //         data_staff_perjalanan.id_tujuan_perjalanan,
         //         data_staff_perjalanan.total_biaya AS staff_total_biaya,
         //         data_staff_perjalanan.status AS data_staff_status,
@@ -41,7 +41,7 @@ class ViewDataStaffTujuan extends Migration
         //         data_tujuan_perjalanan.total_biaya AS tujuan_total_biaya,
         //         data_tujuan_perjalanan.status AS tujuan_status
         //     FROM data_staff_perjalanan
-        //     INNER JOIN staff ON staff.nip = data_staff_perjalanan.nip_staff
+        //     INNER JOIN staff ON staff.nip = data_staff_perjalanan.id_staff
         //     INNER JOIN data_tujuan_perjalanan ON data_tujuan_perjalanan.id = data_staff_perjalanan.id_tujuan_perjalanan');
 
     }

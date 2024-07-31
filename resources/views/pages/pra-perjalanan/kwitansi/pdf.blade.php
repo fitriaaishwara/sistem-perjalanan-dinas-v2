@@ -71,8 +71,8 @@
                 <tr>
                     <td></td>
                     <td class="font-12">Bukti Kas No:
-                        @if(!empty($kwitansi->kwitansi[0]->bukti_kas_nomor))
-                            {{ $kwitansi->kwitansi[0]->bukti_kas_nomor }}
+                        @if(!empty($kwitansi->kwitansi->bukti_kas_nomor))
+                            {{ $kwitansi->kwitansi->bukti_kas_nomor }}
                         @else
                             -
                         @endif
@@ -80,7 +80,7 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td class="font-12">Tahun Anggaran      : {{ $kwitansi->kwitansi[0]->tahun_anggaran }}</td>
+                    <td class="font-12">Tahun Anggaran      : {{ $kwitansi->kwitansi->tahun_anggaran }}</td>
                 </tr>
             </tbody>
         </table>

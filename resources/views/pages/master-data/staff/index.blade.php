@@ -61,6 +61,11 @@
                                     <select id="id_jabatan" type="text" class="form-control col-md-12 col-xs-12 id_jabatan" name="id_jabatan" required>
                                     </select>
                                 </div>
+                                <div class="mb-3 validate show_in_jenis_pns_only">
+                                    <label for="id_jabatan_struktural" class="form-label">Jabatan Struktural</label>
+                                    <select id="id_jabatan_struktural" type="text" class="form-control col-md-12 col-xs-12 id_jabatan_struktural" name="id_jabatan_struktural">
+                                    </select>
+                                </div>
                                 <div class="mb-3 validate">
                                     <label for="id_instansi" class="form-label">Instansi<span style="color:red;">*</span></label>
                                     <select id="id_instansi" type="text" class="form-control col-12 id_instansi required" name="id_instansi" required>
@@ -389,6 +394,49 @@
             },
         });
 
+        $("#id_jabatan_struktural").select2({
+            theme: 'bootstrap',
+            width: '100%',
+            dropdownParent: $('#myModal'),
+            placeholder: "Pilih Jabatan Struktural",
+            ajax: {
+                url: "{{ route('jabatan-struktural/getData') }}",
+                dataType: 'json',
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr('content'),
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                method: 'POST',
+                delay: 250,
+                destroy: true,
+                data: function(params) {
+                    var query = {
+                        searchkey: params.term || '',
+                        start: 0,
+                        length: 50
+                    }
+                    return JSON.stringify(query);
+                },
+                processResults: function(data) {
+                    var result = {
+                        results: [],
+                        more: false
+                    };
+                    if (data && data.data) {
+                        $.each(data.data, function() {
+                            result.results.push({
+                                id: this.id,
+                                text: this.name
+                            });
+                        })
+                    }
+                    return result;
+                },
+                cache: false
+            },
+        });
+
         $('#saveBtn').click(function(e) {
             e.preventDefault();
             var isValid = $("#staffForm").valid();
@@ -466,6 +514,11 @@
                     if(response.data.instansis) {
                         var instansi = new Option(response.data.instansis.name, response.data.instansis.id, true, true);
                         $('#id_instansi').append(instansi).trigger('change');
+                    }
+
+                    if(response.data.jabatan_struktural) {
+                        var jabatanStruktural = new Option(response.data.jabatan_struktural.name, response.data.jabatan_struktural.id, true, true);
+                        $('#id_jabatan_struktural').append(jabatanStruktural).trigger('change');
                     }
                 },
                 error: function() {
@@ -584,6 +637,7 @@
                 id_instansi: {
                     required: true,
                 },
+
             },
             errorElement: 'em',
             errorPlacement: function(error, element) {
@@ -604,6 +658,8 @@
             $('#jenis').val("").trigger('change')
             $('#id_golongan').val("").trigger('change');
             $('#id_jabatan').val("").trigger('change');
+            $('#id_jabatan_struktural').val("").trigger('change');
+            $('#id_instansi').val("").trigger('change');
             isUpdate = false;
         });
 

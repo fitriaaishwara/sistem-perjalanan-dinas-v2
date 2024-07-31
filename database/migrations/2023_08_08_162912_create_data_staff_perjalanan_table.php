@@ -15,7 +15,7 @@ class CreateDataStaffPerjalananTable extends Migration
     {
         Schema::create('data_staff_perjalanan', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('nip_staff');
+            $table->string('id_staff');
             $table->foreignUuid('id_tujuan_perjalanan');
             $table->string('id_perjalanan');
             $table->integer('total_biaya')->default(0);
@@ -28,8 +28,8 @@ class CreateDataStaffPerjalananTable extends Migration
 
             $table->foreign('id_tujuan_perjalanan')->references('id')->on('data_tujuan_perjalanan');
 
-            // Assuming 'nip_staff' is a foreign key referencing 'nip' in 'staff'
-            $table->foreign('nip_staff')->references('nip')->on('staff');
+            // Assuming id_staff' is a foreign key referencing 'nip' in 'staff'
+            $table->foreign('id_staff')->references('id')->on('staff');
             // Assuming 'id_kegiatan' is a foreign key referencing 'id' in 'kegiatan'
 
             $table->foreign('id_perjalanan')->references('id')->on('perjalanan');

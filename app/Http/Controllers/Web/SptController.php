@@ -11,6 +11,7 @@ use Dotenv\Validator;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class SptController extends Controller
 {
@@ -106,8 +107,8 @@ class SptController extends Controller
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'SPT failed to create'];
             $create = Spt::create([
                 'id_tujuan' => $request->id_tujuan,
-                'nip_staff' => $request->nip_staff,
-                'nip_staff_penandatangan' => $request->nip_staff_penandatangan,
+                'id_staff' => $request->id_staff,
+                'id_staff_penandatangan' => $request->id_staff_penandatangan,
                 'nomor_spt' => $request->nomor_spt,
                 'dikeluarkan_tanggal' => $request->dikeluarkan_tanggal,
             ]);
@@ -174,8 +175,8 @@ class SptController extends Controller
             $fileName = time() . '_' . $file->getClientOriginalName();
             $path = 'uploads/spt/ttd/' . $fileName; // Update path
 
-            // Move the file to the designated path
-            $file->move(public_path('uploads/spt/ttd'), $fileName);
+            // Store the file using Laravel Storage
+            Storage::disk('public')->putFileAs('uploads/spt/ttd/', $file, $fileName);
 
             $SptUpdate = Spt::where('id_tujuan', $tujuan->id)->update([
                 'file_spt' => $fileName,
@@ -226,12 +227,36 @@ class SptController extends Controller
             return response()->json(['status' => false, 'message' => 'Nota Dinas not found'], 404);
         }
 
-        $file = public_path('uploads/spt/ttd/' . $Spt->file_spt);
+        if (is_null($Spt->file_spt)) {
+            return response()->json(['status' => false, 'message' => 'File not found'], 404);
+        }
 
-        if (file_exists($file)) {
-            return response()->download($file);
+        $filePath = 'uploads/spt/ttd/' . $Spt->file_spt;
+
+        if (Storage::disk('public')->exists($filePath)) {
+            return Storage::disk('public')->download($filePath);
         } else {
             return response()->json(['status' => false, 'message' => 'File not found'], 404);
         }
+    }
+
+    public function downloadFilettd($id)
+    {
+        $Spt = Spt::findOrFail($id);
+        $filePath = 'uploads/spt/ttd/' . $Spt->file_spt;
+
+        // Pastikan disk yang digunakan adalah 'public'
+        if (Storage::disk('public')->exists($filePath)) {
+            return Storage::disk('public')->download($filePath);
+        } else {
+            return response()->json(['status' => false, 'message' => 'File not found'], 404);
+        }
+
+        if ($Spt == null) {
+            Alert::error('File Not Found');
+
+            return redirect()->back();
+
+            }
     }
 }

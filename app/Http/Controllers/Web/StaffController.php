@@ -78,7 +78,8 @@ class StaffController extends Controller
                     'id_golongan' => $id_golongan,
                     'id_jabatan'  => $id_jabatan,
                     'id_instansi' => $request['id_instansi'],
-                    'updated_by'  => auth()->user()->id,
+                    'id_jabatan_struktural' => $request['id_jabatan_struktural'],
+
                 ]);
 
                 if ($create) {
@@ -97,7 +98,7 @@ class StaffController extends Controller
     {
         try {
             $data = ['status' => false, 'message' => 'Staff failed to be found'];
-            $data = Staff::with(['golongans', 'jabatans', 'instansis'])->where('nip', $nip)->first();
+            $data = Staff::with(['golongans', 'jabatans', 'instansis', 'jabatan_struktural'])->where('nip', $nip)->first();
             switch ($data->jenis) {
                 case '0':
                     $data->jenis_name = "PNS";
@@ -126,42 +127,46 @@ class StaffController extends Controller
     }
     public function update(Request $request)
     {
-
         try {
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Staff failed to update'];
-            $lainnya_id_instansi = Instansi::select('id') -> where('name', 'Lainnya') -> first() -> id;
-            // // dd((int) $request->id_instansi == (int) $lainnya_id_instansi);
 
-            // jika id_instansi lainnya maka create data
-            if((int) $request->id_instansi == (int) $lainnya_id_instansi) {
+            // Memastikan bahwa nip yang diinput unik, kecuali untuk data yang sedang diupdate
+            $existingStaff = Staff::where('nip', $request->nip)->first();
+            if ($existingStaff && $existingStaff->id != $request->id) {
+                return ['status' => false, 'code' => 'EC002', 'message' => 'NIP already exists'];
+            }
 
-                $cek_instansi = Instansi::where('name', $request->id_instansi) -> first();
-                if(!$cek_instansi) {
+            // Handling instansi "Lainnya"
+            $lainnya_id_instansi = Instansi::where('name', 'Lainnya')->first()->id;
+            if ((int) $request->id_instansi == (int) $lainnya_id_instansi) {
+                $cek_instansi = Instansi::where('name', $request->instansi_other_id)->first();
+                if (!$cek_instansi) {
                     $instansi = new Instansi();
                     $instansi->name = $request->instansi_other_id;
                     $instansi->save();
                     $instansiID = $instansi->id;
                 } else {
-                    $instansiID = $cek_instansi -> id;
+                    $instansiID = $cek_instansi->id;
                 }
-
             } else {
                 $instansiID = $request->id_instansi;
             }
 
-            $update = Staff::where('nip', $request['nip'])->update([
-                'nip' => $request['nip'],
-                'name'        => ucwords($request['name']),
-                'id_golongan' => $request['id_golongan'],
-                'id_jabatan' => $request['id_jabatan'],
+            $update = Staff::where('id', $request->id)->update([
+                'nip' => $request->nip,
+                'name' => ucwords($request->name),
+                'id_golongan' => $request->id_golongan,
+                'id_jabatan' => $request->id_jabatan,
                 'id_instansi' => $instansiID,
-                'jenis' => $request['jenis'],
+                'jenis' => $request->jenis,
+                'id_jabatan_struktural' => $request->id_jabatan_struktural,
             ]);
+
             if ($update) {
                 $data = ['status' => true, 'code' => 'SC001', 'message' => 'Staff successfully updated'];
             }
         } catch (\Exception $ex) {
-            $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. please try again later. ' . $ex -> getLine()];
+            $data = ['status' => false, 'code' => 'EEC001', 'message' => 'A system error has occurred. Please try again later. ' . $ex->getMessage()];
         }
         return $data;
     }

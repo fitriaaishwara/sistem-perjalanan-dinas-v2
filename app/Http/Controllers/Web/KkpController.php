@@ -73,7 +73,7 @@ class KkpController extends Controller
     return datatables($data)
         ->addIndexColumn()
         ->addColumn('nama', function($db) {
-            $staff = Staff::where('id', $db->nip_staff)->first();
+            $staff = Staff::where('id', $db->id_staff)->first();
             $text = "";
 
             if ($staff) {
@@ -84,7 +84,7 @@ class KkpController extends Controller
             return $text;
         })
         ->addColumn('golongan', function($db) {
-            $staff = Staff::where('id', $db->nip_staff)->first();
+            $staff = Staff::where('id', $db->id_staff)->first();
             $text = '';
 
             if ($staff and !empty($staff->id_golongan)) {
@@ -94,7 +94,7 @@ class KkpController extends Controller
             return $text;
         })
         ->addColumn('jenis', function($db) {
-            $staff = Staff::where('id', $db->nip_staff)->first();
+            $staff = Staff::where('id', $db->id_staff)->first();
             $text = "";
 
             if ($staff) {
@@ -119,7 +119,7 @@ class KkpController extends Controller
             return $text;
         })
         ->addColumn('jabatan', function($db) {
-            $staff = Staff::where('id', $db->nip_staff)->first();
+            $staff = Staff::where('id', $db->id_staff)->first();
             $text = '';
 
             if ($staff and !empty($staff->id_jabatan)) {
@@ -129,7 +129,7 @@ class KkpController extends Controller
             return $text;
         })
         ->addColumn('instansi', function($db) {
-            $staff = Staff::where('id', $db->nip_staff)->first();
+            $staff = Staff::where('id', $db->id_staff)->first();
             $text = '';
 
             if ($staff and !empty($staff->id_instansi)) {

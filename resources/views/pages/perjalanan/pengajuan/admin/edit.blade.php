@@ -172,10 +172,10 @@
                     <input type="hidden" name="id_edit" id="id_edit">
                     <input type="hidden" name="id_staff" id="id_staff">
                     <div class="row mb-4">
-                        <label for="nip_staff" class="col-sm-3 col-form-label">Staff<span
+                        <label for="id_staff" class="col-sm-3 col-form-label">Staff<span
                                 style="color:red;">*</span></label>
                         <div class="col-sm-9 validate">
-                            <select name="nip_staff" class="form-control select2" required id="nip_staff">
+                            <select name="id_staff" class="form-control select2" required id="id_staff">
                                 <option value="">Pilih Staff</option>
                                 @foreach ($staff as $item)
                                     @if ($item->status === 1)
@@ -1067,13 +1067,13 @@
                 url: url,
                 success: function(response) {
                     $('#id_staff').val(response.data.staff.nip);
-                    $('#nip_staff').val(response.data.staff.nip).trigger('change');
+                    $('#id_staff').val(response.data.staff.nip).trigger('change');
                     $('#id_tujuan_perjalanan').val(response.data.id_tujuan_perjalanan).trigger('change');
 
                     // if (response.data.staff) {
                     //     var staff = new Option(response.data.staff.name, response
                     //         .data.staff.nip, true, true);
-                    //     $('.nip_staff').append(staff).trigger('change');
+                    //     $('.id_staff').append(staff).trigger('change');
                     // }
                 },
                 error: function() {

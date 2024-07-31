@@ -14,12 +14,13 @@ class CreateStaffTable extends Migration
     public function up()
     {
         Schema::create('staff', function (Blueprint $table) {
-            $table->uuid('id');
+            $table->uuid('id')->primary();
             $table->foreignUuid('id_user')->nullable();
             $table->foreignUuid('id_jabatan')->nullable();
             $table->unsignedInteger('id_golongan')->nullable();
             $table->unsignedInteger('id_instansi')->nullable();
-            $table->string('nip')->primary();
+            $table->foreignUuid('id_jabatan_struktural')->nullable();
+            $table->string('nip')->unique();
             $table->string('jenis');
             $table->string('name');
             $table->boolean('status')->default(1);
@@ -32,6 +33,7 @@ class CreateStaffTable extends Migration
             $table->foreign('id_jabatan')->references('id')->on('jabatan');
             $table->foreign('id_golongan')->references('id')->on('golongan');
             $table->foreign('id_instansi')->references('id')->on('instansi');
+            $table->foreign('id_jabatan_struktural')->references('id')->on('jabatan_struktural');
         });
     }
 

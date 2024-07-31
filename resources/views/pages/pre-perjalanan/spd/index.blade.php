@@ -244,6 +244,7 @@
                         var btnEdit = "";
                         var btnDetail= "";
                         var baseUrl = getBaseUrl();
+                        var btnDownloadTtd = "";
 
                         if (row.spd == "" || row.spd == null) {
                             @if (auth()->check() && auth()->user()->hasAnyRole(['Super Admin', 'Admin']))
@@ -271,10 +272,29 @@
 
                         }
 
+                        @if (auth()->check() && auth()->user()->hasAnyRole(['Staff']))
+                            // Cek apakah data.spd ada dan panjangnya lebih dari 0
+                            if (row.spd && row.spd.length > 0) {
+                                var spdId = row.spd[0].id; // Ambil id dari elemen pertama dalam array spd
+
+                                // Buat tombol unduh untuk TTD
+                                btnDownloadTtd += '<a href="' + baseUrl + '/surat-perjalanan-dinas/downloadttd/' + spdId + '" name="btnDownloadTtd" data-id="' + spdId + '" type="button" class="btn btn-primary btn-sm btnDownloadTtd m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
+                            } else {
+
+                                //badge spd belum di tandatangani
+                                btnDownloadTtd += '<span class="badge badge-danger">SPD belum ditandatangani</span><br>';
+
+                                // btnDownload += '<a href="/surat-perjalanan-dinas/pdf/' + data +
+                                // '" name="btnDownload" data-id="' + data +
+                                // '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download Draft">Download Draft</a>';
+
+                            }
+                        @endif
+
 
 
                         console.log(row);
-                        return btnTambah + btnEdit + btnDetail;
+                        return btnTambah + btnEdit + btnDetail + btnDownloadTtd + btnDownload;
 
                     },
                 },

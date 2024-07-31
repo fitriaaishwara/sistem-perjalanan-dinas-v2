@@ -16,7 +16,7 @@ class ExportController extends Controller
         $templatePath = public_path('assets/templates/spd.xlsx');
         $export = new SpdExport($id, $templatePath);
 
-        return response()->download($export->view()->getData()['filePath'], 'spd-depan.xlsx', [
+        return response()->download($export->view()->getData()['filePath'], 'spd.xlsx', [
             'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         ]);
     }

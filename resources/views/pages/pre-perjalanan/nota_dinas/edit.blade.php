@@ -63,8 +63,8 @@
                                     <textarea class="form-control" id="isi_nota_dinas" name="isi_nota_dinas" rows="3" placeholder="Isi Nota Dinas">{{$notadinas->isi_nota_dinas}}</textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label for="nip_staff_penandatangan">Ditandatangani Oleh: s </label>
-                                    <select class="form-control select2" id="nip_staff_penandatangan" name="nip_staff_penandatangan">
+                                    <label for="id_staff_penandatangan">Ditandatangani Oleh: s </label>
+                                    <select class="form-control select2" id="id_staff_penandatangan" name="id_staff_penandatangan">
                                         <option value="">Pilih Penandatangan</option>
                                         @foreach ($staff as $item)
                                             <option value="{{ $item->nip }}">{{ $item->name }}</option>
@@ -132,7 +132,7 @@
             dateFormat: "Y-m-d",
         });
 
-        $("#nip_staff_penandatangan").val("{{ $notadinas->nip_staff_penandatangan }}").trigger('change');
+        $("#id_staff_penandatangan").val("{{ $notadinas->id_staff_penandatangan }}").trigger('change');
 
         // Function to toggle status nota dinas
         $('#status_nota_dinas').change(function() {

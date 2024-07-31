@@ -18,7 +18,7 @@ class DataKegiatan extends Model
     protected $fillable = [
         'id_perjalanan',
         'id_tujuan',
-        'nip_staff',
+        'id_staff',
         'id_kegiatan',
         'status',
         'created_by',
@@ -43,7 +43,7 @@ class DataKegiatan extends Model
 
     public function staff()
     {
-        return $this->belongsTo(Staff::class, 'nip_staff', 'nip');
+        return $this->belongsTo(Staff::class, 'id_staff', 'nip');
     }
 
 }

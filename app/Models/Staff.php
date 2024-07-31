@@ -13,7 +13,7 @@ class Staff extends Model
     protected $table = 'staff';
     protected $primaryKey = 'nip';
     protected $fillable = [
-        'id_user','id_jabatan','id_golongan','id_instansi','nip', 'jenis', 'name', 'description', 'status'
+        'id_user','id_jabatan','id_golongan','id_instansi', 'id_jabatan_struktural', 'nip', 'jenis', 'name', 'description', 'status'
     ];
 
     public function golongans()
@@ -31,6 +31,11 @@ class Staff extends Model
         return $this->belongsTo(Instansi::class, 'id_instansi', 'id');
     }
 
+    public function jabatan_struktural()
+    {
+        return $this->belongsTo(JabatanStruktural::class, 'id_jabatan_struktural', 'id');
+    }
+
     public function kwitansiBendahara()
     {
         return $this->hasMany(Kwitansi::class, 'id_bendahara', 'id');
@@ -43,23 +48,23 @@ class Staff extends Model
 
     public function dataStaffPerjalanan()
     {
-        return $this->hasMany(DataStaffPerjalanan::class, 'nip', 'nip_staff');
+        return $this->hasMany(DataStaffPerjalanan::class, 'nip', 'id_staff');
     }
 
     public function nota_dinas()
     {
-        return $this->hasMany(NotaDinas::class, 'nip_staff_penandatangan', 'nip');
+        return $this->hasMany(NotaDinas::class, 'id_staff_penandatangan', 'nip');
     }
 
     public function spt()
     {
-        return $this->hasMany(Spt::class, 'nip_staff_penandatangan', 'nip');
+        return $this->hasMany(Spt::class, 'id_staff_penandatangan', 'nip');
 
     }
 
     public function DataKegiatan()
     {
-        return $this->hasMany(DataKegiatan::class, 'nip_staff', 'nip');
+        return $this->hasMany(DataKegiatan::class, 'id_staff', 'nip');
     }
 
     public function user()

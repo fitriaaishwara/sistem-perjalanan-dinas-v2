@@ -31,9 +31,9 @@ class Kwitansi1Export implements FromView
 
         // Masukkan data ke dalam template Excel
         $spreadsheet->getActiveSheet()->setCellValue('E2', $data->perjalanan[0]->mak->kode_mak); // Cell 'H14'
-        $spreadsheet->getActiveSheet()->setCellValue('E3', $data->kwitansi[0]->bukti_kas_nomor); // Cell 'H15'
-        $spreadsheet->getActiveSheet()->setCellValue('E4', $data->kwitansi[0]->tahun_anggaran); // Cell 'H15'
-        $spreadsheet->getActiveSheet()->setCellValue('E5', $data->kwitansi[0]->sudah_diterima_dari); // Cell 'H16'
+        $spreadsheet->getActiveSheet()->setCellValue('E3', $data->kwitansi->bukti_kas_nomor); // Cell 'H15'
+        $spreadsheet->getActiveSheet()->setCellValue('E4', $data->kwitansi->tahun_anggaran); // Cell 'H15'
+        $spreadsheet->getActiveSheet()->setCellValue('E5', $data->kwitansi->sudah_diterima_dari); // Cell 'H16'
         $spreadsheet->getActiveSheet()->setCellValue('E6', $data->perjalanan[0]->kegiatan[0]->kegiatan); // Cell 'H17'
         $spreadsheet->getActiveSheet()->setCellValue('E7', $data->tujuan_perjalanan[0]->tempatBerangkat->name); // Cell 'H19'
         $spreadsheet->getActiveSheet()->setCellValue('E8', $data->tujuan_perjalanan[0]->tempatTujuan->name); // Cell 'H20'

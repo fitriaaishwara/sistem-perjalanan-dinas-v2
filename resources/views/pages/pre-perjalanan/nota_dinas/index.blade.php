@@ -239,6 +239,7 @@
                     render: function(data, type, row) {
                         var btnTambah = "";
                         var btnDownload = "";
+                        var btnDownloadTtd = "";
                         var btnEdit = "";
                         var btnDelete = "";
                         var baseUrl = getBaseUrl();
@@ -275,14 +276,26 @@
                                 @endif
                             }
 
+                            if (row.nota_dinas != null) {
+                                @if (auth()->check() && auth()->user()->hasAnyRole(['Staff']))
+                                btnDownloadTtd += '<a href="' + baseUrl + '/nota-dinas/downloadttd/' + row.nota_dinas.id +
+                                    '" name="btnDownloadTtd" data-id="' + row.nota_dinas.id +
+                                    '" type="button" class="btn btn-primary btn-sm btnDownloadTtd m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
 
-
+                                @endif
+                            } else if (row.nota_dinas == null) {
+                                @if (auth()->check() && auth()->user()->hasAnyRole(['Staff']))
+                                  // Jika data.spd kosong, tampilkan pesan dan badge
+                                btnDownloadTtd += '<span class="badge badge-warning">Nota Dinas Belum di TTD</span>';
+                                btnDownload += '<a href="' + baseUrl + '/nota-dinas/pdf/' + data + '" name="btnDownload" data-id="' + data + '" type="button" class="btn btn-primary btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download Draft">Download Draft</a>';
+                                @endif
+                            }
 
                             // btnDelete += '<a href="#" name="btnDelete" data-id="' + data +
                             //     '" type="button" class="btn btn-danger btn-sm btnDelete m-1" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a>';
 
                             // console.log(row);
-                        return btnTambah + btnEdit + btnDownload + btnDelete + btnDetail;
+                        return btnTambah + btnEdit + btnDownloadTtd + btnDelete + btnDetail + btnDownload;
                     },
                 },
             ]

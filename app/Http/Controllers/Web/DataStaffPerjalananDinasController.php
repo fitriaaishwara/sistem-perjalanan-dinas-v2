@@ -38,7 +38,7 @@ class DataStaffPerjalananDinasController extends Controller
         return datatables($data)
             ->addIndexColumn()
             ->addColumn('nama', function($db) {
-                $staff = Staff::where('nip', $db->nip_staff)->first();
+                $staff = Staff::where('nip', $db->id_staff)->first();
                 $text = "";
 
                 if ($staff) {
@@ -49,7 +49,7 @@ class DataStaffPerjalananDinasController extends Controller
                 return $text;
             })
             ->addColumn('golongan', function($db) {
-                $staff = Staff::where('nip', $db->nip_staff)->first();
+                $staff = Staff::where('nip', $db->id_staff)->first();
                 $text = '';
 
                 if ($staff and !empty($staff->id_golongan)) {
@@ -59,7 +59,7 @@ class DataStaffPerjalananDinasController extends Controller
                 return $text;
             })
             ->addColumn('jenis', function($db) {
-                $staff = Staff::where('nip', $db->nip_staff)->first();
+                $staff = Staff::where('nip', $db->id_staff)->first();
                 $text = "";
 
                 if ($staff) {
@@ -84,7 +84,7 @@ class DataStaffPerjalananDinasController extends Controller
                 return $text;
             })
             ->addColumn('jabatan', function($db) {
-                $staff = Staff::where('nip', $db->nip_staff)->first();
+                $staff = Staff::where('nip', $db->id_staff)->first();
                 $text = '';
 
                 if ($staff and !empty($staff->id_jabatan)) {
@@ -94,7 +94,7 @@ class DataStaffPerjalananDinasController extends Controller
                 return $text;
             })
             ->addColumn('instansi', function($db) {
-                $staff = Staff::where('nip', $db->nip_staff)->first();
+                $staff = Staff::where('nip', $db->id_staff)->first();
                 $text = '';
 
                 if ($staff and !empty($staff->id_instansi)) {
@@ -136,7 +136,7 @@ class DataStaffPerjalananDinasController extends Controller
         return datatables($data)
             ->addIndexColumn()
             ->addColumn('nama', function($db) {
-                $staff = Staff::where('nip', $db->nip_staff)->first();
+                $staff = Staff::where('nip', $db->id_staff)->first();
                 $text = "";
 
                 if ($staff) {
@@ -147,7 +147,7 @@ class DataStaffPerjalananDinasController extends Controller
                 return $text;
             })
             ->addColumn('golongan', function($db) {
-                $staff = Staff::where('nip', $db->nip_staff)->first();
+                $staff = Staff::where('nip', $db->id_staff)->first();
                 $text = '';
 
                 if ($staff and !empty($staff->id_golongan)) {
@@ -157,7 +157,7 @@ class DataStaffPerjalananDinasController extends Controller
                 return $text;
             })
             ->addColumn('jenis', function($db) {
-                $staff = Staff::where('nip', $db->nip_staff)->first();
+                $staff = Staff::where('nip', $db->id_staff)->first();
                 $text = "";
 
                 if ($staff) {
@@ -182,7 +182,7 @@ class DataStaffPerjalananDinasController extends Controller
                 return $text;
             })
             ->addColumn('jabatan', function($db) {
-                $staff = Staff::where('nip', $db->nip_staff)->first();
+                $staff = Staff::where('nip', $db->id_staff)->first();
                 $text = '';
 
                 if ($staff and !empty($staff->id_jabatan)) {
@@ -192,7 +192,7 @@ class DataStaffPerjalananDinasController extends Controller
                 return $text;
             })
             ->addColumn('instansi', function($db) {
-                $staff = Staff::where('nip', $db->nip_staff)->first();
+                $staff = Staff::where('nip', $db->id_staff)->first();
                 $text = '';
 
                 if ($staff and !empty($staff->id_instansi)) {

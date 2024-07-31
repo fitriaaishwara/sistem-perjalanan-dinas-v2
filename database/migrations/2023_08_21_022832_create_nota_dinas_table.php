@@ -16,7 +16,7 @@ class CreateNotaDinasTable extends Migration
         Schema::create('nota_dinas', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignUuid('id_perjalanan');
-            $table->string('nip_staff_penandatangan');
+            $table->string('id_staff_penandatangan');
             $table->string('nomor_nota_dinas');
             $table->string('yth');
             $table->string('dari');
@@ -34,7 +34,7 @@ class CreateNotaDinasTable extends Migration
             $table->softDeletes();
 
             $table->foreign('id_perjalanan')->references('id')->on('perjalanan');
-            $table->foreign('nip_staff_penandatangan')->references('nip')->on('staff');
+            $table->foreign('id_staff_penandatangan')->references('id')->on('staff');
 
         });
     }

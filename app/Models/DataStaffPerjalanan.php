@@ -16,7 +16,7 @@ class DataStaffPerjalanan extends Model
 
     protected $fillable = [
         'id_perjalanan',
-        'nip_staff',
+        'id_staff',
         'id_tujuan_perjalanan',
         'created_by',
         'updated_by',
@@ -31,7 +31,7 @@ class DataStaffPerjalanan extends Model
 
     public function staff()
     {
-        return $this->belongsTo(Staff::class, 'nip_staff', 'nip');
+        return $this->belongsTo(Staff::class, 'id_staff', 'nip');
     }
 
     public function spd()
@@ -41,7 +41,7 @@ class DataStaffPerjalanan extends Model
 
     public function penandatangan()
     {
-        return $this->hasMany(Spt::class, 'nip_staff_penandatangan', 'id');
+        return $this->hasMany(Spt::class, 'id_staff_penandatangan', 'id');
     }
 
     public function tujuan_perjalanan()

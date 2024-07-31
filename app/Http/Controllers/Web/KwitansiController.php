@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
 use Dotenv\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class KwitansiController extends Controller
 {
@@ -256,8 +257,8 @@ class KwitansiController extends Controller
             $fileName = time() . '_' . $file->getClientOriginalName();
             $path = 'uploads/kwitansi/ttd/' . $fileName; // Update path
 
-            // Move the file to the designated path
-            $file->move(public_path('uploads/kwitansi/ttd'), $fileName);
+            // Store the file using Laravel Storage
+            Storage::disk('public')->putFileAs('uploads/kwitansi/ttd', $file, $fileName);
 
             $KwitansiUpdate = Kwitansi::where('id_staff_perjalanan', $dataStaff->id)->update([
                 'file_kwitansi' => $fileName,
@@ -307,12 +308,20 @@ class KwitansiController extends Controller
             return response()->json(['status' => false, 'message' => 'Nota Dinas not found'], 404);
         }
 
-        $file = public_path('uploads/kwitansi/ttd/' . $kwitansi->file_kwitansi);
+        $filePath = 'uploads/kwitansi/ttd/' . $kwitansi->file_kwitansi;
 
-        if (file_exists($file)) {
-            return response()->download($file);
+        if (Storage::disk('public')->exists($filePath)) {
+            return Storage::disk('public')->download($filePath);
         } else {
             return response()->json(['status' => false, 'message' => 'File not found'], 404);
         }
+
+        if ($kwitansi == null) {
+            Alert::error('File Not Found');
+
+            return redirect()->back();
+
+            }
+
     }
 }

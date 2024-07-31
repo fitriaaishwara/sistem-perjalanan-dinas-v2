@@ -13,7 +13,7 @@ class Spt extends Model
     protected $table = 'spt';
     protected $primaryKey = 'id';
     protected $fillable = [
-        'id_tujuan', 'nip_staff', 'nip_staff_penandatangan', 'nomor_spt', 'dikeluarkan_tanggal',
+        'id_tujuan', 'id_staff', 'id_staff_penandatangan', 'nomor_spt', 'dikeluarkan_tanggal',
     ];
 
     public function tujuan()
@@ -23,11 +23,11 @@ class Spt extends Model
 
     public function staff()
     {
-        return $this->belongsTo(DataStaffPerjalanan::class, 'nip_staff', 'id');
+        return $this->belongsTo(DataStaffPerjalanan::class, 'id_staff', 'id');
     }
 
     public function staff_penandatangan()
     {
-        return $this->belongsTo(Staff::class, 'nip_staff_penandatangan', 'nip');
+        return $this->belongsTo(Staff::class, 'id_staff_penandatangan', 'nip');
     }
 }

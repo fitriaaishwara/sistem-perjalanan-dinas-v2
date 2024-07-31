@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
 use Dotenv\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class SpdController extends Controller
 {
@@ -180,7 +181,8 @@ class SpdController extends Controller
             $fileName = time() . '_' . $file->getClientOriginalName();
             $path = 'uploads/spd/ttd/' . $fileName;
 
-            $file->move(public_path('uploads/spd/ttd'), $fileName);
+             // Store the file using Laravel Storage
+             Storage::disk('public')->putFileAs('uploads/spt/ttd/', $file, $fileName);
 
             $SpdUpdate = Spd::where('id_staff_perjalanan', $perjalanan->id)->update(['file_spd' => $fileName]);
 
@@ -231,12 +233,39 @@ class SpdController extends Controller
             return response()->json(['status' => false, 'message' => 'Nota Dinas not found'], 404);
         }
 
-        $file = public_path('uploads/spd/ttd/' . $Spd->file_spd);
+        $filePath = 'uploads/spd/ttd/' . $Spd->file_spd;
 
-        if (file_exists($file)) {
-            return response()->download($file);
+        if (Storage::disk('public')->exists($filePath)) {
+            return Storage::disk('public')->download($filePath);
         } else {
             return response()->json(['status' => false, 'message' => 'File not found'], 404);
         }
+
+        if ($Spd == null) {
+            Alert::error('File Not Found');
+
+            return redirect()->back();
+
+            }
+    }
+
+    public function downloadFilettd($id)
+    {
+        $Spd = Spd::findOrFail($id);
+        $filePath = 'uploads/spd/ttd/' . $Spd->file_spd;
+
+        // Pastikan disk yang digunakan adalah 'public'
+        if (Storage::disk('public')->exists($filePath)) {
+            return Storage::disk('public')->download($filePath);
+        } else {
+            return response()->json(['status' => false, 'message' => 'File not found'], 404);
+        }
+
+        if ($Spd == null) {
+            Alert::error('File Not Found');
+
+            return redirect()->back();
+
+            }
     }
 }

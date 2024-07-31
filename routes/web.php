@@ -107,6 +107,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/jabatan/{id}', [App\Http\Controllers\Web\JabatanController::class, 'show'])->name('jabatan/show');
     Route::post('/jabatan/delete/{id}', [App\Http\Controllers\Web\JabatanController::class, 'destroy'])->name('jabatan/delete');
 
+    //Jabatan Struktural
+    Route::post('/jabatan-struktural', [App\Http\Controllers\Web\JabatanStrukturalController::class, 'getData'])->name('jabatan-struktural/getData');
+
     //sbm
     Route::get('/uang_harian', [App\Http\Controllers\Web\UangHarianController::class, 'index'])->name('uang_harian');
     Route::post('/uang_harian/getData', [App\Http\Controllers\Web\UangHarianController::class, 'getData'])->name('uang_harian/getData');
@@ -222,6 +225,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/nota-dinas/upload/edit', [App\Http\Controllers\Web\NotaDinasController::class, 'upload'])->name('nota-dinas.upload.edit');
     Route::get('/nota-dinas/show/{id}', [App\Http\Controllers\Web\NotaDinasController::class, 'showND'])->name('nota-dinas.show');
     Route::get('/nota-dinas/download/{id}', [App\Http\Controllers\Web\NotaDinasController::class, 'downloadFile'])->name('nota-dinas/download');
+    Route::get('/nota-dinas/downloadttd/{id}', [App\Http\Controllers\Web\NotaDinasController::class, 'downloadFilettd'])->name('nota-dinas/downloadttd');
 
     //SPT
     Route::get('/surat-perintah-tugas', [App\Http\Controllers\Web\SptController::class, 'index'])->name('spt');
@@ -234,6 +238,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/surat-perintah-tugas/upload/edit', [App\Http\Controllers\Web\SptController::class, 'upload'])->name('spt.upload.edit');
     Route::get('/surat-perintah-tugas/show/{id}', [App\Http\Controllers\Web\SptController::class, 'showSpt'])->name('spt.show');
     Route::get('/surat-perintah-tugas/download/{id}', [App\Http\Controllers\Web\SptController::class, 'downloadFile'])->name('spt/download');
+    Route::get('/surat-perintah-tugas/downloadttd/{id}', [App\Http\Controllers\Web\SptController::class, 'downloadFilettd'])->name('spt/downloadttd');
 
     //SPD
     Route::get('/surat-perjalanan-dinas', [App\Http\Controllers\Web\SpdController::class, 'index'])->name('spd');
@@ -247,6 +252,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/surat-perjalanan-dinas/upload/edit', [App\Http\Controllers\Web\SpdController::class, 'upload'])->name('spd.upload.edit');
     Route::get('/surat-perjalanan-dinas/show/{id}', [App\Http\Controllers\Web\SpdController::class, 'showSpt'])->name('spd.show');
     Route::get('/surat-perjalanan-dinas/download/{id}', [App\Http\Controllers\Web\SpdController::class, 'downloadFile'])->name('spd/download');
+    Route::get('/surat-perjalanan-dinas/downloadttd/{id}', [App\Http\Controllers\Web\SpdController::class, 'downloadFilettd'])->name('spd/downloadttd');
 
     Route::get('/bukti-perjalanan', [App\Http\Controllers\Web\UploadBuktiController::class, 'index'])->name('bukti');
     Route::any('/bukti-perjalananBerangkatById/getData/{id_staff_perjalanan} ', [App\Http\Controllers\Web\UploadBuktiController::class, 'getUploadByIdBerangkat'])->name('uploadByIdBerangkat/getData');
@@ -270,6 +276,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/kwitansi/upload/edit', [App\Http\Controllers\Web\KwitansiController::class, 'upload'])->name('kwitansi.upload.edit');
     Route::get('/kwitansi/show/{id}', [App\Http\Controllers\Web\KwitansiController::class, 'showKwitansi'])->name('kwitansi.show');
     Route::get('/kwitansi/download/{id}', [App\Http\Controllers\Web\KwitansiController::class, 'downloadFile'])->name('kwitansi/download');
+    Route::get('/kwitansi/downloadttd/{id}', [App\Http\Controllers\Web\KwitansiController::class, 'downloadFilettd'])->name('kwitansi/downloadttd');
+
     //Transportasi
     Route::post('/transportasi/getData', [App\Http\Controllers\Web\TransportasiController::class, 'getData'])->name('transportasi/getData');
     Route::get('/transportasi', [App\Http\Controllers\Web\TransportasiController::class, 'index'])->name('transportasi');

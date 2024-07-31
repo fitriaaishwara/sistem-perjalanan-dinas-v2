@@ -201,6 +201,8 @@
                         var btnDetail = "";
                         var btnEdit = "";
                         var baseUrl = getBaseUrl();
+                        var btnDownload = "";
+                        var btnDownloadTtd = "";
 
 
                         if (!data.spt || data.spt.length === 0) {
@@ -225,8 +227,30 @@
 
                         }
 
+
+
+                            @if (auth()->check() && auth()->user()->hasAnyRole(['Staff']))
+                            // Cek apakah data.spt ada dan panjangnya lebih dari 0
+                            if (data.spt && data.spt.length > 0) {
+                                var sptId = data.spt[0].id; // Ambil id dari elemen pertama dalam array spt
+                                var sptIdTujuan = data.spt[0].id_tujuan; // Ambil id_tujuan dari elemen pertama dalam array spt
+
+                                // Buat tombol unduh untuk TTD
+                                btnDownloadTtd += '<a href="' + baseUrl + '/surat-perintah-tugas/downloadttd/' + sptId + '" name="btnDownloadTtd" data-id="' + sptId + '" type="button" class="btn btn-primary btn-sm btnDownloadTtd m-1" data-toggle="tooltip" data-placement="top" title="Download"><i class="fa fa-download"></i></a>';
+                            } else {
+                                // Jika data.spt tidak ada atau panjangnya 0
+
+                                // Jika data.spd kosong, tampilkan pesan dan badge
+                                btnDownloadTtd += '<span class="badge badge-warning">SPT Belum di TTD</span>';
+
+                                // // // Buat tombol unduh untuk PDF
+                                // btnDownload += '<a href="' + baseUrl + '/surat-perintah-tugas/pdf/' + sptIdTujuan + '" name="btnDownload" data-id="' + sptIdTujuan + '" type="button" class="btn btn-success btn-sm btnDownload m-1" data-toggle="tooltip" data-placement="top" title="Download Draft">Download Draft</a>';
+
+                            }
+                        @endif
+
                         console.log(row);
-                        return btnTambah + btnEdit + btnDetail;
+                        return btnTambah + btnEdit + btnDetail + btnDownloadTtd + btnDownload;
                     },
                 },
             ]

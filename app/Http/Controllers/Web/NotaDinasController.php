@@ -14,7 +14,8 @@ use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class NotaDinasController extends Controller
 {
@@ -131,7 +132,7 @@ class NotaDinasController extends Controller
                 'lampiran' => 'required|string',
                 'tanggal_nota_dinas' => 'required',
                 'isi_nota_dinas' => 'required|string',
-                'nip_staff_penandatangan' => 'required',
+                'id_staff_penandatangan' => 'required',
                 'status_nota_dinas_hidden' => 'required|boolean', // Ensure it's a boolean value
             ]);
 
@@ -144,7 +145,7 @@ class NotaDinasController extends Controller
             $notaDinas->lampiran = $validatedData['lampiran'];
             $notaDinas->tanggal_nota_dinas = $validatedData['tanggal_nota_dinas'];
             $notaDinas->isi_nota_dinas = $validatedData['isi_nota_dinas'];
-            $notaDinas->nip_staff_penandatangan = $validatedData['nip_staff_penandatangan'];
+            $notaDinas->id_staff_penandatangan = $validatedData['id_staff_penandatangan'];
             $notaDinas->id_perjalanan = $validatedData['id_perjalanan'];
             $notaDinas->status_nota_dinas = $validatedData['status_nota_dinas_hidden']; // Use the hidden field value
 
@@ -174,7 +175,7 @@ class NotaDinasController extends Controller
             $data = ['status' => false, 'code' => 'EC001', 'message' => 'Jabatan failed to create'];
             $create =  NotaDinas::find($id)->update([
                 'id_perjalanan' => $request->id_perjalanan,
-                'nip_staff_penandatangan' => $request->nip_staff_penandatangan,
+                'id_staff_penandatangan' => $request->id_staff_penandatangan,
                 'nomor_nota_dinas' => $request->nomor_nota_dinas,
                 'yth' => $request->yth,
                 'dari' => $request->dari,
@@ -207,58 +208,56 @@ class NotaDinasController extends Controller
     }
 
     public function upload(Request $request)
-{
-    \Log::info('Upload method called');
-    $perjalanan = Perjalanan::with(['nota_dinas'])->find($request->id_perjalanan);
+    {
+        \Log::info('Upload method called');
+        $perjalanan = Perjalanan::with(['nota_dinas'])->find($request->id_perjalanan);
 
-    if (!$perjalanan) {
-        Alert::error('Perjalanan not found');
-        return redirect()->back();
-    }
+        if (!$perjalanan) {
+            Alert::error('Perjalanan not found');
+            return redirect()->back();
+        }
 
-    $validator = \Validator::make($request->all(), [
-        'file_nota_dinas' => 'required|mimes:pdf|max:2048',
-    ]);
-
-    if ($validator->fails()) {
-        return response()->json([
-            'status' => false,
-            'message' => 'Invalid file. The maximum file size is 2 MB with the format PDF.'
-        ]);
-    }
-
-    try {
-        $file = $request->file('file_nota_dinas');
-        $fileName = time() . '_' . $file->getClientOriginalName();
-        $path = 'uploads/nota-dinas/ttd/' . $fileName;
-
-        // Move the file to the designated path
-        $file->move(public_path('uploads/nota-dinas/ttd'), $fileName);
-
-        $notaDinasUpdate = NotaDinas::where('id_perjalanan', $perjalanan->id)->update([
-            'file_nota_dinas' => $fileName,
+        $validator = \Validator::make($request->all(), [
+            'file_nota_dinas' => 'required|mimes:pdf|max:2048',
         ]);
 
-        if ($notaDinasUpdate) {
-            return response()->json([
-                'status' => true,
-                'message' => 'Nota Dinas successfully updated'
-            ]);
-        } else {
+        if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'message' => 'Nota Dinas failed to update'
+                'message' => 'Invalid file. The maximum file size is 2 MB with the format PDF.'
             ]);
         }
-    } catch (\Exception $ex) {
-        return response()->json([
-            'status' => false,
-            'message' => 'A system error has occurred. Please try again later. ' . $ex->getMessage()
-        ]);
-    }
 
-    return redirect()->back();
-}
+        try {
+            $file = $request->file('file_nota_dinas');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $path = 'uploads/nota-dinas/ttd/' . $fileName;
+
+            // Store the file using Laravel Storage
+            Storage::disk('public')->putFileAs('uploads/nota-dinas/ttd', $file, $fileName);
+
+            $notaDinasUpdate = NotaDinas::where('id_perjalanan', $perjalanan->id)->update([
+                'file_nota_dinas' => $fileName,
+            ]);
+
+            if ($notaDinasUpdate) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Nota Dinas successfully updated'
+                ]);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Nota Dinas failed to update'
+                ]);
+            }
+        } catch (\Exception $ex) {
+            return response()->json([
+                'status' => false,
+                'message' => 'A system error has occurred. Please try again later. ' . $ex->getMessage()
+            ]);
+        }
+    }
     public function showND($id)
     {
         $perjalanan = Perjalanan::with(['nota_dinas'])->find($id);
@@ -284,10 +283,31 @@ class NotaDinasController extends Controller
             return response()->json(['status' => false, 'message' => 'Nota Dinas not found'], 404);
         }
 
-        $file = public_path('uploads/nota-dinas/ttd/' . $notaDinas->file_nota_dinas);
+        $filePath = 'uploads/nota-dinas/ttd/' . $notaDinas->file_nota_dinas;
 
-        if (file_exists($file)) {
-            return response()->download($file);
+        if (Storage::disk('public')->exists($filePath)) {
+            return Storage::disk('public')->download($filePath);
+        } else {
+            return response()->json(['status' => false, 'message' => 'File not found'], 404);
+        }
+
+        if ($notaDinas == null) {
+        Alert::error('File Not Found');
+
+        return redirect()->back();
+
+        }
+    }
+
+
+    public function downloadFilettd($id)
+    {
+        $notaDinas = NotaDinas::findOrFail($id);
+        $filePath = 'uploads/nota-dinas/ttd/' . $notaDinas->file_nota_dinas;
+
+        // Pastikan disk yang digunakan adalah 'public'
+        if (Storage::disk('public')->exists($filePath)) {
+            return Storage::disk('public')->download($filePath);
         } else {
             return response()->json(['status' => false, 'message' => 'File not found'], 404);
         }

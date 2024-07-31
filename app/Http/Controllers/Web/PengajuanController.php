@@ -155,11 +155,11 @@ class PengajuanController extends Controller
 
     function save_staff(Request $request, $id_perjalanan)
     {
-        $nip_staff = $request->nip_staff;
+        $id_staff = $request->id_staff;
         $id_tujuan_perjalanan = $request->id_tujuan_perjalanan;
 
         //check when tanggal_berangkat and tanggal_pulang staff have perjalanan. then cant add data staff perjalnanan and showing alert
-        $check = DataStaffPerjalanan::where('nip_staff', $nip_staff)
+        $check = DataStaffPerjalanan::where('id_staff', $id_staff)
             ->whereHas('tujuan_perjalanan', function ($query) use ($id_tujuan_perjalanan) {
                     $query->where('id', $id_tujuan_perjalanan);
                 })
@@ -184,7 +184,7 @@ class PengajuanController extends Controller
             $staff = DataStaffPerjalanan::findOrFail($request->id_edit);
         }
 
-        $staff->nip_staff = $nip_staff;
+        $staff->id_staff = $id_staff;
         $staff->id_tujuan_perjalanan = $id_tujuan_perjalanan;
         $staff->save();
 
@@ -192,7 +192,7 @@ class PengajuanController extends Controller
         // $kegiatan = new DataKegiatan;
         // $kegiatan->id_perjalanan = $id_perjalanan;
         // $kegiatan->id_tujuan = $id_tujuan_perjalanan;
-        // $kegiatan->nip_staff = $nip_staff;
+        // $kegiatan->id_staff = $id_staff;
         // $kegiatan->id_kegiatan = $request->id_kegiatan; // Assuming this field is coming from the request
         // $kegiatan->status = 1;
         // $kegiatan->created_by = Auth::id();
